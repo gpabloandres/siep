@@ -196,9 +196,10 @@ class PromocionController extends AppController {
 			$data = $this->request->data;
 			$data = json_encode($data);
 
+			$hostApi = getenv('HOSTAPI');
+
 			//$response = $httpSocket->post("https://constancia.sieptdf.tk/api/promocion", $data, $request);
-			//$response = $httpSocket->post("http://192.168.1.40:3000/api/promocion", $data, $request);
-			$response = $httpSocket->post("http://web:3000/api/promocion", $data, $request);
+			$response = $httpSocket->post("http://$hostApi/api/promocion", $data, $request);
 
 			$response = $response->body;
 			$apiResponse = json_decode($response);
