@@ -27,6 +27,8 @@ spec:
           value: {{ .Values.cakephpDebug | quote}}
         - name: MYSQL_HOST
           value: {{ .Release.Name}}-siep-mysql
+        - name: HOSTAPI
+          value: {{ .Release.Name}}-laravel
         resources: {}
       restartPolicy: Always
 status: {}
