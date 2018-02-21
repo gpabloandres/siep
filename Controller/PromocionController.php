@@ -205,19 +205,19 @@ class PromocionController extends AppController {
 			$apiResponse = json_decode($response);
 
 			if( isset($apiResponse->error)) {
-				$this->Session->setFlash("API: ".$apiResponse->error, 'default', array('class' => 'alert alert-danger'));
+				$this->Session->setFlash("API($hostApi) Error: ".$apiResponse->error, 'default', array('class' => 'alert alert-danger'));
 				$this->redirect($this->referer());
 			} else {
 				if( isset($apiResponse->done)) {
 					$this->Session->setFlash("Promocion realizada con exito", 'default', array('class' => 'alert alert-success'));
 					$this->redirect($this->referer());
 				} else {
-					$this->Session->setFlash("API: No se determinó si la operación se efectuo con exito", 'default', array('class' => 'alert alert-warning'));
+					$this->Session->setFlash("API($hostApi) !done: No se determinó si la operación se efectuo con exito", 'default', array('class' => 'alert alert-warning'));
 					$this->redirect($this->referer());
 				}
 			}
 		} catch(\Exception $ex){
-			$this->Session->setFlash("Error: ".$ex->getMessage(), 'default', array('class' => 'alert alert-danger'));
+			$this->Session->setFlash("API($hostApi) TryError: ".$ex->getMessage(), 'default', array('class' => 'alert alert-danger'));
 			$this->redirect($this->referer());
 		}
 	}
