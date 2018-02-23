@@ -70,10 +70,10 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ver <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
-            <li><?php echo $this->Html->link(__('Alumnos por Sección [todos los ciclos]'), '/cursos_inscripcions');?></li>
+            <li><?php echo $this->Html->link(__('Alumnos por Sección [nominal]'), '/cursos_inscripcions');?></li>
             <!--<li><?php echo $this->Html->link(__('Alumnos por Unidad Curricular'), '/inscripcions_materias');?></li>-->
-            <li><?php echo $this->Html->link(__('Matricula 2017'), '/matriculas');?></li>
-            <li><?php echo $this->Html->link(__('Matricula 2018'), '/vacantes');?></li>
+            <li><?php echo $this->Html->link(__('Alumnos por Sección [cuantitativo]'), '/matriculas');?></li>
+            <li><?php echo $this->Html->link(__('Inscriptos por año [cuantitativo]'), '/vacantes');?></li>
             <!--<li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>-->
             <!--<li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>-->
             <!--<li><?php echo $this->Html->link(__('Gráficos'), '/graficos'); ?></li>-->
