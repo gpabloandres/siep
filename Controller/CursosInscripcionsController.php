@@ -148,14 +148,28 @@ class CursosInscripcionsController extends AppController {
 		if(!empty($this->params['named']['anio'])) {
 			$conditions['Curso.anio ='] = $this->params['named']['anio'];
 		}
+		if(!empty($this->params['named']['division'])) {
+			$conditions['Curso.division ='] = $this->params['named']['division'];
+		}
 		if(!empty($this->params['named']['inscripcion_id'])) {
 			$conditions['CursosInscripcion.inscripcion_id ='] = $this->params['named']['inscripcion_id'];
 		}
 
-		$modoLista = (
-			!empty($this->params['named']['modo']) &&
-			$this->params['named']['modo'] == 'lista'
-		) ? true : false;
+		if(empty($this->params['named']['modo'])) {
+			$modo = '';
+		} else {
+			$modo = $this->params['named']['modo'];
+		}
+
+		switch ($modo)
+		{
+			case 'tarjeta':
+				$modoLista = false;
+			break;
+			default:
+				$modoLista = true;
+			break;
+		}
 
 		// Inicializa la paginacion segun las condiciones
 		$cursosInscripcions = $this->paginate('CursosInscripcion', $conditions);
@@ -174,8 +188,9 @@ class CursosInscripcionsController extends AppController {
 
 		$comboDivision = $this->Curso->find('list', array(
 			'recursive'=> -1,
-			'fields'=> array('Curso.division','Curso.division')
-		));
+			'fields'=> array('Curso.division','Curso.division'),
+			'conditions'=>array('centro_id'=>$userCentroId))
+		);
 
 		$comboCiclo = $this->Ciclo->find('list', array(
 			'fields'=>array('Ciclo.id', 'Ciclo.nombre')
