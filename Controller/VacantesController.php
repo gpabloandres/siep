@@ -62,6 +62,7 @@ class VacantesController extends AppController
         $this->loadModel('Ciclo');
         $comboCiclo = $this->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
         $cicloIdUltimo = $this->getLastCicloId();
+        $cicloIdActual = $this->getActualCicloId();
 
         $this->loadModel('Curso');
         $conditions = array('AND'=>array(
@@ -195,7 +196,7 @@ class VacantesController extends AppController
         $nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
         $nivelCentroArray = $this->Centro->findById($nivelCentroId, 'nivel_servicio');
         $nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
-        $this->set(compact('matriculas','cicloIdUltimo','comboCiclo','comboCiudad','comboSector', 'nivelCentroString'));
+        $this->set(compact('matriculas','cicloIdUltimo','cicloIdActual','comboCiclo','comboCiudad','comboSector', 'nivelCentroString'));
     }
 
     public function logView($fecha)
