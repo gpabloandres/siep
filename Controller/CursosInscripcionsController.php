@@ -43,6 +43,13 @@ class CursosInscripcionsController extends AppController {
 		$this->loadModel('Curso');
 		$this->loadModel('Ciclo');
 
+		// Api exportacion a Excel
+		$showExportBtn = 0;
+		$queryExportacionExcel = [];
+		// Por defecto definimos el centro_id como el centro del usuario
+		$queryExportacionExcel['por_pagina'] = 'all';
+		$queryExportacionExcel['userid'] = $this->Auth->user('id');
+
 		// Abria que ver como cake gestiona estos joins de manera nativa en el ORM
 		$this->paginate['CursosInscripcion'] = array(
 			'fields' => array(
@@ -101,7 +108,10 @@ class CursosInscripcionsController extends AppController {
 					'Inscripcion.centro_id' => $userCentroId,
 					'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA')
 				);
-			break;
+				$queryExportacionExcel['centro_id'] = $userCentroId;
+				$showExportBtn++;
+
+				break;
 			case 'usuario':
 				if($nivelServicio === 'Común - Inicial - Primario')
 				{
@@ -138,18 +148,25 @@ class CursosInscripcionsController extends AppController {
 		$conditions = array();
 		if(!empty($this->params['named']['centro_id'])) {
 			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
+			$queryExportacionExcel['centro_id'] = $this->params['named']['centro_id'];
+			$showExportBtn++;
 		}
 		if(!empty($this->params['named']['ciclo_id'])) {
 			$conditions['Inscripcion.ciclo_id ='] = $this->params['named']['ciclo_id'];
+			$queryExportacionExcel['ciclo_id'] = $this->params['named']['ciclo_id'];
+			$showExportBtn++;
 		}
 		if(!empty($this->params['named']['turno'])) {
 			$conditions['Curso.turno ='] = $this->params['named']['turno'];
+			$queryExportacionExcel['turno'] = $this->params['named']['turno'];
 		}
 		if(!empty($this->params['named']['anio'])) {
 			$conditions['Curso.anio ='] = $this->params['named']['anio'];
+			$queryExportacionExcel['anio'] = $this->params['named']['anio'];
 		}
 		if(!empty($this->params['named']['division'])) {
 			$conditions['Curso.division ='] = $this->params['named']['division'];
+			$queryExportacionExcel['division'] = $this->params['named']['division'];
 		}
 		if(!empty($this->params['named']['inscripcion_id'])) {
 			$conditions['CursosInscripcion.inscripcion_id ='] = $this->params['named']['inscripcion_id'];
@@ -208,8 +225,6 @@ class CursosInscripcionsController extends AppController {
 			'fields'=>array('nombre_completo_curso','nombre_completo_curso'),
 		));
 		*/
-		$this->loadModel('Centro');
-		$this->loadModel('Curso');
 		$userCentroId = $this->getUserCentroId();
         $nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
         $userRol = $this->Auth->user('role');
@@ -226,7 +241,7 @@ class CursosInscripcionsController extends AppController {
 			$comboSecciones = $this->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$userCentroId, 'status' => '1')));
 		}
 		/* FIN */
-		$this->set(compact('cursosInscripcions','comboAnio','comboDivision','comboCiclo','cicloIdActual','comboSecciones','modoLista'));
+		$this->set(compact('cursosInscripcions','comboAnio','comboDivision','comboCiclo','cicloIdActual','comboSecciones','modoLista','queryExportacionExcel','showExportBtn'));
 	}
 
 	public function confirmarAlumnos() {
