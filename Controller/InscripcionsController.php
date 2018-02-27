@@ -16,7 +16,7 @@ class InscripcionsController extends AppController {
 	    } elseif ($this->Auth->user('role') === 'usuario') {
 	        $this->Auth->allow('index', 'add', 'view', 'edit', 'constanciaPdf');
 	    } else if ($this->Auth->user('role') === 'admin') {
-            $this->Auth->allow('index', 'view', 'constanciaPdf');
+            $this->Auth->allow('index', 'view', 'edit', 'constanciaPdf');
         }
 	    /* FIN */
         /* FUNCIÓN PRIVADA "LISTS" (INICIO).
