@@ -21,11 +21,11 @@
     ?>
     <?php
 		if ($current_user['role'] == 'superadmin') {
-              $divisiones = array('ROJA' => 'ROJA', 'CELESTE' => 'CELESTE', 'NARANJA' => 'NARANJA', 'AMARILLA' => 'AMARILLA', 'A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E', 'F' => 'F', 'G' => 'G', 'H' => 'H');
+              $divisiones = array('ROJA' => 'ROJA', 'CELESTE' => 'CELESTE', 'NARANJA' => 'NARANJA', 'AMARILLA' => 'AMARILLA', 'A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E', 'F' => 'F', 'G' => 'G', 'H' => 'H', '1°' => '1°', '2°' => '2°', '3°' => '3°', '4°' => '4°', '5°' => '5°', '6°' => '6°', '7°' => '7°', '8°' => '8°', '9°' => '9°', '10°' => '10°', '11°' => '11°');
           } else if ($current_user['puesto'] == 'Dirección Jardín') {
               $divisiones = array('ROJA' => 'ROJA', 'CELESTE' => 'CELESTE', 'NARANJA' => 'NARANJA', 'AMARILLA' => 'AMARILLA');
           } else {
-            $divisiones = array('A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E', 'F' => 'F', 'G' => 'G', 'H' => 'H');       
+            $divisiones = array('A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E', 'F' => 'F', 'G' => 'G', 'H' => 'H', '1°' => '1°', '2°' => '2°', '3°' => '3°', '4°' => '4°', '5°' => '5°', '6°' => '6°', '7°' => '7°', '8°' => '8°', '9°' => '9°', '10°' => '10°', '11°' => '11°');       
           }
 		echo $this->Form->input('division', array('label' => false, 'empty' => 'Ingrese una división...', 'options' => $divisiones, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
     ?>
