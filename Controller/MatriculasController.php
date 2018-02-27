@@ -196,7 +196,7 @@ class MatriculasController extends AppController
             
             where
             
-            ci.id = 2018 and
+            ci.nombre = 2018 and
             (ins.estado_inscripcion = 'CONFIRMADA' or ins.estado_inscripcion = 'NO CONFIRMADA')
             
             group by 
