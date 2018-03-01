@@ -51,6 +51,7 @@ class PromocionController extends AppController {
 			'conditions' => array('nombre' => $hoyAñoString)
 		));
 
+
 		$cicloaPromocionar = array_pop($cicloaPromocionar);
 		$cicloSiguienteNombre = ((int)$cicloaPromocionar['nombre']) + 1;
 
@@ -182,7 +183,7 @@ class PromocionController extends AppController {
 			)
 		));
 
-		$this->set(compact('centro','curso','cursosInscripcions','cicloaPromocionar','cicloSiguienteNombre','secciones'));
+		$this->set(compact('cicloaPromocionar','centro','curso','cursosInscripcions','cicloaPromocionar','cicloSiguienteNombre','secciones'));
 	}
 
 	public function confirmarAlumnos()
@@ -202,13 +203,23 @@ class PromocionController extends AppController {
 			$response = $httpSocket->post("http://$hostApi/api/promocion", $data, $request);
 
 			$response = $response->body;
-			$apiResponse = json_decode($response);
+			$apiResponse = json_decode($response,true);
 
-			if( isset($apiResponse->error)) {
-				$this->Session->setFlash("API($hostApi) Error: ".$apiResponse->error, 'default', array('class' => 'alert alert-danger'));
+			if( isset($apiResponse['error'])) {
+				// El api puede devolver mas de 1 error, hay que mostrarlos a todos
+				$err = $apiResponse['error'];
+				if(is_array($err)) {
+					$msgError = "";
+					foreach ($err as $errParam) {
+						$msgError .= $errParam[0]."<br>";
+					}
+				} else {
+					$msgError = $err;
+				}
+				$this->Session->setFlash("API($hostApi) Error: ".$msgError, 'default', array('class' => 'alert alert-danger'));
 				$this->redirect($this->referer());
 			} else {
-				if( isset($apiResponse->done)) {
+				if( isset($apiResponse['done'])) {
 					$this->Session->setFlash("Promocion realizada con exito", 'default', array('class' => 'alert alert-success'));
 					$this->redirect($this->referer());
 				} else {

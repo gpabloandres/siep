@@ -19,7 +19,8 @@
                 <?php
                 if(
                     $cursosInscripcion['Inscripcion']['estado_inscripcion']=='CONFIRMADA' &&
-                    $cursosInscripcion['Inscripcion']['promocionado'] != 1
+                    $cursosInscripcion['Inscripcion']['promocionado'] == 0 &&
+                    $cursosInscripcion['Inscripcion']['ciclo_id'] == $cicloaPromocionar['id']
                 ) :
                 ?>
                     <input type="checkbox" class="toggle_checkbox" name="id[]" value="<?php echo $cursosInscripcion['Inscripcion']['id']; ?>">
