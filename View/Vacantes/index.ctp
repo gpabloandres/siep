@@ -42,7 +42,7 @@
          $ocultar = true;
      }
 ?>
-<div class="TituloSec">Matrículas y Vacantes por Agrupamientos</div>
+<div class="TituloSec">Inscriptos por año [Cuantitativo]</div>
 <div id="ContenidoSec">
     <div class="table-responsive">
       <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
