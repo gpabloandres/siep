@@ -146,6 +146,11 @@ class CursosInscripcionsController extends AppController {
         */
 		$this->redirectToNamed();
 		$conditions = array();
+		if(!empty($this->params['named']['estado_inscripcion'])) {
+			$conditions['Inscripcion.estado_inscripcion ='] = $this->params['named']['estado_inscripcion'];
+			$queryExportacionExcel['estado_inscripcion'] = $this->params['named']['estado_inscripcion'];
+			$showExportBtn++;
+		}
 		if(!empty($this->params['named']['centro_id'])) {
 			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
 			$queryExportacionExcel['centro_id'] = $this->params['named']['centro_id'];
