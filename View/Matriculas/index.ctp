@@ -1,5 +1,3 @@
-
-
 <div class="TituloSec">Filtro</div>
 <div id="ContenidoSec">
     <?php echo $this->Form->create('Curso',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
@@ -90,7 +88,7 @@
 
 <br>
 
-<div class="TituloSec">Matriculas y Vacantes por Sección</div>
+<div class="TituloSec">Alumnos por sección [Cuantitativo]</div>
 <div id="ContenidoSec">
 
     <div class="table-responsive">

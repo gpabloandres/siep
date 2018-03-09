@@ -1,5 +1,5 @@
 <!-- start main -->
-<div class="TituloSec">Alumnos por sección</div>
+<div class="TituloSec">Alumnos por sección [Nominal]</div>
 <div id="ContenidoSec">
   <div id="main">
   <!-- start second nav -->
