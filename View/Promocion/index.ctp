@@ -2,6 +2,7 @@
 <div class="TituloSec">Promocion de alumnos</div>
 <div id="ContenidoSec">
     <h4><?php echo $centro['nombre']; ?> <?php echo "(".$curso['anio']." ".$curso['division']." ".$curso['turno'].")" ?>
+        | <b><?php echo $cicloaPromocionar['nombre']; ?></b>
     </h4>
 
     <div class="row">

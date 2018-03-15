@@ -147,7 +147,7 @@ class EgresoController extends AppController {
 		$this->redirectToNamed();
 		$conditions = array();
 
-		//$conditions['Inscripcion.fecha_egreso ='] = null;
+		$conditions['Inscripcion.ciclo_id ='] = $cicloaPromocionar['id'];
 
 		if(!empty($this->params['named']['centro_id'])) {
 			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];

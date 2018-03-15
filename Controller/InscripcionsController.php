@@ -352,6 +352,15 @@ class InscripcionsController extends AppController {
         $alumnoId = $alumno['Alumno']['id'];
         $personaId  = $alumno['Persona']['id'];
 
+        // Obtener el ciclo id actual
+        $hoyArray = getdate();
+        $this->loadModel('Ciclo');
+        $cicloActual = $this->Ciclo->find('first', array(
+            'recursive' => -1,
+            'conditions' => array('nombre' => $hoyArray['year'])
+        ));
+        $cicloActual = array_pop($cicloActual);
+
         // Submit de formulario
     	if (!empty($this->data)) {
             //abort if cancel button was pressed
@@ -422,7 +431,15 @@ class InscripcionsController extends AppController {
                 $this->loadModel('Curso');
                 $cursoIdArray = $this->request->data['Curso'];
                 $cursoIdString = $cursoIdArray['Curso'];
-                $matriculaActual = $this->Inscripcion->CursosInscripcion->find('count', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoIdString)));
+                $matriculaActual = $this->Inscripcion->CursosInscripcion->find('count', array(
+                    'fields'=>array(
+                        'CursosInscripcion.*',
+                        'Inscripcion.*'
+                    ),
+                    'conditions'=>array(
+                        'CursosInscripcion.curso_id'=>$cursoIdString,
+                        'Inscripcion.ciclo_id'=>$cicloActual['id'],
+                    )));
                 $this->Curso->id=$cursoIdString;
                 $this->Curso->saveField("matricula", $matriculaActual);
                 $plazasArray = $this->Curso->findById($cursoIdString, 'plazas');
@@ -445,7 +462,15 @@ class InscripcionsController extends AppController {
                         $this->loadModel('Curso');
                         $cursoIdArray = $this->request->data['Curso'];
                         $cursoIdString = $cursoIdArray['Curso'];
-                        $matriculaActual = $this->Inscripcion->CursosInscripcion->find('count', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoIdString)));
+                        $matriculaActual = $this->Inscripcion->CursosInscripcion->find('count', array(
+                            'fields'=>array(
+                                'CursosInscripcion.*',
+                                'Inscripcion.*'
+                            ),
+                            'conditions'=>array(
+                                'CursosInscripcion.curso_id'=>$cursoIdString,
+                                'Inscripcion.ciclo_id'=>$cicloActual['id'],
+                        )));
                         $this->Curso->id=$cursoIdString;
                         $this->Curso->saveField("matricula", $matriculaActual);
                         $plazasArray = $this->Curso->findById($cursoIdString, 'plazas');
@@ -466,7 +491,15 @@ class InscripcionsController extends AppController {
             if ($cursoIdNew != $cursoIdAnterior) {
                 // Actualiza los valores de matrícula y vacantes tanto de la sección origen como de la sección destino.
                 // Comienza por el curso anterior...
-                $matricula = $this->Inscripcion->CursosInscripcion->find('count', array('fields' => array('curso_id'), 'conditions' => array('CursosInscripcion.curso_id' => $cursoIdAnterior)));
+                $matricula = $this->Inscripcion->CursosInscripcion->find('count', array(
+                    'fields'=>array(
+                        'CursosInscripcion.*',
+                        'Inscripcion.*'
+                    ),
+                    'conditions'=>array(
+                        'CursosInscripcion.curso_id'=>$cursoIdAnterior,
+                        'Inscripcion.ciclo_id'=>$cicloActual['id'],
+                )));
                 $matriculaActual = $matricula - 1;
 
                 $this->Curso->id = $cursoIdAnterior;
@@ -478,9 +511,18 @@ class InscripcionsController extends AppController {
 
                 $this->Curso->saveField("vacantes", $vacantesActual);
 
-               // Continúa por el curso actual...    
-               $matricula = $this->Inscripcion->CursosInscripcion->find('count', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoIdNew)));
-               $matriculaActual = $matricula + 1;
+                // Continúa por el curso actual...
+                $matricula = $this->Inscripcion->CursosInscripcion->find('count', array(
+                    'fields'=>array(
+                        'CursosInscripcion.*',
+                        'Inscripcion.*'
+                    ),
+                    'conditions'=>array(
+                        'CursosInscripcion.curso_id'=>$cursoIdNew,
+                        'Inscripcion.ciclo_id'=>$cicloActual['id'],
+                )));
+
+                $matriculaActual = $matricula + 1;
 
                 $this->Curso->id=$cursoIdNew;
                 $this->Curso->saveField("matricula", $matriculaActual);
