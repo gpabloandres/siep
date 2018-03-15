@@ -51,7 +51,6 @@ class PromocionController extends AppController {
 			'conditions' => array('nombre' => $hoyAñoString)
 		));
 
-
 		$cicloaPromocionar = array_pop($cicloaPromocionar);
 		$cicloSiguienteNombre = ((int)$cicloaPromocionar['nombre']) + 1;
 
@@ -148,14 +147,13 @@ class PromocionController extends AppController {
         */
 		$this->redirectToNamed();
 		$conditions = array();
+		$conditions['Inscripcion.ciclo_id ='] = $cicloaPromocionar['id'];
+
 		if(!empty($this->params['named']['centro_id'])) {
 			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
 		}
 		if(!empty($this->params['named']['curso_id'])) {
 			$conditions['CursosInscripcion.curso_id ='] = $this->params['named']['curso_id'];
-		}
-		if(!empty($this->params['named']['inscripcion_id'])) {
-			$conditions['CursosInscripcion.inscripcion_id ='] = $this->params['named']['inscripcion_id'];
 		}
 
 		// Inicializa la paginacion segun las condiciones
