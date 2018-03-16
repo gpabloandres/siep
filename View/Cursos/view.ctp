@@ -38,11 +38,19 @@
 		    <div class="unit">
 		 		<div class="subtitulo">Opciones</div>
 				<div class="opcion"><?php echo $this->Html->link(__('Listar Secciones'), array('action' => 'index')); ?></div>
+
+
+					<?php if(
+						($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] != 'Sala de 5 años') ||
+						($curso['Centro']['nivel_servicio'] == 'Común - Primario' && $curso['Curso']['anio'] != '6to') ||
+						($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] != '6to')
+					): ?>
 					<div class="opcion"><?php echo $this->Html->link(__('Promocionar'), array('action' => 'index','controller' => 'Promocion',
 							'centro_id'=>$curso['Centro']['id'],
 							'curso_id'=>$curso['Curso']['id']
 						)); ?>
 					</div>
+					<?php endif; ?>
 
 					<?php if(
 						($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] == 'Sala de 5 años') ||
@@ -55,6 +63,12 @@
 						)); ?>
 					</div>
 					<?php endif; ?>
+					<div class="opcion"><?php echo $this->Html->link(__('Reubicar'), array('action' => 'index','controller' => 'Reubicacion',
+							'centro_id'=>$curso['Centro']['id'],
+							'curso_id'=>$curso['Curso']['id']
+						)); ?>
+					</div>
+
 
 				<?php if($current_user['role'] == 'superadmin'): ?>
 				<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $curso['Curso']['id'])); ?></div>
