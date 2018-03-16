@@ -181,18 +181,12 @@ class EgresoController extends AppController {
 			$userId = $this->Auth->user('id');
 
 			$httpSocket = new HttpSocket();
-			$request = array('header' => array('Content-Type' => 'application/json'));
 			$this->request->data['user_id'] = $userId;
 			$data = $this->request->data;
-			$data = json_encode($data);
 
 			$hostApi = getenv('HOSTAPI');
-
-			//$response = $httpSocket->post("https://constancia.sieptdf.tk/api/promocion", $data, $request);
-			$response = $httpSocket->post("http://$hostApi/api/inscripcion/egreso", $data, $request);
-
-			$response = $response->body;
-			$apiResponse = json_decode($response,true);
+			$response = $httpSocket->post("http://$hostApi/api/inscripcion/egreso", $data);
+			$apiResponse = json_decode($response->body,true);
 
 			if( isset($apiResponse['error']) && count($apiResponse['error'])>0 ) {
 				// El api puede devolver mas de 1 error, hay que mostrarlos a todos
