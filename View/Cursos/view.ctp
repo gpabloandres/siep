@@ -38,31 +38,79 @@
 		    <div class="unit">
 		 		<div class="subtitulo">Opciones</div>
 				<div class="opcion"><?php echo $this->Html->link(__('Listar Secciones'), array('action' => 'index')); ?></div>
+					<?php
+					// Por defecto no muestro la promocion
+					$showPromocion = false;
+					$showEgreso = false;
 
+					/*
+						Los unicos 6to que promocionan
+						940007700 CEPET
+						940008300 EPET
+						940015900 SABATO
+						940015700 GUEVARA
+					 */
 
-					<?php if(
-						($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] != 'Sala de 5 años') ||
-						($curso['Centro']['nivel_servicio'] == 'Común - Primario' && $curso['Curso']['anio'] != '6to') ||
-						($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] != '6to')
-					): ?>
-					<div class="opcion"><?php echo $this->Html->link(__('Promocionar'), array('action' => 'index','controller' => 'Promocion',
-							'centro_id'=>$curso['Centro']['id'],
-							'curso_id'=>$curso['Curso']['id']
-						)); ?>
-					</div>
+					if($curso['Curso']['anio'] == '6to')
+					{
+						if(
+							($curso['Centro']['cue'] == '940007700') ||
+							($curso['Centro']['cue'] == '940008300') ||
+							($curso['Centro']['cue'] == '940015900') ||
+							($curso['Centro']['cue'] == '940015700')
+						) {
+							$showPromocion = true;
+						}
+					} else {
+						// El resto de las secciones promocionan menos 5to inicial y 7mo secundario
+						if(
+							($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] != 'Sala de 5 años') ||
+							($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] != '7mo')
+						) {
+							$showPromocion = true;
+						}
+					}
+					?>
+
+					<?php  if($showPromocion) : ?>
+						<div class="opcion"><?php echo $this->Html->link(__('Promocionar'), array('action' => 'index','controller' => 'Promocion',
+								'centro_id'=>$curso['Centro']['id'],
+								'curso_id'=>$curso['Curso']['id']
+							)); ?>
+						</div>
 					<?php endif; ?>
 
-					<?php if(
-						($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] == 'Sala de 5 años') ||
-						($curso['Centro']['nivel_servicio'] == 'Común - Primario' && $curso['Curso']['anio'] == '6to') ||
-						($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] == '6to')
-					): ?>
-					<div class="opcion"><?php echo $this->Html->link(__('Egresar'), array('action' => 'index','controller' => 'Egreso',
-							'centro_id'=>$curso['Centro']['id'],
-							'curso_id'=>$curso['Curso']['id']
-						)); ?>
-					</div>
+					<?php
+						if($curso['Curso']['anio'] == '6to')
+						{
+							if(
+								($curso['Centro']['cue'] == '940007700') ||
+								($curso['Centro']['cue'] == '940008300') ||
+								($curso['Centro']['cue'] == '940015900') ||
+								($curso['Centro']['cue'] == '940015700')
+							) {
+								$showEgreso = false;
+							} else {
+								$showEgreso = true;
+							}
+						} else {
+							if(
+								($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] == 'Sala de 5 años') ||
+								($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] == '7mo')
+							) {
+								$showEgreso = true;
+							}
+						}
+					?>
+
+					<?php  if($showEgreso) : ?>
+						<div class="opcion"><?php echo $this->Html->link(__('Egresar'), array('action' => 'index','controller' => 'Egreso',
+								'centro_id'=>$curso['Centro']['id'],
+								'curso_id'=>$curso['Curso']['id']
+							)); ?>
+						</div>
 					<?php endif; ?>
+
 					<div class="opcion"><?php echo $this->Html->link(__('Reubicar'), array('action' => 'index','controller' => 'Reubicacion',
 							'centro_id'=>$curso['Centro']['id'],
 							'curso_id'=>$curso['Curso']['id']
