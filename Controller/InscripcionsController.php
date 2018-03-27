@@ -289,7 +289,16 @@ class InscripcionsController extends AppController {
                         //$this->loadModel('Curso');
                         //$cursoIdArray = $this->request->data['Curso'];
                         //$cursoIdString = $cursoIdArray['Curso'];
-                        $matriculaActual = $this->Inscripcion->CursosInscripcion->find('count', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoIdString)));
+                        $matriculaActual = $this->Inscripcion->CursosInscripcion->find('count', array(
+                            'fields'=>array(
+                                'CursosInscripcion.*',
+                                'Inscripcion.*'
+                            ),
+                            'conditions'=>array(
+                                'CursosInscripcion.curso_id'=>$cursoIdString,
+                                'Inscripcion.ciclo_id'=>$cicloIdActualString
+                            )));
+
                         $this->Curso->id=$cursoIdString;
                         $this->Curso->saveField("matricula", $matriculaActual);
                         $plazasArray = $this->Curso->findById($cursoIdString, 'plazas');
