@@ -41,7 +41,7 @@
 <div class="row">
   <div class="col-xs-6 col-sm-3">
       <?php
-          echo $this->Form->input('ciclo_id', array('label'=>'Ciclo lectivo*', 'default'=>$cicloIdUltimo, 'disabled' => true, 'empty' => 'Ingrese un ciclo lectivo...', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+          echo $this->Form->input('ciclo_id', array('label'=>'Ciclo lectivo*', 'default'=>$cicloIdActual, 'disabled' => true, 'empty' => 'Ingrese un ciclo lectivo...', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
       <?php echo $this->Form->input('usuario_id', array('type' => 'hidden')); ?>
   </div>
