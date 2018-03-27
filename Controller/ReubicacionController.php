@@ -3,8 +3,6 @@ App::uses('AppController', 'Controller');
 
 class ReubicacionController extends AppController {
 
-	public $paginate = array('CursosInscripcion' => array('limit' => 2, 'order' => 'CursosInscripcion.curso_id ASC'));
-
     public function beforeFilter() {
         parent::beforeFilter();
 		/* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
