@@ -23,7 +23,12 @@
                 success: function(lista){
                     $(".s2_centro").append('<option value="' +''+ '"> ' + 'Seleccione una sección'+ '</option>');
                     for (var key  in lista) {
-                        $(".s2_seccion").append('<option value="' +key+ '"> ' + lista[key] + '</option>');
+                        if(key == <?php echo $cursoInscripcion['Curso']['id']; ?>)
+                        {
+                            $(".s2_seccion").append('<option value="' +key+ '" selected="selected"> ' + lista[key] + '</option>');
+                        } else {
+                            $(".s2_seccion").append('<option value="' +key+ '"> ' + lista[key] + '</option>');
+                        }
                     }
                 }
             });
