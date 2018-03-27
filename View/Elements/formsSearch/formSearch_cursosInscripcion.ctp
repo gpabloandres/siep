@@ -46,16 +46,8 @@
 <!-- COMBO CICLOS -->
 <div class="form-group">
     <div class="input select">
-        <select name="ciclo_id" class="form-control" data-toggle="tooltip" data-placement="bottom">
-            <option value="">Seleccione un ciclo...</option>
-            <?php
-            foreach($comboCiclo as $ciclo_id => $ciclo_value) :
-                ?>
-                <option value="<?php echo $ciclo_id;  ?>"><?php echo $ciclo_value; ?></option>
-                <?php
-            endforeach;
-            ?>
-        </select>
+        <?php
+        echo $this->Form->input('ciclo_id', array('label' => false, 'empty'=>'Seleccione un ciclo...', 'options'=>$comboCiclo, 'default'=>$defaultForm['ciclo_id'], 'class' => 'form-control'));	?>
     </div>
 </div>
 
@@ -63,7 +55,7 @@
 <div class="form-group">
    <?php
    		$turnos = array('Mañana' => 'Mañana', 'Tarde' =>'Tarde', 'Mañana Extendida' =>'Mañana Extendida', 'Tarde Extendida' => 'Tarde Extendida', 'Doble Extendida' =>'Doble Extendida', 'Vespertino' => 'Vespertino', 'Noche' =>'Noche', 'Otro' =>'Otro'); 
-   		echo $this->Form->input('Curso.turno', array('label' => false, 'empty'=>'Ingrese un turno...', 'options'=>$turnos, 'class' => 'form-control'));	?>
+   		echo $this->Form->input('Curso.turno', array('label' => false, 'empty'=>'Ingrese un turno...', 'options'=>$turnos, 'default'=>$defaultForm['turno'], 'class' => 'form-control'));	?>
 </div>
 
 <!-- COMBO AÑOS -->
@@ -80,7 +72,7 @@
           } else {
               $anios = array('1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');  
           }
-        echo $this->Form->input('anio', array('label' =>false, 'empty' => 'Ingrese un año...', 'options' => $anios,  'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Selecciones una opción de la lista'));
+        echo $this->Form->input('anio', array('label' =>false, 'empty' => 'Ingrese un año...', 'options' => $anios, 'default'=>$defaultForm['anio'],  'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Selecciones una opción de la lista'));
     ?>
 </div>
 
@@ -91,7 +83,7 @@
     <div class="form-group">
         <?php
         // SI ESTA DEFINIDO EL CENTRO... FILTRAR SECCIONES
-        echo $this->Form->input('division', array('label' => false, 'empty' => 'Ingrese una division...', 'options' => $comboDivision, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Selecciones una opción de la lista'));
+        echo $this->Form->input('division', array('label' => false, 'empty' => 'Ingrese una division...', 'options' => $comboDivision, 'default'=>$defaultForm['division'], 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Selecciones una opción de la lista'));
         ?>
     </div>
 <?php
@@ -101,7 +93,7 @@
 <div class="form-group">
     <?php
     $inscripcion_estados = array('CONFIRMADA'=>'CONFIRMADA','NO CONFIRMADA'=>'NO CONFIRMADA','BAJA'=>'BAJA','EGRESO'=>'EGRESO');
-    echo $this->Form->input('estado_inscripcion', array('label' => false, 'empty' => 'Ingrese un estado de la inscripción...', 'options' => $inscripcion_estados, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+    echo $this->Form->input('estado_inscripcion', array('label' => false, 'empty' => 'Ingrese un estado de la inscripción...', 'options' => $inscripcion_estados, 'default'=>$defaultForm['estado_inscripcion'],'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
     ?>
 </div>
 

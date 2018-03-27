@@ -144,37 +144,62 @@ class CursosInscripcionsController extends AppController {
 		/* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
         *Pagina según búsquedas simultáneas ya sea por CENTRO y/o CURSO y/o INSCRIPCIÓN.
         */
+
+		$defaultForm['estado_inscripcion'] = '';
+		$defaultForm['centro_id'] = '';
+		$defaultForm['ciclo_id'] = '';
+		$defaultForm['turno'] = '';
+		$defaultForm['anio'] = '';
+		$defaultForm['division'] = '';
+
 		$this->redirectToNamed();
 		$conditions = array();
-		if(!empty($this->params['named']['estado_inscripcion'])) {
+		if(empty($this->params['named']['estado_inscripcion'])) {
+			$conditions['Inscripcion.estado_inscripcion ='] = 'CONFIRMADA';
+			$queryExportacionExcel['estado_inscripcion'] = $conditions['Inscripcion.estado_inscripcion ='];
+			$showExportBtn++;
+
+			$defaultForm['estado_inscripcion'] = $conditions['Inscripcion.estado_inscripcion ='];
+
+		} else {
 			$conditions['Inscripcion.estado_inscripcion ='] = $this->params['named']['estado_inscripcion'];
 			$queryExportacionExcel['estado_inscripcion'] = $this->params['named']['estado_inscripcion'];
 			$showExportBtn++;
+
+			$defaultForm['estado_inscripcion'] = $this->params['named']['estado_inscripcion'];
 		}
 		if(!empty($this->params['named']['centro_id'])) {
 			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
 			$queryExportacionExcel['centro_id'] = $this->params['named']['centro_id'];
 			$showExportBtn++;
+
+			$defaultForm['centro_id'] = $this->params['named']['centro_id'];
 		}
 		if(!empty($this->params['named']['ciclo_id'])) {
 			$conditions['Inscripcion.ciclo_id ='] = $this->params['named']['ciclo_id'];
 			$queryExportacionExcel['ciclo_id'] = $this->params['named']['ciclo_id'];
 			$showExportBtn++;
+
+			$defaultForm['ciclo_id'] = $this->params['named']['ciclo_id'];
 		}
 		if(!empty($this->params['named']['turno'])) {
 			$conditions['Curso.turno ='] = $this->params['named']['turno'];
 			$queryExportacionExcel['turno'] = $this->params['named']['turno'];
+
+			$defaultForm['turno'] = $this->params['named']['turno'];
+
 		}
 		if(!empty($this->params['named']['anio'])) {
 			$conditions['Curso.anio ='] = $this->params['named']['anio'];
 			$queryExportacionExcel['anio'] = $this->params['named']['anio'];
+
+			$defaultForm['anio'] = $this->params['named']['anio'];
 		}
 		if(!empty($this->params['named']['division'])) {
 			$conditions['Curso.division ='] = $this->params['named']['division'];
 			$queryExportacionExcel['division'] = $this->params['named']['division'];
-		}
-		if(!empty($this->params['named']['inscripcion_id'])) {
-			$conditions['CursosInscripcion.inscripcion_id ='] = $this->params['named']['inscripcion_id'];
+
+			$defaultForm['division'] = $this->params['named']['division'];
 		}
 
 		if(empty($this->params['named']['modo'])) {
@@ -246,7 +271,7 @@ class CursosInscripcionsController extends AppController {
 			$comboSecciones = $this->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$userCentroId, 'status' => '1')));
 		}
 		/* FIN */
-		$this->set(compact('cursosInscripcions','comboAnio','comboDivision','comboCiclo','cicloIdActual','comboSecciones','modoLista','queryExportacionExcel','showExportBtn'));
+		$this->set(compact('defaultForm','cursosInscripcions','comboAnio','comboDivision','comboCiclo','cicloIdActual','comboSecciones','modoLista','queryExportacionExcel','showExportBtn'));
 	}
 
 	public function confirmarAlumnos() {
