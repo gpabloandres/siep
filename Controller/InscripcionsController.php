@@ -16,7 +16,7 @@ class InscripcionsController extends AppController {
 	    } elseif ($this->Auth->user('role') === 'usuario') {
 	        $this->Auth->allow('index', 'add', 'view', 'edit', 'constanciaPdf');
 	    } else if ($this->Auth->user('role') === 'admin') {
-            $this->Auth->allow('index', 'view', 'edit', 'constanciaPdf');
+            $this->Auth->allow('index', 'add', 'view', 'edit', 'constanciaPdf');
         }
 	    /* FIN */
         /* FUNCIÓN PRIVADA "LISTS" (INICIO).
@@ -130,6 +130,27 @@ class InscripcionsController extends AppController {
             $this->redirect( array( 'action' => 'index' ));
 		}
 	    /* FIN */
+        //Se obtiene el rol del usuario
+        $userRole = $this->Auth->user('role');
+        //Se obtiene el centro del usuario
+        $userCentroId = $this->getUserCentroId();
+
+        $userData = $this->Auth->user();
+
+        if($userRole == 'admin') {
+            switch($userData['Centro']['nivel_servicio']) {
+                case 'Común - Inicial':
+                case 'Común - Primario':
+                    //  Puede add tranquilamente
+                    break;
+                default:
+                    $this->Session->setFlash('No tiene permisos para agregar inscripciones.', 'default', array('class' => 'alert alert-warning'));
+                    $this->redirect( array( 'action' => 'index' ));
+                    break;
+
+            }
+        }
+
         //Al realizar SUBMIT
         if (!empty($this->data)) {
             //Iniciamos proceso de inscripcion
@@ -138,9 +159,6 @@ class InscripcionsController extends AppController {
             $this->request->data['Inscripcion']['usuario_id'] = $this->Auth->user('id');
             //La fecha de alta se toma del servidor php al momento de ejecutar el controlador
             $this->request->data['Inscripcion']['fecha_alta'] = date('Y-m-d');
-            $userCentroId = $this->getUserCentroId();
-            //Se obtiene el rol del usuario
-            $userRole = $this->Auth->user('role');
             switch($userRole) {
                 case 'superadmin':
                 case 'usuario':
@@ -148,8 +166,6 @@ class InscripcionsController extends AppController {
                     $userCentroId = $this->request->data['Inscripcion']['centro_id'];
                 break;
                 case 'admin':
-                    // Usa el centro definido para el usuario
-                    $userCentroId = $this->getUserCentroId();
                     $this->request->data['Inscripcion']['centro_id'] = $userCentroId ;
                 break;
             }
