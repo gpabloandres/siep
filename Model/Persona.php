@@ -207,20 +207,16 @@ class Persona extends AppModel {
                 'message' => 'Indicar un formato válido.'
             ),
             'calle_nombre' => array(
-                'required' => array(
-                'rule' => 'notBlank',
-                'required' => 'create',
-                'message' => 'Indicar un nombre de calle.'
-                ),
                 'alphaBet' => array(
+                    'allowEmpty' => true,
                 'rule' => '/^[áÁéÉíÍóÓúÚa-zA-ZñÑ 0-9]{3,}$/i',
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 )
             ),
             'calle_nro' => array(
                 'numeric' => array(
+                    'allowEmpty' => true,
                 'rule' => 'naturalNumber',
-                'required' => true,
                 'message' => 'Indicar un número de calle (sólo números, sin puntos, ni comas, ni guiones, ni espacios).'
                 )
             )

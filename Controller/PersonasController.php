@@ -18,6 +18,8 @@ class PersonasController extends AppController {
 	        $this->Auth->allow('index', 'add' , 'view', 'edit', 'autocompletePersonas','listarBarrios','listarAsentamientos');
 	    }
 	    /* FIN */
+
+		App::uses('HttpSocket', 'Network/Http');
     }
 
 	public function index() {
@@ -172,6 +174,13 @@ class PersonasController extends AppController {
 			$this->Session->setFlash('Persona no válida', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
+
+		if(!$this->adminCanEdit($id))
+		{
+			$this->Session->setFlash('No tiene permisos para editar a esta persona, no pertenece a su establecimiento', 'default', array('class' => 'alert alert-warning'));
+			$this->redirect(array('action' => 'index'));
+		}
+
 		if (!empty($this->data)) {
 		  //abort if cancel button was pressed
           if(isset($this->params['data']['cancel'])){
@@ -190,6 +199,21 @@ class PersonasController extends AppController {
 		  $year = $this->request->data['Persona']['fecha_nac']['year'];
 		  // Calcula la edad y se deja en los datos que se intentaran guardar
 		  $this->request->data['Persona']['edad'] = $this->__getEdad($day, $month, $year);
+
+		  $fechaNacimiento = $this->request->data['Persona']['fecha_nac'];
+
+			if(!empty($fechaNacimiento))
+			{
+				$fechaNacimiento = explode('-',$fechaNacimiento);
+
+				$day = $fechaNacimiento[2];
+				$month = $fechaNacimiento[1];
+				$year = $fechaNacimiento[0];
+
+				// Calcula la edad y se deja en los datos que se intentaran guardar
+				$this->request->data['Persona']['edad'] = $this->__getEdad($day, $month, $year);
+			}
+
 		  if ($this->Persona->save($this->data)) {
 				$this->Session->setFlash('La persona ha sido grabada', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Persona->id;
@@ -263,7 +287,63 @@ class PersonasController extends AppController {
 		if ($day_diff < 0 && $month_diff < 0) $year_diff--;
                 return $year_diff;
 	}
+	
+	private function adminCanEdit($personaId) {
+		//Se obtiene el rol del usuario
+		$userRole = $this->Auth->user('role');
+		$userData = $this->Auth->user();
 
+		//  El rol ADMIN puede editar a la persona solo si ésta pertenece a su institucion como alumno
+		if($userRole == 'admin') {
+			//Obtenemos algunos datos de esa personaId
+			$apiPersona = $this->consumeApiPersona($personaId);
+
+			// Si no existe error al consumir el api
+			if(!isset($apiPersona['error']))
+			{
+				$userCentroId = (int) $userData['Centro']['id'];
+				$ultimaInscripcionCentroId = (int) $apiPersona['inscripcion']['centro_id'];
+
+				// Si la ultima inscripcion de la persona pertenece al establecimiento del usuario admin actual, puede editar
+				if($userCentroId == $ultimaInscripcionCentroId)
+				{
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				// Error al consumir el API
+				$this->Session->setFlash($apiPersona['error'], 'default', array('class' => 'alert alert-danger'));
+				$this->redirect(array('action' => 'index'));
+				return false;
+			}
+		} else {
+			// El resto de los roles puede editar
+			return true;
+		}
+	}
+
+	public function consumeApiPersona($personaId) {
+		try
+		{
+			$hostApi = getenv('HOSTAPI');
+
+			$httpSocket = new HttpSocket();
+			$request = array('header' => array('Content-Type' => 'application/json'));
+
+			// Datos de la ultima inscripcion de la persona
+			$data['ver'] = 'ultima';
+			$response = $httpSocket->get("http://$hostApi/api/inscripcion/find/persona/$personaId", $data, $request);
+
+			$response = $response->body;
+			$apiResponse = json_decode($response,true);
+
+			return $apiResponse;
+		} catch(Exception $ex)
+		{
+			return ['error'=>$ex->getMessage()];
+		}
+	}
 
 public function autocompletePersonas() {
 		$conditions = array();
