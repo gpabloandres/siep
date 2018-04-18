@@ -69,12 +69,11 @@
  <div class="unit">
         <div class="subtitulo">Opciones</div>
         <div class="opcion"><?php echo $this->Html->link(__('Listar Personas'), array('action' => 'index')); ?></div>
-      <?php if($current_user['role'] == 'superadmin'): ?>  
+      <?php if($current_user['role'] == 'superadmin' || $current_user['role'] == 'admin'): ?>
         <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $persona['Persona']['id'])); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $persona['Persona']['id']), null, sprintf(__('Esta seguro de borrar al alumno %s?'), $persona['Persona']['nombre_completo_persona'])); ?></div>
-        <?php /*
-        <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $persona['Persona']['id'], 'ext' => 'pdf')); ?></div>-->
-        */ ?>
+      <?php endif; ?>
+      <?php if($current_user['role'] == 'superadmin'): ?>
+              <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $persona['Persona']['id']), null, sprintf(__('Esta seguro de borrar al alumno %s?'), $persona['Persona']['nombre_completo_persona'])); ?></div>
       <?php endif; ?>
 	</div>
   </div>
