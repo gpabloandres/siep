@@ -155,7 +155,6 @@ class Persona extends AppModel {
                 )
             ),
             'ocupacion' => array(
-
                 'alphaBet' => array(
                 'rule' => '/^[ a-zA-ZñÑ]{0,}$/i',
 								'required' => false,
@@ -219,7 +218,21 @@ class Persona extends AppModel {
                 'rule' => 'naturalNumber',
                 'message' => 'Indicar un número de calle (sólo números, sin puntos, ni comas, ni guiones, ni espacios).'
                 )
-            )
+            ),
+            'depto_casa' => array(
+                'alphaBet' => array(
+                    'allowEmpty' => true,
+                'rule' => '/^[áÁéÉíÍóÓúÚa-zA-ZñÑ 0-9]{1,}$/i',
+                'message' => 'Sólo letras, mínimo un caracter'
+                )
+            ),
+            'tira_edificio' => array(
+                'alphaBet' => array(
+                    'allowEmpty' => true,
+                'rule' => '/^[áÁéÉíÍóÓúÚa-zA-ZñÑ 0-9]{1,}$/i',
+                'message' => 'Sólo letras, mínimo un caracter'
+                )
+            ),
         );
     }
 ?>
