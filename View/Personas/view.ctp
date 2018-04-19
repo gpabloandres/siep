@@ -37,7 +37,7 @@
                     <b><?php echo __('Lugar de Nacimiento: '); ?></b>
                     <?php echo ($ciudadNombre[$persona['Persona']['ciudad_id']]); ?></p>
                     <b><?php echo __('Direccion: '); ?></b>
-                    <?php echo $persona['Persona']['calle_nombre'].' N° '.$persona['Persona']['calle_nro']; ?></p>
+                    <?php echo $persona['Persona']['calle_nombre'].' '.$persona['Persona']['calle_nro'].' '.$persona['Persona']['depto_casa'].' '.$persona['Persona']['tira_edificio']; ?></p>
                      <!-- Sí tiene barrio guardado lo muestra. -->
                     <?php if (($barrioNombre[$persona['Persona']['barrio_id']]) !== null):?>
                           <b><?php echo __('Barrio: '); ?></b>
