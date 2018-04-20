@@ -36,8 +36,8 @@
                     <?php echo ($persona['Persona']['division_politica']); ?></p>
                     <b><?php echo __('Lugar de Nacimiento: '); ?></b>
                     <?php echo ($ciudadNombre[$persona['Persona']['ciudad_id']]); ?></p>
-                    <b><?php echo __('Direccion: '); ?></b>
-                    <?php echo $persona['Persona']['calle_nombre'].' '.$persona['Persona']['calle_nro'].' '.$persona['Persona']['depto_casa'].' '.$persona['Persona']['tira_edificio']; ?></p>
+                    <b><?php echo __('Domicilio: '); ?></b><br>
+                    <?php echo ' Calle: '.$persona['Persona']['calle_nombre'].' N° '.$persona['Persona']['calle_nro'].' | Dto/Casa: '.$persona['Persona']['depto_casa'].' |  Tira/Edificio: '.$persona['Persona']['tira_edificio'].' | Ciudad: '.$ciudadNombre[$persona['Persona']['ciudad_id']]; ?></p>
                      <!-- Sí tiene barrio guardado lo muestra. -->
                     <?php if (($barrioNombre[$persona['Persona']['barrio_id']]) !== null):?>
                           <b><?php echo __('Barrio: '); ?></b>
@@ -52,12 +52,14 @@
                     <?php echo $persona['Persona']['telefono_nro']; ?></p>
                     <b><?php echo __('Email: '); ?></b>
                     <?php echo ($this->Html->link($persona['Persona']['email'],'mailto:'.$persona['Persona']['email'])); ?></p>
+                    <!--
                     <b><?php echo __('Ocupación: '); ?></b>
                     <?php echo ($persona['Persona']['ocupacion']); ?></p>
                     <b><?php echo __('Lugar de trabajo: '); ?></b>
                     <?php echo ($persona['Persona']['lugar_de_trabajo']); ?></p>
                     <b><?php echo __('Horario de trabajo: '); ?></b>
                     <?php echo ($persona['Persona']['horario_de_trabajo']); ?></p>
+                    -->
                     <b><?php echo __('Observaciones: '); ?></b>
                     <?php echo $persona['Persona']['observaciones']; ?></p>
                  </div>
