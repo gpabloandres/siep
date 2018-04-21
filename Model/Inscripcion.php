@@ -245,14 +245,21 @@ class Inscripcion extends AppModel {
 					       'message' => 'Indicar una opción'
 				           )
                    ),
-				   'certificado_septimo' => array(
+				   'partida_nacimiento_alumno' => array(
                            'boolean' => array(
                            'rule' => array('boolean'),
                            'allowEmpty' => true,
 					       'message' => 'Indicar una opción'
 				           )
                    ),
-				   'certificado_laboral' => array(
+				   'certificado_vacunas' => array(
+                           'boolean' => array(
+                           'rule' => array('boolean'),
+                           'allowEmpty' => true,
+					       'message' => 'Indicar una opción'
+				           )
+                   ),
+                   'certificado_septimo' => array(
                            'boolean' => array(
                            'rule' => array('boolean'),
                            'allowEmpty' => true,
