@@ -51,11 +51,11 @@
             <div class="col-md-6">
                 <div class="unit">
                     <?php echo '<b>Vinculo:</b> '.$familiar['vinculo'];?><br>
-                    <?php echo '<b>Nombre:</b> '.$familiarNombre[$familiar['persona_id']];?><br>
+                    <?php echo '<b>Nombre:</b> '.$personaNombre[$familiar['persona_id']];?><br>
                     <!--
-                    <?php echo '<b>Cuil/Cuit:</b> '.$familiarCuilCuit[$familiar['persona_id']];?><br>
-                    <?php echo '<b>Telefono:</b> '.$familiarTelefono[$familiar['persona_id']];?><br>
-                    <?php echo '<b>Email:</b> '.$familiarEmail[$familiar['persona_id']];?><br>
+                    <?php //echo '<b>Cuil/Cuit:</b> '.$familiarCuilCuit[$familiar['persona_id']];?><br>
+                    <?php //echo '<b>Telefono:</b> '.$familiarTelefono[$familiar['persona_id']];?><br>
+                    <?php //echo '<b>Email:</b> '.$familiarEmail[$familiar['persona_id']];?><br>
                     -->
                 <div class="text-right">
                     <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'familiars', 'action' => 'view', $familiar['id']), array('class' => 'btn btn-success','escape' => false)); ?>
