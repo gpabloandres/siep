@@ -60,16 +60,12 @@
                                   <ul>
                                     <?php if(!$inscripcion['Inscripcion']['fotocopia_dni'] == 1): ?>
                                     <li><span class="label label-danger"><?php echo 'Falta Fotocopia DNI'; ?></span></li><?php endif; ?>
-                                    <?php if(!$inscripcion['Inscripcion']['certificado_septimo'] == 1): ?>
-                                    <li><span class="label label-danger"><?php echo 'Falta Certificado de Séptimo'; ?></span></li><?php endif; ?>
-                                    <?php if(!$inscripcion['Inscripcion']['analitico'] == 1): ?>
-                                    <li><span class="label label-danger"><?php echo 'Falta Analítico'; ?></span></li><?php endif; ?>
                                     <?php if(!$inscripcion['Inscripcion']['partida_nacimiento_alumno'] == 1): ?>
                                     <li><span class="label label-danger"><?php echo 'Falta Partida Alumno'; ?></span></li><?php endif; ?>
-                                    <?php if(!$inscripcion['Inscripcion']['partida_nacimiento_tutor'] == 1): ?>
-                                    <li><span class="label label-danger"><?php echo 'Falta Partida Tutor'; ?></span></li><?php endif; ?>
-                                    <?php if(!$inscripcion['Inscripcion']['libreta_sanitaria'] == 1): ?>
-                                    <li><span class="label label-danger"><?php echo 'Falta Libreta Sanitaria'; ?></span></li><?php endif; ?>
+                                    <?php if(!$inscripcion['Inscripcion']['certificado_vacunas'] == 1): ?>
+                                    <li><span class="label label-danger"><?php echo 'Certificado vacunación'; ?></span></li><?php endif; ?>
+                                    <?php if(($current_user['puesto'] == 'Dirección Colegio Secundario' || $current_user['puesto'] == 'Supervisión Secundaria') && (!$inscripcion['Inscripcion']['certificado_septimo'] == 1)): ?>
+                                    <li><span class="label label-danger"><?php echo 'Falta Certificado Primaria'; ?></span></li><?php endif; ?>
                                   </ul>
                             </div>
                         </div>
