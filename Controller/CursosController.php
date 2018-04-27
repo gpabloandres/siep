@@ -63,6 +63,25 @@ class CursosController extends AppController {
 		}
 		$cursos = $this->paginate('Curso',$conditions);
 	    /* FIN */
+		
+	    /*
+		 * *********************
+		 * 		IMPORTANTE
+		 * *********************
+		 * Falta filtrar estos combobox segun el tipo de usuario logueado
+		 *
+		 */
+		$comboAnio = $this->Curso->find('list', array(
+			'recursive'=> -1,
+			'fields'=> array('Curso.anio','Curso.anio')
+		));
+
+		$comboDivision = $this->Curso->find('list', array(
+			'recursive'=> -1,
+			'fields'=> array('Curso.division','Curso.division'),
+			'conditions'=>array('centro_id'=>$userCentroId))
+		);
+
 		/* SETS DE DATOS PARA COMBOBOXS DEL FORM SEARCH (INICIO). 
         *  Sí es 'superadmin' el combobox de centros trae todas las instituciones.
         *  Sino sí es 'usuario' trae sólo los centros correspondientes al nivel. 
@@ -82,7 +101,7 @@ class CursosController extends AppController {
 			$centros = $this->Curso->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('id'=>$userCentroId)));
 		}
 		/* FIN */
-		$this->set(compact('cursos', 'centros'));
+		$this->set(compact('cursos', 'centros', 'comboAnio','comboDivision','comboSecciones'));
 	}
 
 	function view($id = null) {
