@@ -86,17 +86,15 @@ class AlumnosController extends AppController {
 		$this->loadModel('Ciclo');
 		$cicloNombre = $this->Ciclo->find('list', array('fields'=>array('nombre')));
         //Datos personales del Alumno
-		$alumnoId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
-        $alumnoNombre = $this->Alumno->Persona->find('list', array('fields'=>array('nombre_completo_persona'), array('conditions' => array('id' => $alumnoId, 'recursive' => -1))));
-        //$alumnoNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions' => array('id' => $alumnoId)));
-        $alumnoDocumentoTipo = $this->Alumno->Persona->find('list', array('fields'=>array('documento_tipo'), array('conditions' => array('id' => $alumnoId, 'recursive' => -1))));
-        $alumnoDocumentoNumero = $this->Alumno->Persona->find('list', array('fields'=>array('documento_nro'), array('conditions' => array('id' => $alumnoId, 'recursive' => -1))));
-        $alumnoEdad = $this->Alumno->Persona->find('list', array('fields'=>array('edad'), array('conditions' => array('id' => $alumnoId, 'recursive' => -1))));
+		$personaId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
+        $alumnoNombre = $this->Alumno->Persona->find('list', array('fields'=>array('nombre_completo_persona'), array('conditions' => array('id' => $personaId, 'recursive' => -1))));
+        $alumnoDocumentoTipo = $this->Alumno->Persona->find('list', array('fields'=>array('documento_tipo'), array('conditions' => array('id' => $personaId, 'recursive' => -1))));
+        $alumnoDocumentoNumero = $this->Alumno->Persona->find('list', array('fields'=>array('documento_nro'), array('conditions' => array('id' => $personaId, 'recursive' => -1))));
+        $alumnoEdad = $this->Alumno->Persona->find('list', array('fields'=>array('edad'), array('conditions' => array('id' => $personaId, 'recursive' => -1))));
     	// Datos relacionados.
     	$centroId = $this->Alumno->find('list', array('fields'=>array('centro_id'), 'conditions'=>array('id'=>$id)));
 		$this->loadModel('Centro');
 		$centroNombre = $this->Centro->find('list', array('fields'=>array('nombre')));
-        $personaId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
 		$this->loadModel('Persona');
 		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
         /*
@@ -105,15 +103,15 @@ class AlumnosController extends AppController {
 		$materiaAlia = $this->Materia->find('list', array('fields'=>array('alia'), 'conditions'=>array('id'=>$notaMateriaId)));
 		*/
 		//Familiares relacionados.
-		$this->loadModel('Persona');
-        $familiarNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
-        /*
+        //$familiarNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
+        $alumnoId = $this->Alumno->primaryKey = $id;
         $familiarVinculo = $this->Persona->Familiar->find('list', array('fields' => array('vinculo'), 'conditions' => array('id' => $alumnoId)));
+        /*
         $familiarCuilCuit = $this->Persona->find('list', array('fields' => array('cuil_cuit')));
         $familiarTelefono = $this->Persona->find('list', array('fields' => array('telefono_nro')));
         $familiarEmail = $this->Persona->find('list', array('fields' => array('email')));
 		*/
-		$this->set(compact('alumnoNombre', 'alumnoDocumentoTipo', 'alumnoDocumentoNumero', 'alumnoEdad', 'centroNombre', 'cicloNombre', 'personaId', 'personaNombre', 'foto', 'materiaAlia', 'barrioNombre', 'familiarNombre', '$familiarCuilCuit', '$familiarTelefono', '$familiarEmail'));
+		$this->set(compact('alumnoNombre', 'alumnoDocumentoTipo', 'alumnoDocumentoNumero', 'alumnoEdad', 'centroNombre', 'cicloNombre', 'personaId', 'personaNombre', 'foto', 'materiaAlia', 'barrioNombre', 'familiarNombre', 'familiarVinculo'));
     }
 
 	public function add() {
