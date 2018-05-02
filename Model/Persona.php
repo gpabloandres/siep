@@ -219,6 +219,13 @@ class Persona extends AppModel {
                 'message' => 'Indicar un número de calle (sólo números, sin puntos, ni comas, ni guiones, ni espacios).'
                 )
             ),
+            'ciudad_id' => array(
+                'numeric' => array(
+                    'rule' => 'naturalNumber',
+                    'required' => true,
+                    'message' => 'Indicar ciudad.'
+                )
+            ),
             'depto_casa' => array(
                 'alphaBet' => array(
                     'allowEmpty' => true,
