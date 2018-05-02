@@ -48,7 +48,7 @@
   <div class="col-xs-6 col-sm-3">
       <?php
           $estados_inscripcion = array('CONFIRMADA'=>'CONFIRMADA','NO CONFIRMADA'=>'NO CONFIRMADA');
-           echo $this->Form->input('estado_inscripcion', array('label'=>'Estado de la inscripción*', /*'default'=>'NO CONFIRMADA', 'disabled' => true,*/ 'empty' => 'Ingrese un estado de la inscripción...', 'options'=>$estados_inscripcion, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+           echo $this->Form->input('estado_inscripcion', array('label'=>'Estado de la inscripción*', 'default'=>'CONFIRMADA', 'empty' => 'Ingrese un estado de la inscripción...', 'options'=>$estados_inscripcion, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
   </div>
 </div><hr />
@@ -125,20 +125,17 @@
     </div>
   </div>
   <!-- End Datos generales -->
-
-   <!-- Datos de alta -->
+  <!-- Datos de alta -->
    <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit">
         <strong><h3>Datos del Alta</h3></strong>
         <hr />
       <?php
             $tipos_inscripcion = array('Común'=>'Común','Hermano de alumno regular'=>'Hermano de alumno regular','Pase'=>'Pase','Situación social'=>'Situación social', 'Integración'=>'Integración');
-            echo $this->Form->input('tipo_inscripcion', array('id'=>'tipoInscripcion','disabled'=>true,'default'=>'Común', 'label'=>'Tipo de inscripción*', 'disabled' => true, 'empty' => 'Ingrese un tipo de inscripción...', 'options'=>$tipos_inscripcion, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+            echo $this->Form->input('tipo_inscripcion', array('id'=>'tipoInscripcion', 'default'=>'Común', 'label'=>'Tipo de inscripción*', 'empty' => 'Ingrese un tipo de inscripción...', 'options'=>$tipos_inscripcion, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
-
     <hr>
     <!-- Autocomplete -->
-    <?php /*
     <div id="formHermanoDeAlumnoRegular">
         <strong><h5>Hermano de Alumno Regular</h5></strong>
         <input id="AutocompleteHermanoAlumno" class="form-control" placeholder="Indique Alumno por DNI, nombre y/o apellido">
@@ -207,15 +204,17 @@
             });
          });
       </script>
-
-    <div id="formSituacionSocial" style="display:none;">
-      <?php
-            $situaciones_sociales = array('Mudanza de la familia' => 'Mudanza de la familia', 'Pasó a educación de jóvenes y adultos' => 'Pasó a educación de jóvenes y adultos', 'Pasó a educación especial' => 'Pasó a educación especial', 'No le gustaba la escuela' => 'No le gustaba la escuela', 'Tenía muchas materias previas' => 'Tenía muchas materias previas', 'Problemas disciplinarios' => 'Problemas disciplinarios',  'Decisión de la escuela' => 'Decisión de la escuela', 'Problemas de salud' =>  'Problemas de salud', 'Cambio en la situación económica' => 'Cambio en la situación económica', 'Comenzó a trabajar' => 'Comenzó a trabajar', 'Quedó embarazada' => 'Quedó embarazada', 'Debe colaborar en la casa' => 'Debe colaborar en la casa');
+      <div id="formSituacionSocial" style="display:none;">
+        <?php
+            if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria')) {
+                $situaciones_sociales = array('Pasó a educación especial' => 'Pasó a educación especial', 'Mudanza de la familia' => 'Mudanza de la familia', 'Problemas de adaptación' => 'Problemas de adaptación', 'Problemas disciplinarios' => 'Problemas disciplinarios', 'Decisión de la institución' => 'Decisión de la institución', 'Problemas de salud' => 'Problemas de salud', 'Dificultad de transporte' => 'Dificultad de transporte', 'Cambio en la situación económica' => 'Cambio en la situación económica', 'No especifica' => 'No especifica', 'Otro' => 'Otro', 'Tenía muchas materias previas' => 'Tenía muchas materias previas', 'Pasó a educación de jóvenes y adultos' => 'Pasó a educación de jóvenes y adultos', 'Comenzó a trabajar' => 'Comenzó a trabajar', 'Quedó embarazada' => 'Quedó embarazada', 'Debe colaborar en la casa' => 'Debe colaborar en la casa');
+            } else {
+                $situaciones_sociales = array('Pasó a educación especial' => 'Pasó a educación especial', 'Mudanza de la familia' => 'Mudanza de la familia', 'Problemas de adaptación' => 'Problemas de adaptación', 'Problemas disciplinarios' => 'Problemas disciplinarios', 'Decisión de la institución' => 'Decisión de la institución', 'Problemas de salud' => 'Problemas de salud', 'Dificultad de transporte' => 'Dificultad de transporte', 'Cambio en la situación económica' => 'Cambio en la situación económica', 'No especifica' => 'No especifica', 'Otro' => 'Otro');
+            }
             echo $this->Form->input('situacion_social', array('label' => 'Situación social', 'empty' => 'Ingrese una opción...', 'options' => $situaciones_sociales, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-      ?>
-    </div>
-    */ ?>   
-    <?php
+        ?>
+      </div>
+      <?php
       /*
             $tipos_alta = array('Regular' => 'Regular', 'Equivalencia'=>'Equivalencia');
             echo $this->Form->input('tipo_alta', array('label' => 'Alta tipo*', 'default' => 'Ingrese un tipo...', 'options' => $tipos_alta, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
@@ -243,8 +242,7 @@
     </div>
    </div>
    <!-- End Datos de alta -->
-
-    <!-- Documentacion presentada -->
+   <!-- Documentacion presentada -->
     <div class="col-md-4 col-sm-6 col-xs-12">
       <div class="unit"><strong><h3>Documentación Presentada</h3></strong><hr />
         <div class="row"><br>
@@ -254,30 +252,38 @@
             </span>
           </div>
           <div class="input-group">
-            <span class="input-group-addon">
-             <?php echo $this->Form->input('certificado_septimo', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Primario Completo</label>'));?>
-            </span>
-          </div>
-        <div class="input-group">
-          <span class="input-group-addon">
-            <?php echo $this->Form->input('analitico', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Analítico</label>'));?>
-          </span>
-        </div>
-        <div class="input-group">
           <span class="input-group-addon">
             <?php echo $this->Form->input('partida_nacimiento_alumno', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Alumno</label>'));?>
           </span>
-        </div>
-        <div class="input-group">
+          </div>
+          <div class="input-group">
           <span class="input-group-addon">
-           <?php echo $this->Form->input('partida_nacimiento_tutor', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Tutor</label>'));?>
+            <?php echo $this->Form->input('certificado_vacunas', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Vacunación</label>'));?>
           </span>
-        </div>
-        <div class="input-group">
-          <span class="input-group-addon">
-            <?php echo $this->Form->input('libreta_sanitaria', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Libreta Sanitaria</label>'));?>
-          </span>
-        </div>
+          </div>
+          <!--
+          <div class="input-group">
+            <span class="input-group-addon">
+             <?php echo $this->Form->input('partida_nacimiento_tutor', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Tutor</label>'));?>
+            </span>
+          </div>
+          -->
+          <?php 
+          if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria')) {
+          ?>  
+            <div class="input-group">
+                <span class="input-group-addon">
+                 <?php echo $this->Form->input('certificado_septimo', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Primario Completo</label>'));?>
+                </span>
+            </div>
+            <!--
+            <div class="input-group">
+              <span class="input-group-addon">
+                <?php echo $this->Form->input('analitico', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Analítico</label>'));?>
+              </span>
+            </div>
+            -->
+          <?php } ?>
       </div><br>
     </div>
   </div>
