@@ -14,9 +14,9 @@ class InscripcionsController extends AppController {
         if ($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
 	    } elseif ($this->Auth->user('role') === 'usuario') {
-	        $this->Auth->allow('index', 'add', 'view', 'edit', 'constanciaPdf');
+	        $this->Auth->allow('index', 'add', 'view', 'edit');
 	    } else if ($this->Auth->user('role') === 'admin') {
-            $this->Auth->allow('index', 'add', 'view', 'edit', 'constanciaPdf');
+            $this->Auth->allow('index', 'add', 'view', 'edit');
         }
 	    /* FIN */
         /* FUNCIÓN PRIVADA "LISTS" (INICIO).
@@ -113,11 +113,22 @@ class InscripcionsController extends AppController {
             $this->Session->setFlash('Inscripcion no valida.', 'default', array('class' => 'alert alert-warning'));
             $this->redirect(array('action' => 'index'));
         }
-        $this->set('inscripcion', $this->Inscripcion->read(null, $id));
-        $personaId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
-        $this->loadModel('Persona');
-        $personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
-        $this->set(compact('inscripcions', 'personaId', 'personaNombre'));
+
+        //Obtenemos datos de la inscripcion desde el API
+        $apiInscripcion = $this->consumeApiFindInscripcion($id);
+
+        // Si no existe error al consumir el api
+        if(!isset($apiInscripcion['error']))
+        {
+            $curso = $apiInscripcion['curso'];
+            $inscripcion = $apiInscripcion['inscripcion'];
+
+            $this->set(compact('inscripcion','curso'));
+        } else {
+            // Error al consumir el API
+            $this->Session->setFlash($apiInscripcion['error'], 'default', array('class' => 'alert alert-danger'));
+            $this->redirect(array('action' => 'index'));
+        }
     }
 
 	public function add() {
@@ -663,25 +674,27 @@ class InscripcionsController extends AppController {
 		return $legajo;
     }
 
-    public function constanciaPdf($id)
-    {
-        try {
-            $httpSocket = new HttpSocket();
-            $response = $httpSocket->get("http://web:3000/api/constancia/$id");
-            $response = $response->body;
+    private function consumeApiFindInscripcion($inscripcioId) {
+        try
+        {
+            $hostApi = getenv('HOSTAPI');
 
-            $api = json_decode($response);
-            if( isset($api->error)) {
-                $this->Session->setFlash($api->error, 'default', array('class' => 'alert alert-warning'));
-                $this->redirect(array('action' => 'index'));
-            } else {
-                header("content-type: application/pdf");
-                echo $response;
-            }
-        } catch(\Exception $ex){
-            $this->Session->setFlash($ex->getMessage(), 'default', array('class' => 'alert alert-warning'));
-            $this->redirect(array('action' => 'index'));
+            $httpSocket = new HttpSocket();
+            $request = array('header' => array('Content-Type' => 'application/json'));
+
+            // Datos de la ultima inscripcion de la persona
+            $data = [];
+            $response = $httpSocket->get("http://$hostApi/api/inscripcion/find/id/$inscripcioId", $data, $request);
+
+            $response = $response->body;
+            $apiResponse = json_decode($response,true);
+
+            return $apiResponse;
+        } catch(Exception $ex)
+        {
+            return ['error'=>$ex->getMessage()];
         }
     }
+
 }
 ?>

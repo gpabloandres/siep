@@ -133,8 +133,8 @@ class PersonasController extends AppController {
 			  $year = $fechaNacimiento[2];
 
 			  $this->request->data['Persona']['fecha_nac'] = [
-				  'month' => $month,
 				  'day' => $day,
+				  'month' => $month,
 				  'year' => $year
 			  ];
 
@@ -194,24 +194,26 @@ class PersonasController extends AppController {
 		  $this->request->data['Persona']['apellidos'] = $apellidosMayuscula;
 		  $this->request->data['Persona']['nombres'] = $nombresMayuscula;
     	  // Antes de guardar calcula la edad
-		  $day = $this->request->data['Persona']['fecha_nac']['day'];
-		  $month = $this->request->data['Persona']['fecha_nac']['month'];
-		  $year = $this->request->data['Persona']['fecha_nac']['year'];
-		  // Calcula la edad y se deja en los datos que se intentaran guardar
-		  $this->request->data['Persona']['edad'] = $this->__getEdad($day, $month, $year);
 
-		  $fechaNacimiento = $this->request->data['Persona']['fecha_nac'];
+  		  $fechaNacimiento = $this->request->data['Persona']['fecha_nacimiento'];
 
 			if(!empty($fechaNacimiento))
 			{
-				$fechaNacimiento = explode('-',$fechaNacimiento);
+				$fechaNacimiento = explode('/',$fechaNacimiento);
 
-				$day = $fechaNacimiento[2];
+				$day = $fechaNacimiento[0];
 				$month = $fechaNacimiento[1];
-				$year = $fechaNacimiento[0];
+				$year = $fechaNacimiento[2];
 
 				// Calcula la edad y se deja en los datos que se intentaran guardar
 				$this->request->data['Persona']['edad'] = $this->__getEdad($day, $month, $year);
+
+				// Es necesario para guardar en la DB
+				$this->request->data['Persona']['fecha_nac'] = [
+					'day' => $day,
+					'month' => $month,
+					'year' => $year
+				];
 			}
 
 		  if ($this->Persona->save($this->data)) {
@@ -224,7 +226,13 @@ class PersonasController extends AppController {
 		}
 		if (empty($this->data)) {
 			$this->data = $this->Persona->read(null, $id);
+			list($año,$mes,$dia) = explode('-',$this->request->data['Persona']['fecha_nac']);
+			$fechaNacimiento =  "$dia/$mes/$año";
 		}
+
+		// Esta fecha tiene el formato dia/mes/año
+		$this->set('fechaNacimiento', $fechaNacimiento);
+
 		$this->loadModel('Ciudad');
 		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
 		$this->set('ciudades', $ciudades);
