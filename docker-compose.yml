@@ -29,6 +29,10 @@ services:
   siep-php-fpm:
     depends_on:
       - siep-mysql
+    environment:
+      - MYSQL_HOST=siep-mysql
+      - CAKEPHP_DEBUG=2
+      - HOSTAPI=172.17.0.1:3000
     image: decyt/siep-php-fpm
     container_name: siep-php-fpm
     networks:
