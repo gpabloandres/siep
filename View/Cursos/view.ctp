@@ -65,6 +65,7 @@
 						// El resto de las secciones promocionan menos 5to inicial y 7mo secundario
 						if(
 							($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] != 'Sala de 5 años') ||
+							($curso['Centro']['nivel_servicio'] == 'Común - Primario') ||
 							($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] != '7mo')
 						) {
 							$showPromocion = true;
