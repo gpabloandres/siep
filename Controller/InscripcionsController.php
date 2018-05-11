@@ -200,7 +200,7 @@ class InscripcionsController extends AppController {
             }
 
             /*
-             *  VERIFICACION DE PERSONA
+             *  VERIFICACION DE PERSONA Y OBTENCIÓN DEL CENTRO DE LA ÚLTIMA INSCRIPCIÓN
              */
             //Antes que nada obtengo personaId
             $personaId = $this->request->data['Persona']['persona_id'];
@@ -219,14 +219,21 @@ class InscripcionsController extends AppController {
             $codigoAnterior = $this->__getCodigo(($ciclo - 1), $personaDni);
             //Comprueba que ese legajo no exista directamente a la base de datos
             $personaInscripta = $this->Inscripcion->find('list', array(
-                'fields'=>array('legajo_nro'),
+                'fields'=>array('legajo_nro', 'centro_id'),
                 'conditions'=>array('legajo_nro'=>$codigoActual)
             ));
+            $this->loadModel('Centro');
+            $this->Centro->recursive = 0;
+            $centroNombre = $this->Centro->findById($personaInscripta, 'id, nombre');
+            $centroNombreString = $centroNombre['Centro']['nombre'];
             /*
-             *  FIN VERIFICACION DE PERSONA
-             */
+             *  FIN VERIFICACION DE PERSONA Y OBTENCIÓN DEL CENTRO DE LA ÚLTIMA INSCRIPCIÓN
+            */
+            
             if (count($personaInscripta)) {
-                $this->Session->setFlash('El alumno ya está inscripto en este ciclo.', 'default', array('class' => 'alert alert-danger'));
+                //$this->Session->setFlash('El alumno ya está inscripto en este ciclo.', 'default', array('class' => 'alert alert-danger'));
+                $resend = $centroNombreString;
+                $this->Session->setFlash(sprintf(_("El alumno ya está inscripto para este ciclo en %s"), $resend), 'default', array('class' => 'alert alert-danger'));       
             } else {
                 $this->request->data['Inscripcion']['legajo_nro'] = $codigoActual;
                 //Antes de guardar genera el estado de la inscripción
