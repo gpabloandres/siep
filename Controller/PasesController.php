@@ -66,6 +66,9 @@ class PasesController extends AppController {
 		if (!empty($this->params['named']['centro_id_destino'])) {
 			$conditions['Pase.centro_id_destino ='] = $this->params['named']['centro_id_destino'];
 		}
+		if(!empty($this->params['named']['anio'])) {
+			$conditions['Pase.anio ='] = $this->params['named']['anio'];
+		}
 		if(!empty($this->params['named']['estado_documentación'])) {
 			$conditions['Pase.estado_documentación ='] = $this->params['named']['estado_documentacion'];
 		}
@@ -167,40 +170,11 @@ class PasesController extends AppController {
 			$userId = $this->Auth->user('id');
 			$this->request->data['Pase']['usuario_id'] = $userId;
  		    // Antes de guardar genera el estado del pase y lo deja en los datos que se intentarán guardar.
-			$estadoPase = 'NO-CONFIRMADO';
+			$estadoPase = 'INICIADO';
 			$this->request->data['Pase']['estado_pase'] = $estadoPase;
  		    // Guarda los datos.
 			if ($this->Pase->save($this->data)) {
 				$this->Session->setFlash('El pase ha sido grabado.', 'default', array('class' => 'alert alert-success'));
-				/* ATUALIZA ESTADO DE INSCRIPCIÓN (INICIO).
-                *  Al registrarse un pase del alumno, modifica la última inscripción de ese alumno:
-                *  pone el estado de inscripción en 'BAJA' y modifica la matrícula del curso correspondiente. 
-                */
-                // Busca el id de la última inscripción del Alumno.
-                $lastInscripcionId = $this->getLastInscripcionId($alumnoIdString);
-                // Cambia a 'BAJA' el estado de esa inscripción.
-                $this->loadModel('Inscripcion');
-                $this->Inscripcion->id=$lastInscripcionId;
-                $this->Inscripcion->saveField("estado_inscripcion", 'BAJA');
-                // Modifica la matrícula de los cursos relacionados a esa inscripción.
-                // Identifica los cursos.
-                $cursosId = $this->Inscripcion->CursosInscripcion->find('list', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.inscripcion_id'=>$lastInscripcionId)));                
-                foreach ($cursosId as $cursosId) {
-                	// Para cada curso resta en 1 la matrícula y suma en 1 la vacante.
-                	$this->loadModel('Curso');
-                	$cursosIdArray = $this->Curso->findById($cursosId, 'id');
-                	$cursosIdString = $cursosIdArray['Curso']['id']; 
-                	$this->Curso->id=$cursosIdString;
-	                $matricula = $this->Curso->findById($cursosId,'id, matricula');
-		            $cursoMatricula = $matricula['Curso']['matricula'];
-	                $matriculaActual = $cursoMatricula - 1;
-	                $this->Curso->saveField("matricula", $matriculaActual);
-	                $vacantes = $this->Curso->findById($cursosId,'id, vacantes');
-		            $cursoVacantes = $vacantes['Curso']['vacantes'];
-	                $vacantesActual = $cursoVacantes + 1;
-	                $this->Curso->saveField("vacantes", $vacantesActual);
-                }
-                /* FIN */
 				$inserted_id = $this->Pase->id;
 				$this->redirect(array('action' => 'view', $inserted_id));
 			} else {
@@ -245,6 +219,35 @@ class PasesController extends AppController {
 				$this->Alumno->id=$alumnoIdString;
 				// Modifica el id del centro del registro de ese alumno. 
 				$this->Alumno->saveField("centro_id", $centroIdDestinoString);
+				/* ATUALIZA ESTADO DE INSCRIPCIÓN (INICIO).
+                *  Al registrarse CONFIRMADO el pase del alumno, modifica la última inscripción de ese alumno:
+                *  pone el estado de inscripción en 'BAJA' y modifica la matrícula del curso correspondiente. 
+                */
+                // Busca el id de la última inscripción del Alumno.
+                $lastInscripcionId = $this->getLastInscripcionId($alumnoIdString);
+                // Cambia a 'BAJA' el estado de esa inscripción.
+                $this->loadModel('Inscripcion');
+                $this->Inscripcion->id=$lastInscripcionId;
+                $this->Inscripcion->saveField("estado_inscripcion", 'BAJA');
+                // Modifica la matrícula de los cursos relacionados a esa inscripción.
+                // Identifica los cursos.
+                $cursosId = $this->Inscripcion->CursosInscripcion->find('list', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.inscripcion_id'=>$lastInscripcionId)));                
+                //foreach ($cursosId as $cursosId) {
+                	// Para cada curso resta en 1 la matrícula y suma en 1 la vacante.
+                	$this->loadModel('Curso');
+                	$cursosIdArray = $this->Curso->findById($cursosId, 'id');
+                	$cursosIdString = $cursosIdArray['Curso']['id']; 
+                	$this->Curso->id=$cursosIdString;
+	                $matricula = $this->Curso->findById($cursosId,'id, matricula');
+		            $cursoMatricula = $matricula['Curso']['matricula'];
+	                $matriculaActual = $cursoMatricula - 1;
+	                $this->Curso->saveField("matricula", $matriculaActual);
+	                $vacantes = $this->Curso->findById($cursosId,'id, vacantes');
+		            $cursoVacantes = $vacantes['Curso']['vacantes'];
+	                $vacantesActual = $cursoVacantes + 1;
+	                $this->Curso->saveField("vacantes", $vacantesActual);
+                //}
+                /* FIN */
 			}
 			if ($this->Pase->save($this->data)) {
 				$this->Session->setFlash('El pase ha sido grabado.', 'default', array('class' => 'alert alert-success'));

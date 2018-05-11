@@ -87,7 +87,7 @@ class Pase extends AppModel {
                     ),
                     'estado_pase' => array(
 						'valid' => array(
-						'rule' => array('inList', array('CONFIRMADO','NO-CONFIRMADO','BAJA')),
+						'rule' => array('inList', array('INICIADO','EN EVALUACIÓN','RECHAZADO', 'CONFIRMADO')),
 						'message' => 'Indicar una opción',
 						'allowEmpty' => false
 							)
@@ -98,7 +98,20 @@ class Pase extends AppModel {
 						'message' => 'Indicar una opción',
 					  	'allowEmpty' => false
 							)
-					)				   
-         );
-}
-?>
+					),
+			        'pase_nro' => array(
+						'numeric' => array(
+			            'rule' => 'naturalNumber',
+			            'message' => 'Indicar número sin puntos ni comas ni espacios.',
+						'allowEmpty' => true
+		            	)
+		            ),
+					'anio' => array(
+						'valid' => array(
+						'rule' => array('inList', array('Sala de 3 años','Sala de 4 años','Sala de 5 años','1ro','2do','3ro','4to','5to','6to','7mo')),
+						'message' => 'Indicar una opción',
+					  	'allowEmpty' => false
+							)
+					)
+        );
+}?>
