@@ -152,6 +152,7 @@ class InscripcionsController extends AppController {
             switch($userData['Centro']['nivel_servicio']) {
                 case 'Común - Inicial':
                 case 'Común - Primario':
+                case 'Común - Secundario':
                     //  Puede add tranquilamente
                     break;
                 default:
