@@ -64,6 +64,9 @@ class CursosController extends AppController {
 		if (!empty($this->params['named']['division'])) {
 			$conditions['Curso.division ='] = $this->params['named']['division'];
 		}
+		if (!empty($this->params['named']['tipo'])) {
+			$conditions['Curso.tipo ='] = $this->params['named']['tipo'];
+		}
 		if (!empty($this->params['named']['turno'])) {
 			$conditions['Curso.turno ='] = $this->params['named']['turno'];
 		}
