@@ -373,6 +373,9 @@ class InscripcionsController extends AppController {
 			$this->Session->setFlash('Inscripcion no valida.', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
+        // Obtención de estados de inscripción anterior y actual.
+        $estadoInscripcionAnteriorArray = $this->Inscripcion->findById($id, 'estado_inscripcion');
+        $estadoInscripcionAnterior = $estadoInscripcionAnteriorArray['Inscripcion']['estado_inscripcion'];
         // Obtención del registro relación curso-inscripción correspondiente a la inscripción.
         $this->loadModel('CursosInscripcion');
         $this->CursosInscripcion->recursive = 0;
@@ -467,7 +470,8 @@ class InscripcionsController extends AppController {
             *  Luego la institución destino, podrá acceder a la inscripción del alumno y actualizando el centro y la sección.
             */
             if ($userRole == 'admin') {
-            /* Se trata de un pase externo, sí se identifica un cambio en el id del centro.
+            /* INICIO: PASE EXTERNO (ENTRE CURSOS DE DIFERENTES INSTITUCIONES DE LA PCIA)
+            *  Se trata de un pase externo, sí se identifica un cambio en el id del centro.
             *  Actualiza el id del centro del Alumno.
             *  Actualiza valores de matrícula y vacantes.
             *  Actualiza a confirmado el estado del pase.
@@ -538,8 +542,10 @@ class InscripcionsController extends AppController {
                         /* FIN */
                     }
                 }
-            }    
-            /* Sino sí cambia de sección, se trata de un pase interno.
+            }
+            /* FIN: PASE EXTERNO (ENTRE CURSOS DE DIFERENTES INSTITUCIONES DE LA PCIA) */    
+            /* INICIO: PASE INTERNO (ENTRE CURSOS DE UNA MISMA INSTITUCIÓN)
+            *  Sí cambia de sección, se trata de un pase interno.
             *  Actualiza valores de matrícula y vacantes del curso origen.
             *  Actualiza valores de matrícula y vacantes del curso destino.
             */
@@ -554,7 +560,7 @@ class InscripcionsController extends AppController {
                         'CursosInscripcion.*',
                         'Inscripcion.*'
                     ),
-                    'contain'=> false,
+                    //'contain'=> false,
                     'conditions'=>array(
                         'CursosInscripcion.curso_id'=>$cursoIdAnterior,
                         'Inscripcion.ciclo_id'=>$cicloActual['id'],
@@ -585,6 +591,34 @@ class InscripcionsController extends AppController {
                 $vacantesActual = $plazasString - $matriculaActual;
                 $this->Curso->saveField("vacantes", $vacantesActual);
             }
+            /* FIN: PASE INTERNO (ENTRE CURSOS DE UNA MISMA INSTITUCIÓN) */
+            /* INICIO: BAJA DE UN ALUMNO (DE UN CURSO DE UNA INSTITUCIÓN)
+            *  Sí cambia el estado de inscripción a BAJA.
+            *  Actualiza valores de matrícula y vacantes del curso origen.
+            */
+            $estadoInscripcionActual = $this->request->data['Inscripcion']['estado_inscripcion'];
+            // Sí el estado de inscripción paso a BAJA.
+            if (($estadoInscripcionAnterior != $estadoInscripcionActual) || ($estadoInscripcionActual == 'BAJA')) {
+                // Actualiza los valores de matrícula y vacantes de la sección origen.
+                $matricula = $this->Inscripcion->CursosInscripcion->find('count', array(
+                    'fields'=>array(
+                        'CursosInscripcion.*',
+                        'Inscripcion.*'
+                    ),
+                    //'contain'=> false,
+                    'conditions'=>array(
+                        'CursosInscripcion.curso_id'=>$cursoIdAnterior,
+                        'Inscripcion.ciclo_id'=>$cicloActual['id'],
+                )));
+                $matriculaActual = $matricula - 1;
+                $this->Curso->id = $cursoIdAnterior;
+                $this->Curso->saveField("matricula", $matriculaActual);
+                $plazasArray = $this->Curso->findById($cursoIdAnterior, 'plazas');
+                $plazasString = $plazasArray['Curso']['plazas'];
+                $vacantesActual = $plazasString - $matriculaActual;
+                $this->Curso->saveField("vacantes", $vacantesActual);
+            }
+            /* FIN: BAJA DE UN ALUMNO (DE UN CURSO DE UNA INSTITUCIÓN) */
             // Quito estos campos de la modificacion, este dato no se modifica
             unset($this->request->data['Inscripcion']['alumno_id']);
             unset($this->request->data['Inscripcion']['ciclo_id']);
@@ -604,7 +638,7 @@ class InscripcionsController extends AppController {
 			}
 		}
         // End submit de formulario
-        $this->set(compact('cursoInscripcion','alumno', 'personaId'));
+        $this->set(compact('cursoInscripcion','alumno', 'personaId', 'estadoInscripcionAnteriorArray'));
     }
 
     public function delete($id = null) {
