@@ -34,6 +34,7 @@ class InscripcionsController extends AppController {
 
 	public function index() {
         $this->Inscripcion->recursive = 0;
+		$this->paginate['Inscripcion']['contain'] = 'Alumno.Persona';
 		$this->paginate['Inscripcion']['limit'] = 4;
 		$this->paginate['Inscripcion']['order'] = array('Inscripcion.fecha_alta' => 'DESC');
 		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
@@ -109,21 +110,7 @@ class InscripcionsController extends AppController {
         } else if ($userRole == 'admin') {
 			$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('id', 'sigla'), 'contain'=>false, 'conditions'=>array('id'=>$nivelCentroId)));
 		}
-        /* Carga de Alumnos */
-		$this->Inscripcion->Alumno->recursive = 0;
-        $personaId = $this->Inscripcion->Alumno->find('list', array(
-            'fields'=>array('persona_id'),
-            'contain'=>false
-            ));
-        $this->loadModel('Persona');
-        $this->Persona->recursive = 0;
-        $this->Persona->Behaviors->load('Containable');
-        $personaNombre = $this->Persona->find('list', array(
-            'fields'=>array('nombre_completo_persona'),
-            'cotain'=>false
-            ));
-        /* FIN */
-		$this->set(compact('inscripcions', 'personaId', 'personaNombre', 'centros', 'ciclos'));
+		$this->set(compact('inscripcions', 'centros', 'ciclos'));
 	}
 
     public function view($id = null) {
