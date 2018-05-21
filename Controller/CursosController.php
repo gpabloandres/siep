@@ -120,18 +120,19 @@ class CursosController extends AppController {
         $cicloIdActual = $this->getActualCicloId();
         $cicloIdActualArray = $this->Ciclo->findById($cicloIdActual, 'id');
         $cicloIdActualString = $cicloIdActualArray['Ciclo']['id'];
+
 		/* FIN */
 		/* GENERA NOMBRES PARA DATOS RELACIONADOS. (INICIO) */
-		$this->loadModel('Persona');
+/*		$this->loadModel('Persona');
 		$this->Persona->recursive = 0;
         $this->Persona->Behaviors->load('Containable');
-		$this->Curso->Inscripcion->Alumno->recursive = 0;
-		$personaId = $this->Curso->Inscripcion->Alumno->find('list', array(
+		$this->Curso->Inscripcion->Alumno->recursive = 1;*/
+/*		$personaId = $this->Curso->Inscripcion->Alumno->find('list', array(
 			'fields'=>array('persona_id'),
 			'contain'=>false));
 		$personaNombre = $this->Persona->find('list', array(
 			'fields'=>array('nombre_completo_persona'),
-			'contain'=>false));
+			'contain'=>false));*/
 		/* FIN */
 		/* OBTIENE NÚMERO DE MATRICULADOS. (INICIO) */
 		$cursoId = $this->Curso->id;
@@ -149,7 +150,7 @@ class CursosController extends AppController {
 		$userCentroId = $this->getUserCentroId();
         $userCentroNivel = $this->getUserCentroNivel($userCentroId);
 		/* FIN */
-		$this->set(compact('personaId', 'personaNombre', 'cicloNombre', 'userCentroNivel', 'vacantes', 'cursoPlazasString', 'cursoMatriculaString', 'cicloIdActualString'));
+		$this->set(compact('inscripciones','cicloNombre', 'userCentroNivel', 'vacantes', 'cursoPlazasString', 'cursoMatriculaString', 'cicloIdActualString'));
 	}
 
 	function add() {
