@@ -498,7 +498,7 @@ class InscripcionsController extends AppController {
                         'CursosInscripcion.*',
                         'Inscripcion.*'
                     ),
-                    'contain'=>false,
+                    //'contain'=>false,
                     'conditions'=>array(
                         'CursosInscripcion.curso_id'=>$cursoIdString,
                         'Inscripcion.ciclo_id'=>$cicloActual['id'],
@@ -528,7 +528,7 @@ class InscripcionsController extends AppController {
                                 'CursosInscripcion.*',
                                 'Inscripcion.*'
                             ),
-                            'contain'=>false,
+                            //'contain'=>false,
                             'conditions'=>array(
                                 'CursosInscripcion.curso_id'=>$cursoIdString,
                                 'Inscripcion.ciclo_id'=>$cicloActual['id'],
@@ -578,7 +578,7 @@ class InscripcionsController extends AppController {
                         'CursosInscripcion.*',
                         'Inscripcion.*'
                     ),
-                    'contain'=> false,
+                    //'contain'=> false,
                     'conditions'=>array(
                         'CursosInscripcion.curso_id'=>$cursoIdNew,
                         'Inscripcion.ciclo_id'=>$cicloActual['id'],
