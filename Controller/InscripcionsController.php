@@ -218,7 +218,7 @@ class InscripcionsController extends AppController {
             $codigoActual = $this->__getCodigo($ciclo, $personaDni);
             $codigoAnterior = $this->__getCodigo(($ciclo - 1), $personaDni);
             //Comprueba que ese legajo no exista directamente a la base de datos
-            $existePersonaInscripta = $this->Inscripcion->find('count', array(
+            $existePersonaInscripta = $this->Inscripcion->find('first',array(
                  'contain' => false,
                  'conditions' => array('Inscripcion.legajo_nro' => $codigoActual)
             ));
@@ -228,11 +228,8 @@ class InscripcionsController extends AppController {
             /*
              *  FIN VERIFICACION DE PERSONA Y OBTENCIÓN DEL CENTRO DE LA ÚLTIMA INSCRIPCIÓN
             */
-            if ($existePersonaInscripta!=0) {
-                $centroNombre = $this->Centro->findById($existePersonaInscripta, 'id, nombre');
-                $centroNombreString = $centroNombre['Centro']['nombre'];
-                $resend = $centroNombreString;
-                $this->Session->setFlash(sprintf(_("El alumno ya está inscripto para este ciclo en %s"), $resend), 'default', array('class' => 'alert alert-danger'));       
+            if (isset($existePersonaInscripta['Inscripcion']['legajo_nro'])) {
+                $this->Session->setFlash(sprintf(_("El alumno ya está inscripto para este ciclo en %s"), $existePersonaInscripta['Centro']['nombre']), 'default', array('class' => 'alert alert-danger'));
             } else {
                 $this->request->data['Inscripcion']['legajo_nro'] = $codigoActual;
                 /* INICIO:  Definición del estado de la documentación según el nivel del centro.*/
