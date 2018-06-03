@@ -85,7 +85,7 @@ class Curso extends AppModel {
                     ),
 				   'anio' => array(
                         'valid' => array(
-							'rule' => array('inList', array('Sala de 3 años','Sala de 4 años','Sala de 5 años','1ro','2do','3ro','4to','5to','6to','7mo')),
+							'rule' => array('inList', array('Sala de menos de 1 año','Sala de 1 año','Sala de 2 años','Sala de 3 años','Sala de 4 años','Sala de 5 años','1ro','2do','3ro','4to','5to','6to','7mo')),
 							'message' => 'Ingrese un año válido',
 							'allowEmpty' => false
 						)	
