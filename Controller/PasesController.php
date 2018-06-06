@@ -24,7 +24,7 @@ class PasesController extends AppController {
     }
 
 	public function index() {
-		$this->Pase->recursive = -1;
+		$this->Pase->recursive = 0;
 		$this->paginate['Pase']['limit'] = 4;
 		$this->paginate['Pase']['order'] = array('Pase.created' => 'DESC');
 		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
