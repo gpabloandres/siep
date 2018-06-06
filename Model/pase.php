@@ -2,7 +2,7 @@
 class Pase extends AppModel {
 	var $name = 'Pase';
 	public $displayField = 'id';
-	//public $actsAs = array('Containable');
+	public $actsAs = array('Containable');
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
