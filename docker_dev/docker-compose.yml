@@ -42,7 +42,7 @@ services:
       environment:
         - MYSQL_HOST=siep-mysql
         - CAKEPHP_DEBUG=2
-        - HOSTAPI=172.17.0.1:3000
+        - HOSTAPI=siep-api-web
       depends_on:
         - siep-mysql
       networks:
