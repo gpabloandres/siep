@@ -15,7 +15,14 @@ services:
         - MYSQL_PASSWORD=siep
       networks:
         - siep-lan
-
+   
+    siep-adminer:
+      image: adminer
+      networks:
+        - siep-lan
+      ports:
+        - "8080:8080"
+  
     siep-cake-web:
       restart: always
       image: nginx:alpine
@@ -27,7 +34,7 @@ services:
       ports:
         - "80:80"
       depends_on:
-        - siep-cake-php
+        - siep-cake-composer
       networks:
         - siep-lan
 
@@ -47,21 +54,15 @@ services:
         - siep-mysql
       networks:
         - siep-lan
-
-    siep-adminer:
-      image: adminer
-      networks:
-        - siep-lan
-      ports:
-        - "8080:8080"
-  
-    siep-composer:
+    
+    siep-cake-composer:
       image: composer
       volumes:
-        - .:/app
+        - ..:/var/www/myapp
+      working_dir: "/var/www/myapp"
       command: "composer install --ignore-platform-reqs"
       depends_on:
-        - siep-cake-web
+        - siep-cake-php
       networks:
         - siep-lan
 
