@@ -29,10 +29,7 @@
     <?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>
     <div class="unit"><strong><h3>Datos de Nacimiento / Ocupación</h3></strong><hr />
 		<?php
-			//$options = array( 'label' => 'Fecha de nacimiento', 'class' => 'form-control', 'dateFormat' => 'DMY',	'minYear' => date('Y') - 100, 'maxYear' => date('Y'), 'empty' => array('day' => 'Día', 'month' => 'Mes', 'year' => 'Año'));
-			//echo $this->Form->input('fecha_nac', $options);
 			echo $this->Form->input('fecha_nacimiento', array('id'=>'fecha_nacimiento','label' => 'Fecha de nacimiento*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese la fecha de nacimiento...'));
-			echo '<input name="fecha_nac" type="hidden" />';
 			echo $this->Form->input('pcia_nac', array('label' => 'Lugar de Nacimiento*', 'between' => '<br>', 'class' => 'form-control', 'Placeholder' => 'Ingrese un lugar de nacimiento...'));
 			$divisionesTipos = array('Provincia'=>'Provincia','Departamento'=>'Departamento','Partido'=>'Partido','Ciudad'=>'Ciudad','Estado'=>'Estado','Comunidad'=>'Comunidad','Condado'=>'Condado','Tierra'=>'Tierra');
           	echo $this->Form->input('division_politica', array('label' => 'División Política*', 'default' => 'Provincia', 'options' => $divisionesTipos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));

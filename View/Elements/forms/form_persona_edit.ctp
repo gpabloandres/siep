@@ -1,4 +1,5 @@
-<?php echo $this->Html->script(array('tooltip', 'datepicker', 'moment', 'bootstrap-datetimepicker')); ?>
+<?php echo $this->Html->css(array('/js/daterangepicker/daterangepicker')); ?>
+<?php echo $this->Html->script(array('tooltip','moment-with-locales.min','daterangepicker/daterangepicker')); ?>
 <div class="row">
 	<div class="col-xs-6 col-sm-3">
 	    <?php echo $this->Form->input('created', array('label' => 'Creado*', 'readonly' => true, 'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar')); ?>
@@ -29,7 +30,7 @@
     <?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>
     <div class="unit"><strong><h3>Datos de Nacimiento / Ocupación</h3></strong><hr />
 		<?php
-			echo $this->Form->input('fecha_nac', array('label' => 'Fecha de nacimiento', 'type' => 'text', 'between' => '<br>', 'empty' => ' ','class' => 'datepicker form-control', 'Placeholder' => 'Ingrese una fecha...'));
+			echo $this->Form->input('fecha_nacimiento', array('id'=>'fecha_nacimiento','value'=>$fechaNacimiento,'label' => 'Fecha de nacimiento*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese la fecha de nacimiento...'));
 			echo $this->Form->input('pcia_nac', array('label' => 'Lugar de Nacimiento*', 'between' => '<br>', 'class' => 'form-control', 'Placeholder' => 'Ingrese un nombre de pcia...'));
 		    $divisionesTipos = array('Provincia'=>'Provincia','Departamento'=>'Departamento','Partido'=>'Partido','Ciudad'=>'Ciudad','Estado'=>'Estado','Comunidad'=>'Comunidad','Condado'=>'Condado','Tierra'=>'Tierra');
           	echo $this->Form->input('division_politica', array('label' => 'División Política*', 'default' => 'Provincia', 'options' => $divisionesTipos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
@@ -86,19 +87,6 @@
 <div class="col-md-12 col-sm-6 col-xs-12">
     <?php echo $this->Form->input('observaciones', array('label'=>'Observaciones', 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control')); ?>
 </div>
-<script type="text/javascript">
-            $('#datetimepicker1').datetimepicker({
-			useCurrent: true, //this is important as the functions sets the default date value to the current value
-			format: 'YYYY-MM-DD hh:mm',
-			}).on('dp.change', function (e) {
-                  var specifiedDate = new Date(e.date);
-				  if (specifiedDate.getMinutes() == 0)
-				  {
-					  specifiedDate.setMinutes(1);
-					  $(this).data('DateTimePicker').date(specifiedDate);
-				  }
-               });
-  </script>
 	<script>
  $(document).ready(function(){
 	 var el = $("#comboCiudad")
@@ -135,17 +123,15 @@
 });
  </script>
 
-	<script type="text/javascript">
-		$('#datetimepicker1').datetimepicker({
-			useCurrent: true, //this is important as the functions sets the default date value to the current value
-			format: 'YYYY-MM-DD hh:mm',
-		}).on('dp.change', function (e) {
-			var specifiedDate = new Date(e.date);
-			if (specifiedDate.getMinutes() == 0)
-			{
-				specifiedDate.setMinutes(1);
-				$(this).data('DateTimePicker').date(specifiedDate);
-			}
-		});
-	</script>
 </div>
+
+<script type="text/javascript">
+	$(function() {
+		moment.locale('es');
+
+		$('#fecha_nacimiento').daterangepicker({
+			singleDatePicker: true,
+			showDropdowns: true
+		});
+	});
+</script>

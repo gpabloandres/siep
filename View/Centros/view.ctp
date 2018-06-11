@@ -183,6 +183,7 @@
 </div>
 <!-- end Titulaciones Relacionadas -->
 */ ?>
+<?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
 <!-- Cursos Relacionados -->
 <div id="click_04" class="titulo_acordeon">Secciones Relacionadas <span class="caret"></span></div>
 <div id="acordeon_04">
@@ -214,6 +215,7 @@
         <?php endif; ?>
     </div>
 </div>
+<?php endif ?>
 <!-- end Cursos Relacionados -->
 <?php /*
 <!-- Inscripciones Relacionadas
