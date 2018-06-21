@@ -21,3 +21,4 @@ mysql/
 docker_dev/dump/
 
 docker_dev/mysqldata/
+supervisord.*
