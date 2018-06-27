@@ -186,10 +186,10 @@ class PasesController extends AppController {
 			$alumnoIdArray = $this->Alumno->findByPersonaId($personaId,'id');
 			$alumnoIdString = $alumnoIdArray['Alumno']['id'];
 			$this->request->data['Pase']['alumno_id'] = $alumnoIdString;
-			// Genera el id del centro en función del id del alumno.
-			$alumnoCentroIdArray = $this->Alumno->findById($alumnoIdString, 'centro_id');
-			$alumnoCentroIdString = $alumnoCentroIdArray['Alumno']['centro_id'];
-			$this->request->data['Pase']['centro_id_origen'] = $alumnoCentroIdString;
+			// Genera el id del centro en función del role del usuario.
+			//Se obtiene el centro del usuario
+        	$userCentroId = $this->getUserCentroId();
+        	$this->request->data['Pase']['centro_id_origen'] = $userCentroId;
 			// Antes de guardar genera el estado de la documentación
 			if ($this->request->data['Pase']['nota_tutor'] == true) {
 			    	$estadoDocumentacion = "COMPLETA";
@@ -222,7 +222,7 @@ class PasesController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->data)) {
-		  //abort if cancel button was pressed
+		    //abort if cancel button was pressed
             if (isset($this->params['data']['cancel'])) {
                 $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
@@ -238,30 +238,36 @@ class PasesController extends AppController {
 			// Sí se confirma el pase, se modifica el id del centro del alumno. 
 			$estadoPase = $this->request->data['Pase']['estado_pase'];
 			if ($estadoPase == 'CONFIRMADO') {
-				// Obtiene el id del pase.
+				/* ATUALIZA ESTADO DE INSCRIPCIÓN (INICIO).
+	            *  Al registrarse CONFIRMADO el pase del alumno, modifica la última inscripción de ese alumno:
+	            *  pone el estado de inscripción en 'BAJA' y modifica la matrícula del curso correspondiente. 
+	            */
+	   			// Obtiene el id del pase.
 				$paseId = $this->request->data['Pase']['id'];
-				// Obtiene el id del alumno relacionado a ese pase.
+
+	   			// Obtiene el id del alumno relacionado a ese pase.
 				$alumnoIdArray = $this->Pase->findById($paseId, 'alumno_id');
 				$alumnoIdString = $alumnoIdArray['Pase']['alumno_id'];
-				// Obtiene el id del centro destino del pase.
-				$centroIdDestinoArray = $this->Pase->findById($paseId ,'centro_id_destino');
-				$centroIdDestinoString = $centroIdDestinoArray['Pase']['centro_id_destino'];
-				// Carga el modelo Alumno. 
-				$this->loadModel('Alumno');
-				// Identifica el registro del alumno en el modelo.
-				$this->Alumno->id=$alumnoIdString;
-				// Modifica el id del centro del registro de ese alumno. 
-				$this->Alumno->saveField("centro_id", $centroIdDestinoString);
-				/* ATUALIZA ESTADO DE INSCRIPCIÓN (INICIO).
-                *  Al registrarse CONFIRMADO el pase del alumno, modifica la última inscripción de ese alumno:
-                *  pone el estado de inscripción en 'BAJA' y modifica la matrícula del curso correspondiente. 
-                */
-                // Busca el id de la última inscripción del Alumno.
-                $lastInscripcionId = $this->getLastInscripcionId($alumnoIdString);
-                // Cambia a 'BAJA' el estado de esa inscripción.
-                $this->loadModel('Inscripcion');
-                $this->Inscripcion->id=$lastInscripcionId;
+				
+				// Obtiene el id del ciclo actual.
+				$this->loadModel('Ciclo');
+				$cicloIdActual = $this->getActualCicloId();
+	        	$cicloIdActualArray = $this->Ciclo->findById($cicloIdActual, 'id');
+	        	$cicloIdActualString = $cicloIdActualArray['Ciclo']['id'];
+	        	
+	        	// Obtiene el id de la inscripcion relacionada al alumno del pase y al ciclo actual.
+	        	$this->loadModel('Inscripcion');
+	        	$lastInscripcionId = $this->Inscripcion->find('list', array(
+	                	'fields'=>array('id'), 
+	                	'conditions'=>array('alumno_id'=>$alumnoIdString, 'ciclo_id'=>$cicloIdActualString)
+	                ));
+	        	$lastInscripcionIdArray = $this->Inscripcion->findById($lastInscripcionId, 'id');
+	        	$lastInscripcionIdString = $lastInscripcionIdArray['Inscripcion']['id'];
+				
+				// Cambia a 'BAJA' el estado de esa inscripción.
+        		$this->Inscripcion->id=$lastInscripcionId;
                 $this->Inscripcion->saveField("estado_inscripcion", 'BAJA');
+                
                 // Modifica la matrícula de los cursos relacionados a esa inscripción.
                 // Identifica los cursos.
                 $cursosId = $this->Inscripcion->CursosInscripcion->find('list', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.inscripcion_id'=>$lastInscripcionId)));                

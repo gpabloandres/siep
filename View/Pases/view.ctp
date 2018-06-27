@@ -11,7 +11,7 @@
                         <b><?php echo __('Fecha de Inicio: '); ?></b>
                             <?php echo ($pase['Pase']['created']); ?></p>
                         <b><?php echo __('Ciclo: '); ?></b>
-                            <?php echo ($this->Html->link($ciclos[$pase['Pase']['ciclo_id']], array('controller' => 'ciclos', 'action' => 'view', $pase['Pase']['ciclo_id']))); ?></p>
+                            <?php echo $ciclos[$pase['Pase']['ciclo_id']]; ?></p>
                         <b><?php echo __('Alumno: '); ?></b>
                             <?php echo ($this->Html->link($personaNombre[$alumnosId[$pase['Pase']['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['Pase']['alumno_id']))); ?></p>
                         <b><?php echo __('Institución de Destino: '); ?></b>
@@ -26,6 +26,8 @@
                             <?php echo ($pase['Pase']['estado_documentacion']); ?></p>
                         <b><?php echo __('Estado: '); ?></b>
                             <?php echo ($pase['Pase']['estado_pase'])." desde el ".($pase['Pase']['modified']); ?></p>
+                        <b><?php echo __('Observaciones: '); ?></b>
+                            <?php echo ($pase['Pase']['observaciones']); ?></p>
                     </div>
                 </div>
             </div>

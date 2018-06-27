@@ -8,7 +8,7 @@
             <span class="error"></span><?php echo $this->Html->image('../img/inscription_image.png', array('class' => 'img-thumbnail img-responsive')); ?>
                 <?php endif; ?>
         </div>-->
-        <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Ciclo:</b> <?php echo $this->Html->link($ciclosNombre[$pase['Pase']['ciclo_id']], array('controller' => 'ciclos', 'action' => 'view', $pase['Pase']['ciclo_id'])); ?></span><br/>
+        <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Ciclo:</b> <?php echo $ciclosNombre[$pase['Pase']['ciclo_id']]; ?></span><br/>
       <?php if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) { ?>
           <span class="name"><span class="glyphicon glyphicon-home"></span> <b>Centro Origen:</b> <?php echo $this->Html->link($centrosNombreTarjetas[$pase['Pase']['centro_id_origen']], array('controller' => 'centros', 'action' => 'view', $pase['Pase']['centro_id_origen'])); ?></span><br/>
       <?php } ?> 
@@ -22,7 +22,7 @@
         if (($pase['Pase']['estado_pase'] == 'INICIADO') && ($current_user['centro_id'] == $pase['Pase']['centro_id_origen'])) { ?>
             <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo $this->Html->link($personaNombre[$personaId[$pase['Pase']['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['Pase']['alumno_id'])); ?></span><br/>
         <?php } else if (($pase['Pase']['estado_pase'] == 'CONFIRMADO') && ($current_user['centro_id'] == $pase['Pase']['centro_id_destino'])) { ?>
-            <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo $this->Html->link($personaNombre[$personaId[$pase['Pase']['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['Pase']['alumno_id'])); ?></span><br/>
+            <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b>        <?php echo $this->Html->link($personaNombre[$personaId[$pase['Pase']['alumno_id']]], array('controller' => 'inscripcions', 'action' => 'add')); ?></span><br/>
         <?php } else { ?> 
             <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo $personaNombre[$personaId[$pase['Pase']['alumno_id']]]; ?></span><br/> 
        <?php }

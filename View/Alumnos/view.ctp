@@ -125,7 +125,7 @@
 			<div class="col-md-4">
 				<div class="unit">
 					<?php echo '<b>Ciclo:</b> '.($this->Html->link($cicloNombre[$pase['ciclo_id']], array('controller' => 'ciclos', 'action' => 'view', $pase['ciclo_id'])));?><br>
-					<?php echo '<b>Centro de Destino:</b> '.($this->Html->link($centroNombre[$pase['centro_id_origen']], array('controller' => 'centros', 'action' => 'view', $pase['centro_id_origen'])));?><br>
+					<?php echo '<b>Centro de Origen:</b> '.($this->Html->link($centroNombre[$pase['centro_id_origen']], array('controller' => 'centros', 'action' => 'view', $pase['centro_id_origen'])));?><br>
 					<!--<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>-->
 					<?php echo '<b>Alumno:</b> '.($this->Html->link($personaNombre[$personaId[$pase['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['alumno_id'])));?><br>
 		            <b>Documentación:</b> <?php if($pase['estado_documentacion'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $pase['estado_documentacion']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $pase['estado_documentacion']; ?></span><?php } ?></br>
