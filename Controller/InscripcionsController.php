@@ -137,13 +137,13 @@ class InscripcionsController extends AppController {
 
 	public function add() {
         $this->Inscripcion->recursive = 0;
-        /* BOTÓN CANCELAR (INICIO).
-        */
+        /* BOTÓN CANCELAR (INICIO) */
         if (isset($this->params['data']['cancel'])) {
             $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
             $this->redirect( array( 'action' => 'index' ));
 		}
 	    /* FIN */
+        /* INICIO: PERMISO PARA AGREGAR SEGÚN EL NIVEL DEL CENTRO DEL USUARIO */
         //Se obtiene el rol del usuario
         $userRole = $this->Auth->user('role');
         //Se obtiene el centro del usuario
@@ -154,7 +154,7 @@ class InscripcionsController extends AppController {
                 case 'Común - Inicial':
                 case 'Común - Primario':
                 case 'Común - Secundario':
-                    //  Puede add tranquilamente
+                    // Permitidos agregar.
                     break;
                 default:
                     $this->Session->setFlash('No tiene permisos para agregar inscripciones.', 'default', array('class' => 'alert alert-warning'));
@@ -163,6 +163,7 @@ class InscripcionsController extends AppController {
             }
         }
         $this->Inscripcion->contain(array('Centro', 'Ciclo'));
+        /* FIN */
         //Al realizar SUBMIT
         if (!empty($this->data)) {
             $this->Inscripcion->create();
@@ -170,6 +171,7 @@ class InscripcionsController extends AppController {
             $this->request->data['Inscripcion']['usuario_id'] = $this->Auth->user('id');
             //La fecha de alta se toma del servidor php al momento de ejecutar el controlador
             $this->request->data['Inscripcion']['fecha_alta'] = date('Y-m-d');
+            /* DEFINICIÓN DEL CENTRO DE ORIGEN SEGÚN EL ROL DEL USUARIO (INICIO) */
             switch($userRole) {
                 case 'superadmin':
                 case 'usuario':
@@ -180,6 +182,7 @@ class InscripcionsController extends AppController {
                     $this->request->data['Inscripcion']['centro_id'] = $userCentroId;
                 break;
             }
+            /* FIN */
             // Luego de seleccionar el ciclo, se deja en los datos que se intentarán guardar.
             $cicloId = $this->request->data['Inscripcion']['ciclo_id'];
             $this->Inscripcion->Ciclo->recursive = 0;
@@ -198,9 +201,7 @@ class InscripcionsController extends AppController {
                 $this->Session->setFlash('No definio la sección.', 'default', array('class' => 'alert alert-danger'));
                 $this->redirect($this->referer());
             }
-            /*
-             *  VERIFICACION DE PERSONA Y OBTENCIÓN DEL CENTRO DE LA ÚLTIMA INSCRIPCIÓN
-             */
+            /* INICIO: VERIFICACION DE DEFINICIÓN DE LA PERSONA */
             //Antes que nada obtengo personaId
             $personaId = $this->request->data['Persona']['persona_id'];
             if (empty($personaId)) {
@@ -208,16 +209,28 @@ class InscripcionsController extends AppController {
                 $this->Session->setFlash('No se definio la persona.', 'default', array('class' => 'alert alert-danger'));
                 $this->redirect($this->referer());
             }
-            //Obtenemos algunos datos de esa personaId
+            /* FIN */
+            /* INICIO: GENERACIÓN DEL CÓDIGO DE INSCRIPCIÓN */
+            //Obtención del DNI de la persona.
             $this->loadModel('Persona');
             $this->Persona->recursive = 0;
             $this->Persona->Behaviors->load('Containable');
             $persona = $this->Persona->findById($personaId,'id, documento_nro');
             $personaDni = $persona['Persona']['documento_nro'];
-            //Genera el nro de legajo y se deja en los datos que se intentaran guardar
-            $codigoActual = $this->__getCodigo($ciclo, $personaDni);
+            //Genera del código de inscripción y se deja en los datos que se intentaran guardar.
+            //Obtiene el tipo de inscripción actual. 
+            $tipoInscripcionActual = $this->request->data['Inscripcion']['tipo_inscripcion'];
+            // Obtiene número de pase para el ciclo actual.
+            $paseNro = 1; //Se podría calcular desde los registros de pases.
+            // Sí el tipo de inscripción actual es PASE, genera un código específico.
+            if ($tipoInscripcionActual == 'Pase') {
+                $codigoActual = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
+            } else {
+                $codigoActual = $this->__getCodigo($ciclo, $personaDni);
+            }
             $codigoAnterior = $this->__getCodigo(($ciclo - 1), $personaDni);
-            //Comprueba que ese legajo no exista directamente a la base de datos
+            /* FIN */
+            /* INICIO: Comprobación de unicidad del código de inscripción en la base de datos. */
             $existePersonaInscripta = $this->Inscripcion->find('first',array(
                  'contain' => false,
                  'conditions' => array('Inscripcion.legajo_nro' => $codigoActual)
@@ -225,14 +238,11 @@ class InscripcionsController extends AppController {
             $this->loadModel('Centro');
             $this->Centro->recursive = 0;
             $this->Centro->Behaviors->load('Containable');
-            /*
-             *  FIN VERIFICACION DE PERSONA Y OBTENCIÓN DEL CENTRO DE LA ÚLTIMA INSCRIPCIÓN
-            */
             if (isset($existePersonaInscripta['Inscripcion']['legajo_nro'])) {
                 $this->Session->setFlash(sprintf(_("El alumno ya está inscripto para este ciclo en %s"), $existePersonaInscripta['Centro']['nombre']), 'default', array('class' => 'alert alert-danger'));
             } else {
                 $this->request->data['Inscripcion']['legajo_nro'] = $codigoActual;
-                /* INICIO:  Definición del estado de la documentación según el nivel del centro.*/
+            /* INICIO:  Definición del estado de la documentación según el nivel del centro.*/
                 $userCentroNivel = $this->getUserCentroNivel($userCentroId);
                 switch($userCentroNivel) {
                     case 'Común - Inicial':
@@ -255,11 +265,8 @@ class InscripcionsController extends AppController {
                 }
                 //Se genera el estado y se deja en los datos que se intentaran guardar
                 $this->request->data['Inscripcion']['estado_documentacion'] = $estadoDocumentacion;
-                /*FIN*/
-                /*
-                 *  VERIFICACIONES Y CREACIÓN DEL ALUMNO
-                 * 
-                */
+                /* FIN */
+                /* INICIO: VERIFICACIONES PARA CREACIÓN DEL ALUMNO */
                 //Verifica si la persona se encuentra inscripta como alumno              
                 $this->loadModel('Alumno');
                 $this->Alumno->Behaviors->load('Containable');
@@ -291,7 +298,9 @@ class InscripcionsController extends AppController {
                         die;
                     }
                 }
-                /* FIN DE VERIFICACIÓN Y CREACIÓN DEL ALUMNO */
+                $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
+                /* FIN */
+                /* INICIO: Adecúa mensajes para los combobox dependientes según el tipo de inscripción. */
                 switch($this->request->data['Inscripcion']['tipo_inscripcion'])
                 {
                     case 'Hermano de alumno regular':
@@ -310,10 +319,7 @@ class InscripcionsController extends AppController {
                         }
                     break;
                 }
-                $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
-                /*
-                 *  FIN VERIFICACION DE ALUMNO
-                 */
+                /* FIN */
                 if ($this->Inscripcion->save($this->data)) {
                     /* ATUALIZA MATRÍCULA Y VACANTES (INICIO).
                     *  Al registrarse una Inscripción sí es para el ciclo actual o para un agrupamiento 
@@ -632,6 +638,11 @@ class InscripcionsController extends AppController {
 	private function __getCodigo($ciclo, $personaDocString){
 		$legajo = $personaDocString."-".$ciclo;
 		return $legajo;
+    }
+
+    private function __getCodigoPase($ciclo, $personaDocString, $paseNro){
+        $legajo = $personaDocString."-".$ciclo."-"."PASE"."_".$paseNro;
+        return $legajo;
     }
 
     private function consumeApiFindInscripcion($inscripcioId) {
