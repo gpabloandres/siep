@@ -221,9 +221,18 @@ class InscripcionsController extends AppController {
             //Obtiene el tipo de inscripción actual. 
             $tipoInscripcionActual = $this->request->data['Inscripcion']['tipo_inscripcion'];
             // Obtiene número de pase para el ciclo actual.
-            $paseNro = 1; //Se podría calcular desde los registros de pases.
             // Sí el tipo de inscripción actual es PASE, genera un código específico.
-            if ($tipoInscripcionActual == 'Pase') {
+            if ($tipoInscripcionActual == 'PASE') {
+                $paseNro = 0;
+                do { 
+                    $paseNro += 1;
+                    $codigoPrueba = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
+                    $cuentaInscripcionPase = $this->Inscripcion->find('count',array(
+                                    'contain' => false,
+                                    'conditions' => array('Inscripcion.legajo_nro' => $codigoPrueba)
+                                    ));
+                } while ($cuentaInscripcionPase != 0)
+            }                             
                 $codigoActual = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
             } else {
                 $codigoActual = $this->__getCodigo($ciclo, $personaDni);
