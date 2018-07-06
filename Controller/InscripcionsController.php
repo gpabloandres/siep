@@ -154,6 +154,8 @@ class InscripcionsController extends AppController {
                 case 'Común - Inicial':
                 case 'Común - Primario':
                 case 'Común - Secundario':
+                case 'Adultos - Primario':
+                case 'Adultos - Secundario':
                     //  Puede add tranquilamente
                     break;
                 default:
