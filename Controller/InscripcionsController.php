@@ -154,7 +154,9 @@ class InscripcionsController extends AppController {
                 case 'Común - Inicial':
                 case 'Común - Primario':
                 case 'Común - Secundario':
-                    // Permitidos agregar.
+                case 'Adultos - Primario':
+                case 'Adultos - Secundario':
+                //  PERMITIDOS AGREGAR
                     break;
                 default:
                     $this->Session->setFlash('No tiene permisos para agregar inscripciones.', 'default', array('class' => 'alert alert-warning'));
@@ -248,7 +250,7 @@ class InscripcionsController extends AppController {
             $this->Centro->recursive = 0;
             $this->Centro->Behaviors->load('Containable');
             if (isset($existePersonaInscripta['Inscripcion']['legajo_nro'])) {
-                $this->Session->setFlash(sprintf(_("El alumno ya está inscripto para este ciclo en %s"), $existePersonaInscripta['Centro']['nombre']), 'default', array('class' => 'alert alert-danger'));
+                $this->Session->setFlash(sprintf("El alumno ya está inscripto para este ciclo en %s", $existePersonaInscripta['Centro']['nombre']), 'default', array('class' => 'alert alert-danger'));
             } else {
                 $this->request->data['Inscripcion']['legajo_nro'] = $codigoActual;
             /* INICIO:  Definición del estado de la documentación según el nivel del centro.*/
