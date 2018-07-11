@@ -137,13 +137,13 @@ class InscripcionsController extends AppController {
 
 	public function add() {
         $this->Inscripcion->recursive = 0;
-        /* BOTÓN CANCELAR (INICIO).
-        */
+        /* BOTÓN CANCELAR (INICIO) */
         if (isset($this->params['data']['cancel'])) {
             $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
             $this->redirect( array( 'action' => 'index' ));
 		}
 	    /* FIN */
+        /* INICIO: PERMISO PARA AGREGAR SEGÚN EL NIVEL DEL CENTRO DEL USUARIO */
         //Se obtiene el rol del usuario
         $userRole = $this->Auth->user('role');
         //Se obtiene el centro del usuario
@@ -156,7 +156,7 @@ class InscripcionsController extends AppController {
                 case 'Común - Secundario':
                 case 'Adultos - Primario':
                 case 'Adultos - Secundario':
-                    //  Puede add tranquilamente
+                //  PERMITIDOS AGREGAR
                     break;
                 default:
                     $this->Session->setFlash('No tiene permisos para agregar inscripciones.', 'default', array('class' => 'alert alert-warning'));
@@ -165,6 +165,7 @@ class InscripcionsController extends AppController {
             }
         }
         $this->Inscripcion->contain(array('Centro', 'Ciclo'));
+        /* FIN */
         //Al realizar SUBMIT
         if (!empty($this->data)) {
             $this->Inscripcion->create();
@@ -172,6 +173,7 @@ class InscripcionsController extends AppController {
             $this->request->data['Inscripcion']['usuario_id'] = $this->Auth->user('id');
             //La fecha de alta se toma del servidor php al momento de ejecutar el controlador
             $this->request->data['Inscripcion']['fecha_alta'] = date('Y-m-d');
+            /* DEFINICIÓN DEL CENTRO DE ORIGEN SEGÚN EL ROL DEL USUARIO (INICIO) */
             switch($userRole) {
                 case 'superadmin':
                 case 'usuario':
@@ -182,6 +184,7 @@ class InscripcionsController extends AppController {
                     $this->request->data['Inscripcion']['centro_id'] = $userCentroId;
                 break;
             }
+            /* FIN */
             // Luego de seleccionar el ciclo, se deja en los datos que se intentarán guardar.
             $cicloId = $this->request->data['Inscripcion']['ciclo_id'];
             $this->Inscripcion->Ciclo->recursive = 0;
@@ -200,9 +203,7 @@ class InscripcionsController extends AppController {
                 $this->Session->setFlash('No definio la sección.', 'default', array('class' => 'alert alert-danger'));
                 $this->redirect($this->referer());
             }
-            /*
-             *  VERIFICACION DE PERSONA Y OBTENCIÓN DEL CENTRO DE LA ÚLTIMA INSCRIPCIÓN
-             */
+            /* INICIO: VERIFICACION DE DEFINICIÓN DE LA PERSONA */
             //Antes que nada obtengo personaId
             $personaId = $this->request->data['Persona']['persona_id'];
             if (empty($personaId)) {
@@ -210,16 +211,37 @@ class InscripcionsController extends AppController {
                 $this->Session->setFlash('No se definio la persona.', 'default', array('class' => 'alert alert-danger'));
                 $this->redirect($this->referer());
             }
-            //Obtenemos algunos datos de esa personaId
+            /* FIN */
+            /* INICIO: GENERACIÓN DEL CÓDIGO DE INSCRIPCIÓN */
+            //Obtención del DNI de la persona.
             $this->loadModel('Persona');
             $this->Persona->recursive = 0;
             $this->Persona->Behaviors->load('Containable');
             $persona = $this->Persona->findById($personaId,'id, documento_nro');
             $personaDni = $persona['Persona']['documento_nro'];
-            //Genera el nro de legajo y se deja en los datos que se intentaran guardar
-            $codigoActual = $this->__getCodigo($ciclo, $personaDni);
+            //Genera del código de inscripción y se deja en los datos que se intentaran guardar.
+            //Obtiene el tipo de inscripción actual. 
+            $tipoInscripcionActual = $this->request->data['Inscripcion']['tipo_inscripcion'];
+            // Obtiene número de pase para el ciclo actual.
+            // Sí el tipo de inscripción actual es PASE, genera un código específico.
+            if ($tipoInscripcionActual == 'PASE') {
+                $paseNro = 0;
+                do { 
+                    $paseNro += 1;
+                    $codigoPrueba = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
+                    $cuentaInscripcionPase = $this->Inscripcion->find('count',array(
+                                    'contain' => false,
+                                    'conditions' => array('Inscripcion.legajo_nro' => $codigoPrueba)
+                                    ));
+                } while ($cuentaInscripcionPase != 0)
+            }                             
+                $codigoActual = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
+            } else {
+                $codigoActual = $this->__getCodigo($ciclo, $personaDni);
+            }
             $codigoAnterior = $this->__getCodigo(($ciclo - 1), $personaDni);
-            //Comprueba que ese legajo no exista directamente a la base de datos
+            /* FIN */
+            /* INICIO: Comprobación de unicidad del código de inscripción en la base de datos. */
             $existePersonaInscripta = $this->Inscripcion->find('first',array(
                  'contain' => false,
                  'conditions' => array('Inscripcion.legajo_nro' => $codigoActual)
@@ -227,14 +249,11 @@ class InscripcionsController extends AppController {
             $this->loadModel('Centro');
             $this->Centro->recursive = 0;
             $this->Centro->Behaviors->load('Containable');
-            /*
-             *  FIN VERIFICACION DE PERSONA Y OBTENCIÓN DEL CENTRO DE LA ÚLTIMA INSCRIPCIÓN
-            */
             if (isset($existePersonaInscripta['Inscripcion']['legajo_nro'])) {
                 $this->Session->setFlash(sprintf("El alumno ya está inscripto para este ciclo en %s", $existePersonaInscripta['Centro']['nombre']), 'default', array('class' => 'alert alert-danger'));
             } else {
                 $this->request->data['Inscripcion']['legajo_nro'] = $codigoActual;
-                /* INICIO:  Definición del estado de la documentación según el nivel del centro.*/
+            /* INICIO:  Definición del estado de la documentación según el nivel del centro.*/
                 $userCentroNivel = $this->getUserCentroNivel($userCentroId);
                 switch($userCentroNivel) {
                     case 'Común - Inicial':
@@ -257,11 +276,8 @@ class InscripcionsController extends AppController {
                 }
                 //Se genera el estado y se deja en los datos que se intentaran guardar
                 $this->request->data['Inscripcion']['estado_documentacion'] = $estadoDocumentacion;
-                /*FIN*/
-                /*
-                 *  VERIFICACIONES Y CREACIÓN DEL ALUMNO
-                 * 
-                */
+                /* FIN */
+                /* INICIO: VERIFICACIONES PARA CREACIÓN DEL ALUMNO */
                 //Verifica si la persona se encuentra inscripta como alumno              
                 $this->loadModel('Alumno');
                 $this->Alumno->Behaviors->load('Containable');
@@ -293,7 +309,9 @@ class InscripcionsController extends AppController {
                         die;
                     }
                 }
-                /* FIN DE VERIFICACIÓN Y CREACIÓN DEL ALUMNO */
+                $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
+                /* FIN */
+                /* INICIO: Adecúa mensajes para los combobox dependientes según el tipo de inscripción. */
                 switch($this->request->data['Inscripcion']['tipo_inscripcion'])
                 {
                     case 'Hermano de alumno regular':
@@ -312,10 +330,7 @@ class InscripcionsController extends AppController {
                         }
                     break;
                 }
-                $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
-                /*
-                 *  FIN VERIFICACION DE ALUMNO
-                 */
+                /* FIN */
                 if ($this->Inscripcion->save($this->data)) {
                     /* ATUALIZA MATRÍCULA Y VACANTES (INICIO).
                     *  Al registrarse una Inscripción sí es para el ciclo actual o para un agrupamiento 
@@ -464,90 +479,6 @@ class InscripcionsController extends AppController {
                 $this->Session->setFlash('No definio la sección.', 'default', array('class' => 'alert alert-danger'));
                 $this->redirect($this->referer());
             }
-            /* METODOLOGÍAS DE PASE SEGÚN PERFILES DE USUARIOS*/
-            /* Sí es admin, primero debe generar desde su institución (centro origen) y con el módulo PASE, la propuesta de pase.
-            *  Luego la institución destino, podrá acceder a la inscripción del alumno y actualizando el centro y la sección.
-            */
-            if ($userRole == 'admin') {
-            /* INICIO: PASE EXTERNO (ENTRE CURSOS DE DIFERENTES INSTITUCIONES DE LA PCIA)
-            *  Se trata de un pase externo, sí se identifica un cambio en el id del centro.
-            *  Actualiza el id del centro del Alumno.
-            *  Actualiza valores de matrícula y vacantes.
-            *  Actualiza a confirmado el estado del pase.
-            */
-            if ($cursoInscripcion['Inscripcion']['centro_id'] != $userCentroId) {
-                /* Actualiza el id del centro del Alumno. */
-                $alumnoIdArray = $this->Alumno->findByPersonaId($personaId);
-                $alumnoIdString = $alumnoIdArray['Alumno'];
-                $this->Alumno->id=$alumnoIdString;
-                $this->Alumno->saveField("centro_id", $userCentroId);
-                /* Modifica a "CONFIRMADO" el estado del pase. */
-                $alumnoIdArray = $this->Inscripcion->findById($id, 'alumno_id');
-                $alumnoIdString = $alumnoIdArray['Inscripcion']['alumno_id'];
-                $this->loadModel('Pase');
-                $this->Pase->recursive = 0;
-                $this->Pase->Behaviors->load('Containable');
-                $this->Pase->alumno_id=$alumnoIdString;
-                $this->Pase->saveField("estado_pase", 'CONFIRMADO');
-                /* ATUALIZA MATRÍCULA Y VACANTES (INICIO). */
-                $cursoIdArray = $this->request->data['Curso'];
-                $cursoIdString = $cursoIdArray['Curso'];
-                $matriculaActual = $this->Inscripcion->CursosInscripcion->find('count', array(
-                    'fields'=>array(
-                        'CursosInscripcion.*',
-                        'Inscripcion.*'
-                    ),
-                    //'contain'=>false,
-                    'conditions'=>array(
-                        'CursosInscripcion.curso_id'=>$cursoIdString,
-                        'Inscripcion.ciclo_id'=>$cicloActual['id'],
-                    )));
-                $this->Curso->id=$cursoIdString;
-                $this->Curso->saveField("matricula", $matriculaActual);
-                $plazasArray = $this->Curso->findById($cursoIdString, 'plazas');
-                $plazasString = $plazasArray['Curso']['plazas'];
-                $vacantesActual = $plazasString - $matriculaActual;
-                $this->Curso->saveField("vacantes", $vacantesActual);
-                /* FIN */
-                }
-            } else {
-                /* Síno sí es superadmin o usuario , generara el pase directamente con la edición de la Inscripción */
-                if ($userRole == 'superadmin' || $userRole == 'usuario') {
-                    if ($cursoInscripcion['Inscripcion']['centro_id'] != $userCentroId) {
-                        /* Actualiza el id del centro del Alumno. */
-                        $alumnoIdArray = $this->Alumno->findByPersonaId($personaId);
-                        $alumnoIdString = $alumnoIdArray['Alumno'];
-                        $this->Alumno->id=$alumnoIdString;
-                        $this->Alumno->saveField("centro_id", $userCentroId);
-                        /* ATUALIZA MATRÍCULA Y VACANTES (INICIO). */
-                        $cursoIdArray = $this->request->data['Curso'];
-                        $cursoIdString = $cursoIdArray['Curso'];
-                        $matriculaActual = $this->Inscripcion->CursosInscripcion->find('count', array(
-                            'fields'=>array(
-                                'CursosInscripcion.*',
-                                'Inscripcion.*'
-                            ),
-                            //'contain'=>false,
-                            'conditions'=>array(
-                                'CursosInscripcion.curso_id'=>$cursoIdString,
-                                'Inscripcion.ciclo_id'=>$cicloActual['id'],
-                        )));
-                        $this->Curso->id=$cursoIdString;
-                        $this->Curso->saveField("matricula", $matriculaActual);
-                        $plazasArray = $this->Curso->findById($cursoIdString, 'plazas');
-                        $plazasString = $plazasArray['Curso']['plazas'];
-                        $vacantesActual = $plazasString - $matriculaActual;
-                        $this->Curso->saveField("vacantes", $vacantesActual);
-                        /* FIN */
-                    }
-                }
-            }
-            /* FIN: PASE EXTERNO (ENTRE CURSOS DE DIFERENTES INSTITUCIONES DE LA PCIA) */    
-            /* INICIO: PASE INTERNO (ENTRE CURSOS DE UNA MISMA INSTITUCIÓN)
-            *  Sí cambia de sección, se trata de un pase interno.
-            *  Actualiza valores de matrícula y vacantes del curso origen.
-            *  Actualiza valores de matrícula y vacantes del curso destino.
-            */
             $cursoIdAnterior = $cursoInscripcion['Curso']['id'];
             $cursoIdNew = $nuevoCurso['Curso']['id'];
             // Sí los id de los cursos son diferentes, se trata de un cambio de sección.
@@ -718,6 +649,11 @@ class InscripcionsController extends AppController {
 	private function __getCodigo($ciclo, $personaDocString){
 		$legajo = $personaDocString."-".$ciclo;
 		return $legajo;
+    }
+
+    private function __getCodigoPase($ciclo, $personaDocString, $paseNro){
+        $legajo = $personaDocString."-".$ciclo."-"."PASE"."_".$paseNro;
+        return $legajo;
     }
 
     private function consumeApiFindInscripcion($inscripcioId) {

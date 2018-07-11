@@ -1,19 +1,23 @@
 <?php echo $this->Html->script(array('acordeon', 'slider')); ?>
 <?php echo $this->Html->css('slider.css'); ?>
 <!-- start main -->
-<div class="TituloSec">Pase <?php //echo ($curso['Curso']['nombre_completo_curso']); ?></div>
+<div class="TituloSec">Pase <?php echo ($pase['Pase']['pase_nro']); ?></div>
 <div id="ContenidoSec">
     <div class="row">
         <div class="col-md-8">
              <div class="unit">
                 <div class="row perfil">
                     <div class="col-md-8 col-sm-6 col-xs-8">
+                        <b><?php echo __('Fecha de Inicio: '); ?></b>
+                            <?php echo ($pase['Pase']['created']); ?></p>
                         <b><?php echo __('Ciclo: '); ?></b>
-                            <?php echo ($this->Html->link($ciclos[$pase['Pase']['ciclo_id']], array('controller' => 'ciclos', 'action' => 'view', $pase['Pase']['ciclo_id']))); ?></p>
+                            <?php echo $ciclos[$pase['Pase']['ciclo_id']]; ?></p>
                         <b><?php echo __('Alumno: '); ?></b>
                             <?php echo ($this->Html->link($personaNombre[$alumnosId[$pase['Pase']['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['Pase']['alumno_id']))); ?></p>
                         <b><?php echo __('Institución de Destino: '); ?></b>
                             <?php echo ($this->Html->link($centros[$pase['Pase']['centro_id_destino']], array('controller' => 'centros', 'action' => 'view', $pase['Pase']['centro_id_destino']))); ?></p>
+                        <b><?php echo __('Año de estudio: '); ?></b>
+                            <?php echo ($pase['Pase']['anio']); ?></p>    
                         <b><?php echo __('Tipo: '); ?></b>
                             <?php echo ($pase['Pase']['tipo']); ?></p>
                         <b><?php echo __('Motivo: '); ?></b>
@@ -21,7 +25,9 @@
                         <b><?php echo __('Documentación: '); ?></b>
                             <?php echo ($pase['Pase']['estado_documentacion']); ?></p>
                         <b><?php echo __('Estado: '); ?></b>
-                            <?php echo ($pase['Pase']['estado_pase']); ?></p>
+                            <?php echo ($pase['Pase']['estado_pase'])." desde el ".($pase['Pase']['modified']); ?></p>
+                        <b><?php echo __('Observaciones: '); ?></b>
+                            <?php echo ($pase['Pase']['observaciones']); ?></p>
                     </div>
                 </div>
             </div>

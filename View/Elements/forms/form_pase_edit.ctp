@@ -6,25 +6,36 @@
   </div>
   <div class="col-xs-6 col-sm-3">
         <?php
-            $estados = array('CONFIRMADO'=>'CONFIRMADO','NO CONFIRMADO'=>'NO CONFIRMADO','BAJA'=>'BAJA');
+            $estados = array('INICIADO'=>'INICIADO', 'EN EVALUACIÓN'=>'EN EVALUACIÓN', 'CONFIRMADO'=>'CONFIRMADO', 'RECHAZADO'=>'RECHAZADO');
             echo $this->Form->input('estado_pase', array('label' => 'Estado del Pase', 'empty' => 'Ingrese una opción...', 'options' => $estados, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
         ?>
+  </div>
+  <div class="col-xs-6 col-sm-3">
+    <?php echo $this->Form->input('modified', array('label' => 'Modificado*', 'readonly' => true, 'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar'));
+    ?>
   </div>
 </div><hr />
 <div class="row">
   <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
        <?php 
-          echo $this->Form->input('alumno_id', array('label'=>'Alumno*', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
+          echo $this->Form->input('alumno_id', array('label'=>'Alumno*', 'readonly' => true, 'options'=>$PersonaAlumnoId, 'between' => '<br>', 'class' => 'form-control'));
       ?><br>
       <?php
-          echo $this->Form->input('centro_id_destino', array('label'=>'Institución Destino*', 'readonly' => true, 'empty' => 'Ingrese una institución...', 'options'=>$listacentros, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-      ?>
+          echo $this->Form->input('centro_id_destino', array('label'=>'Institución Destino*', 'readonly' => true, 'empty' => 'Ingrese una institución...', 'options'=>$centrosNombre, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+      ?><br>
+      <?php
+          $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años', '1ro' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+          echo $this->Form->input('anio', array('label'=>'Año de estudio*', 'empty' => 'Ingrese un año de estudio...', 'options'=>$anios, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+      ?><br>
     </div>
     <?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>
     <div class="unit"><strong><h3>Datos Específicos</h3></strong><hr />
-        <?php
-            $tipos = array('De Preinscripción' => 'De Preinscripción', 'De inscripción' => 'De inscripción');
+      <?php
+            echo $this->Form->input('pase_nro', array('label'=>'Trámite de pase nro*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Indique el número sin puntos, ni guiones, ni espacios', 'placeholder' => 'Ingrese un nº de pase...'));
+      ?><br>
+      <?php
+            $tipos = array('Ingreso a la provincia' => 'Ingreso a la provincia', 'Egreso de la provincia' => 'Egreso de la provincia', 'Dentro de la provincia' => 'Dentro de la provincia');
             echo $this->Form->input('tipo', array('label' => 'Tipo', 'empty' => 'Ingrese una opción...', 'options' => $tipos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
         ?><br>
         <?php
