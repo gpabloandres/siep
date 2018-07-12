@@ -52,10 +52,10 @@
 <div class="col-md-4">
  <div class="unit">
  			<div class="subtitulo">Opciones</div>
+			<div class="opcion"><?php echo $this->Html->link(__('Listar Agentes'), array('action' => 'index')); ?></div>
 			<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $empleado['Empleado']['id'])); ?></div>
 			<div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $empleado['Empleado']['id']), null, sprintf(__('Esta seguro de borrar al empleado %s?'), $empleado['Empleado']['nombre_completo_empleado'])); ?></div>
-	        <div class="opcion"><?php echo $this->Html->link(__('Listar Agentes'), array('action' => 'index')); ?></div>
-	 </div>
+		 </div>
   </div>
 </div> 
  <!-- end main -->

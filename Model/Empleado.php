@@ -40,19 +40,6 @@ class Empleado extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'Inscripcion' => array(
-			'className' => 'Inscripcion',
-			'foreignKey' => 'empleado_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
 		'Inventario' => array(
 			'className' => 'Inventario',
 			'foreignKey' => 'empleado_id',
@@ -130,13 +117,6 @@ class Empleado extends AppModel {
 	//Validaciones
 
         var $validate = array(
-                   'created' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-                           'message' => 'Indicar fecha y hora.'
-                           )
-                   ),
 				   'nombres' => array(
                            'required' => array(
 						   'rule' => 'notBlank',

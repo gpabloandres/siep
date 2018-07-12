@@ -1,4 +1,4 @@
-<?php echo $this->Html->script(array('tooltip', 'datepicker', 'moment', 'bootstrap-datetimepicker')); ?> 
+<?php echo $this->Html->script(array('tooltip', 'datepicker', 'moment', 'bootstrap-datetimepicker')); ?>
 <div class="row">
   <div class="col-xs-6 col-sm-3">
       <?php echo $this->Form->input('created', array('label' => 'Creado*', 'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar')); ?>
@@ -8,15 +8,15 @@
   <div class="col-md-4 col-sm-6 col-xs-12">
 	  <?php
           echo $this->Form->input('nombre', array('label' => 'Nombre*', 'empty' => 'Ingrese un nombre...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca el nombre de la titulación'));
-          $certificaciones = array('Primaria de 6 años' => 'Primaria de 6 años', 'Primaria de 7 años' => 'Primaria de 7 años','9 años' => '9 años', 'Secundaria' => 'Secundaria', 'EGB/ Primaria y Ciclo Básico' => 'EGB/ Primaria y Ciclo Básico', 'Sin requisitos' => 'Sin requisitos', 'Medio completo' => 'Medio completo', 'Otros' => 'Otros' );
+          $certificaciones = array('Primaria de 6 años' => 'Primaria de 6 años', 'Primaria de 7 años' => 'Primaria de 7 años','9 años' => '9 años', 'Secundaria' => 'Secundaria', 'EGB - Primaria y Ciclo Básico' => 'EGB - Primaria y Ciclo Básico', 'Sin requisitos' => 'Sin requisitos', 'Medio completo' => 'Medio completo', 'Otros' => 'Otros' );
           echo $this->Form->input('certificacion', array('label' => 'Certificación*', 'empty' => 'Ingrese una certificación...',  'options' => $certificaciones, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
-          $condiciones_ingreso = array('Asistir al Curso' => 'Asistir al Curso', 'Aprobar Curso' => 'Aprobar Curso', 'Examen de Ingreso' => 'Examen de Ingreso', 'Prueba de nivel o aptitud' => 'Prueba de nivel o aptitud', 'Sin requisitos/unicamente Secundario' => 'Sin  requisitos/unicamente Secundario', 'Otros' => 'Otros');
+          $condiciones_ingreso = array('Asistir al Curso' => 'Asistir al Curso', 'Aprobar Curso' => 'Aprobar Curso', 'Examen de Ingreso' => 'Examen de Ingreso', 'Prueba de nivel o aptitud' => 'Prueba de nivel o aptitud', 'Sin requisitos- unicamente Secundario' => 'Sin  requisitos - unicamente Secundario', 'Otros' => 'Otros');
           echo $this->Form->input('condicion_ingreso', array('label' => 'Condición de Ingreso*', 'empty' => 'Ingrese una condición de ingreso...', 'options' => $condiciones_ingreso, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
           echo $this->Form->input('ciclo_implementacion', array('label' => 'Ciclo de implementación*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca el año inicial de vigencia del título', 'placeholder' => 'Ciclo de implementación'));
           echo $this->Form->input('ciclo_finalizacion', array('label' => 'Ciclo de finalización', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca el año final de vigencia del título', 'placeholder' => 'Ciclo de finalización'));
           $tipo_formaciones = array('Docente' => 'Docente', 'Docente y Técnico Profesional' => 'Docente y Técnico Profesional', 'Técnico tecnológico' => 'Técnico tecnológico', 'Técnico humanístico' => 'Técnico humanístico');
           echo $this->Form->input('tipo_formacion', array('label' => 'Formación tipo (superior)*', 'empty' => 'Ingrese un tipo...', 'options' => $tipo_formaciones, 'between' => '<br>', 'class' => 'form-control'));
-          $tipos = array('Grado/Formación Inicial' => 'Grado/Formación Inicial', 'Posgrado/Especialización' => 'Posgrado/Especialización', 'Postítulo Docente' => 'Postítulo Docente');
+          $tipos = array('Grado-Formación Inicial' => 'Grado-Formación Inicial', 'Posgrado-Especialización' => 'Posgrado-Especialización', 'Postítulo Docente' => 'Postítulo Docente');
           echo $this->Form->input('tipo', array('label' => 'Tipo (superior)*', 'empty' => 'Ingrese un tipo...', 'options' => $tipos, 'between' => '<br>', 'class' => 'form-control'));
 		  echo $this->Form->input('a_termino', array('between' => '<br>', 'class' => 'form-control'));
           $orientaciones = array('Bachiller' => 'Bachiller', 'Ciclo Básico' => 'Ciclo Básico', 'Comercial' => 'Comercial', 'Técnica' => 'Técnica', 'Agropecuaria' => 'Agropecuaria', 'Artística' => 'Artística', 'Otros' => 'Otros', 'Ciclo Básico Técnico' => 'Ciclo Básico Técnico', 'Humanidades y Cs. Sociales' => 'Humanidades y Cs. Sociales', 'Ciencias Naturales' => 'Ciencias Naturales', 'Economía y Gestión de las Organizaciones' => 'Economía y Gestión de las Organizaciones', 'Producción de Bienes y Servicios' => 'Producción de Bienes y Servicios', 'Comuncación, Artes y Diseño' => 'Comuncación, Artes y Diseño', 'Ciclo Básico Artístico' => 'Ciclo Básico Artístico', 'Ciclo Básico Agrario' => 'Ciclo Básico Agrario', 'Lenguas' => 'Lenguas', 'Economía y Administración' => 'Economía y Administración', 'Informática' => 'Informática', 'Agro y Ambiente' => 'Agro y Ambiente', 'Turismo' => 'Turismo', 'Comunicación' => 'Comunicación', 'Educación Física' => 'Educación Física', 'Ciencias naturales,salud y medio ambiente' => 'Ciencias naturales ,salud y medio ambiente', 'Gestión y Administración' => 'Gestión y Administración', 'Tecnología' => 'Tecnología', 'Letras' => 'Letras', 'Físico Matemática' => 'Físico Matemática', 'Pedagogía' => 'Pedagogía');
@@ -59,13 +59,13 @@
           $norma_homologación_tipos = array('Ley' => 'Ley', 'Resolución' => 'Resolución');
           echo $this->Form->input('norma_homologacion_tipo', array('label' => 'Norma de homologación nacional tipo*', 'empty' => 'Ingrese un tipo de norma...', 'options' => $norma_homologación_tipos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
           echo $this->Form->input('norma_homologacion_nro', array('label' => 'Norma de homologación nacional Nro*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca una número', 'Placeholder' => 'Ingrese un número'));
-          echo $this->Form->input('norma_homologacion_anio', array('label' => 'Norma de homologación nacional año*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca un año', 'Placeholder' => 'Ingrese un año'));		
+          echo $this->Form->input('norma_homologacion_anio', array('label' => 'Norma de homologación nacional año*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca un año', 'Placeholder' => 'Ingrese un año'));
           echo $this->Form->input('Titulacion.Centro', array('label' => 'Centro*', 'multiple' => true, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
       ?>
-  </div> 
+  </div>
   </div>
   <script type="text/javascript">
-            $('#datetimepicker1').datetimepicker({ 
+            $('#datetimepicker1').datetimepicker({
       useCurrent: true, //this is important as the functions sets the default date value to the current value
       format: 'YYYY-MM-DD hh:mm',
       }).on('dp.change', function (e) {

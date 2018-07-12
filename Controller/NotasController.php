@@ -2,8 +2,6 @@
 class NotasController extends AppController {
 
 	var $name = 'Notas';
-    public $helpers = array('Session');
-	public $components = array('Auth','Session');
     var $paginate = array('Nota' => array('limit' => 4, 'order' => 'Nota.created DESC'));
 
 	function beforeFilter(){
@@ -14,11 +12,7 @@ class NotasController extends AppController {
 	}
 
 	public function index() {
-<<<<<<< HEAD
 		$this->Nota->recursive = -1;
-=======
-		$this->Nota->recursive = 1;
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 		
         $this->paginate['Nota']['limit'] = 6;
 		$this->paginate['Nota']['order'] = array('Nota.ciclo' => 'DESC');
@@ -131,7 +125,6 @@ class NotasController extends AppController {
 
 	
 	//Métodos privados.
-
 	private function __lists(){
 		$cicloIdActual = $this->getLastCicloId();
         $cicloInscripcionAlumnoId = $this->getLastCicloInscripcionAlumnoId($cicloIdActual);

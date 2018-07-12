@@ -1,1 +1,0 @@
-2017/04/11 14:51:33 [error] 5#0: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 192.168.99.1, server: localhost, request: "GET /users/login HTTP/1.1", upstream: "fastcgi://172.17.0.5:9000", host: "192.168.99.100", referrer: "http://192.168.99.100/cursos_inscripcions"

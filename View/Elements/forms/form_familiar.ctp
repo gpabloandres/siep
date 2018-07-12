@@ -1,51 +1,129 @@
-<?php echo $this->Html->script(array('tooltip', 'moment', 'bootstrap-datetimepicker')); ?>
-<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<?php echo $this->Html->css(array('/js/select2/select2.min')); ?>
+<?php echo $this->Html->script(array('tooltip', 'datepicker', 'moment', 'bootstrap-datetimepicker','select2/select2.min')); ?>
+
+<script>
+    $(function(){
+        $('.s2_alumno').select2();
+    });
+</script>
+
 <div class="row">
-	<div class="col-xs-6 col-sm-3">
-	    <?php echo $this->Form->input('created', array('label' => 'Creado*', 'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar')); ?>
-    </div>
 </div><hr />
 <div class="row">
    	<div class="col-md-6 col-sm-6 col-xs-12">
-		<div class="unit"><strong>Datos Generales</strong><hr />
-			<?php
-	            echo $this->Form->input('persona_id', array('label'=>'Alumno*', 'empty' => 'Ingrese un alumno...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-	            $vinculos = array('Padre' => 'Padre', 'Madre'=>'Madre', 'Tutor'=>'Tutor');
-	            echo $this->Form->input('vinculo', array('label'=>'Vinculo*', 'empty' => 'Ingrese un vinculo...', 'options' => $vinculos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-	            echo $this->Form->input('nombre_completo', array('label'=>'Nombre Completo*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el nombre completo', 'Placeholder' => 'Ingrese el nombre completo...'));
-	            $nacionalidades = array('América del Sur' => array( 'Argentino' => 'Argentino', 'Boliviana' => 'Boliviana', 'Brasileña' => 'Brasileña', 'Chilena' => 'Chilena', 'Colombiana' => 'Colombiana', 'Ecuatoriana' => 'Ecuatoriana', 'Guyanesa' => 'Guyanesa', 'Paraguaya' => 'Paraguaya', 'Peruana' => 'Peruana', 'Surinamesa' => 'Surinamesa', 'Uruguaya' => 'Uruguaya', 'Venezolana' => 'Venezolana'),
-				    'América Central' => array( 'Beliceña' => 'Beliceña', 'Costarricense' => 'Costarricense', 'Guatemalteca' => 'Guatemalteca', 'Hondureña' => 'Hondureña', 'Nicaragüense' => 'Nicaragüense', 'Salvadoreña' => 'Salvadoreña'),
-					'América del Norte' => array( 'Canadiense' => 'Canadiense', 'Estadounidense' => 'Estadounidense', 'Mexicana' => 'Mexicana'),
-					'Caribe' => array( 'Cubana' => 'Cubana', 'Arubana' => 'Arubana', 'Bahameña' => 'Bahameña', 'Barbadense' => 'Barbadense', 'Dominiquesa' => 'Dominiquesa',
-					'Dominicana' => 'Dominicana', 'Haitiana' => 'Haitiana', 'Jamaiquina' => 'Jamaiquina', 'Puertorriqueña' => 'Puertorriqueña', 'Sancristobaleña' => 'Sancristobaleña', 'Santaluciana' => 'Santaluciana', 'Sanvicentina' => 'Sanvicentina'),
-					'Europa' => array( 'Albanesa' => 'Albanesa', 'Alemana' => 'Alemana', 'Andorrana' => 'Andorrana', 'Armenia' => 'Armenia', 'Austríaca' => 'Austríaca', 'Belga' => 'Belga', 'Bielorrusa' => 'Bielorrusa', 'Bosnia' => 'Bosnia', 'Búlgara' => 'Búlgara', 'Checa' => 'Checa', 'Chipriota' => 'Chipriota', 'Croata' => 'Croata',
-					'Danesa' => 'Danesa', 'Escocesa' => 'Escocesa', 'Eslovaca' => 'Eslovaca', 'Hindú' => 'Hindú', 'Eslovena' => 'Eslovena', 'Española' => 'Española', 'Estonia' => 'Estonia', 'Finlandesa' => 'Finlandesa', 'Francesa' => 'Francesa', 'Griega' => 'Griega', 'Holandesa' => 'Holandesa', 'Húngara' => 'Húngara', 'Británica' => 'Británica', 'Irlandesa' => 'Irlandesa', 'Italiana' => 'Italiana', 'Letona' => 'Letona', 'Lituana' => 'Lituana', 'Luxemburguesa' => 'Luxemburguesa',  'Maltesa' => 'Maltesa', 'Moldava' => 'Moldava', 'Monegasca' => 'Monegasca', 'Montenegrina' => 'Montenegrina', 'Noruega' => 'Noruega', 'Polaca' => 'Polaca', 'Luxemburguesa' => 'Luxemburguesa', 'Portuguesa' => 'Portuguesa', 'Rumana' => 'Rumana', 'Rusa' => 'Rusa', 'Serbia' => 'Serbia', 'Sueca' => 'Sueca', 'Suiza' => 'Suiza', 'Turca' => 'Turca', 'Ucraniana' => 'Ucraniana'),
-					'Oceanía' => array( 'Australiana' => 'Australiana', 'Neozelandesa' => 'Neozelandesa'),
-					'Asia' => array( 'Afgana' => 'Afgana', 'Azerbaiyana' => 'Azerbaiyana', 'Bangladesí' => 'Bangladesí', 'Bareiní' => 'Bareiní', 'China' => 'China', 'Liberiana' => 'Liberiana', 'Emiratí' => 'Emiratí', 'Filipina' => 'Filipina', 'Georgiana' => 'Georgiana', 'Hindú' => 'Hindú', 'Indonesia' => 'Indonesia', 'Israelí' => 'Israelí', 'Japonesa' => 'Japonesa', 'Libanesa' => 'Libanesa', 'Mongola' => 'Mongola', 'Norcoreana' => 'Norcoreana', 'Hindú' => 'Hindú', 'Siria' => 'Siria', 'Surcoreana' => 'Surcoreana', 'Vietnamita' => 'Vietnamita' ),
-					'África' => array( 'Argelina' => 'Argelina', 'Camerunesa' => 'Camerunesa', 'Etíope' => 'Etíope', 'Ecuatoguineana' => 'Ecuatoguineana', 'Egipcia' => 'Egipcia', 'Liberiana' => 'Liberiana', 'Libia' => 'Libia', 'Marroquí' => 'Marroquí', 'Namibia' => 'Namibia', 'Nigeriana' => 'Nigeriana', 'Saharaui' => 'Saharaui', 'Senegalesa' => 'Senegalesa', 'Sudafricana' => 'Sudafricana', 'Togolesa' => 'Togolesa'),
-					);
-				echo $this->Form->input('nacionalidad', array('label'=>'Nacionalidad*', 'empty' => 'Ingrese una nacionalidad...',  'options' => $nacionalidades, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));
-				echo $this->Form->input('cuit_cuil', array('label'=>'Cuil / Cuit', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un nº de CUIL/CUIT', 'Placeholder' => 'Ingrese un nº de cuil/cuit...'));
-	            echo $this->Form->input('ocupacion', array('label'=>'Ocupacion*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese una ocupación', 'Placeholder' => 'Ingrese una ocupación...'));
-	      		?>
-	  	</div>
+		<div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
+			<?php /*    
+	            echo $this->Form->input('persona_id', array('label'=>'Tutor*', 'empty' => 'Ingrese una persona como Tutor...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+	        */ ?>
+		    <!-- Autocomplete para nombre de Personas -->
+            <div>
+                <strong><h5>Nombres y Apellidos del Padre/Tutor*</h5></strong>
+                <input id="PersonaNombreCompleto" class="form-control" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo">
+                <input id="PersonaId" name="data[Persona][persona_id]" type="text" style="display:none;">
+                <div class="alert alert-danger" role="alert" id="AutocompleteError" style="display:none;">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span>
+                        La persona no fue localizada.
+                        <?php echo $this->Html->link("Crear persona",array('controller'=>'personas','action'=>'add'));?>
+                </div>
+            </div><br>
+            <script>
+                    $( function() {
+                        $( "#PersonaNombreCompleto" ).autocomplete({
+                            source: "<?php echo $this->Html->url(array('action'=>'autocompleteNombrePersona'));?>",
+                            minLength: 2,
+                            // Evento: se ejecuta al seleccionar el resultado
+                            select: function( event, ui ) {
+                                // Elimina ID de persona previo a establecer la seleccion
+                                $("#PersonaId").val("");
+                                if(ui.item != undefined) {
+                                    var nombre_completo = ui.item.Persona.nombre_completo_persona;
+                                    $("#PersonaNombreCompleto").val(nombre_completo);
+                                    $("#PersonaId").val(ui.item.Persona.id);
+                                    return false;
+                                }
+                            },
+                            response: function(event, ui) {
+                                // Elimina ID de persona al obtener respuesta
+                                $("#PersonaId").val("");
+                                if (ui.content.length === 0) {
+                                    $("#AutocompleteError").show();
+                                    $("#PersonaId").val("");
+                                } else {
+                                    $("#AutocompleteError").hide();
+                                }
+                            }
+                        }).autocomplete("instance")._renderItem = function( ul, item ) {
+                            // Renderiza el resultado de la respuesta
+                            var nombre_completo = item.Persona.nombre_completo_persona + " - "+item.Persona.documento_nro;
+                            return $( "<li>" )
+                                .append( "<div>" +nombre_completo+ "</div>" )
+                                .appendTo( ul );
+                        };
+                    });
+            </script><br>
+           <!-- End Autocomplete -->
+        <?php  
+            if ($current_user['role'] == 'admin') { 
+              echo $this->Form->input('Alumno', array('label'=>'Alumno*', 'empty' => 'Ingrese un alumno...', 'options'=>$alumnosNombre ,'between' => '<br>', 'class' => 's2_alumno form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+            } else if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) {
+          ?>
+          <!-- Autocomplete -->
+            <div>
+                <strong><h5>Nombre Completo del Alumno*</h5></strong>
+                <input id="AutocompleteAlumno" class="form-control" placeholder="Buscar alumno por DNI, nombre y/o apellido">
+                <div class="alert alert-danger" role="alert" id="AutocompleteAlumnoError" style="display:none;">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    No se encontraron resultados de busqueda
+                </div>
+            </div>
+            <hr />
+            <script>
+                $( function() {
+                    $( "#AutocompleteAlumno" ).autocomplete({
+                        source: "<?php echo $this->Html->url(array('action'=>'autocompleteNombreAlumno'));?>",
+                        minLength: 2,
+                        select: function( event, ui ) {
+                            var nombre_completo = ui.item.Persona.apellidos +" "+ ui.item.Persona.nombres +' - ' +ui.item.Persona.documento_nro;
+                            $("#AutocompleteAlumno").val( nombre_completo );
+                            return false;
+                        },
+                        response: function(event, ui) {
+                            if (ui.content.length === 0)
+                            {
+                                $("#AutocompleteAlumnoError").show();
+                            } else {
+                                $("#AutocompleteAlumnoError").hide();
+                            }
+                        }
+                    }).autocomplete( "instance" )._renderItem = function( ul, item ) {
+                        var nombre_completo = item.Persona.apellidos +" "+ item.Persona.nombres +' - ' +item.Persona.documento_nro;
+                        return $( "<li>" )
+                            .append( "<div>" +nombre_completo+ "</div>" )
+                            .appendTo( ul );
+                    };
+                });
+            </script>
+            <!-- End Autocomplete -->
+        <?php } ?>
+        </div>
 	  	<?php echo '</div><div class="col-md-6 col-sm-6 col-xs-12">'; ?>
-      	<div class="unit"><strong>Datos de Contacto</strong><hr />
+      	<div class="unit"><strong><h3>Datos Específicos</h3></strong><hr />
         	<?php
-			  	echo $this->Form->input('domicilio', array('label' => 'Domicilio*','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el domicilio real', 'placeholder' => 'Ingrese el nombre y nº de la calle...'));
-				echo $this->Form->input('barrio_id', array('label' => 'Barrio*', 'empty' => 'Ingrese un barrio...', 'options' => $barrios, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));	
-			  	$asentamientos = array('10 de Febrero' => '10 de Febrero', 'El Escondido' => 'El Escondido', 'La Bolsita' => 'La Bolsita', '11 de Noviembre' => '11 de Noviembre',
-				    'El Mirador' => 'El Mirador', 'El Mirador de Ushuaia' => 'El Mirador de Ushuaia', 'El Obrero' => 'El Obrero', 'Dos Banderas' => 'Dos Banderas',
-					'Las Raíces' => 'Las Raíces', 'La cima' => 'La cima', 'El Colombo' => 'El Colombo', 'Espacio Verde B° Bella Vista' => 'Espacio Verde B° Bella Vista',
-					'Espacio Verde B° Latinoamericano' => 'Espacio Verde B° Latinoamericano', 'Los Leñadores' => 'Los Leñadores', 'Las Reinas' => 'Las Reinas', 'Itati' => 'Itati');
-			  	echo $this->Form->input('asentamiento', array('label' => 'Asentamiento', 'empty' => 'Ingrese un asentamiento...',  'options' => $asentamientos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));
-			  	$ciudades = array('Rio Grande' => 'Rio Grande', 'Tolhuin' => 'Tolhuin', 'Ushuaia' => 'Ushuaia');
-			  	echo $this->Form->input('ciudad', array('label' => 'Ciudad*', 'empty' => 'Ingrese una ciudad...',  'options' => $ciudades, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));
-	          	echo $this->Form->input('lugar_de_trabajo', array('label'=>'Lugar de trabajo*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un lugar de trabajo', 'Placeholder' => 'Ingrese un lugar de trabajo...'));
-          	  	echo $this->Form->input('email', array('label' => 'Email','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un email de contacto', 'placeholder' => 'Ingrese un email...'));
-			  	echo $this->Form->input('telefono_nro', array('label' => 'Numero de Telefono*','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un teléfono de contacto', 'placeholder' => 'Ingrese un nº de teléfono...')
-			  	);
+			  	$vinculos = array('Padre' => 'Padre', 'Madre'=>'Madre', 'Tutor'=>'Tutor');
+			  	echo $this->Form->input('vinculo', array('label'=>'Vinculo*', 'empty' => 'Ingrese un vinculo...', 'options' => $vinculos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
 			?>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon">
+              <?php echo $this->Form->input('conviviente', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Conviviente</label>'));?>
+            </span>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon">
+              <?php echo $this->Form->input('autorizado_retirar', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Autorizado a Retirar</label>'));?>
+            </span>
         </div>
     </div>
     <div class="col-md-12 col-sm-6 col-xs-12">

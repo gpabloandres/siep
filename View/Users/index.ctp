@@ -25,9 +25,9 @@
                           <th><?php echo $this->Paginator->sort('puesto', 'Puesto');?></th>
                           <th><?php echo $this->Paginator->sort('empleado_id', 'Agente');?></th>
                           <th><?php echo $this->Paginator->sort('email', 'E-Mail');?></th>
-                          <th><?php echo $this->Paginator->sort('created', 'Creado');?></th>
+                          <!--<th><?php echo $this->Paginator->sort('created', 'Creado');?></th>-->
                           <!--<th><?php echo $this->Paginator->sort('modified','Modificado');?></th>-->
-                          <th><?php echo $this->Paginator->sort('status','Estado');?></th>
+                          <!--<th><?php echo $this->Paginator->sort('status','Estado');?></th>-->
                           <th>Acciones</th>
                         </tr>
                     </thead>
@@ -44,9 +44,9 @@
                             <!--<td style="text-align: center;"><?php echo $user['User']['role']; ?></td>-->
                             <td style="text-align: center;"><?php echo $this->Html->link($user['Empleado']['nombre_completo_empleado'], array('controller' => 'empleados', 'action' => 'view', $user['User']['empleado_id'])); ?></td>
                             <td style="text-align: center;"><?php echo $this->Html->link($user['User']['email'], 'mailto:'.$user['User']['email']); ?></td>
-                            <td style="text-align: center;"><?php echo $this->Html->formatTime($user['User']['created']); ?></td>
+                            <!--<td style="text-align: center;"><?php echo $this->Html->formatTime($user['User']['created']); ?></td>-->
                             <!--<td style="text-align: center;"><?php echo $this->Html->formatTime($user['User']['modified']); ?></td>-->
-                            <td style="text-align: center;"><?php echo $user['User']['status']; ?></td>
+                            <!--<td style="text-align: center;"><?php echo $user['User']['status']; ?></td>-->
                             <td >
                              <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-edit"></i>', array('action' => 'edit', $user['User']['id']), array('class' => 'btn btn-warning', 'escape' => false)); ?></span>
                             <?php if( $user['User']['status'] != 0){ ?>

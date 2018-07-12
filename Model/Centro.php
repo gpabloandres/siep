@@ -73,7 +73,7 @@ class Centro extends AppModel {
 	);
 
 	var $hasAndBelongsToMany = array(
-				'Empleado' => array(
+		'Empleado' => array(
 			'className' => 'Empleado',
 			'joinTable' => 'centros_empleados',
 			'foreignKey' => 'centro_id',
@@ -104,7 +104,14 @@ class Centro extends AppModel {
 			'insertQuery' => ''
 		)
 	);
-
+	var $belongsTo = array(
+		'Ciudad' => array(
+			'className' => 'Ciudad',
+			'foreignKey' => 'ciudad_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		));
 	//Validaciones
 
         var $validate = array(
@@ -117,80 +124,181 @@ class Centro extends AppModel {
                            'isUnique' => array(
 	                       'rule' => 'isUnique',
 	                       'message' => 'Este CUE esta siendo usado.'
-	                     )    						   
+	                     ),
+											 'numeric' => array(
+			                   'rule' => 'naturalNumber',
+			                   'message' => 'Indicar número sin puntos ni comas ni espacios.'
+			                 )
                    ),
-				   'nombre' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength',5),
-                           'allowEmpty' => false,
-                           'message' => 'Indicar un nombre (Ejemplo: Centro Educativo de Nivel Secundario 1 o Colegio Provincial Los Andes).'
-                           ),
-                           'isUnique' => array(
+
+					 'nombre' => array(
+
+                         'isUnique' => array(
 	                       'rule' => 'isUnique',
 	                       'message' => 'Este nombre de centro esta siendo usado.'
-	                     )    						   
+	                     ),
+											 'alphaBet' => array(
+			                 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ0-9]{5,}$/i',
+											 'message' => 'Indicar un nombre (Ejemplo: Centro Educativo de Nivel Secundario 1 o Colegio Provincial Los Andes).'
+
+			                 )
                    ),
-                   'sigla' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength', 5), 
-                           'allowEmpty' => false,       
-                           'message' => 'Indicar una sigla (Ejemplo: CENS 1 o CP Los Andes).'
-                           ),
-                           'isUnique' => array(
-	                       'rule' => 'isUnique',
-	                       'message' => 'Esta sigla de centro esta siendo usado.'
-	                     )          						   
+             'sigla' => array(
+
+                            'isUnique' => array(
+	                          'rule' => 'isUnique',
+	                          'message' => 'Esta sigla de centro esta siendo usado.'
+	                           ),
+											      'alphaBet' => array(
+										      	'rule' => '/^[ .áÁéÉíÍóÓúÚa-zA-ZñÑ0-9]{5,}$/i',
+										      	'message' => 'Sólo letras y números, mínimo cinco caracteres'
+									         	)
                    ),
+
+			    'sector'=> array(
+					'minLength' => array(
+					'rule' => array('inList', array('ESTATAL' ,'PRIVADO')),
+					'allowEmpty' => false,
+					'message' => 'Indicar una opcion.'
+				),
+					'alphaBet' => array(
+					'rule' => '/^[ a-zA-ZñÑ]{5,}$/i',
+					'message' => 'Sólo letras y números, mínimo cinco caracteres'
+				)
+				),
+
+				'nivel_servicio' => array(
+					'alphaBet' => array(
+					'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ-]{5,}$/i',
+					'message' => 'Ingrese un nivel válido'
+				)),
+
                    'fechaFundacion' => array(
-                           'date' => array(
-                           'rule' => 'date',
+                           'datetime' => array(
+                           'rule' => 'datetime',
                            'allowEmpty' => false,
                            'message' => 'Indicar fecha de creacion del centro.'
-                           )        
+                           )
                    ),
                    'equipoDirectivo' => array(
                            'minLength' => array(
-                           'rule' => array('minLength', 5), 
-                           'allowEmpty' => false,       
+                           'rule' => array('minLength', 5),
+                           'allowEmpty' => false,
                            'message' => 'Indicar nombres del equipo directivo (Director, Vicedirector y Secretario).'
-                           )        
+												 ),
+												 'alphaBet' => array(
+				                 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+												 'message' => 'Indicar nombres del equipo directivo (Sólo letras y espacios)'
+
+				                 )
                    ),
-                    'direccion' => array(
+
+			    'ambito' => array(
+		 	    		'minLength' => array(
+		 			'rule' => array('inList', array('URBANO' ,'RURAL')),
+		 			'allowEmpty' => false,
+		 			'message' => 'Indicar una opcion.'
+				),
+				'alphaBet' => array(
+				'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+				)
+   				),
+
+        'direccion' => array(
+               'alphaBet' => array(
+			         'rule' => '/^[ a-zA-ZñÑ0-9]{5,}$/i',
+			         'message' => 'Sólo letras y números, mínimo cinco caracteres'
+			          )
+         ),
+
+			    'cp' => array(
+	  	    			'minLength' => array(
+	  				'rule' => array('minLength',4),
+	  				'allowEmpty' => false,
+	  				'message' => 'Indicar código postal.'
+					),
+					'numeric' => array(
+						'rule' => 'naturalNumber',
+						'message' => 'Indicar número sin puntos ni comas ni espacios.'
+					)
+				),
+
+				'codigoLocalidad' => array(
+				  	'minLength' => array(
+                      	'rule' => array('minLength',5),
+												'allowEmpty' => false,
+			       						'message' => 'Indicar un código de localidad válido.'
+						),
+						'numeric' => array(
+							'rule' => 'naturalNumber',
+							'message' => 'Indicar número sin puntos ni comas ni espacios.'
+						)
+				),
+
+                    'ciudad_id' => array(
                            'minLength' => array(
-                           'rule' => array('minLength',5),                          
+                           'rule' => 'notBlank',
                            'allowEmpty' => false,
-                           'message' => 'Indicar direccion que contenga numeros y letras.'
-                           )        
-                   ),        
-                    'ciudad' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength',5),                          
-                           'allowEmpty' => false,
-                           'message' => 'Indicar una opcion.'
-                           )        
+                           'message' => 'Indicar una ciudad.'
+												 ),
+												 'numeric' => array(
+						 							'rule' => 'naturalNumber',
+
+						 						)
                    ),
+
+									 'departamento_id' => array(
+
+                   'required' => array(
+						   	 	 'rule' => 'notBlank',
+						       'required' => 'create',
+                   'message' => 'seleccionar un departamento.'
+								 ),
+								 'numeric' => array(
+		 							'rule' => 'naturalNumber',
+		 						)
+									 ),
+									 /*
+									 'barrio_id' => array(
+
+										'required' => array(
+									 'rule' => 'notBlank',
+									 'required' => 'create',
+										'message' => 'seleccionar un barrio.'
+									),
+									'numeric' => array(
+										'rule' => 'naturalNumber',
+										'message' => 'Indicar número sin puntos ni comas ni espacios.'
+									)
+										),
+									*/	
+
                    'telefono' => array(
                            'minLength' => array(
                            'rule' => array('minLength',6),
                            'allowEmpty' => false,
                            'message' => 'Indicar un telefono de referencia.'
-                           )        
+												 ),
+												 'numeric' => array(
+				                   'rule' => 'naturalNumber',
+				                   'message' => 'Indicar número de teléfono sin puntos ni comas ni espacios.'
+				                 ),
                    ),
                    'email' => array(
                            'email' => array(
                            'rule' => 'email',
-                           'allowEmpty' => true,
+                           'allowEmpty' => false,
                            'message' => 'Indicar correo electronico valido.'
-                           )        
+												 )
                    ),
                   'url' => array(
                            'url' => array(
                            'rule' => 'url',
                            'allowEmpty' => true,
                            'message' => 'Indicar una url valida.'
-                           )        
-                   )
-        
+												 ),
+												)
+
      );
 }
 ?>

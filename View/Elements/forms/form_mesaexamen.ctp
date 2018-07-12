@@ -1,5 +1,4 @@
 <?php echo $this->Html->script(array('acordeon', 'tooltip', 'datepicker', 'moment', 'bootstrap-datetimepicker')); ?>
-<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 <div class="row">
 	<div class="col-xs-6 col-sm-3">
 	    <?php echo $this->Form->input('created', array('label' => 'Creado*', 'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar')); ?>

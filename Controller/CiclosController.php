@@ -4,8 +4,6 @@ App::uses('AppController', 'Controller');
 class CiclosController extends AppController {
 
 	var $name = 'Ciclos';
-    var $helpers = array('Form', 'Time', 'Js');
-	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Ciclo' => array('limit' => 4, 'order' => 'Ciclo.nombre ASC'));
 
 	public function beforeFilter() {

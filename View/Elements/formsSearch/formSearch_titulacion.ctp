@@ -1,10 +1,29 @@
-<?php echo $this->Form->create('Titulacion',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
-<div class="form-group">
-   <?php echo $this->Form->input('nombre', array('label' => false, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el nombre', 'Placeholder' => 'Ingrese el nombre de la titulación...'));?>
+<!-- Autocomplete -->
+<div>
+    <input id="TitulacionId" class="form-control" placeholder="Buscar por nombre">
 </div>
-<br>
+<hr />
 <div class="text-center">
     <span class="link"><?php echo $this->Form->button('<span class="glyphicon glyphicon-search"></span> BUSCAR', array('class' => 'submit', 'class' => 'btn btn-primary')); ?>
     </span>
     <?php echo $this->Form->end(); ?>
+</div>
+<script>
+    $( function() {
+        $( "#TitulacionId" ).autocomplete({
+            source: "<?php echo $this->Html->url(array('action'=>'autocompleteTitulacions'));?>",
+            minLength: 2,
+            select: function( event, ui ) {
+                $("#TitulacionId").val( ui.item.Titulacion.nombre );
+                window.location.href = "<?php echo $this->Html->url(array('controller'=>'titulacions','action'=>'view'));?>/"+ui.item.Titulacion.id;
+                return false;
+            }
+        }).autocomplete( "instance" )._renderItem = function( ul, item ) {
+            return $( "<li>" )
+                .append( "<div>" +item.Titulacion.nombre+ "</div>" )
+                .appendTo( ul );
+        };
+    });
+</script>
+<!-- End Autocomplete -->
 </div>

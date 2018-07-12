@@ -1,15 +1,24 @@
-# TRAES con CakePHP 2.X
+# SIEP con CakePHP 2.X
 
-/Plugin/CakePdf/*
-/Plugin/DebugKit/*
-/Plugin/Upload/*
+/Plugin/*
 
 /Vendor/*
 
 /tmp/*
+
+/logs/**/*.log*
 
 /Console
 
 !.htaccess
 !app/.htaccess
 !app/webroot/.htaccess
+.idea/*
+\.docker-compose\.yml\.swp
+
+mysql/
+
+docker_dev/dump/
+
+docker_dev/mysqldata/
+supervisord.*

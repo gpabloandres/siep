@@ -1,5 +1,4 @@
 <?php echo $this->Html->script(array('tooltip', 'datepicker', 'moment', 'bootstrap-datetimepicker')); ?>
-<?php $this->TinyMCE->editor(array('theme' => 'advanced', 'mode' => 'textareas')); ?>
 <div class="row">
 	<div class="col-xs-6 col-sm-3">
 	    <?php echo $this->Form->input('created', array('label' => 'Creado*', 'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar')); ?>
@@ -15,14 +14,18 @@
 		?>
 		</div>
 	</div>
+	<!--
 	<div class="col-md-6 col-sm-6 col-xs-12">
   		<div class="unit"><strong><h3>Datos Específicos</h3></strong><hr />	
   	  	<?php
+  	  	    /*
 		 	echo $this->Form->input('contenidos', array('label' => 'Contenidos', 'type' => 'file', 'class' => 'file', 'data-show-upload' => 'false', 'data-show-caption' => 'true'));
             echo $this->Form->input('plan_de_estudio', array('label' => 'Plan de Estudio', 'type' => 'file', 'class' => 'file', 'data-show-upload' => 'false', 'data-show-caption' => 'true'));
+        	*/
         ?>
 		</div>
 	</div>
+	-->
 	<div class="col-md-12 col-sm-6 col-xs-12">
         <?php
          	echo $this->Form->input('participantes', array('label'=>'Docentes Participantes', 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control')); 

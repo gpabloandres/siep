@@ -1,0 +1,47 @@
+version: '2.1'
+
+services:
+  siep-mysql:
+    ports:
+      - "3306:3306"
+    volumes:
+      - ".:/home"
+
+  siep-nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - "80:80"
+    expose:
+      - "80"
+    volumes:
+      - ".:/var/www/myapp"
+
+  siep-php-fpm:
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
+    volumes:
+      - ".:/var/www/myapp"
+
+  siep-adminer:
+    image: adminer
+    networks:
+      - back-tier
+      - front-tier
+    ports:
+      - "8080:8080"
+  
+  siep-composer:
+    image: composer
+    volumes:
+      - .:/app
+    command: "composer install --ignore-platform-reqs"
+  siep-migrations:
+    image: decyt/siep-php-fpm
+    volumes:
+      - .:/app
+    command: "Vendor/bin/cake Migrations.migration run all -f"
+    networks:
+      - back-tier

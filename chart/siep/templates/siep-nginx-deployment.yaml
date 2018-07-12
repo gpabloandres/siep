@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c
+    kompose.service.type: nodeport
+    kompose.version: 1.1.0 (36652f6)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: {{ .Release.Name}}-siep-nginx
+  name: {{ .Release.Name}}-siep-nginx
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: {{ .Release.Name}}-siep-nginx
+    spec:
+      containers:
+      - name: {{ .Release.Name}}-siep-nginx
+        image: "decyt/siep-nginx:{{ .Values.siepNginxVersion}}"
+        command: ["/bin/sh"]
+        args: ["-c", "envsubst '$MEMCACHED $UPSTREAM' < /etc/nginx/conf.d/siep.tpl > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+        env:
+        - name: MEMCACHED
+          value: {{ .Release.Name}}-memcached:11211
+        - name: UPSTREAM
+          value: {{ .Release.Name}}-siep-php-fpm:9000
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+status: {}

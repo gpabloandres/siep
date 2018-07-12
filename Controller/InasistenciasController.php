@@ -2,8 +2,6 @@
 class InasistenciasController extends AppController {
 
 	var $name = 'Inasistencias';
-    public $helpers = array('Session');
-	public $components = array('Auth','Session');
 	var $paginate = array('Inasistencia' => array('limit' => 4, 'order' => 'Inasistencia.created DESC'));
 
     function beforeFilter(){
@@ -24,7 +22,6 @@ class InasistenciasController extends AppController {
             strtolower($clean) :
         $clean;
     }
-
 
 	public function index() {
 		$this->Inasistencia->recursive = 1;
@@ -143,7 +140,6 @@ class InasistenciasController extends AppController {
 
 
 	//Métodos privados
-	
 	private function __lists(){
 	    $ciclos = $this->Inasistencia->Ciclo->find('list');
         $cicloIdActual = $this->getLastCicloId();

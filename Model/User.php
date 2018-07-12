@@ -3,10 +3,10 @@ App::uses('AppModel', 'Model');
 App::uses('AuthComponent', 'Controller/Component');
 
 class User extends AppModel {
-	
+
 	var $name = 'User';
 	public $displayField = 'username';
-	
+
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(
@@ -23,9 +23,9 @@ class User extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		)		
+		)
 	);
-    
+
 //Validaciones
    public $validate = array(
 	'username' => array(
@@ -34,9 +34,9 @@ class User extends AppModel {
 			 'required' => 'create',
 			 'message' => 'Indicar una fecha y hora.'
          ),
-		'between' => array( 
-			'rule' => array('between', 5, 15), 
-			'required' => true, 
+		'between' => array(
+			'rule' => array('between', 5, 15),
+			'required' => true,
 			'message' => 'Usernames must be between 5 to 15 characters'
 		),
 		'isUnique' => array(
@@ -47,7 +47,7 @@ class User extends AppModel {
 			'rule'    => array('alphaNumericDashUnderscore'),
 			'message' => 'Username can only be letters, numbers and underscores'
 		),
-	),	
+	),
     'password' => array(
 		'required' => array(
 			'rule' => 'notBlank',
@@ -55,7 +55,7 @@ class User extends AppModel {
 			'message' => 'La Contraseña es obligatoria'
 		),
 		'min_length' => array(
-			'rule' => array('minLength', '4'),  
+			'rule' => array('minLength', '4'),
 			'message' => 'La contraseña debe tener al menos 6 caracteres'
 		)
 	),
@@ -95,20 +95,20 @@ class User extends AppModel {
 	),
 	'puesto' => array(
 		'valid' => array(
-			'rule' => array('inList', array('Sistemas', 'Supervisor', 'Director', 'Administrativo')),
+			'rule' => array('inList', array('Sistemas', 'Subsecretaría Provincial', 'Dirección Provincial de Modalidades', 'Dirección Provincial de Superior', 'Supervisión Inicial/Primaria', 'Supervisión Secundaria', 'Dirección Jardín', 'Dirección Escuela Primaria', 'Dirección Colegio Secundario', 'Dirección Instituto Superior')),
 			'message' => 'Ingrese un puesto válido',
 			'allowEmpty' => false
 		)
-		/*	
+		/*
 		'required' => array(
-			'rule' => array('puesto', true),    
-			'message' => 'Ingrese una opción de la lista'    
+			'rule' => array('puesto', true),
+			'message' => 'Ingrese una opción de la lista'
 	    )
 	    */
 	),
 	'password_update' => array(
 		'min_length' => array(
-			'rule' => array('minLength', '6'),   
+			'rule' => array('minLength', '6'),
 			'message' => 'La contraseña debe contener al menos 6 caracteres'
 		)
 	),
@@ -117,7 +117,7 @@ class User extends AppModel {
 			'rule' => array('equaltofield','password_update'),
 			'message' => 'Ambas contraseñas no coinciden'
 		)
-	)           
+	)
 	);
 
    /**
@@ -125,6 +125,8 @@ class User extends AppModel {
    * @param array $options
    * @return boolean
    *
+   */
+   /*
     function isUniqueUsername($check) {
          $username = $this->find(
             'first',
@@ -140,39 +142,41 @@ class User extends AppModel {
         );
         if(!empty($username)){
             if($this->data[$this->alias]['id'] == $username['User']['id']){
-                return true; 
+                return true;
             }else{
-                return false; 
+                return false;
             }
         }else{
-            return true; 
+            return true;
         }
     }*/
-	
+
 	public function alphaNumericDashUnderscore($check) {
         // $data array is passed using the form field name as the key
         // have to extract the value to make the function generic
         $value = array_values($check);
         $value = $value[0];
- 
+
         return preg_match('/^[a-zA-Z0-9_ \-]*$/', $value);
     }
-	
-	public function equaltofield($check,$otherfield) { 
-        //get name of field 
-        $fname = ''; 
-        foreach ($check as $key => $value){ 
-            $fname = $key; 
-            break; 
-        } 
-        return $this->data[$this->name][$otherfield] === $this->data[$this->name][$fname]; 
+
+	public function equaltofield($check,$otherfield) {
+        //get name of field
+        $fname = '';
+        foreach ($check as $key => $value){
+            $fname = $key;
+            break;
+        }
+        return $this->data[$this->name][$otherfield] === $this->data[$this->name][$fname];
     }
-	
+
 	/**
      * Before isUniqueEmail
      * @param array $options
      * @return boolean
      *
+     */
+	/*
     function isUniqueEmail($check) {
        $email = $this->find(
             'first',
@@ -187,15 +191,15 @@ class User extends AppModel {
         );
         if(!empty($email)){
             if($this->data[$this->alias]['id'] == $email['User']['id']){
-                return true; 
+                return true;
             }else{
-                return false; 
+                return false;
             }
         }else{
-            return true; 
+            return true;
         }
     }*/
-	
+
 	/**
 	 * Before Save
 	 * @param array $options
@@ -212,6 +216,6 @@ class User extends AppModel {
 		}
 		// fallback to our parent
 		return parent::beforeSave($options);
-	} 
+	}
 }
 ?>

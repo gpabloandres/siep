@@ -30,12 +30,7 @@
 			<?php echo ($materia['Materia']['dictado']); ?></p>
 
 			<!--<b><?php echo __('Contenido:'); ?></b>
-<<<<<<< HEAD
 			<?php echo $this->Html->link('View File', '../files/materias/'.$materia['Materia']['contenido'], array('class' => 'button', 'target' => '_blank')); ?></p>-->
-=======
-			<?php echo $this->Html->link('View File', '../files/materias/'.$materia['Materia']['contenido'], 
-						           array('class' => 'button', 'target' => '_blank')); ?></p>-->
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
             
   </div><div class="col-md-4 col-sm-6 col-xs-8">	
 
@@ -67,11 +62,7 @@
 <div class="col-md-4">
  	<div class="unit">
  		<div class="subtitulo">Opciones</div>
-<<<<<<< HEAD
  			<div class="opcion"><?php echo $this->Html->link(__('Listar Unidades Curriculares'), array('action' => 'index')); ?></div>
-=======
- 			<div class="opcion"><?php echo $this->Html->link(__('Listar Materias'), array('action' => 'index')); ?></div>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
  			<?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
 			<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $materia['Materia']['id'])); ?></div>
 			<div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $materia['Materia']['id']), null, sprintf(__('Esta seguro de borrar la materia %s?'), $materia['Cargo']['nombre'])); ?></div>
@@ -127,11 +118,7 @@
 		</ul>
 	</div>
 </div>-->
-<<<<<<< HEAD
 <!-- Horarios Relacionados  
-=======
-<!-- Horarios Relacionados 
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 <div id="click_01" class="titulo_acordeon">Horarios Relacionados <span class="caret"></span></div>
 <div id="acordeon_01">
    <div class="table-responsive">
@@ -183,11 +170,7 @@
 	<div class="col-md-6">
 		<div class="unit">
 			<?php echo '<b>Código inscripción:</b> '.$this->Html->link($inscripcion['legajo_nro'], array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id']));?><br>
-<<<<<<< HEAD
 			<?php echo '<b>Alumno:</b> '.($this->Html->link($alumnoNombre[$inscripcion['persona_id']], array('controller' => 'personas', 'action' => 'view', $inscripcion['persona_id'])));?><br>
-=======
-			<?php echo '<b>Alumno:</b> '.($this->Html->link($alumnoNombre[$inscripcion['alumno_id']], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['alumno_id'])));?><br>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
             <?php echo '<b>Fecha_alta:</b> '.($this->Html->formatTime($inscripcion['fecha_alta']));?><br>
 			<!--<?php echo '<b>Fecha_baja:</b> '.($this->Html->formatTime($inscripcion['fecha_baja']));?><br>
             <?php echo '<b>Fecha_egreso:</b> '.($this->Html->formatTime($inscripcion['fecha_egreso']));?><br>-->

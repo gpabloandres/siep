@@ -18,42 +18,43 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">CUEs <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
-            <li><?php echo $this->Html->link(__('Establecimientos'),'/'); ?></li>
-            <li><?php echo $this->Html->link(__('Infraestructura'),'/'); ?></li>
-            <li><?php echo $this->Html->link(__('Inventario'),'/'); ?></li>
-            <li><?php echo $this->Html->link(__('Agentes'),'/empleados'); ?></li>
-            <li><?php echo $this->Html->link(__('Usuarios'),'/users'); ?></li>
+            <!--<li><?php echo $this->Html->link(__('Establecimientos'),'/'); ?></li>-->
+            <!--<li><?php echo $this->Html->link(__('Infraestructura'),'/'); ?></li>-->
+            <!--<li><?php echo $this->Html->link(__('Inventario'),'/'); ?></li>-->
+            <!--<li><?php echo $this->Html->link(__('Agentes'),'/empleados'); ?></li>-->
+            <!--<li><?php echo $this->Html->link(__('Usuarios'),'/users'); ?></li>-->
           </ul>
         </li>
-        <li class="dropdown">
+        <!--<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Normativas <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Resoluciones'), '/resolucions'); ?></li>
             <li><?php echo $this->Html->link(__('Anexos'), '/anexos'); ?></li>
           </ul>
-        </li>
+        </li>-->
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ofertas <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Ciclos'),'/ciclos'); ?></li>
-            <li><?php echo $this->Html->link(__('Titulaciones'),'/titulacions'); ?></li>
-            <li><?php echo $this->Html->link(__('Diseños Curriculares'), '/disenocurriculars'); ?></li>
+            <!--<li><?php echo $this->Html->link(__('Titulaciones'),'/titulacions'); ?></li>-->
+            <!--<li><?php echo $this->Html->link(__('Diseños Curriculares'), '/disenocurriculars'); ?></li>-->
             <li><?php echo $this->Html->link(__('Secciones'), '/cursos'); ?></li>
-            <li><?php echo $this->Html->link(__('Unidades Curriculares'),'/materias'); ?></li>
-            <li><?php echo $this->Html->link(__('Horarios'),'/'); ?></li>
+            <!--<li><?php echo $this->Html->link(__('Unidades Curriculares'),'/materias'); ?></li>-->
+            <!--<li><?php echo $this->Html->link(__('Horarios'),'/'); ?></li>-->
           </ul>
         </li>  
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alumnos <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alumnado <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><?php echo $this->Html->link(__('Personas'),'/personas'); ?></li>
             <li><?php echo $this->Html->link(__('Inscripciones'), '/inscripcions'); ?></li>
-            <li><?php echo $this->Html->link(__('Inasistencias'), '/inasistencias'); ?></li>
-            <li><?php echo $this->Html->link(__('Calificaciones'), '/notas'); ?></li>
-            <li><?php echo $this->Html->link(__('Mesa de Exámenes'), '/mesaexamens'); ?></li>
+            <li><?php echo $this->Html->link(__('Familiares'), array('controller'=>'familiars', 'action'=>'add')); ?></li>
+            <li><?php echo $this->Html->link(__('Alumnos'),'/alumnos'); ?></li>
+            <!--<li><?php echo $this->Html->link(__('Inasistencias'), '/inasistencias'); ?></li>-->
+            <!--<li><?php echo $this->Html->link(__('Calificaciones'), '/notas'); ?></li>-->
+            <!--<li><?php echo $this->Html->link(__('Mesa de Exámenes'), '/mesaexamens'); ?></li>-->
           </ul>
         </li>
-        <li class="dropdown">
+        <!--<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Docentes <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Docentes'),'/'); ?></li>
@@ -64,16 +65,19 @@
             <li><?php echo $this->Html->link(__('Capacitaciones'), '/'); ?></li>
           </ul>
         </li>
-      <li>
+      <li>-->
       <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ver <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><?php echo $this->Html->link(__('Alumnos por Sección'), '/cursos_inscripcions');?></li>
-            <li><?php echo $this->Html->link(__('Alumnos por Unidad'), '/inscripcions_materias');?></li>
-            <li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>
-            <li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>
-            <li><?php echo $this->Html->link(__('Gráficos'), '/graficos'); ?></li>
-            <li><?php echo $this->Html->link(__('Calendario'),'/full_calendar');?></li> 
+            <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
+            <li><?php echo $this->Html->link(__('Alumnos por Sección [nominal]'), '/cursos_inscripcions');?></li>
+            <!--<li><?php echo $this->Html->link(__('Alumnos por Unidad Curricular'), '/inscripcions_materias');?></li>-->
+            <li><?php echo $this->Html->link(__('Alumnos por Sección [cuantitativo]'), '/matriculas');?></li>
+            <li><?php echo $this->Html->link(__('Inscriptos por año [cuantitativo]'), '/vacantes');?></li>
+            <!--<li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>-->
+            <!--<li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>-->
+            <!--<li><?php echo $this->Html->link(__('Gráficos'), '/graficos'); ?></li>-->
+            <!--<li><?php echo $this->Html->link(__('Calendario'),'/full_calendar');?></li>--> 
           </ul>
         </li>
       <li>

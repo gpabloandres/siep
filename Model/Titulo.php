@@ -37,7 +37,7 @@ class Titulo extends AppModel {
                            'message' => 'Indicar la institucion dadora del titulo.'
                            )
                    ),
-                         
+
         );
 
 }

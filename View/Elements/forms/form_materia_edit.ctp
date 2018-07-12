@@ -8,17 +8,11 @@
    <div class="col-md-6 col-sm-6 col-xs-12">
      <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
       <?php
-<<<<<<< HEAD
           echo $this->Form->input('curso_id', array('label' => 'Curso*', 'empty' => 'Ingrese un curso...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement
             ' => 'bottom', 'title' => 'Seleccione una opción'));
           echo $this->Form->input('nombre', array('label' => 'Nombre*', 'empty' => 'Ingrese un nombre...',/* 'options' => $nombres,*/ 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));
           echo $this->Form->input('alia', array('label' => 'Alia*', 'empty' => 'Ingrese un alia...',/* 'options' => $alias,*/ 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
           echo $this->Form->input('disenocurricular_id', array('label' => 'Diseño Curricular*', 'empty' => 'Ingrese un Diseño Curricular...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-=======
-          echo $this->Form->input('curso_id', array('label' => 'Curso*', 'empty' => 'Ingrese un curso...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-          echo $this->Form->input('nombre', array('label' => 'Nombre*', 'empty' => 'Ingrese un nombre...',/* 'options' => $nombres,*/ 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));
-          echo $this->Form->input('alia', array('label' => 'Alia*', 'empty' => 'Ingrese un alia...',/* 'options' => $alias,*/ 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
           $formaciones = array('General' => 'General', 'Orientada' =>'Orientada');
           echo $this->Form->input('campo_formacion', array('label' => 'Campo de formación*', 'empty' => 'Ingrese un campo de formación...', 'options' => $formaciones, 'between' => '<br>', 'class' =>  'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca el nombre del campo de formación', 'placeholder' => 'Campo de formación'));
           $formatos = array('Asignatura' => 'Asignatura', 'Seminario' =>'Seminario', 'Taller' =>'Taller');
@@ -27,11 +21,7 @@
           echo $this->Form->input('dictado', array('label' => 'Dictado*', 'default' => 'Presencial', 'options' => $tipos_dictado, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
           $tipos_obligatoriedad = array('Obligatoria' => 'Obligatoria', 'Elegible' => 'Elegible', 'Optativa' => 'Optativa', 'Obligatoria reemplazable por otra' => 'Obligatoria reemplazable por otra');
           echo $this->Form->input('obligatoriedad', array('label' => 'Obligatoriedad*', 'empty' => 'Ingrese un tipo de obligatoriedad...', 'options' => $tipos_obligatoriedad, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-<<<<<<< HEAD
           ?>
-=======
-         ?>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
         </div>
     </div>     
     <div class="col-md-6 col-sm-6 col-xs-12"><!--<div class="subtitulo">Datos de contacto</div>-->
@@ -46,12 +36,8 @@
           $tipos_escala_numerica = array('Si' => 'Si', 'No' => 'No');
           echo $this->Form->input('escala_numerica', array('label' => 'Escala numérica*', 'empty' => 'Ingrese una escala numérica...', 'options' => $tipos_escala_numerica, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
           echo $this->Form->input('nota_minima', array('label' => 'Nota mínima*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca la nota mínima', 'Placeholder' => 'Ingrese una nota mínima...'));
-<<<<<<< HEAD
           echo $this->Form->input('plan_de_estudio', array('label' => 'Plan de Estudio*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca el plan de estudio', 'Placeholder' => 'Ingrese un plan de estudio...'));
           ?>
-=======
-            ?>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
         </div>
     <script type="text/javascript">
             $('#datetimepicker1').datetimepicker({ 

@@ -1,43 +1,55 @@
-application:
-  image: waldemarnt/cakephp
-  volumes:
-        - .:/var/www/cake-app
-  tty: true
-db:
-  image: mysql
-  ports:
-    - 3386:3306    
-  environment:
-    MYSQL_ROOT_PASSWORD: root
-    MYSQL_DATABASE: siep
-    MYSQL_USER: root
-    MYSQL_PASSWORD: root    
-phpmyadmin:
-  image: phpmyadmin/phpmyadmin
-  restart: always
-  links:
-    - db
-  ports:
-    - 8184:80
-  environment:
-    PMA_USER: root
-    PMA_PASSWORD: root
-    PMA_ARBITRARY: 1
-php:
-    image: bitnami/php-fpm
-    expose:
-        - 9000
-    volumes_from:
-        - application
-    links:
-        - db    
-nginx:
-    image: waldemarnt/cakephp-nginx
-    ports:
-        - 80:80
-    links:
-        - php
-    volumes_from:
-        - application
+version: '2.1'
+
+services:
+  siep-mysql:
+    image: mysql:5.7
+    container_name: siep-mysql
     volumes:
-        - ./logs/nginx/:/var/log/nginx    
+      - mysql:/var/lib/mysql
+    ports:
+      - "3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=siep
+      - MYSQL_USER=siep
+      - MYSQL_PASSWORD=siep
+    networks:
+      - back-tier
+
+  siep-nginx:
+    depends_on: 
+      - siep-php-fpm
+    image: decyt/siep-nginx
+    ports:
+      - "80"
+    networks:
+      - back-tier
+      - front-tier
+
+  siep-php-fpm:
+    depends_on:
+      - siep-mysql
+    environment:
+      - MYSQL_HOST=siep-mysql
+      - CAKEPHP_DEBUG=2
+      - HOSTAPI=172.17.0.1:3000
+    image: decyt/siep-php-fpm
+    container_name: siep-php-fpm
+    networks:
+      - back-tier
+  siep-memcached:
+    image: memcached:alpine
+    ports:
+      - "11211:11211"
+    networks:
+      - back-tier
+ 
+
+volumes:
+  mysql: {}
+
+networks:
+  front-tier:
+    driver: overlay
+  back-tier:
+    driver: overlay

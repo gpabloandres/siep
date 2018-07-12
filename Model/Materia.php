@@ -3,7 +3,7 @@ class Materia extends AppModel {
 	var $name = 'Materia';
     public $displayField = 'alia';
     public $actsAs = array('Containable');
-    
+
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $hasOne = array(
@@ -30,7 +30,7 @@ class Materia extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		) 	
+		)
 	);
 
 	var $hasMany = array(
@@ -121,19 +121,40 @@ class Materia extends AppModel {
 						   'message' => 'Indicar una fecha y hora.'
 						   )
                    ),
+									 'curso_id' => array(
+
+				 					 'required' => array(
+				 					'rule' => 'notBlank',
+				 					'required' => 'create',
+				 					 'message' => 'seleccionar un curso.'
+				 				 ),
+				 				 'numeric' => array(
+				 					 'rule' => 'naturalNumber',
+				 					 'message' => 'Indicar una opción correcta.'
+				 				 )
+				 					 ),
+
 				   'nombre' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Indicar un nombre.'
-                           )
-				    ),
+												 ),
+												 'alphaBet' => array(
+				                 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+												 'message' => 'Indicar un nombre correcto (Sólo letras y espacios)'
+
+				    )),
                    'alia' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Indicar un alia.'
                            ),
+													 'alphaBet' => array(
+					                 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+													 'message' => 'indicar un alias correcto (Sólo letras y espacios)'
+												 ),
 						   'isUnique' => array(
 	                       'rule' => 'isUnique',
 	                       'message' => 'Este alias de materia esta siendo usado.'
@@ -144,35 +165,55 @@ class Materia extends AppModel {
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Indicar un campo de formación.'
-                           )
-                   ),
+												 ),
+												 'alphaBet' => array(
+				                 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+												 'message' => 'Indicar un campo de formación correcto (Sólo letras y espacios)'
+
+                   )),
                    'formato' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Indicar un formato.'
-                           )
-                   ),
+												 ),
+												 'alphaBet' => array(
+				                 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+												 'message' => 'Indicar un formato correcto (Sólo letras y espacios)'
+
+                   )),
                    'dictado' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Indicar un dictado.'
-                           )
+												 ),
+												 'alphaBet' => array(
+												 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+												 'message' => 'indicar una opción correcta'
+												 )
                    ),
                    'obligatoriedad' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Indicar una obligatoriedad.'
-                           )
-					),	   
+												 ),
+												 'alphaBet' => array(
+												 'rule' => '/^[ .áÁéÉíÍóÓúÚa-zA-ZñÑ0-9]{5,}$/i',
+												 'message' => 'Ingresar una opción correcta'
+												 )
+					),
                    'carga_horaria_en' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Indicar una opción.'
-                           )
+												 ),
+												 'alphaBet' => array(
+												 'rule' => '/^[ .áÁéÉíÍóÓúÚa-zA-ZñÑ0-9]{5,}$/i',
+												 'message' => 'Ingresar una opción correcta'
+												 )
                    ),
 				   'carga_horaria_semanal' => array(
                            'required' => array(
@@ -191,7 +232,11 @@ class Materia extends AppModel {
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Indicar una opción.'
-                           )
+												 ),
+												 'alphaBet' => array(
+												 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+												 'message' => 'Ingresar una opción correcta'
+												 )
                    ),
                    'duracion' => array(
                            'required' => array(
@@ -199,6 +244,7 @@ class Materia extends AppModel {
 						   'required' => 'create',
 						   'message' => 'Indicar una duración.'
                            ),
+
 						   'numeric' => array(
                            'rule' => 'numeric',
                            'allowEmpty' => false,
@@ -210,7 +256,11 @@ class Materia extends AppModel {
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Indicar una opción.'
-                           )
+												 ),
+												 'alphaBet' => array(
+												 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+												 'message' => 'Ingresar una opción correcta'
+												 )
                    ),
 				   'nota_minima' => array(
                            'required' => array(
@@ -229,14 +279,14 @@ class Materia extends AppModel {
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Adjuntar contenidos.'
-                           ) 
+                           )
 				   ),
 				   'curso_id' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Indicar un curso.'
-                           ) 
+                           )
 				   ),
 				   'rule1' => array(
 				           'rule'    => array(

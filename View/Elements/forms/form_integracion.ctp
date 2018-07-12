@@ -1,5 +1,4 @@
 <?php echo $this->Html->script('datepicker'); ?>
-<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
   	<div class="row">
   	 	<div class="col-md-6 col-sm-6 col-xs-12">
 	  	<?php 

@@ -19,12 +19,7 @@
           echo $this->Form->input('dictado', array('label' => 'Dictado*', 'default' => 'Presencial', 'options' => $tipos_dictado, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
           $tipos_obligatoriedad = array('Obligatoria' => 'Obligatoria', 'Elegible' => 'Elegible', 'Optativa' => 'Optativa', 'Obligatoria reemplazable por otra' => 'Obligatoria reemplazable por otra');
           echo $this->Form->input('obligatoriedad', array('label' => 'Obligatoriedad*', 'default' => 'Obligatoria', 'options' => $tipos_obligatoriedad, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-<<<<<<< HEAD
           ?>
-=======
-          //echo $this->Form->input('contenido', array('label' => 'Contenidos', 'type' => 'file', 'class' => 'file', 'data-show-upload' => 'false', 'data-show-caption' => 'true'));
-           ?>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
         </div>
     </div>     
     <div class="col-md-6 col-sm-6 col-xs-12"><!--<div class="subtitulo">Datos de contacto</div>-->
@@ -39,12 +34,8 @@
 				  $tipos_escala_numerica = array('Si' => 'Si', 'No' => 'No');
 				  echo $this->Form->input('escala_numerica', array('label' => 'Escala numérica*', 'empty' => 'Ingrese una escala numérica...', 'options' => $tipos_escala_numerica, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
 				  echo $this->Form->input('nota_minima', array('label' => 'Nota mínima*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca la nota mínima', 'Placeholder' => 'Ingrese una nota mínima...'));
-<<<<<<< HEAD
           echo $this->Form->input('disenocurricular_id', array('label' => 'Plan de Estudio*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca el plan de estudio', 'Placeholder' => 'Ingrese un plan de estudio...'));
           ?>
-=======
-            ?>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
         </div>
     <script type="text/javascript">
             $('#datetimepicker1').datetimepicker({ 

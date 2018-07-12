@@ -7,16 +7,14 @@
               <div class="col-xs-12 col-sm-8 col-md-8">
                   <div id="second-nav">
                       <div class="unit text-center">
-                        <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
                           <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-plus"></i> AGREGAR ', array('action' => 'add'), array('class' => 'btn btn-primary','escape' => false)); ?>
                           </span>
-                        <?php endif; ?>  
                       </div>
                   </div>
                   <!-- end second nav -->
 	           <div class="row">
    			       <?php foreach ($inscripcions as $inscripcion): ?>
-			       <?php echo $this->element('inscripcion',array( 'inscripcion' => $inscripcion )); ?>
+  			       <?php echo $this->element('inscripcion',array( 'inscripcion' => $inscripcion )); ?>
                    <?php endforeach; ?>
 	           </div>
 			   <div class="unit text-center">

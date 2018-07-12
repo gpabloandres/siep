@@ -16,7 +16,9 @@ class GraficosController extends AppController {
     } 
 
     public function i_x_curso() {
-
+     	$this->loadModel('Curso');
+     	$cursos = $this->Curso->find('list', array('field'=>array('matricula'), 'conditions'=>array('centro_id'=>19)));
+		$this->set(compact($cursos));
 	}
 
 	public function r_x_curso() {

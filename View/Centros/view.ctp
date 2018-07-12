@@ -4,7 +4,7 @@
 <div class="TituloSec"><?php echo ($centro['Centro']['sigla']); ?></div>
 <div id="ContenidoSec">
     <div class="row">
-    	<div class="col-md-8">	
+    	<div class="col-md-8">
 	 		<div class="unit">
  				<div class="row perfil">
 			  	<!--<div class="col-md-4 col-sm-6 col-xs-12 thumbnail text-center">
@@ -13,7 +13,9 @@
    					<div class="col-md-6 col-sm-6 col-xs-8">
                       <div id="click_01" class="titulo_acordeon_datos">Datos Generales <span class="caret"></span></div>
                       <div id="acordeon_01">
-                        <div class="unit">	
+                        <div class="unit">
+							<b><?php echo __('Nombre: '); ?></b>
+							<?php echo ($centro['Centro']['nombre']); ?></p>
 							<b><?php echo __('Fecha de Fundación: '); ?></b>
 							<?php echo ($centro['Centro']['fechaFundacion']); ?></p>
 							<b><?php echo __('Sector: '); ?></b>
@@ -23,10 +25,10 @@
 							<b><?php echo __('Director: '); ?></b>
 				    			<?php echo $centro['Centro']['equipoDirectivo']; ?></p>
 							<b><?php echo __('Ámbito: '); ?></b>
-								<?php echo $centro['Centro']['ambito']; ?></p>	
+								<?php echo $centro['Centro']['ambito']; ?></p>
 				        </div>
-	   				</div>    
-                    </div>            
+	   				</div>
+                    </div>
                     <div class="col-md-6 col-sm-6 col-xs-8">
                       	<div id="click_02" class="titulo_acordeon_datos">Datos de Contacto <span class="caret"></span></div>
                       	<div id="acordeon_02">
@@ -34,15 +36,15 @@
 	                        	<b><?php echo __('Domicilio: '); ?></b>
 								<?php echo $centro['Centro']['direccion']; ?></p>
 								<b><?php echo __('Barrio: '); ?></b>
-									<?php echo $centro['Centro']['barrio']; ?></p>
+									<?php echo $barrios[$centro['Centro']['barrio_id']]; ?></p>
 								<b><?php echo __('Código Postal: '); ?></b>
 									<?php echo $centro['Centro']['cp']; ?></p>
 								<b><?php echo __('Código de Localidad: '); ?></b>
-									<?php echo $centro['Centro']['codigo_localidad']; ?></p>	
+									<?php echo $centro['Centro']['codigo_localidad']; ?></p>
 								<b><?php echo __('Ciudad: '); ?></b>
-									<?php echo $centro['Centro']['ciudad']; ?></p>
+									<?php echo $ciudades[$centro['Centro']['ciudad_id']]; ?></p>
 								<b><?php echo __('Departamento: '); ?></b>
-								<?php echo $centro['Centro']['departamento']; ?></p>
+								<?php echo $departamentos[$centro['Centro']['departamento_id']]; ?></p>
 							    <b><?php echo __('Telefono: '); ?></b>
 									<?php echo $centro['Centro']['telefono']; ?></p>
 		                        <b><?php echo __('Email: '); ?></b>
@@ -54,27 +56,30 @@
  					</div>
  				</div>
 			</div>
-		</div>	
+		</div>
 <!-- star sidebar -->
 		<div class="col-md-4">
  			<div class="unit">
  				<div class="subtitulo">Opciones</div>
 				<div class="opcion"><?php echo $this->Html->link(__('Listar Instituciones'), array('controller' => 'centros', 'action' => 'index')); ?></div>
+				<?php /*
 				<!--<div class="opcion"><?php echo $this->Html->link(__('Listar Ciclos'), array('controller' => 'ciclos', 'action' => 'index')); ?></div>
-		        <div class="opcion"><?php echo $this->Html->link(__('Listar Titulaciones'), array('controller' => 'titulacions', 'action' => 'index')); ?></div>	
-                <div class="opcion"><?php echo $this->Html->link(__('Listar Cursos'), array('controller' => 'cursos', 'action' => 'index')); ?></div>	
+		        <div class="opcion"><?php echo $this->Html->link(__('Listar Titulaciones'), array('controller' => 'titulacions', 'action' => 'index')); ?></div>
+                <div class="opcion"><?php echo $this->Html->link(__('Listar Cursos'), array('controller' => 'cursos', 'action' => 'index')); ?></div>
 		        <div class="opcion"><?php echo $this->Html->link(__('Listar Alumnos'), array('controller' => 'alumnos', 'action' => 'index')); ?></div>
 		        <div class="opcion"><?php echo $this->Html->link(__('Listar Inscripciones'), array('controller' => 'inscripcions', 'action' => 'index')); ?></div>
                 <!--<div class="opcion"><?php echo $this->Html->link(__('Listar Inasistencias'), array('controller' => 'inasistencias', 'action' => 'index')); ?></div>-->
-			  <?php if($current_user['role'] == 'superadmin'): ?>	
-				<!--<div class="opcion"><?php echo $this->Html->link(__('Exportar a PDF'), array('action' => 'view', $centro['Centro']['id'], 'ext' => 'pdf')); ?></div>-->
+			  	<!--<div class="opcion"><?php echo $this->Html->link(__('Exportar a PDF'), array('action' => 'view', $centro['Centro']['id'], 'ext' => 'pdf')); ?></div>-->
+				*/ ?>
+			  <?php if($current_user['role'] == 'superadmin'): ?>
 				<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $centro['Centro']['id'])); ?></div>
 		        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $centro['Centro']['id']), null, sprintf(__('Esta seguro de borrar el centro %s?'), $centro['Centro']['sigla'])); ?></div>
-		      <?php endif; ?>  
+		      <?php endif; ?>
   			</div>
  		</div>
-	</div> 	
+	</div>
 <!-- end sidebar -->
+<?php /*
 <!--<div class="related">
 	<h3><?php echo __('Cargos Relacionados');?></h3>
 	<?php if (!empty($centro['Cargo'])):?>
@@ -143,6 +148,8 @@
 		</ul>
 	</div>
 </div>-->
+*/ ?>
+<?php /*
 <!-- Titulaciones Relacionadas -->
 <div id="click_03" class="titulo_acordeon">Titulaciones Relacionadas <span class="caret"></span></div>
 <div id="acordeon_03">
@@ -161,10 +168,10 @@
 			        <hr>
                     <div class="text-right">
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'titulacions', 'action' => 'view', $titulacion['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-                        <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
+                        <?php if($current_user['role'] == 'superadmin'): ?>
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'titulacions', 'action' => 'edit', $titulacion['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'titulacions', 'action' => 'delete', $titulacion['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
-                        <?php endif; ?>  
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -175,14 +182,11 @@
     </div>
 </div>
 <!-- end Titulaciones Relacionadas -->
-<!-- Cursos Relacionados --> 
-<<<<<<< HEAD
+*/ ?>
+<?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
+<!-- Cursos Relacionados -->
 <div id="click_04" class="titulo_acordeon">Secciones Relacionadas <span class="caret"></span></div>
 <div id="acordeon_04">
-=======
-<div id="click_01" class="titulo_acordeon">Cursos Relacionados <span class="caret"></span></div>
-<div id="acordeon_01">
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 	<div class="row">
 	<?php if (!empty($centro['Curso'])):?>
 		<div class="col-xs-12 col-sm-6 col-md-8">
@@ -198,10 +202,10 @@
                     <hr>
                     <div class="text-right">
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'cursos', 'action' => 'view', $curso['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-                        <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
+                       <?php if($current_user['role'] == 'superadmin'): ?> 
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'cursos', 'action' => 'edit', $curso['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'cursos', 'action' => 'delete', $curso['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
-                        <?php endif; ?>  
+                       <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -211,8 +215,10 @@
         <?php endif; ?>
     </div>
 </div>
+<?php endif ?>
 <!-- end Cursos Relacionados -->
-<!-- Inscripciones Relacionadas 
+<?php /*
+<!-- Inscripciones Relacionadas
 	<div id="click_02" class="titulo_acordeon">Inscripciones Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_02">
 		<div class="row">
@@ -248,6 +254,8 @@
 	</div>
 </div>
 <!-- end Inscripciones Relacionadas -->
+*/ ?>
+<?php if($current_user['role'] == 'superadmin'): ?>
 <!-- Empleados Relacionados -->
 <div id="click_05" class="titulo_acordeon">Usuarios Relacionados <span class="caret"></span></div>
 <div id="acordeon_05">
@@ -275,3 +283,4 @@
 </div>
 </div>
 <!-- end Agentes Relacionados -->
+<?php endif; ?>

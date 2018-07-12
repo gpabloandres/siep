@@ -1,9 +1,9 @@
-<div class="TituloSec"><?php echo __('Agregar Alumno'); ?></div>
+<div class="TituloSec"><?php echo __('Agregar Persona'); ?></div>
 <div id="ContenidoSec">
-   <div class="alumnos form">
-        <?php echo $this->Form->create('Alumno', array('type' => 'file', 'novalidate' => 'novalidate'));?>
+   <div class="personas form">
+        <?php echo $this->Form->create('Persona', array('type' => 'file', 'novalidate' => 'novalidate'));?>
 	    <div class="unit">
-             <?php echo $this->element('forms/form_alumno_add'); ?><p>
+             <?php echo $this->element('forms/form_persona_add'); ?><p>
         </div>
         <div class="text-center">
             <div class="submit">                 

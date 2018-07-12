@@ -4,8 +4,6 @@ App::uses('AppController', 'Controller');
 class DisenoCurricularsController extends AppController {
 
    	var $name = 'Disenocurriculars';
-    public $helpers = array('Session', 'Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
-	public $components = array('Flash', 'Auth','Session', 'RequestHandler');
 	var $paginate = array('Disenocurricular' => array('limit' => 4, 'order' => 'Disenocurricular.anio DESC'));
 
     function beforeFilter(){
@@ -27,6 +25,12 @@ class DisenoCurricularsController extends AppController {
 	public function index() {
 	    //
 	    $this->Disenocurricular->recursive = -1;
+		$userCentroId = $this->getUserCentroId();
+		$titulacionsId = $this->Disenocurricular->Titulacion->CentrosTitulacion->find('list', array('fields'=>array('titulacion_id'), 'conditions'=>array('centro_id'=>$userCentroId)));
+		if($this->Auth->user('role') === 'admin') {
+			$this->paginate['Disenocurricular']['conditions'] = array('Disenocurricular.titulacion_id' => $titulacionsId);
+		}
+
 		$disenocurriculars = $this->paginate('Disenocurricular');
 		
         $this->redirectToNamed();

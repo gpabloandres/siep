@@ -8,23 +8,22 @@
 	         <div class="unit">
  		        <div class="row perfil">
                     <div class="col-md-4 col-sm-6 col-xs-8">	
-<<<<<<< HEAD
 						<b><?php echo __('Centro: '); ?></b>
 						 	<?php echo ($this->Html->link($curso['Centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $curso['Centro']['id']))); ?></p>
 						<b><?php echo __('Titulacion: '); ?></b>
 						 	<?php echo ($this->Html->link($curso['Titulacion']['nombre'], array('controller' => 'titulacions', 'action' => 'view', $curso['Titulacion']['id']))); ?></p>
 						<b><?php echo __('Turno: '); ?></b>
 							<?php echo ($curso['Curso']['turno']); ?></p>
-=======
-						<b><?php echo __('Turno: '); ?></b>
-						<?php echo ($curso['Curso']['turno']); ?></p>
-						<b><?php echo __('Centro: '); ?></b>
-						<?php echo ($this->Html->link($curso['Centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $curso['Centro']['id']))); ?></p>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
+						<b><?php echo __('Tipo: '); ?></b>
+							<?php echo ($curso['Curso']['tipo']); ?></p>	
 						<b><?php echo __('Aula: '); ?></b>
 							<?php echo ($curso['Curso']['aula_nro']); ?></p>
-			            <!--<b><?php echo __('Matriculados: '); ?></b>-->
-						<button class="btn btn-primary" type="button">Matriculados: <span class="badge"><?php echo ($matriculados); ?></span></button>
+			            <b><?php echo __('Plazas: '); ?></b> 
+			            	<span class="badge"><?php echo ($cursoPlazasString); ?></span></button></b>
+						<b><?php echo __(' | Matriculados: '); ?></b>
+							<span class="badge"><?php echo ($cursoMatriculaString); ?></span></button></b><br/><br/>
+						<button class="btn btn-primary" type="button">Vacantes: 
+							<span class="badge"><?php echo ($vacantes); ?></span></button>
                     </div>
                     <!--<div class="col-md-4 col-sm-6 col-xs-8">	
 			            <b><?php echo __('Organización de cursada: '); ?></b>
@@ -39,7 +38,88 @@
 		    <div class="unit">
 		 		<div class="subtitulo">Opciones</div>
 				<div class="opcion"><?php echo $this->Html->link(__('Listar Secciones'), array('action' => 'index')); ?></div>
-			  <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>	
+					<?php
+					// Por defecto no muestro la promocion
+					$showPromocion = false;
+					$showEgreso = false;
+
+					/*
+						Los unicos 6to que promocionan
+						940007700 CEPET
+						940008300 EPET
+						940015900 SABATO
+						940015700 GUEVARA
+					 */
+
+					if($curso['Curso']['anio'] == '6to')
+					{
+						if(
+							($curso['Centro']['cue'] == '940007700') ||
+							($curso['Centro']['cue'] == '940008300') ||
+							($curso['Centro']['cue'] == '940015900') ||
+							($curso['Centro']['cue'] == '940015700')
+						) {
+							$showPromocion = true;
+						}
+					} else {
+						// El resto de las secciones promocionan menos 5to inicial y 7mo secundario
+						if(
+							($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] != 'Sala de 5 años') ||
+							($curso['Centro']['nivel_servicio'] == 'Común - Primario') ||
+							($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] != '7mo')
+						) {
+							$showPromocion = true;
+						}
+					}
+					?>
+
+					<?php  if($showPromocion) : ?>
+						<div class="opcion"><?php echo $this->Html->link(__('Promocionar'), array('action' => 'index','controller' => 'Promocion',
+								'centro_id'=>$curso['Centro']['id'],
+								'curso_id'=>$curso['Curso']['id']
+							)); ?>
+						</div>
+					<?php endif; ?>
+
+					<?php
+						if($curso['Curso']['anio'] == '6to')
+						{
+							if(
+								($curso['Centro']['cue'] == '940007700') ||
+								($curso['Centro']['cue'] == '940008300') ||
+								($curso['Centro']['cue'] == '940015900') ||
+								($curso['Centro']['cue'] == '940015700')
+							) {
+								$showEgreso = false;
+							} else {
+								$showEgreso = true;
+							}
+						} else {
+							if(
+								($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] == 'Sala de 5 años') ||
+								($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] == '7mo')
+							) {
+								$showEgreso = true;
+							}
+						}
+					?>
+
+					<?php  if($showEgreso) : ?>
+						<div class="opcion"><?php echo $this->Html->link(__('Egresar'), array('action' => 'index','controller' => 'Egreso',
+								'centro_id'=>$curso['Centro']['id'],
+								'curso_id'=>$curso['Curso']['id']
+							)); ?>
+						</div>
+					<?php endif; ?>
+
+					<div class="opcion"><?php echo $this->Html->link(__('Reubicar'), array('action' => 'index','controller' => 'Reubicacion',
+							'centro_id'=>$curso['Centro']['id'],
+							'curso_id'=>$curso['Curso']['id']
+						)); ?>
+					</div>
+
+
+				<?php if($current_user['role'] == 'superadmin'): ?>
 				<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $curso['Curso']['id'])); ?></div>
 				<div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $curso['Curso']['id']), null, sprintf(__('Esta seguro de borrar el curso %s?'), $curso['Curso']['division'])); ?></div>
 			  <?php endif; ?>	
@@ -47,6 +127,7 @@
 		</div>
     </div>
 <!-- end main -->
+<?php /*
 <!-- Cargos Relacionados -->
 <!--<div class="related">
 	<h3><?php echo __('Cargos Relacionados');?></h3>
@@ -119,11 +200,7 @@
 </div>-->
 <!-- end Cargos Relacionados -->
 <!-- Materias Relacionadas -->
-<<<<<<< HEAD
 <div id="click_02" class="titulo_acordeon">Unidades Curriculares Relacionadas <span class="caret"></span></div>
-=======
-<div id="click_02" class="titulo_acordeon">Espacios Relacionados <span class="caret"></span></div>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 <div id="acordeon_02">
 		<div class="row">
 	<?php if (!empty($curso['Materia'])):?>
@@ -140,8 +217,8 @@
 			<?php echo '<b>Carga horaria semanal:</b> '.$materia['carga_horaria_semanal'];?><br>
         <div class="text-right">
             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'materias', 'action' => 'view', $materia['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-          <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?> 
-		    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'materias', 'action' => 'edit', $materia['id']), array('class' => 'btn btn-warning','escape' => false)); ?>	
+            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'materias', 'action' => 'edit', $materia['id']), array('class' => 'btn btn-warning','escape' => false)); ?>	
+		   <?php if($current_user['role'] == 'superadmin'): ?>	
 			<?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('cont""roller' => 'materias', 'action' => 'delete', $materia['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
           <?php endif; ?>  
             </div>
@@ -168,24 +245,30 @@
     <div class="swiper-container" style="height: 200px;">
         <div class="swiper-wrapper" >
 	<?php foreach ($curso['Inscripcion'] as $inscripcion): ?>
+	<!-- Sólo visualiza las inscripciones relacionadas del ciclo actual y con estado CONFIRMADAS -->
+	<?php// if ((($inscripcion['ciclo_id'] == $cicloIdActualString) || $curso['Curso']['division'] == '')) { ?>
 	<div class="swiper-slide">
-	<div class="col-md-6">
+	  <div class="col-md-6">
 		<div class="unit">
 			<?php echo '<b>Inscripción:</b> '.($this->Html->link($inscripcion['legajo_nro'], array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id'])));?><br>
-			<?php echo '<b>Alumno:</b> '.($this->Html->link($alumnoNombre[$inscripcion['persona_id']], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['persona_id'])));?><br>
-            <?php echo '<b>Fecha_alta:</b> '.($this->Html->formatTime($inscripcion['fecha_alta']));?><br>
-			<!--<?php echo '<b>Fecha_baja:</b> '.($this->Html->formatTime($inscripcion['fecha_baja']));?><br>
-            <?php echo '<b>Fecha_egreso:</b> '.($this->Html->formatTime($inscripcion['fecha_egreso']));?><br>-->
+			<?php echo '<b>Alumno:</b> '.($this->Html->link($personaNombre[$personaId[$inscripcion['alumno_id']]], array('controller' => 'personas', 'action' => 'view', $inscripcion['alumno_id'])));?><br>
+            <!--<?php echo '<b>Fecha_alta:</b> '.($this->Html->formatTime($inscripcion['fecha_alta']));?><br>-->
+			<!--<?php echo '<b>Fecha_baja:</b> '.($this->Html->formatTime($inscripcion['fecha_baja']));?><br>-->
+            <!--<?php echo '<b>Fecha_egreso:</b> '.($this->Html->formatTime($inscripcion['fecha_egreso']));?><br>-->
+            <?php echo '<b>Estado:</b> '.$inscripcion['estado_inscripcion'];?><br>
             <div class="text-right">
 	            <?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-eye-open"></i>'), array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id']), array('class' => 'btn btn-success','escape' => false)); ?>
               <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
 	            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'inscripcions', 'action' => 'edit', $inscripcion['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
+	          <?php endif; ?>  
+			  <?php if($current_user['role'] == 'superadmin'): ?>	
 				<?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'inscripcions', 'action' => 'delete', $inscripcion['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
 			  <?php endif; ?>	
             </div>
 		</div>
 	 </div>
   </div>		
+		<?php// } ?>
 		<?php endforeach; ?>
   </div>
   <!-- Add Pagination -->
@@ -245,11 +328,11 @@
 	</div>
 </div>-->
 <!-- end Ciclos Relacionadas -->
-
-    <!-- Initialize Swiper -->
-    <script>
+<!-- Initialize Swiper -->
+    <!--<script>
     var swiper = new Swiper('.swiper-container', {
         pagination: '.swiper-pagination',
         paginationClickable: true,
     });
-    </script>
+    </script>-->
+*/?>    

@@ -2,8 +2,6 @@
 class IntegracionsController extends AppController {
 
 	var $name = 'Integracions';
-    var $helpers = array('Session');
-	var $components = array('Auth','Session');
 	var $paginate = array('Integracions' => array('limit' => 4, 'order' => 'Integracions.id'));
 
 	function beforeFilter(){

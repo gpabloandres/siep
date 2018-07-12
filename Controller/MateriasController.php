@@ -2,27 +2,8 @@
 class MateriasController extends AppController {
 
 	var $name = 'Materias';
-<<<<<<< HEAD
     public $uses = array('Materia', 'Inscripcion');
-    public $helpers = array('Form', 'Time', 'Js');
-	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Materia' => array('limit' => 6, 'order' => 'Materia.alia DESC'));
-
-    public function beforeFilter() {
-        parent::beforeFilter();
-        //Si el usuario tiene un rol de superadmin le damos acceso a todo.
-        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
-        if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
-	        $this->Auth->allow();
-	    } elseif ($this->Auth->user('role') === 'usuario') { 
-	        $this->Auth->allow('index', 'view');
-	    } 
-    }
-=======
-    var $helpers = array('Form', 'Time', 'Js');
-	var $components = array('Session', 'RequestHandler');
-	public $paginate = array('Materia' => array('limit' => 6, 'order' => 'Materia.alia DESC'));
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -51,27 +32,23 @@ class MateriasController extends AppController {
 		$this->Materia->recursive = 1;
 		$this->paginate['Materia']['limit'] = 6;
 		$this->paginate['Materia']['order'] = $this->Materia->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso'), 'order'=>'Curso.anio ASC'));
-<<<<<<< HEAD
+		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
+		*  Sí el usuario es "admin" muestra las materias del establecimiento. 
+		*  Sino sí es "usuario" externo muestra los materias del nivel.
+		*/ 
 		$userCentroId = $this->getUserCentroId();
-		if($this->Auth->user('role') === 'admin') {
-        	$this->paginate['Materia']['conditions'] = array('Curso.centro_id' => $userCentroId);
+		$userRole = $this->Auth->user('role');
+		if ($userRole === 'admin') {
+			$cursosId = $this->Materia->Curso->find('list', array('fields'=>array('id'), 'conditions'=>array('centro_id'=>$userCentroId)));
+			$this->paginate['Materia']['conditions'] = array('Materia.curso_id' => $cursosId);
+		} else if ($userRole === 'usuario') {
+			$nivelCentro = $this->Materia->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+			$nivelCursoId = $this->Materia->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
+			$this->paginate['Materia']['conditions'] = array('Materia.curso_id' => $nivelCursoId);
 		}
-		$this->loadModel('Centro');
-        $centrosId = $this->Materia->Curso->find('list', array('fields'=>array('centro_id')));
-=======
-		if($this->Auth->user('role') === 'admin') {
-        	$userCentroId = $this->getUserCentroId();
-			$centrosId = $this->Materia->Curso->find('list', array('fields'=>array('centro_id')));
-        	$this->paginate['Materia']['conditions'] = array('Curso.centro_id' => $userCentroId);
-		}
-		$this->loadModel('Centro');
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
-        $centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions' => array('id' => $centrosId)));
-        $cursosId = $this->Materia->find('list', array('fields'=>array('curso_id')));
-        $cursos = $this->Materia->Curso->find('list', array('fields'=>array('nombre_completo_curso'), 'conditions' => array('id' => $cursosId)));
+		/* FIN */
 		$this->redirectToNamed();
 		$conditions = array();
-		
 		if(!empty($this->params['named']['centro_id']))
 		{
 			$conditions['Curso.centro_id ='] = $this->params['named']['centro_id'];
@@ -84,17 +61,15 @@ class MateriasController extends AppController {
 		{
 			$conditions['Materia.alia ='] = $this->params['named']['alia'];
 		}
-<<<<<<< HEAD
 		if(!empty($this->params['named']['pan_de_estudio']))
 		{
 			$conditions['Materia.plan_de_estudio ='] = $this->params['named']['plan_de_estudio'];
 		}
-
-=======
-		
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 		$materias = $this->paginate('Materia', $conditions);
-		$this->set(compact('materias', 'cursos', 'centros'));
+		$centrosId = $this->Materia->Curso->find('list', array('fields'=>array('centro_id')));
+        $this->loadModel('Centro');
+        $centrosNombre = $this->Centro->find('list', array('fields'=>array('sigla')));
+        $this->set(compact('materias', 'cursos', 'centrosNombre'));
 	}
 
 	public function view($id = null) {
@@ -152,29 +127,21 @@ class MateriasController extends AppController {
            $this->Session->setFlash(__('Los Contenidos no se guardaron.'));
         }
         */
-          if(isset($this->params['data']['cancel'])){
+        if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
-		  }
-          if (!empty($this->data)) {
+		}
+        if (!empty($this->data)) {
 			$this->Materia->create();
 			
-			if ($this->Materia->save($this->request->data)) {
-<<<<<<< HEAD
-				$this->Session->setFlash('La unidad ha sido grabada', 'default', array('class' => 'alert alert-success'));
-				$inserted_id = $this->Materia->id;
-				$this->redirect(array('action' => 'view', $inserted_id));
-			} else {
-				$this->Session->setFlash('La unidad no fue grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
-=======
-				$this->Session->setFlash('El espacio ha sido grabado', 'default', array('class' => 'alert alert-success'));
-				$inserted_id = $this->Materia->id;
-				$this->redirect(array('action' => 'view', $inserted_id));
-			} else {
-				$this->Session->setFlash('El espacio no fue grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
-			}
+		if ($this->Materia->save($this->request->data)) {
+			$this->Session->setFlash('La unidad ha sido grabada', 'default', array('class' => 'alert alert-success'));
+			$inserted_id = $this->Materia->id;
+			$this->redirect(array('action' => 'view', $inserted_id));
+		} else {
+			$this->Session->setFlash('La unidad no fue grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 		}
+	}
         $cursos = $this->Materia->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
         $this->set(compact('cursos'));
     }
@@ -191,11 +158,7 @@ class MateriasController extends AppController {
                 $this->redirect( array( 'action' => 'index' ));
 		  }
 		  if ($this->Materia->save($this->data)) {
-<<<<<<< HEAD
 				$this->Session->setFlash('La unidad ha sido grabada.', 'default', array('class' => 'alert alert-success'));
-=======
-				$this->Session->setFlash('La materia ha sido grabada.', 'default', array('class' => 'alert alert-success'));
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 				//$this->redirect(array('action' => 'index'));
 				$inserted_id = $this->Materia->id;
 				$this->redirect(array('action' => 'view', $inserted_id));
@@ -213,7 +176,6 @@ class MateriasController extends AppController {
 		$this->set(compact('disenocurriculars', 'alumnos'));
 	}
    
-
 	public function delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash('Id no valido para unidad.', 'default', array('class' => 'alert alert-warning'));

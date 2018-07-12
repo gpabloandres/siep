@@ -5,7 +5,7 @@ class Ciclo extends AppModel {
 	var $name = 'Ciclo';
     var $displayField = 'nombre';
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
-	
+
 	var $hasMany = array(
 		'Inscripcion' => array(
 			'className' => 'Inscripcion',
@@ -71,6 +71,19 @@ class Ciclo extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
+		),
+		'Pase' => array(
+			'className' => 'Pase',
+			'foreignKey' => 'ciclo_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
 		)
     );
 
@@ -89,27 +102,13 @@ class Ciclo extends AppModel {
 			'finderQuery' => '',
 			'deleteQuery' => '',
 			'insertQuery' => ''
-		),
-		'Curso' => array(
-			'className' => 'Curso',
-			'joinTable' => 'ciclos_cursos',
-			'foreignKey' => 'ciclo_id',
-			'associationForeignKey' => 'curso_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
-		),
+		)
 	);
 
     //Validaciones
 
                    var $validate = array(
+				   /*
 				   'created' => array(
                          'required' => array(
 						 'rule' => 'notBlank',
@@ -117,6 +116,7 @@ class Ciclo extends AppModel {
 						 'message' => 'Indicar una fecha y hora.'
                          )
                    ),
+                   */
 				   'nombre' => array(
                          'required' => array(
 						 'rule' => 'notBlank',
@@ -126,18 +126,22 @@ class Ciclo extends AppModel {
 						 'isUnique' => array(
 						 'rule' => 'isUnique',
 						 'message' => 'Este nombre de ciclo esta siendo usado.'
-	                     )
+					 ),
+					 'numeric' => array(
+						 'rule' => 'naturalNumber',
+						 'message' => 'Indicar número sin puntos ni comas ni espacios.'
+					 )
                    ),
                    'fechaInicio' => array(
                          'required' => array(
-						 'rule' => 'notBlank',
+						 						 'rule' => 'date',
                          'required' => 'create',
                          'message' => 'Indicar una fecha.'
 	                     )
                    ),
                    'fechaFinal' => array(
                          'required' => array(
-						 'rule' => 'notBlank',
+						 						 'rule' => 'date',
                          'required' => 'create',
                          'message' => 'Indicar una fecha.'
 	                     )

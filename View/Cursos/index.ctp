@@ -7,7 +7,7 @@
       <div class="col-xs-12 col-sm-8 col-md-8">
         <div id="second-nav">
     			<div class="unit text-center">
-      			<?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?> 
+      			<?php if($current_user['role'] == 'superadmin'): ?> 
               <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-plus"> </i> AGREGAR', array('action' => 'add'), array('class' => 'btn btn-primary','escape'=> false)); ?>
               </span>
             <?php endif; ?> 

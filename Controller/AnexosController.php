@@ -4,8 +4,6 @@ App::uses('AppController', 'Controller');
 class AnexosController extends AppController {
 
    	var $name = 'Anexos';
-    public $helpers = array('Session', 'Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
-	public $components = array('Flash', 'Auth','Session', 'RequestHandler');
 	var $paginate = array('Anexo' => array('limit' => 4, 'order' => 'Anexo.anio DESC'));
 
     function beforeFilter(){
@@ -25,7 +23,6 @@ class AnexosController extends AppController {
  * @return void
  */
 	public function index() {
-	    //
 	    $this->Anexo->recursive = -1;
 		$this->set('anexos', $this->paginate());
 		

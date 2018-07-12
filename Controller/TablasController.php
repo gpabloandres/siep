@@ -2,11 +2,9 @@
 App::uses('AppController', 'Controller');
 
 class TablasController extends AppController {
+
 	var $name = 'Tablas';
 
-    var $helpers = array('Session');
-	public $components = array('Auth','Session', 'RequestHandler');
-	
 	function beforeFilter(){
 		parent::beforeFilter();
 	}
@@ -18,6 +16,5 @@ class TablasController extends AppController {
 	public function r_x_curso() {
 
 	}
-
 }
 ?>

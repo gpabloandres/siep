@@ -6,8 +6,6 @@ class CentrosController extends AppController {
 
 	var $name = 'Centros';
     public $uses = array('Centro', 'Titulacion');
-    public $helpers = array('Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
-	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Centro' => array('limit' => 4, 'order' => 'Centro.cue ASC'));
 
  	public function beforeFilter() {
@@ -16,42 +14,53 @@ class CentrosController extends AppController {
         //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
         if($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
-<<<<<<< HEAD
-	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) { 
-=======
-	    } elseif ($this->Auth->user('role') === 'usuario') { 
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
-	        $this->Auth->allow('index', 'view');
-	    } 
+	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) {
+	        $this->Auth->allow('index', 'view', 'autocompleteCentro', 'autocompleteSeccionDependiente');
+	    }
     }
 
  	function index() {
 		$this->Centro->recursive = -1;
-		
+
 		$this->paginate['Centro']['limit'] = 4;
 		$this->paginate['Centro']['order'] = array('Centro.nivel' => 'ASC');
 		$this->redirectToNamed();
 		$conditions = array();
-		
+
 		if(!empty($this->params['named']['cue']))
 		{
 			$conditions['Centro.cue ='] = $this->params['named']['cue'];
 		}
-		
+
 		$centros = $this->paginate('Centro', $conditions);
 		$this->set(compact('centros'));
+
+		$this->loadModel('Ciudad');
+		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
+		$this->set('ciudades', $ciudades);
 	}
-	
+
 	function view($id = null) {
 		if (!$id) {
 			$this->Session->setFlash('Centro no valido', 'default', array('class' => 'alert alert-danger'));
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('centro', $this->Centro->read(null, $id));
+		$this->loadModel('Barrio');
+		$barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
+		$this->set('barrios', $barrios);
+
+		$this->loadModel('Ciudad');
+		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
+		$this->set('ciudades', $ciudades);
+
+		$this->loadModel('Departamento');
+		$departamentos = $this->Departamento->find('list', array('fields' => array('nombre')));
+		$this->set('departamentos', $departamentos);
 	}
 
 	function add() {
-		//abort if cancel button was pressed  
+		//abort if cancel button was pressed
         if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
@@ -68,19 +77,29 @@ class CentrosController extends AppController {
 			  }
 		}
 		$empleados = $this->Centro->Empleado->find('list', array('fields'=>array('id', 'nombre_completo_empleado')));
-		$titulacions = $this->Titulacion->find('list');
-		$this->set(compact('titulacions', $titulacions));
 		$this->set(compact('empleados'));
+
+		$this->loadModel('Barrio');
+		$barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
+		$this->set('barrios', $barrios);
+
+		$this->loadModel('Ciudad');
+		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
+		$this->set('ciudades', $ciudades);
+
+		$this->loadModel('Departamento');
+		$departamentos = $this->Departamento->find('list', array('fields' => array('nombre')));
+		$this->set('departamentos', $departamentos);
 	}
 
-		
+
 	function edit($id = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash('Centro no valido', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->data)) {
-			//abort if cancel button was pressed  
+			//abort if cancel button was pressed
 	        if(isset($this->params['data']['cancel'])){
 	                $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
 	                $this->redirect( array( 'action' => 'index' ));
@@ -101,6 +120,18 @@ class CentrosController extends AppController {
 		$titulacions = $this->Titulacion->find('list');
 		$this->set(compact('titulacions', $titulacions));
 		$this->set(compact('empleados'));
+
+		$this->loadModel('Barrio');
+		$barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
+		$this->set('barrios', $barrios);
+
+		$this->loadModel('Ciudad');
+		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
+		$this->set('ciudades', $ciudades);
+
+		$this->loadModel('Departamento');
+		$departamentos = $this->Departamento->find('list', array('fields' => array('nombre')));
+		$this->set('departamentos', $departamentos);
 	}
 
 	function delete($id = null) {
@@ -115,24 +146,103 @@ class CentrosController extends AppController {
 		$this->Session->setFlash('El centro no fue borrado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 		$this->redirect(array('action' => 'index'));
 	}
-	
+
+	/*
 	function imprimir($id = null) {
-	
+
 	    $this->idEmpty($id,'index');
 		$centro = $this->Centro->read(null, $id);
 	    $this->__createCentroPDF($centro);
 	}
-	
+	*/
+
+	public function listarCiudad($id) {
+		if (is_numeric($id)) {
+
+			$this->layout = 'ajax';
+			$this->loadModel('Ciudad');
+
+			$lista_Ciudad=$this->Ciudad->find('list',array('conditions' => array('departamento_id' => $id)));
+			$this->set('lista_Ciudad',$lista_Ciudad);
+		}
+		echo json_encode($lista_Ciudad);
+		$this->autoRender = false;
+	}
+
+	public function listarBarrios($id) {
+		if (is_numeric($id)) {
+
+			$this->layout = 'ajax';
+			$this->loadModel('Barrio');
+
+			$lista_barrios=$this->Barrio->find('list',array('conditions' => array('ciudad_id' => $id)));
+			$this->set('lista_barrios',$lista_barrios);
+    }
+		echo json_encode($lista_barrios);
+		$this->autoRender = false;
+	}
+
 	// metodos privados.
-	
+	/*
 	function __createCentroPDF($centro)
 	{
 		App::import(null,null,true,array(),'vendors/tcpdf/examples/example_001',false);
 		Configure::write('debug',0);
         $this->layout = 'pdf'; /* esto utilizara el layout 'pdf.ctp' */
-        /* Operaciones que deseamos realizar y variables que pasaremos a la vista. */
+        /* Operaciones que deseamos realizar y variables que pasaremos a la vista. 
         $this->render();
 	}
-			
+	*/
+
+	public function autocompleteCentro() {
+		$term = null;
+
+		$conditions = array();
+		$term = $this->request->query('term');
+
+		// Primero obtiene el termino a buscar
+		if(!empty($term))
+		{
+			// Si el termino es numerico, filtro por cue
+			if(is_numeric($term)) {
+				$conditions[] = array('cue LIKE ' => '%'.$term.'%');
+			} else {
+				// Se esta buscando por nombre del centro
+				$terminos = explode(' ', trim($term));
+				$terminos = array_diff($terminos,array(''));
+
+				foreach($terminos as $termino) {
+					$conditions[] = array('sigla LIKE' => '%' . $termino . '%');
+				}
+			}
+		}
+
+		$centro = $this->Centro->find('all', array(
+			'recursive'	=> -1,
+			'conditions' => $conditions,
+			'fields' 	=> array('id', 'sigla'))
+			);
+
+
+		$this->RequestHandler->respondAs('json'); // Responde con el header correspondiente a json
+		echo json_encode($centro);
+		$this->autoRender = false;
+	}
+
+	public function autocompleteSeccionDependiente() {
+		$id = $this->request->query('id');
+
+		$this->loadModel('Curso');
+		$secciones = $this->Curso->find('list', array(
+			'recursive'=>-1,
+			'fields'=>array('id','nombre_completo_curso'),
+			'conditions'=>array(
+				'centro_id'=>$id)
+		));
+
+		$this->RequestHandler->respondAs('json'); // Responde con el header correspondiente a json
+		$this->autoRender = false;
+		echo json_encode($secciones);
+	}
 }
 ?>

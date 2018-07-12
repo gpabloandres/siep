@@ -4,8 +4,6 @@ App::uses('AppController', 'Controller');
 class ResolucionsController extends AppController {
 
    	var $name = 'Resolucions';
-    public $helpers = array('Session', 'Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
-	public $components = array('Flash', 'Auth','Session', 'RequestHandler');
 	var $paginate = array('Resolucion' => array('limit' => 4, 'order' => 'Resolucion.numero DESC'));
 
     function beforeFilter(){
@@ -25,7 +23,6 @@ class ResolucionsController extends AppController {
  * @return void
  */
 	public function index() {
-	    //
 	    $this->Resolucion->recursive = -1;
 		$this->set('resolucions', $this->paginate());
 		

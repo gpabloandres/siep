@@ -2,9 +2,7 @@
 class HorariosController extends AppController {
 
 	var $name = 'Horarios';
-    var $helpers = array('Session', 'Html');
-	public $components = array('Auth','Session', 'RequestHandler');
-	var $paginate = array('Horario' => array('limit' => 6, 'order' => 'Horario.dia DESC'));
+ 	var $paginate = array('Horario' => array('limit' => 6, 'order' => 'Horario.dia DESC'));
 
     function beforeFilter(){
 	    parent::beforeFilter();

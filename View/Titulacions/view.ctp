@@ -91,24 +91,14 @@
        <div class="unit">
             <div class="subtitulo">Opciones</div>
             <div class="opcion"><?php echo $this->Html->link('Listar Titulaciones', array('controller' => 'titulacions', 'action' => 'index')); ?></div>
-<<<<<<< HEAD
             <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $titulacion['Titulacion']['id'])); ?></div>
             <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $titulacion['Titulacion']['id']), null, sprintf(__('Esta seguro de borrar la titulación %s?'), $titulacion['Titulacion']['nombre'])); ?></div>
-=======
-            <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $titulacions['Titulacion']['id'])); ?></div>
-            <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $titulacions['Titulacion']['id']), null, sprintf(__('Esta seguro de borrar la titulación %s?'), $titulacions['Titulacion']['nombre'])); ?></div>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
         </div>
     </div>
  </div>
 <!-- end main -->
-<<<<<<< HEAD
 <!-- Centros Relacionados -->
 <div id="click_04" class="titulo_acordeon">Centros Relacionados <span class="caret"></span></div>
-=======
-<!-- Cursos Relacionados -->
-<div id="click_04" class="titulo_acordeon">Secciones Relacionadas <span class="caret"></span></div>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 <div id="acordeon_04">
   <div class="row">
   <?php if (!empty($titulacion['Centro'])):?>
@@ -118,12 +108,12 @@
         <div class="unit">
           <?php echo ' <b>CUE N°:</b> '.$centro['cue']; ?><br/>
           <?php echo ' <b>Nombre:</b> '.$centro['sigla']; ?><br/>
-          <?php echo ' <b>Ciudad:</b> '.$centro['ciudad']; ?><br/>
+          <?php echo ' <b>Ciudad:</b> '.$ciudades[$centro['ciudad_id']]; ?><br/>
           <?php echo ' <b>Teléfono:</b> '.$centro['telefono']; ?><br/>
           <hr>
             <div class="text-right">
               <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'centros', 'action' => 'view', $centro['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-              <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
+              <?php if($current_user['role'] == 'superadmin'): ?>
               <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'centros', 'action' => 'edit', $centro['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
               <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'centros', 'action' => 'delete', $centro['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
               <?php endif; ?>  
@@ -151,7 +141,7 @@
           <hr>
           <div class="text-right">
             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'disenocurriculars', 'action' => 'view', $disenocurricular['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-            <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
+            <?php if($current_user['role'] == 'superadmin'): ?>
             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'disenocurriculars', 'action' => 'edit', $disenocurricular['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'disenocurriculars', 'action' => 'delete', $disenocurricular['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
             <?php endif; ?>  
@@ -181,7 +171,7 @@
           <hr>
           <div class="text-right">
             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'cursos', 'action' => 'view', $curso['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-            <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
+            <?php if($current_user['role'] == 'superadmin'): ?>
             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'cursos', 'action' => 'edit', $curso['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'cursos', 'action' => 'delete', $curso['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
             <?php endif; ?>  

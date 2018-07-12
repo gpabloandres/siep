@@ -38,23 +38,29 @@
 	</table>
 	<?php echo $this->Paginator->prev('<< ' . __('previous', true), array(), null, array('class'=>'disabled'));?>
 	<?php echo $this->Paginator->numbers(array(   'class' => 'numbers'     ));?>
-	<?php echo $this->Paginator->next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
+	<?php echo $this->Paginator->next(__('next', true) . ' >>', array(), null, array('class' => 'd isabled'));?>
 </div>				
 <br/>-->
 <?php //echo $this->Html->link( "Logout",   array('action'=>'logout') ); ?>
 	<blockquote>
-	  <h3>Breve instructivo para cargar datos institucionales en SIEP.</h3>
-	  <hr>
-	  <h4>1° PASO: Carga de las Secciones/Cursos</h4><br>
-	  <p>Desde el menú: "CARGA --> SECCIONES" crear los cursos/secciones mediante el botón "AGREGAR".</p><br>
-	  <h4>2° PASO: Carga de los Espacios curriculares/Materias</h4><br>
-	  <p>Desde el menú: "CARGA --> ESPACIOS" crear los espacios/materias mediante el botón "AGREGAR".</p><br>
-	  <h4>3° PASO: Pre-Inscripción de los Alumnos</h4><br>
-	  <p>Desde el menú: "CARGA --> ALUMNOS" cargar los datos personales de los potenciales alumnos mediante el botón "AGREGAR".</p><br>
-	  <h4>4° PASO: Inscripción de los Alumnos</h4><br>
-	  <p>Desde el menú: "CARGA --> INSCRIPCIONES" vincular a los alumnos pre-inscriptos a los cursos y/o materias que cursarán, mediante el botón "AGREGAR".</p><br>
-	  <hr>	
-	  <p>Si buscas resultados distintos, no hagas siempre lo mismo.</p>
-	  <footer>Frase célebre de<cite title="Source Title">Albert Einstein</cite></footer>
+	  <h3>Resoluciones de Situaciones con el Sistema.</h3>
+	  <hr />
+	  <h4>INSCRIPCIÓN DE UN ALUMNO: Agregrar una Inscripción para el próximo Ciclo Lectivo (PRE-INSCRIPCIÓN)</h4><hr />
+	  <h4>1° PASO: Abrir el formulario de Agregación</h4>
+	  <p> - Desde el menú: "ALUMNADO" --> INSCRIPCIONES" presione el botón "+ AGREGAR".<p><br> 
+	  <h4>2° PASO: Completar los campos</h4>	
+	  <p> - En el campo "Ciclo lectivo*" seleccione el ciclo 2018.</p>
+	  <p> - En el campo "Nombre y apellidos del alumno*" tipeé un nombre de persona correspondiente a su Institución (Ej: "ALUMNO PRIMERO SABATO"; "ALUMNO SEGUNDO SABATO").</p><br>
+	  <h4>3° PASO: Presione el botón "GUARDAR".</h4>
+	  <p> - El sistema automáticamente creará a esa persona como ALUMNO de su INSTITUCIÓN, le asignará un CÓDIGO ÚNICO DE INSCRIPCIÓN y actualizará la MATRÍCULA de la sección según el ciclo correspondiente.</p><br>
+	  <hr />
+	  <h4>INSCRIPCIÓN DE UN ALUMNO: Editar una Inscripción | Cambiar la SECCIÓN. </h4><hr />
+	  <h4>1° PASO: Abrir el formulario de Edición</h4>
+	  <p> - Desde la tarjeta correspondiente a la Inscripción seleccionada: presione el botón NARANJA.<p><br> 
+	  <h4>2° PASO: Modificar el campo "Sección*"</h4>	
+	  <p> - En el campo "Sección*" seleccione otra sección.</p><br>
+	  <h4>3° PASO: Presione el botón "GUARDAR".</h4>
+	  <p> - El sistema automáticamente actualizará la MATRÍCULA de la secciones correspondientes al cambio.</p><br>
+	  <hr />	
 	</blockquote>
 </div>

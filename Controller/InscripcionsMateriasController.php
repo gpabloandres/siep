@@ -4,9 +4,6 @@ App::uses('AppController', 'Controller');
 class InscripcionsMateriasController extends AppController {
 
 	var $name = 'InscripcionsMaterias';
-<<<<<<< HEAD
-    public $helpers = array('Session', 'Form', 'Time', 'Js');
-    public $components = array('Auth','Session', 'RequestHandler');
    	var $paginate = array('InscripcionsMateria' => array('limit' => 2, 'order' => 'InscripcionsMateria.materia_id ASC'));
 
     function beforeFilter(){
@@ -20,12 +17,6 @@ class InscripcionsMateriasController extends AppController {
 	    }
     }
 
-=======
-    var $helpers = array('Session', 'Form', 'Time', 'Js');
-    var $components = array('Auth','Session', 'RequestHandler');
-   	var $paginate = array('InscripcionsMateria' => array('limit' => 2, 'order' => 'InscripcionsMateria.materia_id ASC'));
-
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 /**
  * index method
  *
@@ -35,20 +26,16 @@ class InscripcionsMateriasController extends AppController {
 		$this->InscripcionsMateria->recursive = 1;
 		$this->paginate['InscripcionsMateria']['limit'] = 8;
 		$this->paginate['InscripcionsMateria']['order'] = array('InscripcionsMateria.materia_id' => 'ASC');
-		
 		$cicloIdActual = $this->getLastCicloId();
 		$estado2 = array("COMPLETA", "PENDIENTE");
 		if($this->Auth->user('role') === 'admin') {
 			$userCentroId = $this->getUserCentroId();
-			$this->paginate['InscripcionsMateria']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado2, 'Inscripcion.centro_id' => $userCentroId);
+			$this->paginate['InscripcionsMateria']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado_inscripcion' => $estado2, 'Inscripcion.centro_id' => $userCentroId);
 		} else {
-			$this->paginate['InscripcionsMateria']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado2);		
+			$this->paginate['InscripcionsMateria']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado_inscripcion' => $estado2);		
 		}
-
-		$this->loadModel('Ciclo');
-		$this->loadModel('Centro');
-		$this->loadModel('Alumno');
 		$ciclosId = $this->InscripcionsMateria->Inscripcion->find('list', array('fields'=>array('ciclo_id')));
+        $this->loadModel('Ciclo');
         $ciclos = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => $ciclosId)));
         // Carga el combobox de los cursos según la institución correspondiente.
         if($this->Auth->user('role') === 'admin') {
@@ -57,16 +44,15 @@ class InscripcionsMateriasController extends AppController {
           $materias = $this->InscripcionsMateria->Materia->find('list', array('fields'=>array('id', 'alia')));  
         }	
         $centrosId = $this->InscripcionsMateria->Materia->Inscripcion->find('list', array('fields'=>array('centro_id')));
+        $this->loadModel('Centro');
         $centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions' => array('id' => $centrosId)));
         $ciclos = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => $ciclosId)));
 		$inscripcions = $this->InscripcionsMateria->Inscripcion->find('list', array('fields'=>array('id', 'legajo_nro')));
-        $alumnosId = $this->InscripcionsMateria->Inscripcion->find('list', array('fields'=>array('alumno_id')));
-        $alumnos = $this->Alumno->find('list', array('fields'=>array('nombre_completo_alumno'), 'conditions' => array('id' => $alumnosId)));
-  
+        $alumnoId = $this->InscripcionsMateria->Inscripcion->find('list', array('fields'=>array('alumno_id')));
+        $this->loadModel('Persona');
+        $alumnoNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions' => array('id' => $alumnoId)));
   		$this->redirectToNamed();
-		
 		$conditions = array();
-		
 		if(!empty($this->params['named']['centro_id']))
 		{
 			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
@@ -80,6 +66,6 @@ class InscripcionsMateriasController extends AppController {
 			$conditions['InscripcionsMateria.inscripcion_id ='] = $this->params['named']['inscripcion_id'];
 		}
 		$InscripcionsMateria = $this->paginate('InscripcionsMateria', $conditions);
-		$this->set(compact('InscripcionsMateria', 'cicloActual', 'materias', 'inscripcions', 'ciclos', 'alumnos', 'centros'));
+		$this->set(compact('InscripcionsMateria', 'cicloActual', 'materias', 'inscripcions', 'ciclos', 'alumnoNombre', 'centros'));
    }
 }

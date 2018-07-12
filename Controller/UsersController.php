@@ -6,12 +6,13 @@ class UsersController extends AppController {
  
     public $helpers = array('Text', 'Js', 'Time');
     public $components = array('Paginator', 'RequestHandler', 'Session');
-  
+    /*
     public $paginate = array(
         'limit' => 25,
         'conditions' => array('status' => '1'),
         'order' => array('User.username' => 'asc' ) 
     );
+    */
    
     public function beforeFilter() {
         parent::beforeFilter();
@@ -62,7 +63,7 @@ class UsersController extends AppController {
     public function index() {
         //$this->User->recursive = 0;
 		$this->paginate = array(
-            'limit' => 6,
+            'limit' => 10,
             'order' => array('User.username' => 'asc' )
         );
 		$this->redirectToNamed();
@@ -83,10 +84,12 @@ class UsersController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
+        /*
         $this->pdfConfig = array(
             'download' => true,
             'filename' => 'user_' . $id .'.pdf'
         );
+        */
 		$this->set('user', $this->User->read(null, $id));
 		$this->set('user', $this->User->find('first', $options));
 	}
@@ -140,7 +143,6 @@ class UsersController extends AppController {
 	}
 
 	 public function delete($id = null) {
-		
 		if (!$id) {
 			$this->Session->setFlash('Id no valido para el usuario', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action'=>'index'));
@@ -159,7 +161,6 @@ class UsersController extends AppController {
     }
 	
 	public function activate($id = null) {
-		
 		if (!$id) {
 			$this->Session->setFlash('Id no valido para el usuario', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action'=>'index'));

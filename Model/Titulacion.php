@@ -50,91 +50,153 @@ class Titulacion extends AppModel {
 	//Validaciones
         var $validate = array(
             'created' => array(
-						   'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',
-						   'message' => 'Indicar una fecha y hora.'
-						          )
-					     ),
-				    'nombre' => array(
-               'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',       
-               'message' => 'Indicar una opcion.'
-               ),
-						   'isUnique' => array(
-	                       'rule' => 'isUnique',
-	                       'message' => 'Este nombre esta siendo usado.'
-	                     )
-               ),
+			    'required' => array(
+				'rule' => 'notBlank',
+				'required' => 'create',
+				'message' => 'Indicar una fecha y hora.'
+				)
+			),
+			'nombre' => array(
+                'required' => array(
+				'rule' => 'notBlank',
+				'required' => 'create',
+                'message' => 'Indicar una opcion.'
+                ),
+				'isUnique' => array(
+	            'rule' => 'isUnique',
+	            'message' => 'Este nombre esta siendo usado.'
+	            ),
+				'alphaBet' => array(
+				'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+				'message' => 'Indicar el nombre de la titulación (Sólo letras y espacios)'
+				)
+            ),
             'certificacion' => array(
-               'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',       
+                'required' => array(
+				'rule' => 'notBlank',
+				'required' => 'create',
                'message' => 'Indicar la certificación.'
-                       )
+						 ),
+						 'alphaBet' => array(
+						 'rule' => '/^[ -áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+						 'message' => 'Indicar una opción correcta'
+					 )
                ),
 				    'condicion_ingreso' => array(
                'required' => array(
 						   'rule' => 'notBlank',
-						   'required' => 'create',       
+						   'required' => 'create',
                'message' => 'Indicar la condición de ingreso.'
-                       )
+						 ),
+						 'alphaBet' => array(
+						 'rule' => '/^[ -áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+						 'message' => 'Indicar una opción correcta'
+					 )
                ),
 				   'ciclo_implementacion' => array(
                'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',       
+							'rule' => 'notBlank',
+							 'required' => 'create',
                'message' => 'Indicar el ciclo de implementación.'
-                       )
+						 ),
+						 'numeric' => array(
+	 						'rule' => 'naturalNumber',
+	 						'message' => 'Indicar número sin puntos ni comas ni espacios.'
+	 					)
                ),
+							 'ciclo_finalizacion' => array(
+		               'required' => array(
+									 'allowEmpty' => true,
+								     'message' => 'Indicar el ciclo de finalización.'
+								 ),
+								 'numeric' => array(
+			 						'rule' => 'naturalNumber',
+			 						'message' => 'Indicar número sin puntos ni comas ni espacios.'
+			 					)
+		               ),
 				   'a_termino' => array(
                'boolean' => array(
                'rule' => array('boolean'),
 					     'message' => 'Indicar una opción'
 				               )
                 ),
+
+								'tipo' => array(
+										'required' => array(
+										'allowEmpty' => true,
+										'required' => 'create',
+										'message' => 'Indicar una opcion correcta.'
+									),
+									'alphaBet' => array(
+									'rule' => '/^[ -áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+									'message' => 'Indicar una opción correcta'
+								)
+								),
 				   'orientacion' => array(
                'required' => array(
 						   'rule' => 'notBlank',
-						   'required' => 'create',       
+						   'required' => 'create',
                'message' => 'Indicar una opción.'
-                       )
+						 ),
+						 'alphaBet' => array(
+						 'rule' => '/^[ .,áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+						 'message' => 'Indicar una opción correcta'
+					 )
                 ),
 				   'organizacion_plan' => array(
                'required' => array(
 						   'rule' => 'notBlank',
-						   'required' => 'create',       
+						   'required' => 'create',
                'message' => 'Indicar una opción.'
-                       )
+						 ),
+						 'alphaBet' => array(
+						 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+						 'message' => 'Indicar una opción correcta'
+					 )
                 ),
 				   'organizacion_cursada' => array(
                'required' => array(
 						   'rule' => 'notBlank',
-						   'required' => 'create',       
+						   'required' => 'create',
                'message' => 'Indicar una opción.'
-                       )
+						 ),
+						 'alphaBet' => array(
+						 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+						 'message' => 'Indicar una opción correcta'
+					 )
                 ),
 				   'forma_dictado' => array(
                'required' => array(
 						   'rule' => 'notBlank',
-						   'required' => 'create',       
+						   'required' => 'create',
                'message' => 'Indicar una opción.'
-                        )
+						 ),
+						 'alphaBet' => array(
+						 'rule' => '/^[ -áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+						 'message' => 'Indicar una opción correcta'
+					 )
                 ),
 				   'carga_horaria_en' => array(
                'required' => array(
 						   'rule' => 'notBlank',
-						   'required' => 'create',       
+						   'required' => 'create',
                'message' => 'Indicar una opción.'
-                           )
+						 ),
+						 'alphaBet' => array(
+						'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+						'message' => 'Indicar una opción correcta'
+					)
                 ),
 				   'carga_horaria' => array(
                'required' => array(
 						   'rule' => 'notBlank',
 						   'required' => 'create',
 						   'message' => 'Indicar una carga horaria.'
-                           )						   
+						 ),
+						 'numeric' => array(
+							 'rule' => 'naturalNumber',
+							 'message' => 'Indicar número sin puntos ni comas ni espacios.'
+						 )
                 ),
 				   'edad_minima' => array(
                'required' => array(
@@ -143,8 +205,8 @@ class Titulacion extends AppModel {
 						   'message' => 'Indicar una edad.'
                            ),
 						   'numeric' => array(
-                           'rule' => 'numeric', 
-                           'allowEmpty' => false,       
+                           'rule' => 'numeric',
+                           'allowEmpty' => false,
                            'message' => 'Indicar un número.'
                            )
                    ),
@@ -153,15 +215,23 @@ class Titulacion extends AppModel {
 						   'rule' => 'notBlank',
 						   'required' => 'create',
 						   'message' => 'Indicar una articulación.'
-                           )
+						 ),
+						 'alphaBet' => array(
+					 'rule' => '/^[ ,áÁéÉíÍóÓúÚa-zA-ZñÑ]{2,}$/i',
+					 'message' => 'Indicar una opción correcta'
+				 )
                    ),
 				   'duracion_en' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
 						   'required' => 'create',
 						   'message' => 'Indicar una opción.'
-                           )
-                   ),
+						 ),
+						 'alphaBet' => array(
+					'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{4,}$/i',
+					'message' => 'Indicar una opción correcta'
+						)
+					),
 				   'duracion' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
@@ -169,8 +239,8 @@ class Titulacion extends AppModel {
 						   'message' => 'Indicar una duración.'
                            ),
 						   'numeric' => array(
-                           'rule' => 'numeric', 
-                           'allowEmpty' => false,       
+                           'rule' => 'numeric',
+                           'allowEmpty' => false,
                            'message' => 'Indicar un número.'
                            )
                    ),
@@ -179,7 +249,11 @@ class Titulacion extends AppModel {
 						   'rule' => 'notBlank',
 						   'required' => 'create',
 						   'message' => 'Indicar una opción.'
-                           )
+						 ),
+						 'alphaBet' => array(
+				 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{3,}$/i',
+				 'message' => 'Indicar una opción correcta'
+					 )
 				   ),
                   'norma_aprob_jur_nro' => array(
                            'alphaNumeric' => array(
@@ -190,17 +264,18 @@ class Titulacion extends AppModel {
                    ),
 				   'norma_aprob_jur_anio' => array(
                            'numeric' => array(
-                           'rule' => 'numeric', 
-                           'allowEmpty' => true,       
+                           'rule' => 'numeric',
+                           'allowEmpty' => true,
                            'message' => 'Indicar un año.'
-                           )
+												 )
                    ),
 				   'norma_val_nac_tipo' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength', 4), 
-                           'allowEmpty' => true,       
-                           'message' => 'Indicar una opción.'
-                           )
+
+												 'alphaBet' => array(
+										 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{2,}$/i',
+										 'allowEmpty' => true,
+										 'message' => 'Indicar una opción correcta'
+											 )
                    ),
 				   'norma_val_nac_nro' => array(
                            'alphaNumeric' => array(
@@ -211,17 +286,17 @@ class Titulacion extends AppModel {
                    ),
 				   'norma_val_nac_anio' => array(
                            'numeric' => array(
-                           'rule' => 'numeric', 
-                           'allowEmpty' => true,       
+                           'rule' => 'numeric',
+                           'allowEmpty' => true,
                            'message' => 'Indicar un año.'
                            )
                    ),
 				   'norma_ratif_jur_tipo' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength', 4), 
-                           'allowEmpty' => true,       
-                           'message' => 'Indicar una opción.'
-                           )
+						 				'alphaBet' => array(
+										'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{2,}$/i',
+										'allowEmpty' => true,
+										'message' => 'Indicar una opción correcta'
+					)
                    ),
 				   'norma_ratif_jur_nro' => array(
                            'alphaNumeric' => array(
@@ -232,17 +307,17 @@ class Titulacion extends AppModel {
                    ),
 				   'norma_ratif_jur_anio' => array(
                            'numeric' => array(
-                           'rule' => 'numeric', 
-                           'allowEmpty' => true,       
+                           'rule' => 'numeric',
+                           'allowEmpty' => true,
                            'message' => 'Indicar un año.'
                            )
                    ),
 				   'norma_homologacion_tipo' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength', 4), 
-                           'allowEmpty' => true,       
-                           'message' => 'Indicar una opción.'
-                           )
+						 						'alphaBet' => array(
+				 								'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{2,}$/i',
+				 							'allowEmpty' => true,
+				 						'message' => 'Indicar una opción correcta'
+					 					)
                    ),
 				   'norma_homologacion_nro' => array(
                            'alphaNumeric' => array(
@@ -253,8 +328,8 @@ class Titulacion extends AppModel {
                    ),
 				   'norma_homologacion_anio' => array(
                            'numeric' => array(
-                           'rule' => 'numeric', 
-                           'allowEmpty' => true,       
+                           'rule' => 'numeric',
+                           'allowEmpty' => true,
                            'message' => 'Indicar un año.'
                            )
                    )

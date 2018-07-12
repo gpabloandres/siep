@@ -3,7 +3,7 @@
         <div class="alumnos form">
              <?php echo $this->Form->create('Inscripcion', array('novalidate' => true));?>
 	         <div class="unit">
-                 <?php echo $this->element('forms/form_inscripcion'); ?><p>
+                 <?php echo $this->element('forms/form_inscripcion_edit'); ?><p>
              </div>
              <?php echo $this->Form->input('id', array('type' => 'hidden')); ?>
              <div class="text-center">
