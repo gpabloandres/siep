@@ -234,7 +234,6 @@ class InscripcionsController extends AppController {
                                     'conditions' => array('Inscripcion.legajo_nro' => $codigoPrueba)
                                     ));
                 } while ($cuentaInscripcionPase != 0)
-            }                             
                 $codigoActual = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
             } else {
                 $codigoActual = $this->__getCodigo($ciclo, $personaDni);
