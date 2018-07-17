@@ -60,7 +60,7 @@
                                  ?></p>
                                 <?php  if($inscripcion['hermano_id']): ?>
                                     <b><?php echo __('Hermano de:'); ?></b></p>
-                                    <b><?php echo ($this->Html->link($personaNombre[$personaId[$inscripcion['hermano_id']]], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['hermano_id']))); ?><?php //endif; ?></b>
+                                    <b><?php echo ($this->Html->link($hermanoNombre, array('controller' => 'alumnos', 'action' => 'view', $inscripcion['hermano_id']))); ?><?php //endif; ?></b>
                                 <?php endif; ?></p>
                                 <b><?php echo __('Documentación:'); ?></b>
                                   <ul>

@@ -133,6 +133,28 @@ class InscripcionsController extends AppController {
             $this->Session->setFlash($apiInscripcion['error'], 'default', array('class' => 'alert alert-danger'));
             $this->redirect(array('action' => 'index'));
         }
+        //Sí se trata de una inscripción por hermano, obtiene el nombre completo del hermano.  
+        $tipoInscripcionArray = $this->Inscripcion->findById($id, 'tipo_inscripcion');
+        $tipoInscripcion = $tipoInscripcionArray['Inscripcion']['tipo_inscripcion'];
+        if ($tipoInscripcion == 'Hermano de alumno regular') {
+            //Obtención del id de alumno del hermano.
+            $hermanoIdArray = $this->Inscripcion->findById($id, 'hermano_id');
+            $hermanoId = $hermanoIdArray['Inscripcion']['hermano_id'];
+            //Obtención del id de persona del hermano.
+            $this->loadModel('Alumno');
+            $this->Alumno->recursive = 0;
+            $this->Alumno->Behaviors->load('Containable');
+            $personaIdArray = $this->Alumno->findById($hermanoId, 'persona_id');
+            $personaId = $personaIdArray['Alumno']['persona_id'];
+            //Obtención del nombre completo del hermano.
+            $this->loadModel('Persona');
+            $this->Persona->recursive = 0;
+            $this->Persona->Behaviors->load('Containable');
+            $hermanoNombreArray = $this->Persona->findById($personaId, 'nombre_completo_persona');
+            $hermanoNombre = $hermanoNombreArray['Persona']['nombre_completo_persona'];
+            //Envío de dato a la vista.
+            $this->set(compact('hermanoNombre'));
+        }
     }
 
 	public function add() {
@@ -224,7 +246,7 @@ class InscripcionsController extends AppController {
             $tipoInscripcionActual = $this->request->data['Inscripcion']['tipo_inscripcion'];
             // Obtiene número de pase para el ciclo actual.
             // Sí el tipo de inscripción actual es PASE, genera un código específico.
-            if ($tipoInscripcionActual == 'PASE') {
+            if ($tipoInscripcionActual == 'Pase') {
                 $paseNro = 0;
                 do { 
                     $paseNro += 1;
@@ -233,7 +255,7 @@ class InscripcionsController extends AppController {
                                     'contain' => false,
                                     'conditions' => array('Inscripcion.legajo_nro' => $codigoPrueba)
                                     ));
-                } while ($cuentaInscripcionPase != 0)
+                } while ($cuentaInscripcionPase != 0);
                 $codigoActual = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
             } else {
                 $codigoActual = $this->__getCodigo($ciclo, $personaDni);
