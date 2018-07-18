@@ -36,19 +36,18 @@ class PasesController extends AppController {
 		$this->loadModel('Centro');
 		$this->Centro->recursive = 0;
         $this->Centro->Behaviors->load('Containable');
-		$nivelCentroArray = $this->Centro->findById($userCentroId, 'nivel_servicio');
-		$nivelCentro = $nivelCentroArray['Centro']['nivel_servicio'];
-		$nivelCentroId = $this->Centro->find('list', array(
+		$nivelCentroArrayIf = $this->Centro->findById($userCentroId, 'nivel_servicio');
+		$nivelCentroIf = $nivelCentroArrayIf['Centro']['nivel_servicio'];
+		$nivelCentroIdIf = $this->Centro->find('list', array(
 			'fields'=>array('id'),
 			'contain'=>false,
-			'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+			'conditions'=>array('nivel_servicio'=>$nivelCentroIf)));
 		if ($userRole === 'admin') {
 			$this->paginate['Pase']['conditions'] = array('or'=> array('Pase.centro_id_origen' => $userCentroId, 'Pase.centro_id_destino' => $userCentroId));
-		} else if (($userRole === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
+		} else if (($userRole === 'usuario') && ($nivelCentroIf === 'Común - Inicial - Primario')) {
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
 			$this->paginate['Pase']['conditions'] = array('or'=> array('Pase.centro_id_origen' => $nivelCentroId, 'Pase.centro_id_destino' => $nivelCentroId));
 		} else if ($userRole === 'usuario') {
-			$this->loadModel('Centro');
 			$nivelCentro = $this->Centro->find('list', array(
 				'fields'=>array('nivel_servicio'),
 				'contain'=>false,
@@ -96,29 +95,19 @@ class PasesController extends AppController {
 		$ciclosNombre = $this->Ciclo->find('list', array('fields'=>array('id', 'nombre'), 'contain'=>false));
 		/* Carga de Centros
 		*  Sí es superadmin carga todos los centros.
-		*  Sino sí es un usario de Inicial/Primaria, carga los centros de ambos niveles.
+		*  Sino sí es un usuario de Inicial/Primaria, carga los centros de ambos niveles.
 		*  Sino sí es un usuario del resto de los niveles, carga los centros del nivel correspondientes.     
 		*/
-		$nivelCentro = $this->Centro->find('list', array(
-			'fields'=>array('id','nivel_servicio'),
-			'contain'=>false,
-			'conditions'=>array('id'=>$userCentroId)));
-		$nivelCentroId = $this->Centro->find('list', array(
-			'fields'=>array('id'),
-			'contain'=>false,
-			'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-		$nivelCentroArray = $this->Centro->findById($nivelCentroId, 'nivel_servicio');
-		$nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
 		if ($userRole == 'superadmin') {
 			$centrosNombre = $this->Centro->find('list', array('fields'=>array('id', 'sigla'), 'contain'=>false));
-		} else if (($userRole === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
+		} else if (($userRole === 'usuario') && ($nivelCentroIf === 'Común - Inicial - Primario')) {
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
 			$centrosNombre = $this->Centro->find('list', array('fields'=>array('sigla'), 'contain'=>false, 'conditions'=>array('id'=>$nivelCentroId)));
 		} else if ($userRole === 'usuario') {
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
 			$centrosNombre = $this->Centro->find('list', array('fields'=>array('sigla'), 'contain'=>false, 'conditions'=>array('id'=>$nivelCentroId)));
 		} else if ($userRole == 'admin') {
-			$centrosNombre = $this->Centro->find('list', array('fields'=>array('id', 'sigla'), 'contain'=>false, 'conditions'=>array('id'=>$nivelCentroId)));
+			$centrosNombre = $this->Centro->find('list', array('fields'=>array('id', 'sigla'), 'contain'=>false, 'conditions'=>array('id'=>$nivelCentroIdIf)));
 		}
 		 /* Carga de Alumnos */
 		$this->loadModel('Alumno');
@@ -141,27 +130,40 @@ class PasesController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('pase', $this->Pase->read(null, $id));
-		$this->loadModel('Persona');
-		$this->Persona->recursive = 0;
-        $this->Persona->Behaviors->load('Containable');
-		$personasId = $this->Persona->find('list', array('fields' => array('id'), 'contain'=>false));
-	    $personaNombre = $this->Persona->find('list', array(
-	    	'fields'=>array('id', 'nombre_completo_persona'),
-	    	'contain'=>false,
-	    	'conditions'=>array('id'=>$personasId)));
-    	$this->loadModel('Ciclo');
+
+		//Obtención del ciclo.
+        $cicloIdArray = $this->Pase->findById($id, 'ciclo_id');
+        $cicloId = $cicloIdArray['Pase']['ciclo_id'];
+        $this->loadModel('Ciclo');
 		$this->Ciclo->recursive = 0;
         $this->Ciclo->Behaviors->load('Containable');
-		$ciclos = $this->Ciclo->find('list', array('fields' => array('nombre'), 'contain'=>false));
+		$cicloIdArray = $this->Ciclo->findById($cicloId, 'nombre');
+		$ciclos = $cicloIdArray['Ciclo']['nombre'];
+
+		//Obtención del centro.
 		$this->loadModel('Centro');
 		$this->Centro->recursive = 0;
         $this->Centro->Behaviors->load('Containable');
 		$centros = $this->Centro->find('list', array('fields' => array('nombre'), 'contain'=>false));
-		$this->loadModel('Alumno');
-		$this->Alumno->recursive = 0;
+
+		//Obtención del id de alumno.
+        $alumnoIdArray = $this->Pase->findById($id, 'alumno_id');
+        $alumnosId = $alumnoIdArray['Pase']['alumno_id'];
+
+		//Obtención del id de persona.
+        $this->loadModel('Alumno');
+        $this->Alumno->recursive = 0;
         $this->Alumno->Behaviors->load('Containable');
-		$alumnosId = $this->Alumno->find('list', array('fields' => array('persona_id'), 'contain'=>false));
-		$this->set(compact('pases', 'personaNombre', 'ciclos', 'centros', 'alumnosId'));
+        $personaIdArray = $this->Alumno->findById($alumnosId, 'persona_id');
+        $personaId = $personaIdArray['Alumno']['persona_id'];
+
+        //Obtención del nombre completo.
+        $this->loadModel('Persona');
+        $this->Persona->recursive = 0;
+        $this->Persona->Behaviors->load('Containable');
+        $personaNombreArray = $this->Persona->findById($personaId, 'nombre_completo_persona');
+        $personaNombre = $personaNombreArray['Persona']['nombre_completo_persona'];
+        $this->set(compact('pases', 'personaNombre', 'ciclos', 'centros', 'alumnosId'));
 	}
 
 	public function add() {
@@ -193,7 +195,7 @@ class PasesController extends AppController {
 			// Antes de guardar genera el estado de la documentación
 			if ($this->request->data['Pase']['nota_tutor'] == true) {
 			    	$estadoDocumentacion = "COMPLETA";
-			    }else{
+			    } else {
 			        $estadoDocumentacion = "PENDIENTE";
 			    }
 			// Deja el estado de la documentación en los datos que se intentarán guardar.
@@ -306,8 +308,8 @@ class PasesController extends AppController {
     	$this->Persona->recursive = 0;
         $this->Persona->Behaviors->load('Containable');
     	$personaNombres = $this->Persona->find('list', array(
-    	'fields'=>array('id', 'nombre_completo_persona'),
-    	'contain'=>false));
+    										'fields'=>array('id', 'nombre_completo_persona'),
+    										'contain'=>false));
     	$this->set(compact('pase', 'personaNombres'));
 	}
 
@@ -326,40 +328,38 @@ class PasesController extends AppController {
 
 	//Métodos privados
 	private function __lists(){
-		$this->loadModel('Persona');
-		$this->Persona->recursive = 0;
-        $this->Persona->Behaviors->load('Containable');
-		$this->loadModel('User');
-		$this->loadModel('Alumno');
-		$this->Alumno->recursive = 0;
-        $this->Alumno->Behaviors->load('Containable');
-		$userRole = $this->Auth->user('role');
 		/* Carga de Centros
 		*  Sí es superadmin carga todos los centros.
 		*  Sino sí es un usario de Inicial/Primaria, carga los centros de ambos niveles.
 		*  Sino sí es un usuario del resto de los niveles, carga los centros del nivel correspondientes.     
 		*/
+		//Obtención del rol y centro del usuario.
+		$this->loadModel('User');
+		$userRole = $this->Auth->user('role');
 		$userCentroId = $this->getUserCentroId();
+		//Obtención de información de los Centros.
 		$this->loadModel('Centro');
 		$this->Centro->recursive = 0;
         $this->Centro->Behaviors->load('Containable');
-		$nivelCentro = $this->Centro->find('list', array(
+		$nivelCentroIf = $this->Centro->find('list', array(
 			'fields'=>array('id','nivel_servicio'),
 			'contain'=>false,
 			'conditions'=>array('id'=>$userCentroId)));
-		$nivelCentroId = $this->Centro->find('list', array(
+		$nivelCentroIdIf = $this->Centro->find('list', array(
 			'fields'=>array('id'),
 			'contain'=>false,
-			'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-		$nivelCentroArray = $this->Centro->findById($nivelCentroId, 'nivel_servicio');
-		$nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
+			'conditions'=>array('nivel_servicio'=>$nivelCentroIf)));
+		$nivelCentroArrayIf = $this->Centro->findById($nivelCentroIdIf, 'nivel_servicio');
+		$nivelCentroStringIf = $nivelCentroArrayIf['Centro']['nivel_servicio'];
 		if ($userRole == 'superadmin') {
-			$centrosNombre = $this->Centro->find('list', array('fields'=>array('id', 'sigla'), 'contain'=>false));
-		} else if (($userRole === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
+			$centrosNombre = $this->Centro->find('list', array(
+				'fields'=>array('id', 'sigla'),
+				'contain'=>false));
+		} else if (($userRole === 'usuario') && ($nivelCentroIf === 'Común - Inicial - Primario')) {
 			$nivelCentroId = $this->Centro->find('list', array(
 				'fields'=>array('id'),
 				'contain'=>false,
-				'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
+				'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));
 			$centrosNombre = $this->Centro->find('list', array('fields'=>array('sigla'),
 				'contain'=>false,
 				'conditions'=>array('id'=>$nivelCentroId)));
@@ -367,7 +367,7 @@ class PasesController extends AppController {
 			$nivelCentroId = $this->Centro->find('list', array(
 				'fields'=>array('id'),
 				'contain'=>false,
-				'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
+				'conditions'=>array('nivel_servicio'=>$nivelCentroIf))); 		
 			$centrosNombre = $this->Centro->find('list', array(
 				'fields'=>array('sigla'),
 				'contain'=>false,
@@ -376,14 +376,21 @@ class PasesController extends AppController {
 			$centrosNombre = $this->Centro->find('list', array(
 				'fields'=>array('id', 'sigla'),
 				'contain'=>false,
-				'conditions'=>array('id'=>$nivelCentroId)));
+				'conditions'=>array('id'=>$nivelCentroIdIf)));
 		}
+		/* Carga de Alumnos
+		*  Sí es un usuario "admin", carga los alumnos del centro correspondiente.     
+		*  Sino sí es "usuario" o "superadmin" carga todos los alumnos.
+		*/
+		//Obtención de los datos de alumnos.
+		$this->loadModel('Alumno');
+		$this->Alumno->recursive = 0;
+        $this->Alumno->Behaviors->load('Containable');
+        //Obtención de los datos de alumnos.
+		$this->loadModel('Persona');
+		$this->Persona->recursive = 0;
+        $this->Persona->Behaviors->load('Containable');
 		if($userRole == 'admin'){
-			$userCentroId = $this->getUserCentroId();
-			$centroNivel= $this->Centro->find('list', array(
-				'fields'=>array('nivel_servicio'),
-				'contain'=>false,
-				'conditions'=>array('id'=>$userCentroId)));
 			$alumnos = $this->Alumno->find('list', array(
 				'fields'=>array('persona_id'),
 				'contain'=>false,
@@ -392,8 +399,10 @@ class PasesController extends AppController {
 				'fields'=>array('nombre_completo_persona'),
 				'contain'=>false,
 				'conditions'=>array('id'=>$alumnos)));
-		} else {  //SI es superUsuario
-			$alumnos = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'contain'=>false));
+		} else {  //Si el rol del usuario es "usuario" o "superadmin"
+			$alumnos = $this->Alumno->find('list', array(
+				'fields'=>array('persona_id'),
+				'contain'=>false));
 			$PersonaAlumnoId = $this->Persona->find('list', array(
 				'fields'=>array('nombre_completo_persona'),
 				'contain'=>false,
