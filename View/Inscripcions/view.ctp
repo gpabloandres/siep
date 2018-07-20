@@ -56,11 +56,14 @@
                         <div id="acordeon_04">
                             <div class="unit">
                                 <b><?php echo __('Fecha:'); ?></b>
-                                <?php echo $this->Html->formatTime($inscripcion['fecha_alta']);
-                                 ?></p>
+                                <?php echo $this->Html->formatTime($inscripcion['fecha_alta']);?></p>
                                 <?php  if($inscripcion['hermano_id']): ?>
                                     <b><?php echo __('Hermano de:'); ?></b></p>
-                                    <b><?php echo ($this->Html->link($hermanoNombre, array('controller' => 'alumnos', 'action' => 'view', $inscripcion['hermano_id']))); ?><?php //endif; ?></b>
+                                    <b><?php echo ($this->Html->link($hermanoNombre, array('controller' => 'alumnos', 'action' => 'view', $inscripcion['hermano_id']))); ?></b>
+                                <?php endif; ?></p>
+                                <?php  if($inscripcion['tipo_inscripcion'] === 'Pase'): ?>
+                                    <b><?php echo __('Centro de Origen:'); ?></b></p>
+                                    <b><?php echo $centroOrigenNombre; ?></b>
                                 <?php endif; ?></p>
                                 <b><?php echo __('Documentación:'); ?></b>
                                   <ul>
