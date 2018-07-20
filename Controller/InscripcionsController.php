@@ -53,13 +53,13 @@ class InscripcionsController extends AppController {
             'conditions'=>array(
                 'nivel_servicio'=>$nivelCentro)));
 		if ($this->Auth->user('role') === 'admin') {
-        $this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $userCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA'));    
+        $this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $userCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA', 'BAJA', 'EGRESO'));    
         } else if (($userRole === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));
-			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA'));
+			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA', 'BAJA', 'EGRESO'));
 		} else if ($userRole === 'usuario') {
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA'));
+			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA', 'BAJA', 'EGRESO'));
 		}
 		/* FIN */
     	/* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
@@ -155,6 +155,20 @@ class InscripcionsController extends AppController {
             //Envío de dato a la vista.
             $this->set(compact('hermanoNombre'));
         }
+        //Sí se trata de una inscripción por pase, obtiene el nombre de la institución origen.
+        if ($tipoInscripcion == 'Pase') {
+            //Obtención del id del centro de origen.
+            $centroOrigenIdArray = $this->Inscripcion->findById($id, 'centro_origen_id');
+            $centroOrigenId = $centroOrigenIdArray['Inscripcion']['centro_origen_id'];
+            //Obtención del nombre de ese centro de origen.
+            $this->loadModel('Centro');
+            $this->Centro->recursive = 0;
+            $this->Centro->Behaviors->load('Containable');
+            $centroOrigenNombreArray = $this->Centro->findById($centroOrigenId, 'sigla');
+            $centroOrigenNombre = $centroOrigenNombreArray['Centro']['sigla'];
+            //Envío de dato a la vista.
+            $this->set(compact('centroOrigenNombre'));
+        }
     }
 
 	public function add() {
@@ -248,6 +262,7 @@ class InscripcionsController extends AppController {
             // Sí el tipo de inscripción actual es PASE, genera un código específico.
             if ($tipoInscripcionActual == 'Pase') {
                 $paseNro = 0;
+                //Busca el número de pase que corresponde al ciclo actual.
                 do { 
                     $paseNro += 1;
                     $codigoPrueba = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
@@ -256,11 +271,9 @@ class InscripcionsController extends AppController {
                                     'conditions' => array('Inscripcion.legajo_nro' => $codigoPrueba)
                                     ));
                 } while ($cuentaInscripcionPase != 0);
-                $codigoActual = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
-            } else {
-                $codigoActual = $this->__getCodigo($ciclo, $personaDni);
-            }
-            $codigoAnterior = $this->__getCodigo(($ciclo - 1), $personaDni);
+                $codigoActualPase = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
+            } 
+            $codigoActual = $this->__getCodigo($ciclo, $personaDni);
             /* FIN */
             /* INICIO: Comprobación de unicidad del código de inscripción en la base de datos. */
             $existePersonaInscripta = $this->Inscripcion->find('first',array(
@@ -270,121 +283,148 @@ class InscripcionsController extends AppController {
             $this->loadModel('Centro');
             $this->Centro->recursive = 0;
             $this->Centro->Behaviors->load('Containable');
-            if (isset($existePersonaInscripta['Inscripcion']['legajo_nro'])) {
-                $this->Session->setFlash(sprintf("El alumno ya está inscripto para este ciclo en %s", $existePersonaInscripta['Centro']['nombre']), 'default', array('class' => 'alert alert-danger'));
+            //
+            switch ($tipoInscripcionActual) {
+                case 'Pase':
+                    if (isset($existePersonaInscripta['Inscripcion']['legajo_nro'])) {
+                        //Obtención del estado actual de la inscripción
+                        $inscripcionEstadoActualArray = $this->Inscripcion->findByLegajoNro($codigoActual, 'estado_inscripcion');
+                        $inscripcionEstadoActual = $inscripcionEstadoActualArray['Inscripcion']['estado_inscripcion'];
+                        if ($inscripcionEstadoActual == 'BAJA') {
+                           $this->request->data['Inscripcion']['legajo_nro'] = $codigoActualPase;
+                        } else {
+                           $this->Session->setFlash(sprintf("El alumno debe estar dado de baja para realizar el pase."), 'default', array('class' => 'alert alert-danger'));
+                        }                       
+                    } else {
+                        $this->Session->setFlash(sprintf("El alumno debe registrar inscripción en este ciclo para realizar el pase."), 'default', array('class' => 'alert alert-danger'));
+                    }
+                    break;
+                case 'Común':
+                case 'Hermano de alumno regular':
+                case 'Integración':
+                case 'Situación social':
+                    if (isset($existePersonaInscripta['Inscripcion']['legajo_nro'])) {
+                        $this->Session->setFlash(sprintf("El alumno ya está inscripto para este ciclo en %s", $existePersonaInscripta['Centro']['nombre']), 'default', array('class' => 'alert alert-danger'));
+                    } else {
+                        $this->request->data['Inscripcion']['legajo_nro'] = $codigoActual;
+                    }
+                    break;
+                default:
+                    $this->Session->setFlash(sprintf("Error al indicar el tipo de inscripción."), 'default', array('class' => 'alert alert-danger'));
+                    break;
+            }
+            /* FIN */
+            /* INICIO: VERIFICACIONES PARA CREACIÓN DEL ALUMNO (cualquiera sea el tipo de inscripción) */
+            //Verifica si la persona se encuentra inscripta como alumno              
+            $this->loadModel('Alumno');
+            $this->Alumno->Behaviors->load('Containable');
+            $this->Alumno->recursive = 0;
+            $alumno = $this->Alumno->findByPersonaId($personaId);
+            //Obtención del código anterior de inscripción.
+            $codigoAnterior = $this->__getCodigo(($ciclo - 1), $personaDni);
+            //Verficación de existencia de inscripción con ese código anterior.
+            $existeInscripcionAnterior = $this->Inscripcion->find('first', array(
+                'contain' => false,   
+                'conditions' => array('Inscripcion.legajo_nro' => $codigoAnterior)));
+            //Si existe inscripción anterior, obtiene el centro de esa inscripción.
+            if (isset($existeInscripcionAnterior['Inscripcion']['legajo_nro'])) {
+                $inscripcionAnterior = $this->Inscripcion->findByLegajoNro($codigoAnterior, 'centro_id');
+                $inscripcionAnteriorCentro = $inscripcionAnterior['Inscripcion']['centro_id'];
             } else {
-                $this->request->data['Inscripcion']['legajo_nro'] = $codigoActual;
-            /* INICIO:  Definición del estado de la documentación según el nivel del centro.*/
-                $userCentroNivel = $this->getUserCentroNivel($userCentroId);
-                switch($userCentroNivel) {
-                    case 'Común - Inicial':
-                    case 'Común - Primario':
-                            if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1)) {
-                               $estadoDocumentacion = "COMPLETA";
-                            } else {
-                                $estadoDocumentacion = "PENDIENTE";
-                            }
-                        break;
-                    case 'Común - Secundario':
-                            if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1) && ($this->request->data['Inscripcion']['certificado_septimo'] ==1)) {
-                                $estadoDocumentacion = "COMPLETA";
-                            } else {
-                                $estadoDocumentacion = "PENDIENTE";   
-                            }                        
-                        break;
-                    default:
-                            $estadoDocumentacion = "PENDIENTE";
-                }
-                //Se genera el estado y se deja en los datos que se intentaran guardar
-                $this->request->data['Inscripcion']['estado_documentacion'] = $estadoDocumentacion;
-                /* FIN */
-                /* INICIO: VERIFICACIONES PARA CREACIÓN DEL ALUMNO */
-                //Verifica si la persona se encuentra inscripta como alumno              
-                $this->loadModel('Alumno');
-                $this->Alumno->Behaviors->load('Containable');
-                $this->Alumno->recursive = 0;
-                $alumno = $this->Alumno->findByPersonaId($personaId);
-                //Si existe inscripción anterior, obtiene el centro de esa inscripción. 
-                $existeInscripcionAnterior = $this->Inscripcion->find('count', array(
-                 //'recursive'=>-1,
-                 'contain' => false,   
-                 'conditions' => array('Inscripcion.legajo_nro' => $codigoAnterior)
-                 ));
-                if ($existeInscripcionAnterior!=0) {
-                    $inscripcionAnterior = $this->Inscripcion->findByLegajoNro($codigoAnterior, 'centro_id');
-                    $inscripcionAnteriorCentro = $inscripcionAnterior['Inscripcion']['centro_id'];
-                }
-                // Si el alumno no fue creado, o si el centro a inscribir es diferente al centro en el que se encontraba el alumno en el ciclo anterior
-                if (count($alumno) == 0 || $userCentroId != $inscripcionAnteriorCentro) {
-                    // Crear alumno
-                    $this->Alumno->create();
-                    $insert = array(
+                $inscripcionAnteriorCentro = 0;
+            }
+            // Si el alumno no fue creado, o si el id del centro a inscribir es diferente al centro en el que se encontraba el alumno en el ciclo anterior, crea el alumno y le asigna el id del centro actual. 
+            if (count($alumno) == 0 || $userCentroId != $inscripcionAnteriorCentro) {
+                // Crear alumno
+                $this->Alumno->create();
+                $insert = array(
                         'Alumno' => array(
                             'created' => '2017-09-08 12:01',
                             'persona_id' => $personaId,
-                            'centro_id' => $userCentroId
-                        ));
-                    $alumno = $this->Alumno->save($insert);
-                    if (!$alumno['Alumno']['id']) {
-                        print_r("Error al registrar a la persona como alumno");
-                        die;
+                            'centro_id' => $userCentroId));
+                $alumno = $this->Alumno->save($insert);
+                if (!$alumno['Alumno']['id']) {
+                    print_r("Error al registrar a la persona como alumno");
+                    die;
+                }
+            }
+            $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
+            /* FIN */
+            /* INICIO:  Definición del estado de la documentación según el nivel del centro.*/
+            $userCentroNivel = $this->getUserCentroNivel($userCentroId);
+            switch($userCentroNivel) {
+                case 'Común - Inicial':
+                case 'Común - Primario':
+                        if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1)) {
+                               $estadoDocumentacion = "COMPLETA";
+                        } else {
+                                $estadoDocumentacion = "PENDIENTE";
+                        }
+                    break;
+                case 'Común - Secundario':
+                        if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1) && ($this->request->data['Inscripcion']['certificado_septimo'] ==1)) {
+                                $estadoDocumentacion = "COMPLETA";
+                        } else {
+                                $estadoDocumentacion = "PENDIENTE";   
+                        }                        
+                    break;
+                default:
+                       $estadoDocumentacion = "PENDIENTE";
+            }
+            //Se genera el estado y se deja en los datos que se intentaran guardar
+            $this->request->data['Inscripcion']['estado_documentacion'] = $estadoDocumentacion;
+            /* FIN */
+            /* INICIO: Adecúa mensajes para los combobox dependientes según el tipo de inscripción. */
+            switch($this->request->data['Inscripcion']['tipo_inscripcion']) {
+                case 'Hermano de alumno regular':
+                    $hermano  = $this->Alumno->findById($this->request->data['Inscripcion']['hermano_id']);
+                    if (count($hermano) == 0) {
+                        $this->Session->setFlash('No se localizo al hermano como alumno.', 'default', array('class' => 'alert alert-danger'));
+                        $this->redirect($this->referer());
                     }
-                }
-                $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
-                /* FIN */
-                /* INICIO: Adecúa mensajes para los combobox dependientes según el tipo de inscripción. */
-                switch($this->request->data['Inscripcion']['tipo_inscripcion'])
-                {
-                    case 'Hermano de alumno regular':
-                        $hermano  = $this->Alumno->findById($this->request->data['Inscripcion']['hermano_id']);
-                        if (count($hermano) == 0) {
-                            $this->Session->setFlash('No se localizo al hermano como alumno.', 'default', array('class' => 'alert alert-danger'));
-                            $this->redirect($this->referer());
-                        }
                     break;
-                    case 'Pase':
-                        $centroOrigen = $this->Centro->findById($this->request->data['Inscripcion']['centro_origen_id']);
-                        // Aca puede ir la logica de que nivel de servicio es necesario para guardar la inscripcion por pase
-                        if (count($centroOrigen) == 0) {
-                            $this->Session->setFlash('No se localizo el centro origen para el pase', 'default', array('class' => 'alert alert-danger'));
-                            $this->redirect($this->referer());
-                        }
+                case 'Pase':
+                    $centroOrigen = $this->Centro->findById($this->request->data['Inscripcion']['centro_origen_id']);
+                    // Aca puede ir la logica de que nivel de servicio es necesario para guardar la inscripcion por pase
+                    if (count($centroOrigen) == 0) {
+                        $this->Session->setFlash('No se localizo el centro origen para el pase', 'default', array('class' => 'alert alert-danger'));
+                        $this->redirect($this->referer());
+                    }
                     break;
                 }
+            /* FIN */
+            if ($this->Inscripcion->save($this->data)) {
+                /* ATUALIZA MATRÍCULA Y VACANTES (INICIO).
+                *  Al registrarse una Inscripción sí es para el ciclo actual o para un agrupamiento 
+                *  para el próximo ciclo, actualiza valores de matrícula y vacantes del curso correspondiente.
+                */
+                // Obtiene el ciclo id...
+                $this->loadModel('Ciclo');
+                $this->Ciclo->recursive = 0;
+                $this->Ciclo->Behaviors->load('Containable');
+                $cicloIdActual = $this->getActualCicloId();
+                $cicloIdActualArray = $this->Ciclo->findById($cicloIdActual, 'id');
+                $cicloIdActualString = $cicloIdActualArray['Ciclo']['id'];
+                $cursoIdInt = $cursoIdString[0];
+                $this->loadModel('CursosInscripcion');
+                $this->CursosInscripcion->recursive = 0;
+                $this->CursosInscripcion->Behaviors->load('Containable');
+                $matriculaActual = $this->CursosInscripcion->query("
+                    SELECT COUNT(*) AS `matriculas` 
+                    FROM `siep`.`cursos_inscripcions` AS CursosInscripcion
+                    LEFT JOIN `siep`.`inscripcions` AS Inscripcion on Inscripcion.id = CursosInscripcion.inscripcion_id       
+                    WHERE 
+                        CursosInscripcion.curso_id = $cursoIdInt AND 
+                        Inscripcion.ciclo_id = $cicloIdActualString");
+                $matriculaActual = $matriculaActual[0][0]['matriculas'];
+                $this->Curso->id=$cursoIdString;
+                $this->Curso->saveField("matricula", $matriculaActual);
+                $plazasArray = $this->Curso->findById($cursoIdString, 'plazas');
+                $plazasString = $plazasArray['Curso']['plazas'];
+                $vacantesActual = $plazasString - $matriculaActual;
+                $this->Curso->saveField("vacantes", $vacantesActual);
                 /* FIN */
-                if ($this->Inscripcion->save($this->data)) {
-                    /* ATUALIZA MATRÍCULA Y VACANTES (INICIO).
-                    *  Al registrarse una Inscripción sí es para el ciclo actual o para un agrupamiento 
-                    *  para el próximo ciclo, actualiza valores de matrícula y vacantes del curso correspondiente.
-                    */
-                    // Obtiene el ciclo id...
-                    $this->loadModel('Ciclo');
-                    $this->Ciclo->recursive = 0;
-                    $this->Ciclo->Behaviors->load('Containable');
-                    $cicloIdActual = $this->getActualCicloId();
-                    $cicloIdActualArray = $this->Ciclo->findById($cicloIdActual, 'id');
-                    $cicloIdActualString = $cicloIdActualArray['Ciclo']['id'];
-                    $cursoIdInt = $cursoIdString[0];
-                    $this->loadModel('CursosInscripcion');
-                    $this->CursosInscripcion->recursive = 0;
-                    $this->CursosInscripcion->Behaviors->load('Containable');
-                    $matriculaActual = $this->CursosInscripcion->query("
-                         SELECT COUNT(*) AS `matriculas` 
-                         FROM `siep`.`cursos_inscripcions` AS CursosInscripcion
-                         LEFT JOIN `siep`.`inscripcions` AS Inscripcion on Inscripcion.id = CursosInscripcion.inscripcion_id       
-                         WHERE 
-                         CursosInscripcion.curso_id = $cursoIdInt AND 
-                         Inscripcion.ciclo_id = $cicloIdActualString       
-                    ");
-                    $matriculaActual = $matriculaActual[0][0]['matriculas'];
-                    $this->Curso->id=$cursoIdString;
-                    $this->Curso->saveField("matricula", $matriculaActual);
-                    $plazasArray = $this->Curso->findById($cursoIdString, 'plazas');
-                    $plazasString = $plazasArray['Curso']['plazas'];
-                    $vacantesActual = $plazasString - $matriculaActual;
-                    $this->Curso->saveField("vacantes", $vacantesActual);
-                    /* FIN */
-                    $inserted_id = $this->Inscripcion->id;
+                $inserted_id = $this->Inscripcion->id;
                     /*
                      * __ LINEAS PARA DEBUG __
                     echo '<pre>';
@@ -393,11 +433,10 @@ class InscripcionsController extends AppController {
                     echo '</pre>';
                     die;
                     */
-                    $this->Session->setFlash('La inscripcion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
-                    $this->redirect(array('action' => 'view', $inserted_id));
-                } else {
+                $this->Session->setFlash('La inscripcion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
+                $this->redirect(array('action' => 'view', $inserted_id));
+            } else {
                     $this->Session->setFlash('La inscripcion no fue grabada. Intente nuevamente.', 'default', array('class' => 'alert alert-danger'));
-                }
             }
         }
     }

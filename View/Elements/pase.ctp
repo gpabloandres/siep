@@ -38,9 +38,6 @@
           <?php endif; ?>
           <?php if(($current_user['role'] == 'admin') && ((($current_user['centro_id'] == $pase['Pase']['centro_id_destino']) && $pase['Pase']['estado_pase'] == 'CONFIRMADO')) || (($current_user['centro_id'] == $pase['Pase']['centro_id_origen']) && $pase['Pase']['estado_pase'] == 'INICIADO')): ?>
             <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'pases', 'action' => 'view', $pase['Pase']['id']), array('class' => 'btn btn-success','escape' => false)); ?></span>
-            <?php if ($nivelCentroString != 'Común - Secundario') { ?>
-              <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-edit"></i>', array('controller' => 'pases', 'action' => 'edit', $pase['Pase']['id']), array('class' => 'btn btn-warning','escape' => false)); ?></span>
-            <?php } ?>
           <?php endif; ?>
           <?php if($current_user['role'] == 'superadmin'): ?>
             <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-trash"></i>', array('controller' => 'pases', 'action' => 'delete', $pase['Pase']['id']), array('confirm' => 'Está seguro de borrar el pase nro.'.$pase['Pase']['id'], 'class' => 'btn btn-danger','escape' => false)); ?></span>
