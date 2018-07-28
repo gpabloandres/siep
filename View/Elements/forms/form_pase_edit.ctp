@@ -18,9 +18,9 @@
 <div class="row">
   <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
-       <?php 
+       <!--<?php// 
           echo $this->Form->input('alumno_id', array('label'=>'Alumno*', 'readonly' => true, 'options'=>$PersonaAlumnoId, 'between' => '<br>', 'class' => 'form-control'));
-      ?><br>
+      ?><br>-->
       <?php
           echo $this->Form->input('centro_id_destino', array('label'=>'Institución Destino*', 'readonly' => true, 'empty' => 'Ingrese una institución...', 'options'=>$centrosNombre, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?><br>

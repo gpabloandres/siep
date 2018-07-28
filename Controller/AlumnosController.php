@@ -22,17 +22,6 @@ class AlumnosController extends AppController {
     public function index() {
     	$this->paginate['Alumno']['limit'] = 6;
 		$this->paginate['Alumno']['order'] = array('Alumno.id' => 'ASC');
-		// Esta paginacion incluye al modelo Persona relacionado al Alumno Id
-		/*
-		$this->paginate = array(
-			'limit' => 10,
-			'order' => array('Alumno.id' => 'ASC' ),
-			'recursive' => 1,
-			'contain' => [
-				'Persona'
-			]
-		);
-
 		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
 		*Sí el usuario es "admin" muestra los cursos del establecimiento. Sino sí es "usuario" externo muestra los cursos del nivel.
 		*/
@@ -60,49 +49,35 @@ class AlumnosController extends AppController {
         if (!empty($this->params['named']['legajo_fisico_nro'])) {
 			$conditions['Alumno.legajo_fisico_nro ='] = $this->params['named']['legajo_fisico_nro'];
 		}
-		/*
-		if (!empty($this->params['named']['persona_id'])) {
-			$conditions['Alumno.persona_id ='] = $this->params['named']['persona_id'];
-		}
-		*/
 		$alumnos = $this->paginate('Alumno', $conditions);
 	    $this->set(compact('alumnos'));
 	}
 
 	public function view($id = null) {
+		//$this->Alumno->recursive = 0;
 		if (!$id) {
 			$this->Session->setFlash('Alumno no valido', 'default', array('class' => 'alert alert-danger'));
 			$this->redirect(array('action' => 'index'));
 		}
-		//$options = array('conditions' => array('Alumno.' . $this->Alumno->primaryKey => $id));
-		/*
-		$this->pdfConfig = array(
-			'download' => true,
-			'filename' => 'alumno_' . $id .'.pdf'
-		);
-		*/
 		$this->set('alumno', $this->Alumno->read(null, $id));
-        //Genera nombres en el view.
-		$this->loadModel('Ciclo');
-		$cicloNombre = $this->Ciclo->find('list', array('fields'=>array('nombre')));
-        //Datos personales del Alumno
-		$personaId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
-        $alumnoNombre = $this->Alumno->Persona->find('list', array('fields'=>array('nombre_completo_persona'), array('conditions' => array('id' => $personaId, 'recursive' => -1))));
-        $alumnoDocumentoTipo = $this->Alumno->Persona->find('list', array('fields'=>array('documento_tipo'), array('conditions' => array('id' => $personaId, 'recursive' => -1))));
-        $alumnoDocumentoNumero = $this->Alumno->Persona->find('list', array('fields'=>array('documento_nro'), array('conditions' => array('id' => $personaId, 'recursive' => -1))));
-        $alumnoEdad = $this->Alumno->Persona->find('list', array('fields'=>array('edad'), array('conditions' => array('id' => $personaId, 'recursive' => -1))));
+        //Genera datos para el view.
+        //Obtención del id de persona del alumno.
+        $personaIdArray = $this->Alumno->findById($id, 'persona_id');
+        $personaId = $personaIdArray['Alumno']['persona_id'];
+        //Obtención de datos personales del alumno.
+        $this->loadModel('Persona');
+        $this->Persona->recursive = 0;
+        $this->Persona->Behaviors->load('Containable');
+        $personaNombreArray = $this->Persona->findById($personaId, 'nombre_completo_persona');
+        $alumnoNombre = $personaNombreArray['Persona']['nombre_completo_persona'];
+        $personaDocumentoTipoArray = $this->Persona->findById($personaId, 'documento_tipo');
+        $alumnoDocumentoTipo = $personaDocumentoTipoArray['Persona']['documento_tipo'];
+        $personaDocumentoNumeroArray = $this->Persona->findById($personaId, 'documento_nro');
+        $alumnoDocumentoNumero = $personaDocumentoNumeroArray['Persona']['documento_nro'];
+        $personaEdadNumeroArray = $this->Persona->findById($personaId, 'edad');
+        $alumnoEdad = $personaEdadNumeroArray['Persona']['edad'];
     	// Datos relacionados.
-    	$centroId = $this->Alumno->find('list', array('fields'=>array('centro_id'), 'conditions'=>array('id'=>$id)));
-		$this->loadModel('Centro');
-		$centroNombre = $this->Centro->find('list', array('fields'=>array('nombre')));
-		$this->loadModel('Persona');
-		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
-        /*
-		$notaMateriaId = $this->Alumno->Nota->find('list', array('fields'=>array('materia_id')));
-		$this->loadModel('Materia');
-		$materiaAlia = $this->Materia->find('list', array('fields'=>array('alia'), 'conditions'=>array('id'=>$notaMateriaId)));
-		*/
-		//Familiares relacionados.
+    	//Obtención del nombre de para los familiares relacionados.
         //$familiarNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
         $alumnoId = $this->Alumno->primaryKey = $id;
         $familiarVinculo = $this->Persona->Familiar->find('list', array('fields' => array('vinculo'), 'conditions' => array('id' => $alumnoId)));
@@ -111,7 +86,21 @@ class AlumnosController extends AppController {
         $familiarTelefono = $this->Persona->find('list', array('fields' => array('telefono_nro')));
         $familiarEmail = $this->Persona->find('list', array('fields' => array('email')));
 		*/
-		$this->set(compact('alumnoNombre', 'alumnoDocumentoTipo', 'alumnoDocumentoNumero', 'alumnoEdad', 'centroNombre', 'cicloNombre', 'personaId', 'personaNombre', 'foto', 'materiaAlia', 'barrioNombre', 'familiarNombre', 'familiarVinculo'));
+    	//Obtención del nombre del centro para las inscripciones relacionadas.
+    	$this->loadModel('Centro');
+        $this->Centro->recursive = 0;
+        $this->Centro->Behaviors->load('Containable');
+        $centroNombre = $this->Centro->find('list', array('fields' => array('sigla'), 'contain'=>false));
+        //Obtención del nivel del centro id del usuario.
+        $userCentroId = $this->getUserCentroId();
+        $nivelCentroArray = $this->Centro->findById($userCentroId, 'nivel_servicio');
+        $nivelCentro = $nivelCentroArray['Centro']['nivel_servicio'];
+        //Obtención del nombre del ciclo para los pases relacionados.
+    	$this->loadModel('Ciclo');
+        $this->Ciclo->recursive = 0;
+        $this->Ciclo->Behaviors->load('Containable');
+        $cicloNombre = $this->Ciclo->find('list', array('fields' => array('nombre'), 'contain'=>false));
+		$this->set(compact('alumnoNombre', 'alumnoDocumentoTipo', 'alumnoDocumentoNumero', 'alumnoEdad', 'centroNombre', 'cicloNombre', 'personaId', 'personaNombre', 'foto', 'materiaAlia', 'barrioNombre', 'familiarNombre', 'familiarVinculo', 'nivelCentro'));
     }
 
 	public function add() {
