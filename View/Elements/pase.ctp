@@ -22,7 +22,8 @@
         if (($pase['Pase']['estado_pase'] == 'INICIADO') && ($current_user['centro_id'] == $pase['Pase']['centro_id_origen'])) { ?>
             <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo $this->Html->link($personaNombre[$personaId[$pase['Pase']['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['Pase']['alumno_id'])); ?></span><br/>
         <?php } else if (($pase['Pase']['estado_pase'] == 'CONFIRMADO') && ($current_user['centro_id'] == $pase['Pase']['centro_id_destino'])) { ?>
-            <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b>        <?php echo $this->Html->link($personaNombre[$personaId[$pase['Pase']['alumno_id']]], array('controller' => 'inscripcions', 'action' => 'add')); ?></span><br/>
+            <!--<span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo $this->Html->link($personaNombre[$personaId[$pase['Pase']['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['Pase']['alumno_id'])); ?></span><br/>-->
+            <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo $personaNombre[$personaId[$pase['Pase']['alumno_id']]]; ?></span><br/>
         <?php } else { ?> 
             <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo $personaNombre[$personaId[$pase['Pase']['alumno_id']]]; ?></span><br/> 
        <?php }

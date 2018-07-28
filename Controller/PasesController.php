@@ -244,19 +244,16 @@ class PasesController extends AppController {
 	            *  Al registrarse CONFIRMADO el pase del alumno, modifica la última inscripción de ese alumno:
 	            *  pone el estado de inscripción en 'BAJA' y modifica la matrícula del curso correspondiente. 
 	            */
-	   			// Obtiene el id del pase.
+	   			//Obtención del id del pase.
 				$paseId = $this->request->data['Pase']['id'];
-
 	   			// Obtiene el id del alumno relacionado a ese pase.
 				$alumnoIdArray = $this->Pase->findById($paseId, 'alumno_id');
 				$alumnoIdString = $alumnoIdArray['Pase']['alumno_id'];
-				
 				// Obtiene el id del ciclo actual.
 				$this->loadModel('Ciclo');
 				$cicloIdActual = $this->getActualCicloId();
 	        	$cicloIdActualArray = $this->Ciclo->findById($cicloIdActual, 'id');
 	        	$cicloIdActualString = $cicloIdActualArray['Ciclo']['id'];
-	        	
 	        	// Obtiene el id de la inscripcion relacionada al alumno del pase y al ciclo actual.
 	        	$this->loadModel('Inscripcion');
 	        	$lastInscripcionId = $this->Inscripcion->find('list', array(
@@ -265,11 +262,9 @@ class PasesController extends AppController {
 	                ));
 	        	$lastInscripcionIdArray = $this->Inscripcion->findById($lastInscripcionId, 'id');
 	        	$lastInscripcionIdString = $lastInscripcionIdArray['Inscripcion']['id'];
-				
 				// Cambia a 'BAJA' el estado de esa inscripción.
         		$this->Inscripcion->id=$lastInscripcionId;
                 $this->Inscripcion->saveField("estado_inscripcion", 'BAJA');
-                
                 // Modifica la matrícula de los cursos relacionados a esa inscripción.
                 // Identifica los cursos.
                 $cursosId = $this->Inscripcion->CursosInscripcion->find('list', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.inscripcion_id'=>$lastInscripcionId)));                
@@ -304,12 +299,19 @@ class PasesController extends AppController {
 			$this->data = $this->Pase->read(null, $id);
 			$this->set('pases', $this->Pase->read(null, $id));
 		}
+		//Obtención del id del alumno relacionado a ese pase.
+		$alumnoIdArray = $this->Pase->findById($id, 'alumno_id');
+		$alumnoIdString = $alumnoIdArray['Pase']['alumno_id'];
+		//Obtención del id de persona de ese alumno.
+		$personaIdArray = $this->Alumno->findById($alumnoIdString, 'persona_id');
+		//Obtención del nombre completo del alumno.
 		$this->loadModel('Persona');
     	$this->Persona->recursive = 0;
         $this->Persona->Behaviors->load('Containable');
-    	$personaNombres = $this->Persona->find('list', array(
-    										'fields'=>array('id', 'nombre_completo_persona'),
-    										'contain'=>false));
+    	$personaId = $personaIdArray['Alumno']['persona_id'];
+    	$personaNombresArray = $this->Persona->findById($personaId, 'nombre_completo_persona');
+    	$personaNombres = $personaNombresArray['Persona']['nombre_completo_persona'];
+    	//Envía los datos a la vista.
     	$this->set(compact('pase', 'personaNombres'));
 	}
 
