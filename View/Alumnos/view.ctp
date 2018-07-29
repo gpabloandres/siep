@@ -11,7 +11,7 @@
                     <b><?php echo __('Alumno: '); ?></b>
                     <?php echo $this->Html->link($alumnoNombre, array('controller' => 'personas', 'action' => 'view', $alumno['Alumno']['persona_id'])); ?></p>
                     <b><?php echo __('Documento: '); ?></b>
-                    <?php echo $alumnoDocumentoTipo; ?></p>
+                    <?php echo $alumnoDocumentoTipo.' '.$alumnoDocumentoNumero; ?></p>
                     <b><?php echo __('Edad: '); ?></b>
                     <?php echo $alumnoEdad." ".'años'; ?></p>
                     <b><?php echo __('Legajo Físico N°: '); ?></b>
@@ -83,7 +83,9 @@
 			<div class="col-md-4">
 				<div class="unit">
 					<!--<?php echo '<b>Ciclo id:</b> '.($this->Html->link($inscripcion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['ciclo_id'])));?><br>-->
+					<?php if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
 					<?php echo '<b>Centro:</b> '.($this->Html->link($centroNombre[$inscripcion['centro_id']], array('controller' => 'centros', 'action' => 'view', $inscripcion['centro_id'])));?><br>
+					<?php endif; ?>
 					<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>
 					<?php echo '<b>Tipo de alta:</b> '.$inscripcion['tipo_alta'];?><br>
 					<?php echo '<b>Estado de la Inscripción:</b> '.$inscripcion['estado_inscripcion'];?><br>
@@ -95,7 +97,7 @@
 		            <?php echo '<b>Fecha de egreso:</b> '.$this->Html->formatTime($inscripcion['fecha_egreso']);?><br>
 		            <!--<?php echo '<b>Nota:</b> '.$inscripcion['nota'];?><br>-->
 		            */ ?>
-		            <b>Documentación presentada:</b> <?php if($inscripcion['estado_documentacion'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $inscripcion['estado_documentacion']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $inscripcion['estado_documentacion']; ?></span><?php } ?></br>
+		            <b>Documentación:</b> <?php if($inscripcion['estado_documentacion'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $inscripcion['estado_documentacion']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $inscripcion['estado_documentacion']; ?></span><?php } ?></br>
 		            <hr>
 		            <div class="text-right">
 			            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id']), array('class' => 'btn btn-success','escape' => false)); ?>
@@ -130,10 +132,7 @@
 						<?php echo '<b>Centro de Origen:</b> '.($this->Html->link($centroNombre[$pase['centro_id_origen']], array('controller' => 'centros', 'action' => 'view', $pase['centro_id_origen'])));?><br>
 						<?php echo '<b>Centro de Destino:</b> '.($this->Html->link($centroNombre[$pase['centro_id_destino']], array('controller' => 'centros', 'action' => 'view', $pase['centro_id_destino'])));?><br>
 					<?php } ?>	
-					<?php if (($current_user['centro_id'] === $centroNombre[$pase['centro_id_destino']])) { ?>
-						<?php echo '<b>Centro de Origen:</b> '.($this->Html->link($centroNombre[$pase['centro_id_origen']], array('controller' => 'centros', 'action' => 'view', $pase['centro_id_origen'])));?><br>
-					<?php } ?>	
-					<?php if (($current_user['centro_id'] === $centroNombre[$pase['centro_id_origen']])) { ?>
+					<?php if ($current_user['role'] == 'admin') { ?>
 						<?php echo '<b>Centro de Destino:</b> '.($this->Html->link($centroNombre[$pase['centro_id_destino']], array('controller' => 'centros', 'action' => 'view', $pase['centro_id_destino'])));?><br>
 					<?php } ?>
 					<!--<?php// echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>-->

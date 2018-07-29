@@ -1,6 +1,8 @@
 <div class="col-md-4">
     <div class="unit">
-        <span class="name"><span class="glyphicon glyphicon-home"></span> <b>Institución: </b> <?php echo $this->Html->link($curso['Centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $curso['Centro']['id'])); ?></span><br/>
+        <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
+        <span class="name"><span class="glyphicon glyphicon-home"></span> <b>Centro: </b> <?php echo $this->Html->link($curso['Centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $curso['Centro']['id'])); ?></span><br/>
+    <?php endif; ?>
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Año: </b> <?php echo $curso['Curso']['anio']; ?></span><br/>
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>División: </b> <?php echo $curso['Curso']['division']; ?></span><br/>
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Turno: </b> <?php echo $curso['Curso']['turno']; ?></span></br>
