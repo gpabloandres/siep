@@ -13,7 +13,8 @@
                         <b><?php echo __('Ciclo: '); ?></b>
                             <?php echo $ciclos; ?></p>
                         <b><?php echo __('Alumno: '); ?></b>
-                            <?php echo ($this->Html->link($personaNombre, array('controller' => 'alumnos', 'action' => 'view', $pase['Pase']['alumno_id']))); ?></p>
+                            <!--<?php// echo ($this->Html->link($personaNombre, array('controller' => 'alumnos', 'action' => 'view', $pase['Pase']['alumno_id']))); ?></p>-->
+                            <?php echo $personaNombre; ?></p>
                         <b><?php echo __('Institución de Destino: '); ?></b>
                             <?php echo ($this->Html->link($centros[$pase['Pase']['centro_id_destino']], array('controller' => 'centros', 'action' => 'view', $pase['Pase']['centro_id_destino']))); ?></p>
                         <b><?php echo __('Año de estudio: '); ?></b>
