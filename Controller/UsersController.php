@@ -42,7 +42,8 @@ class UsersController extends AppController {
         $this->Centro->Behaviors->load('Containable');
         $nombreCentroArray = $this->Centro->findById($userCentroId, 'nombre');
         $nombreCentro = $nombreCentroArray['Centro']['nombre'];
-		$this->set(compact('users', 'nombreCentro'));
+		$userCentroNivel = $this->getUserCentroNivel($userCentroId);
+		$this->set(compact('users', 'nombreCentro', 'userCentroNivel'));
     	$this->render('/Users/usuario');
     }
 	
