@@ -1,66 +1,98 @@
 <!-- app/View/Users/usuario.ctp -->
 <div class="users form">
 <!-- start main -->
-<div class="TituloSec">Bienvenido a SIEP</div>
+<div class="TituloSec"><?php echo $nombreCentro ?></div>
 <div id="ContenidoSec">
-    <!--<h1 style="font-weight: bold; color: red; text-decoration: underline;"> Página de usuario común</h1>-->
-<!--<h1>Usuarios:</h1>
-	<table>
-	    <thead>
-			<tr>
-				<th><?php echo $this->Form->checkbox('all', array('name' => 'CheckAll',  'id' => 'CheckAll')); ?></th>
-				<th><?php echo $this->Paginator->sort('username', 'Usuario');?>  </th>
-				<th><?php echo $this->Paginator->sort('email', 'E-Mail');?></th>
-				<th><?php echo $this->Paginator->sort('created', 'Creado');?></th>
-				<th><?php echo $this->Paginator->sort('modified','Modificado');?></th>
-				<th><?php echo $this->Paginator->sort('role','Rol');?></th>
-				<th><?php echo $this->Paginator->sort('status','Estado');?></th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>						
-			<?php $count=0; ?>
-			<?php foreach($users as $user): ?>				
-			<?php $count ++;?>
-			<?php if($count % 2): echo '<tr>'; else: echo '<tr class="zebra">' ?>
-			<?php endif; ?>
-				<td><?php echo $this->Form->checkbox('User.id.'.$user['User']['id']); ?></td>
-				<td><?php echo $this->Html->link( $user['User']['username']  ,   array('action'=>'edit', $user['User']['id']),array('escape' => false) );?></td>
-				<td style="text-align: center;"><?php echo $user['User']['email']; ?></td>
-				<td style="text-align: center;"><?php echo $this->Html->formatTime($user['User']['created']); ?></td>
-				<td style="text-align: center;"><?php echo $this->Html->formatTime($user['User']['modified']); ?></td>
-				<td style="text-align: center;"><?php echo $user['User']['role']; ?></td>
-				<td style="text-align: center;"><?php echo $user['User']['status']; ?></td>
-			</tr>
-			<?php endforeach; ?>
-			<?php unset($user); ?>
-		</tbody>
-	</table>
-	<?php echo $this->Paginator->prev('<< ' . __('previous', true), array(), null, array('class'=>'disabled'));?>
-	<?php echo $this->Paginator->numbers(array(   'class' => 'numbers'     ));?>
-	<?php echo $this->Paginator->next(__('next', true) . ' >>', array(), null, array('class' => 'd isabled'));?>
-</div>				
-<br/>-->
-<?php //echo $this->Html->link( "Logout",   array('action'=>'logout') ); ?>
-	<blockquote>
-	  <h3>Resoluciones de Situaciones con el Sistema.</h3>
-	  <hr />
-	  <h4>INSCRIPCIÓN DE UN ALUMNO: Agregrar una Inscripción para el próximo Ciclo Lectivo (PRE-INSCRIPCIÓN)</h4><hr />
-	  <h4>1° PASO: Abrir el formulario de Agregación</h4>
-	  <p> - Desde el menú: "ALUMNADO" --> INSCRIPCIONES" presione el botón "+ AGREGAR".<p><br> 
-	  <h4>2° PASO: Completar los campos</h4>	
-	  <p> - En el campo "Ciclo lectivo*" seleccione el ciclo 2018.</p>
-	  <p> - En el campo "Nombre y apellidos del alumno*" tipeé un nombre de persona correspondiente a su Institución (Ej: "ALUMNO PRIMERO SABATO"; "ALUMNO SEGUNDO SABATO").</p><br>
-	  <h4>3° PASO: Presione el botón "GUARDAR".</h4>
-	  <p> - El sistema automáticamente creará a esa persona como ALUMNO de su INSTITUCIÓN, le asignará un CÓDIGO ÚNICO DE INSCRIPCIÓN y actualizará la MATRÍCULA de la sección según el ciclo correspondiente.</p><br>
-	  <hr />
-	  <h4>INSCRIPCIÓN DE UN ALUMNO: Editar una Inscripción | Cambiar la SECCIÓN. </h4><hr />
-	  <h4>1° PASO: Abrir el formulario de Edición</h4>
-	  <p> - Desde la tarjeta correspondiente a la Inscripción seleccionada: presione el botón NARANJA.<p><br> 
-	  <h4>2° PASO: Modificar el campo "Sección*"</h4>	
-	  <p> - En el campo "Sección*" seleccione otra sección.</p><br>
-	  <h4>3° PASO: Presione el botón "GUARDAR".</h4>
-	  <p> - El sistema automáticamente actualizará la MATRÍCULA de la secciones correspondientes al cambio.</p><br>
-	  <hr />	
-	</blockquote>
+<?php if(($userCentroNivel == 'Común - Inicial') || ($userCentroNivel == 'Común - Primario') || ($userCentroNivel == 'Común - Inicial - Primario')): ?>
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">INICIAL Y PRIMARIA | INSCRIPCIONES POR PASES (Nuevo procedimiento)</h3>
+	  </div>
+	  <div class="panel-body">
+	    <p> A continuación se detallan los pasos a seguir para registrar inscripciones por pases en SIEP entre una institución origen (IO) y una institución destino (ID): </p>
+	  </div>
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item">1º PASO | "Verificación de Baja en la IO": Desde el menú ALTA DE PERSONAS, indicar en "BÚSQUEDA" un alumno y luego click en el botón "BUSCAR". </li>
+	    <li class="list-group-item">2º PASO | "Alta de inscripción por pase": Completar los siguientes campos obligatorios como se indican a continuación:
+	    <ul>
+	    	<li>"Ciclo lectivo*": (indicar el corriente ciclo lectivo)</li>
+	    	<li>"Estado de la inscripción*": CONFIRMADA</li>
+	    	<li>"Nombre y apellidos del alumno*": (Indique el nombre del ingresante)</li>
+	    	<li>"Sección*": (indique una sección sin división ej: 1ro Mañana)</li>
+	    	<li>"Tipo de inscripción*": Pase</li>
+	    	<li>"Pase": (Indique IO)</li>
+	    	<li>Click en el botón "GUARDAR" (SIEP le mostrará el detalle de la inscripción registrada)</li>
+	    </ul>	
+	    </li>
+	    <li class="list-group-item">3º PASO | "Revisión de la inscripción recién registrada": verifique en "Datos de Alta" figure el nombre correcto de la IO.</li>
+	  </ul>
+	</div>
+<?php endif; ?>	
+<?php if(($current_user['role'] == 'usuario') && (($userCentroNivel == 'Común - Secundario'))): ?>
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">SECUNDARIA | INICIACIÓN DE PROPUESTA DE PASE (Nuevo procedimiento)</h3>
+	  </div>
+	  <div class="panel-body">
+	    <p> A continuación se detallan los pasos a seguir para iniciar una propuesta de pase desde una institución origen (IO) a la Supervisión General de Secundaria para que, luego de ser confirmada, la IO genere una nueva inscripción por pase: </p>
+	  </div>
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item">1º PASO | "Acceso al formulario p/agregar pase": Desde el menú ALUMNADO --> PASES, click en el botón "+AGREGAR". </li>
+	    <li class="list-group-item">2º PASO | "Alta de registro de pase": Completar los siguientes campos obligatorios como se indican a continuación:
+	    <ul>
+	    	<li>"Alumno*": (Indique el nombre del ingresante)</li>
+	    	<li>"Institución Destino*": (Indique la institución que corresponda)</li>
+	    	<li>"Año de estudio*": (Indique la opción de año correspondiente)</li>
+	    	<li>Click en el botón "GUARDAR" (SIEP le mostrará el detalle del pase registrado)</li>
+	    </ul>	
+	    <p>OBSERVACIÓN: Una vez guardado el registro de pase, tanto la IO como la ID podrán visualizar el registro de pase desde el menú ALUMNADO --> PASE, pero sólo desde la Supervisión se podrá acceder a la edición del registro.</p>
+	    </li>
+	    <li class="list-group-item">3º PASO | "Seguimiento del estado del pase": desde el menú ALUMNADO --> PASE se podrá visualizar en la tarjeta del pase, el "Estado" del mismo, pudiendo ser:</li>
+		    <ul>
+		    	<li>INICIADO: Al momento de generarlo la IO.</li>
+		    	<li>EVALUACIÓN: Al momento de comenzar a ser revisado desde la Supervisión General.</li>
+		    	<li>RECHAZADO: Al momento de no ser aprobado por la Supervisión General.</li>
+		    	<li>CONFIRMADO: Al momento de ser aprobado por la Supervisión General. A partir de este estado la ID está habilitada de generar una nueva "Alta de inscripción por pase".</li>
+		    </ul>
+		    <li class="list-group-item">4º PASO | "Alta de inscripción por pase": Completar los siguientes campos obligatorios como se indican a continuación:
+	    <ul>
+	    	<li>"Ciclo lectivo*": (indicar el corriente ciclo lectivo)</li>
+	    	<li>"Estado de la inscripción*": CONFIRMADA</li>
+	    	<li>"Nombre y apellidos del alumno*": (Indique el nombre del ingresante)</li>
+	    	<li>"Sección*": (indique una sección sin división ej: 1ro Mañana)</li>
+	    	<li>"Tipo de inscripción*": Pase</li>
+	    	<li>"Pase": (Indique IO)</li>
+	    	<li>Click en el botón "GUARDAR" (SIEP le mostrará el detalle de la inscripción registrada)</li>
+	    </ul>	
+	    </li>
+	    <li class="list-group-item">5º PASO | "Revisión de la inscripción recién registrada": verifique en "Datos de Alta" figure el nombre correcto de la IO.</li>
+	  </ul>
+	</div>
+<?php endif; ?>	
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">INICIAL, PRIMARIA Y SECUNDARIA | INSCRIPCIONES POR HERMANOS</h3>
+	  </div>
+	  <div class="panel-body">
+	    <p> Se desarrollarán en todos los niveles los días 6 y 7 de Agosto. La operatoria en SIEP incluye los siguiente pasos: </p>
+	  </div>
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item">1º PASO | "Acceso al formulario p/agregar inscripción": Desde el menú ALUMNADO --> INSCRIPCIONES, click en el botón "+AGREGAR". </li>
+	    <li class="list-group-item">2º PASO | "Alta de inscripción por hermano": Completar los siguientes campos obligatorios como se indican a continuación:
+	    <ul>
+	    	<li>"Ciclo lectivo*": 2019</li>
+	    	<li>"Estado de la inscripción*": CONFIRMADA</li>
+	    	<li>"Nombre y apellidos del alumno*": (Indique el nombre del ingresante)</li>
+	    	<li>"Sección*": (indique una sección sin división ej: 1ro Mañana)</li>
+	    	<li>"Tipo de inscripción*": Hermano de alumno regular</li>
+	    	<li>"Hermano de Alumno Regular": (Indique el alumno que corresponda)</li>
+	    	<li>Click en el botón "GUARDAR" (SIEP le mostrará el detalle de la inscripción registrada)</li>
+	    </ul>	
+	    </li>
+	    <li class="list-group-item">3º PASO | "Revisión de la inscripción recién registrada": verifique en "Datos de Alta" figure el nombre correcto del hermano.</li>
+	  </ul>
+	</div>
 </div>

@@ -1,4 +1,4 @@
-<div class="TituloSec"><?php echo __('Editar Pase'); ?></div>
+<div class="TituloSec"><?php echo __('Editar Pase de'.' '.$personaNombres); ?></div>
     <div id="ContenidoSec">
         <div class="alumnos form">
              <?php echo $this->Form->create('Pase', array('novalidate' => true));?>

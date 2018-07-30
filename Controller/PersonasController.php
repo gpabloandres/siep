@@ -101,12 +101,6 @@ class PersonasController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		$options = array('conditions' => array('Persona.' . $this->Persona->primaryKey => $id));
-		/*
-		$this->pdfConfig = array(
-			'download' => true,
-			'filename' => 'persona_' . $id .'.pdf'
-		);
-		*/
 		$this->set('persona', $this->Persona->read(null, $id));
         //Evalúa si existe foto.
 		if(empty($this->params['named']['foto'])){
@@ -114,6 +108,54 @@ class PersonasController extends AppController {
 		} else {
 			$foto = 1;
 		}
+    	$persona = $this->Persona->findById($id,'alumno');
+        $personaAlumno = $persona['Persona']['alumno'];
+        if ($personaAlumno = 1) {
+        	/*INICIO: Identificación de la inscripción actual y su estado en una persona con perfil de alumno*/
+    		//Obtención de DNI de la persona.
+	    	$persona = $this->Persona->findById($id,'id, documento_nro');
+	        $personaDni = $persona['Persona']['documento_nro'];
+	    	//Obtención del ciclo actual.
+	    	$ciclo = '18';
+	    	//Obtención del tipo y estado de inscripción actual.
+	    	$this->loadModel('Inscripcion');
+	        $this->Inscripcion->recursive = 0;
+	        $this->Inscripcion->Behaviors->load('Containable');
+	    	//Obtención de los posibles códigos de inscripción (Ordinaria o Pase).
+	    	$codigoActualPosible = $this->__getCodigo($ciclo, $personaDni);
+	    	$paseNro = 1; 
+	        $codigoActualPasePosible = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
+	    	//Verificación de existencia de inscripciones Ordinarias o por Pase con los códigos posibles.
+	    	$existeInscripcionOrdinaria = $this->Inscripcion->find('first',array(
+	                 'contain' => false,
+	                 'conditions' => array('Inscripcion.legajo_nro' => $codigoActualPosible)));
+	    	$existeInscripcionPase = $this->Inscripcion->find('first',array(
+	                 'contain' => false,
+	                 'conditions' => array('Inscripcion.legajo_nro' => $codigoActualPasePosible)));
+	    	//Identificación del código de inscripción cualquiera sea el tipo.
+	    	if (isset($existeInscripcionPase['Inscripcion']['legajo_nro'])) {
+	    		$codigoActual = $codigoActualPasePosible;
+	    		$tipoInscripcion = 'Pase';
+	    	} else if ($existeInscripcionOrdinaria['Inscripcion']['legajo_nro']) {
+	    		$codigoActual = $codigoActualPosible;
+	    		$tipoInscripcionArray = $this->Inscripcion->findByLegajoNro($codigoActual,'tipo_inscripcion');
+	        	$tipoInscripcion = $tipoInscripcionArray['Inscripcion']['tipo_inscripcion'];
+	        }
+	    	//Obtención del estado de esa inscripción.
+	    	$estadoInscripcionArray = $this->Inscripcion->findByLegajoNro($codigoActual,'estado_inscripcion');
+		    $estadoInscripcion = $estadoInscripcionArray['Inscripcion']['estado_inscripcion'];
+	    	//Obtención del centro de esa inscripción.
+	        $this->loadModel('Centro');
+	        $this->Centro->recursive = 0;
+	        $this->Centro->Behaviors->load('Containable');
+	        $idCentroInscripcionArray = $this->Inscripcion->findByLegajoNro($codigoActual,'centro_id');
+	        $idCentroInscripcion = $idCentroInscripcionArray['Inscripcion']['centro_id'];
+	        $nombreCentroInscripcionArray = $this->Centro->findById($idCentroInscripcion,'nombre');
+	        $nombreCentroInscripcion = $nombreCentroInscripcionArray['Centro']['nombre'];
+	        //Visualización del mensaje al usuario.
+	        $this->Session->setFlash("Registra inscripción en".' '.$nombreCentroInscripcion.' '.'con estado:'.' '.$estadoInscripcion, 'default', array('class' => 'alert alert-info'));	
+	    	/*FIN*/
+        }
     	$this->set(compact('foto'));
      }
 
@@ -361,5 +403,15 @@ class PersonasController extends AppController {
 		echo json_encode($personas);
 		$this->autoRender = false;
 	}
+
+	private function __getCodigo($ciclo, $personaDocString){
+		$legajo = $personaDocString."-".$ciclo;
+		return $legajo;
+    }
+
+    private function __getCodigoPase($ciclo, $personaDocString, $paseNro){
+        $legajo = $personaDocString."-".$ciclo."-"."PASE"."_".$paseNro;
+        return $legajo;
+    }
 }
 ?>
