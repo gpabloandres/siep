@@ -35,7 +35,14 @@ class UsersController extends AppController {
 			'order' => array('User.username' => 'asc' )
 		);
     	$users = $this->paginate('User');
-		$this->set(compact('users'));
+    	//Obtención del nombre del centro.
+     	$userCentroId = $this->getUserCentroId();
+        $this->loadModel('Centro');
+        $this->Centro->recursive = 0;
+        $this->Centro->Behaviors->load('Containable');
+        $nombreCentroArray = $this->Centro->findById($userCentroId, 'nombre');
+        $nombreCentro = $nombreCentroArray['Centro']['nombre'];
+		$this->set(compact('users', 'nombreCentro'));
     	$this->render('/Users/usuario');
     }
 	
@@ -47,7 +54,7 @@ class UsersController extends AppController {
 		// if we get the post information, try to authenticate
 		if ($this->request->is('post')) {
 			if ($this->Auth->login()) {
-				$this->Session->setFlash('Bienvenido, '. $this->Auth->user('username'), 'default', array('class' => 'alert alert-success'));
+				$this->Session->setFlash('¡ Bienvenido usuario'.' '.$this->Auth->user('username').' !', 'default', array('class' => 'alert alert-success'));
 				$this->redirect($this->Auth->redirect());
 			} else {
 				$this->Session->setFlash(__('Nombre de usuario o contraseña incorrectos.'));
@@ -68,14 +75,11 @@ class UsersController extends AppController {
         );
 		$this->redirectToNamed();
 		$conditions = array();
-		
-		if(!empty($this->params['named']['username']))
-		{
+		if(!empty($this->params['named']['username'])) {
 			$conditions['User.username ='] = $this->params['named']['username'];
 		}
-		
-        $users = $this->paginate('User', $conditions);
-        $this->set(compact('users'));
+		$users = $this->paginate('User', $conditions);
+     	$this->set(compact('users'));
     }
 
 	public function view($id = null) {
