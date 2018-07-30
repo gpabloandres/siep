@@ -29,6 +29,7 @@
 	  </ul>
 	</div>
 <?php endif; ?>	
+<?php if(($current_user['role'] == 'usuario') && (($userCentroNivel == 'Común - Secundario'))): ?>
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">SECUNDARIA | INICIACIÓN DE PROPUESTA DE PASE (Nuevo procedimiento)</h3>
@@ -69,6 +70,7 @@
 	    <li class="list-group-item">5º PASO | "Revisión de la inscripción recién registrada": verifique en "Datos de Alta" figure el nombre correcto de la IO.</li>
 	  </ul>
 	</div>
+<?php endif; ?>	
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">INICIAL, PRIMARIA Y SECUNDARIA | INSCRIPCIONES POR HERMANOS</h3>
