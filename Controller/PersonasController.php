@@ -110,7 +110,7 @@ class PersonasController extends AppController {
 		}
     	$persona = $this->Persona->findById($id,'alumno');
         $personaAlumno = $persona['Persona']['alumno'];
-        if ($personaAlumno = 1) {
+        if ($personaAlumno == 1) {
         	/*INICIO: Identificación de la inscripción actual y su estado en una persona con perfil de alumno*/
     		//Obtención de DNI de la persona.
 	    	$persona = $this->Persona->findById($id,'id, documento_nro');
