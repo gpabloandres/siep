@@ -136,24 +136,28 @@ class PersonasController extends AppController {
 	    	if (isset($existeInscripcionPase['Inscripcion']['legajo_nro'])) {
 	    		$codigoActual = $codigoActualPasePosible;
 	    		$tipoInscripcion = 'Pase';
-	    	} else if ($existeInscripcionOrdinaria['Inscripcion']['legajo_nro']) {
+	    	} else if (isset($existeInscripcionOrdinaria['Inscripcion']['legajo_nro'])) {
 	    		$codigoActual = $codigoActualPosible;
 	    		$tipoInscripcionArray = $this->Inscripcion->findByLegajoNro($codigoActual,'tipo_inscripcion');
 	        	$tipoInscripcion = $tipoInscripcionArray['Inscripcion']['tipo_inscripcion'];
+	        } else {
+	        	$this->Session->setFlash('No registra inscripción', 'default', array('class' => 'alert alert-info'));
 	        }
-	    	//Obtención del estado de esa inscripción.
-	    	$estadoInscripcionArray = $this->Inscripcion->findByLegajoNro($codigoActual,'estado_inscripcion');
-		    $estadoInscripcion = $estadoInscripcionArray['Inscripcion']['estado_inscripcion'];
-	    	//Obtención del centro de esa inscripción.
-	        $this->loadModel('Centro');
-	        $this->Centro->recursive = 0;
-	        $this->Centro->Behaviors->load('Containable');
-	        $idCentroInscripcionArray = $this->Inscripcion->findByLegajoNro($codigoActual,'centro_id');
-	        $idCentroInscripcion = $idCentroInscripcionArray['Inscripcion']['centro_id'];
-	        $nombreCentroInscripcionArray = $this->Centro->findById($idCentroInscripcion,'nombre');
-	        $nombreCentroInscripcion = $nombreCentroInscripcionArray['Centro']['nombre'];
-	        //Visualización del mensaje al usuario.
-	        $this->Session->setFlash("Registra inscripción en".' '.$nombreCentroInscripcion.' '.'con estado:'.' '.$estadoInscripcion, 'default', array('class' => 'alert alert-info'));	
+	    	if (($existeInscripcionPase) || ($existeInscripcionOrdinaria)) {
+	    		//Obtención del estado de esa inscripción.
+	   		 	$estadoInscripcionArray = $this->Inscripcion->findByLegajoNro($codigoActual,'estado_inscripcion');
+			    $estadoInscripcion = $estadoInscripcionArray['Inscripcion']['estado_inscripcion'];
+		    	//Obtención del centro de esa inscripción.
+		        $this->loadModel('Centro');
+		        $this->Centro->recursive = 0;
+		        $this->Centro->Behaviors->load('Containable');
+		        $idCentroInscripcionArray = $this->Inscripcion->findByLegajoNro($codigoActual,'centro_id');
+		        $idCentroInscripcion = $idCentroInscripcionArray['Inscripcion']['centro_id'];
+		        $nombreCentroInscripcionArray = $this->Centro->findById($idCentroInscripcion,'nombre');
+		        $nombreCentroInscripcion = $nombreCentroInscripcionArray['Centro']['nombre'];
+		        //Visualización del mensaje al usuario.
+		        $this->Session->setFlash("Registra inscripción en".' '.$nombreCentroInscripcion.' '.'con estado:'.' '.$estadoInscripcion, 'default', array('class' => 'alert alert-info'));
+	    	}
 	    	/*FIN*/
         }
     	$this->set(compact('foto'));
@@ -191,8 +195,9 @@ class PersonasController extends AppController {
 			}
 			if ($this->Persona->save($this->data)) {
 				$this->Session->setFlash('La persona ha sido grabada.', 'default', array('class' => 'alert alert-success'));
-				$inserted_id = $this->Persona->id;
-				$this->redirect(array('action' => 'view', $inserted_id));
+				//$inserted_id = $this->Persona->id;
+				//$this->redirect(array('action' => 'view', $inserted_id));
+				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash('La persona no fué grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
