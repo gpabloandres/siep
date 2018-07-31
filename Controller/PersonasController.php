@@ -33,21 +33,12 @@ class PersonasController extends AppController {
 		$this->paginate['Persona']['limit'] = 4;
 		$this->paginate['Persona']['order'] = array('Persona.id' => 'ASC');
 		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
-		*  Sí es "admin" muestra alumnos y familiares del centro.
+		*  Sí es "admin" no muestra alumnos ni familiares.
 		*/
 		$userCentroId = $this->getUserCentroId();
 		$userRole = $this->Auth->user('role');
 		if ($userRole === 'admin') {
-		$personaAlumnoId = $this->Persona->Alumno->find('list', array(
-			'fields'=>array('persona_id'), 
-			'conditions'=>array('centro_id'=>$userCentroId)));
-		$AlumnoFamiliarId = $this->Persona->Alumno->AlumnosFamiliar->find('list', array(
-			'fields'=>array('familiar_id'), 
-			'conditions'=>array('id'=>$personaAlumnoId)));
-		$personaFamiliarId = $this->Persona->Familiar->find('list', array(
-			'fields'=>array('persona_id'),
-			'conditions'=>array('id'=>$AlumnoFamiliarId)));
-		$this->paginate['Persona']['conditions'] = array('Persona.id' => $personaAlumnoId, 'Persona.id' => $personaFamiliarId);
+			$this->paginate['Persona']['conditions'] = array('Persona.id' => 0);
 		}
 		/* FIN */
 		/* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
