@@ -191,8 +191,9 @@ class PersonasController extends AppController {
 			}
 			if ($this->Persona->save($this->data)) {
 				$this->Session->setFlash('La persona ha sido grabada.', 'default', array('class' => 'alert alert-success'));
-				$inserted_id = $this->Persona->id;
-				$this->redirect(array('action' => 'view', $inserted_id));
+				//$inserted_id = $this->Persona->id;
+				//$this->redirect(array('action' => 'view', $inserted_id));
+				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash('La persona no fué grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
