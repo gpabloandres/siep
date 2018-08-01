@@ -286,17 +286,21 @@ class InscripcionsController extends AppController {
             //
             switch ($tipoInscripcionActual) {
                 case 'Pase':
+                    //Si existe una inscripción del actual ciclo relacionada continúa el proceso. Sino indica mensaje y detiene el proceso.                        
                     if (isset($existePersonaInscripta['Inscripcion']['legajo_nro'])) {
                         //Obtención del estado actual de la inscripción
                         $inscripcionEstadoActualArray = $this->Inscripcion->findByLegajoNro($codigoActual, 'estado_inscripcion');
                         $inscripcionEstadoActual = $inscripcionEstadoActualArray['Inscripcion']['estado_inscripcion'];
+                        //Si es estado de inscripción actual es BAJA, continúa con la nueva inscripción por pase. Sino indica mensaje y detiene el proceso.
                         if ($inscripcionEstadoActual == 'BAJA') {
                            $this->request->data['Inscripcion']['legajo_nro'] = $codigoActualPase;
                         } else {
                            $this->Session->setFlash(sprintf("El alumno debe estar dado de baja para realizar el pase."), 'default', array('class' => 'alert alert-danger'));
+                           $this->redirect($this->referer());
                         }                       
                     } else {
                         $this->Session->setFlash(sprintf("El alumno debe registrar inscripción en este ciclo para realizar el pase."), 'default', array('class' => 'alert alert-danger'));
+                        $this->redirect($this->referer());
                     }
                     break;
                 case 'Común':
