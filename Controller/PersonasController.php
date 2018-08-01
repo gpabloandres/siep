@@ -132,7 +132,7 @@ class PersonasController extends AppController {
 	    		$tipoInscripcionArray = $this->Inscripcion->findByLegajoNro($codigoActual,'tipo_inscripcion');
 	        	$tipoInscripcion = $tipoInscripcionArray['Inscripcion']['tipo_inscripcion'];
 	        } else {
-	        	$this->Session->setFlash('No registra inscripción', 'default', array('class' => 'alert alert-info'));
+	        	$this->Session->setFlash('No registra inscripción en el ciclo actual', 'default', array('class' => 'alert alert-info'));
 	        }
 	    	if (($existeInscripcionPase) || ($existeInscripcionOrdinaria)) {
 	    		//Obtención del estado de esa inscripción.
@@ -146,8 +146,8 @@ class PersonasController extends AppController {
 		        $idCentroInscripcion = $idCentroInscripcionArray['Inscripcion']['centro_id'];
 		        $nombreCentroInscripcionArray = $this->Centro->findById($idCentroInscripcion,'nombre');
 		        $nombreCentroInscripcion = $nombreCentroInscripcionArray['Centro']['nombre'];
-		        //Visualización del mensaje al usuario.
-		        $this->Session->setFlash("Registra inscripción en".' '.$nombreCentroInscripcion.' '.'con estado:'.' '.$estadoInscripcion, 'default', array('class' => 'alert alert-info'));
+		        //Visualización del mensaje al usuario de los datos de inscripción en el ciclo actual.
+		        $this->Session->setFlash("En el ciclo actual registra inscripción en".' '.$nombreCentroInscripcion.' '.'con estado:'.' '.$estadoInscripcion, 'default', array('class' => 'alert alert-info'));
 	    	}
 	    	/*FIN*/
         }
