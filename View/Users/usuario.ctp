@@ -4,6 +4,16 @@
 <div class="TituloSec"><?php echo $nombreCentro ?></div>
 <div id="ContenidoSec">
 <?php if(($userCentroNivel == 'Común - Inicial') || ($userCentroNivel == 'Común - Primario') || ($userCentroNivel == 'Común - Inicial - Primario')): ?>
+	<div class="panel panel-danger">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">INICIAL Y PRIMARIA | IMPORTANTE</h3>
+	  </div>
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item">INSCRIPCIÓN DE HERMANOS: en el caso excepcional que por alguna razón específica no se pueda realizar la carga en SIEP de una inscripción, deberán realizar la carga de ese registro en el modelo de planilla indicada en el siguiente enlace <a href="https://drive.google.com/file/d/1pfszuOoffwEyNq5w75M8K_NGJrV9EYBe/view?usp=sharing" target="_blank">(ABRIR Y DESCARGAR PLLA P/INSCRIPCIÓN DE HERMANOS)</a>. </li>
+	    <li class="list-group-item">En todas las instancias de inscripción 2019 (“de Hermanos” y “Abiertas”), se deberá indicar en el campo “Sección*” del formulario de inscripción de SIEP, una sección (sala/grado/curso) sin división, para una correcta lectura de la EVOLUCIÓN DE LAS VACANTES desde el menú VER → INSCRIPTOS POR AÑO [CUANTITATIVO]. Luego del PRIMER SORTEO, opcionalmente, las instituciones podrán REUBICAR a los alumnos 2019 en las secciones correspondientes. </li>
+	   </ul>
+	</div>
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">INICIAL Y PRIMARIA | INSCRIPCIONES POR PASES (Nuevo procedimiento)</h3>
@@ -29,17 +39,27 @@
 	  </ul>
 	</div>
 <?php endif; ?>	
-<?php if(($current_user['role'] == 'usuario') && (($userCentroNivel == 'Común - Secundario'))): ?>
-	<div class="panel panel-primary">
+<?php if($userCentroNivel == 'Común - Secundario'): ?>
+	<div class="panel panel-danger">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">SECUNDARIO | IMPORTANTE</h3>
+	  </div>
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item">INSCRIPCIÓN DE HERMANOS: en el caso excepcional que por alguna razón específica no se pueda realizar la carga en SIEP de una inscripción, deberán realizar la carga de ese registro en el modelo de planilla indicada en el siguiente enlace <a href="https://drive.google.com/file/d/1Y_T7RFGChjru4iDlDppZ6wQDsmQGUCBn/view?usp=sharing" target="_blank">(ABRIR Y DESCARGAR PLLA P/INSCRIPCIÓN DE HERMANOS)</a>. </li>
+	    <li class="list-group-item">En todas las instancias de inscripción 2019 (“de Hermanos” y “Abiertas”), se deberá indicar en el campo “Sección*” del formulario de inscripción de SIEP, una sección (sala/grado/curso) sin división, para una correcta lectura de la EVOLUCIÓN DE LAS VACANTES desde el menú VER → INSCRIPTOS POR AÑO [CUANTITATIVO]. Luego del PRIMER SORTEO, opcionalmente, las instituciones podrán REUBICAR a los alumnos 2019 en las secciones correspondientes. </li>
+	   </ul>
+	</div>
+<!--<div class="panel panel-primary">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">SECUNDARIA | INICIACIÓN DE PROPUESTA DE PASE (Nuevo procedimiento)</h3>
 	  </div>
 	  <div class="panel-body">
 	    <p> A continuación se detallan los pasos a seguir para iniciar una propuesta de pase desde una institución origen (IO) a la Supervisión General de Secundaria para que, luego de ser confirmada, la IO genere una nueva inscripción por pase: </p>
 	  </div>
-	  <!-- List group -->
+	  <!-- List group 
 	  <ul class="list-group">
-	    <li class="list-group-item">1º PASO | "Acceso al formulario p/agregar pase": Desde el menú ALUMNADO --> PASES, click en el botón "+AGREGAR". </li>
+	    <li class="list-group-item">1º PASO | "Acceso al formulario p/agregar pase": Desde el menú ALUMNADO  PASES, click en el botón "+AGREGAR". </li>
 	    <li class="list-group-item">2º PASO | "Alta de registro de pase": Completar los siguientes campos obligatorios como se indican a continuación:
 	    <ul>
 	    	<li>"Alumno*": (Indique el nombre del ingresante)</li>
@@ -47,9 +67,9 @@
 	    	<li>"Año de estudio*": (Indique la opción de año correspondiente)</li>
 	    	<li>Click en el botón "GUARDAR" (SIEP le mostrará el detalle del pase registrado)</li>
 	    </ul>	
-	    <p>OBSERVACIÓN: Una vez guardado el registro de pase, tanto la IO como la ID podrán visualizar el registro de pase desde el menú ALUMNADO --> PASE, pero sólo desde la Supervisión se podrá acceder a la edición del registro.</p>
+	    <p>OBSERVACIÓN: Una vez guardado el registro de pase, tanto la IO como la ID podrán visualizar el registro de pase desde el menú ALUMNADO  PASE, pero sólo desde la Supervisión se podrá acceder a la edición del registro.</p>
 	    </li>
-	    <li class="list-group-item">3º PASO | "Seguimiento del estado del pase": desde el menú ALUMNADO --> PASE se podrá visualizar en la tarjeta del pase, el "Estado" del mismo, pudiendo ser:</li>
+	    <li class="list-group-item">3º PASO | "Seguimiento del estado del pase": desde el menú ALUMNADO  PASE se podrá visualizar en la tarjeta del pase, el "Estado" del mismo, pudiendo ser:</li>
 		    <ul>
 		    	<li>INICIADO: Al momento de generarlo la IO.</li>
 		    	<li>EVALUACIÓN: Al momento de comenzar a ser revisado desde la Supervisión General.</li>
@@ -70,7 +90,9 @@
 	    <li class="list-group-item">5º PASO | "Revisión de la inscripción recién registrada": verifique en "Datos de Alta" figure el nombre correcto de la IO.</li>
 	  </ul>
 	</div>
+!-->
 <?php endif; ?>	
+<!-- Visualizable por todos los roles de usuarios -->	
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">INICIAL, PRIMARIA Y SECUNDARIA | INSCRIPCIONES POR HERMANOS</h3>
