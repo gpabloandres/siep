@@ -169,6 +169,11 @@ class InscripcionsController extends AppController {
             //Envío de dato a la vista.
             $this->set(compact('centroOrigenNombre'));
         }
+        //Obtención del estado de inscripción para habilitar acceso a impresión de constancia de alumno regular.
+        $estadoInscripcionArray = $this->Inscripcion->findById($id, 'estado_inscripcion');
+        $estadoInscripcion = $estadoInscripcionArray['Inscripcion']['estado_inscripcion'];
+        //Envío de dato a la vista.
+        $this->set(compact('estadoInscripcion'));
     }
 
 	public function add() {
