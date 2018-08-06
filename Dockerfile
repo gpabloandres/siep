@@ -25,5 +25,8 @@ RUN chmod 777 /var/www/html/tmp -R
 
 RUN composer install --ignore-platform-reqs
 
+RUN wget https://api.github.com/repos/decyt-tdf/siep/commits/master && mv master /var/www/html/webroot/master.json
+RUN wget https://api.github.com/repos/decyt-tdf/siep/commits/developer && mv developer /var/www/html/webroot/developer.json
+
 EXPOSE 80 443
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
