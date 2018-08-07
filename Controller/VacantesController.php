@@ -67,50 +67,50 @@ class VacantesController extends AppController
         $userCentro = $this->Auth->user('Centro');
 
         // Parametros de API por defecto
-        $params = [];
-        $params['por_pagina'] = 10;
-        $params['ciclo'] = 2019;
-        $params['order'] = 'anio';
-        $params['order_dir'] = 'asc';
+        $apiParams = [];
+        $apiParams['por_pagina'] = 10;
+        $apiParams['ciclo'] = 2019;
+        $apiParams['order'] = 'anio';
+        $apiParams['order_dir'] = 'asc';
 
         // Filtros de formulario y paginacion
         if(isset($this->request->query['ciclo'])){
-            $params['ciclo'] = $this->request->query['ciclo'];
+            $apiParams['ciclo'] = $this->request->query['ciclo'];
         }
         if(isset($this->request->query['anio'])){
-            $params['anio'] = $this->request->query['anio'];
+            $apiParams['anio'] = $this->request->query['anio'];
         }
         if(isset($this->request->query['centro_id'])){
-            $params['centro_id'] = $this->request->query['centro_id'];
+            $apiParams['centro_id'] = $this->request->query['centro_id'];
         }
         if(isset($this->request->query['page'])){
-            $params['page'] = $this->request->query['page'];
+            $apiParams['page'] = $this->request->query['page'];
         }
 
         // Filtros de roles
         if($this->Siep->isAdmin())
         {
-            $params['centro_id'] = $userCentro['id'];
+            $apiParams['centro_id'] = $userCentro['id'];
         }
         if($this->Siep->isUsuario())
         {
             $userNivelServicio = $userCentro['nivel_servicio'];
 
             if ($userNivelServicio === 'Común - Inicial - Primario') {
-                $params['centro_id'] = $userCentro['id'];
-                $params['nivel_servicio'] = [
+                $apiParams['centro_id'] = $userCentro['id'];
+                $apiParams['nivel_servicio'] = [
                     'Común - Inicial',
                     'Común - Primario',
                     'Común - Inicial - Primario'
                 ];
 
             } else {
-                $params['nivel_servicio'] = $userNivelServicio;
+                $apiParams['nivel_servicio'] = $userNivelServicio;
             }
         }
 
         // Consumo de API
-        $matriculas_por_seccion = $this->Siep->consumeApi("api/matriculas/cuantitativa/por_seccion",$params);
+        $matriculas_por_seccion = $this->Siep->consumeApi("api/matriculas/cuantitativa/por_seccion",$apiParams);
         if(isset($matriculas_por_seccion['error']))
         {
             // Manejar error de API
