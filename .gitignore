@@ -22,3 +22,5 @@ docker_dev/dump/
 
 docker_dev/mysqldata/
 supervisord.*
+
+webroot/debug_kit/*
