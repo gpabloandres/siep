@@ -4,6 +4,21 @@
 <div class="TituloSec"><?php echo $nombreCentro ?></div>
 <div id="ContenidoSec">
 <?php if(($userCentroNivel == 'Común - Inicial') || ($userCentroNivel == 'Común - Primario') || ($userCentroNivel == 'Común - Inicial - Primario')): ?>
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">INICIAL Y PRIMARIA | PROMOCIONES </h3>
+	  </div>
+	  <div class="panel-body">
+	    <p> A continuación se detallan los pasos a seguir para registrar PROMOCIONES en SIEP <a href="https://drive.google.com/file/d/1VsFgAyMFQuPrFP8uZiGYfHGqADrqtTHv/view?usp=sharing" target="_blank">(VER TAMBIÉN VIDEO TUTORIAL EN LÍNEA)</a>: </p>
+	  </div>
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item">1º PASO | "Identificación de la sección origen ": Desde el menú OFERTAS --> SECCIONES, indicar en "BÚSQUEDA" una sección (sala/grado) origen y luego click en el botón "BUSCAR". </li>
+	    <li class="list-group-item">2º PASO | "Ver el detalle de la sección": click en el botón VERDE de la tarjeta de la sección.	
+	    </li>
+	    <li class="list-group-item">3º PASO | "Promocionar a la sección destino": Desde "OPCIONES", click en el botón "Promocionar". Luego señalar en el listado el/los alumnos para ser promocionados e indicar en "OPCIONES DE PROMOCIÓN" la sección destino. Por último, click en el botón "Confirmar promoción".</li>
+	  </ul>
+	</div>
 	<div class="panel panel-danger">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">INICIAL Y PRIMARIA | IMPORTANTE</h3>
