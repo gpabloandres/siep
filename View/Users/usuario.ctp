@@ -6,6 +6,26 @@
 <?php if(($userCentroNivel == 'Común - Inicial') || ($userCentroNivel == 'Común - Primario') || ($userCentroNivel == 'Común - Inicial - Primario')): ?>
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
+	    <h3 class="panel-title">INICIAL Y PRIMARIA | INSCRIPCIONES ABIERTAS</h3>
+	  </div>
+	  <div class="panel-body">
+	    <p> Se desarrollarán los días 9 y 10 de Agosto <a href="https://drive.google.com/file/d/1svHmetvUz-EhyQPEeFD2AK7xpqwsRMHo/view?usp=sharing" target="_blank"> (ABRIR Y DESCARGAR EL MODELO DE PLANILLA) </a>. La operatoria en SIEP incluye los siguiente pasos: </p>
+	  </div>
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item">1º PASO | "Alta de inscripción": Completar los siguientes campos obligatorios como se indican a continuación:
+	    <ul>
+	    	<li>"Ciclo lectivo*": 2019</li>
+	    	<li>"Estado de la inscripción*": NO CONFIRMADA</li>
+	    	<li>"Nombre y apellidos del alumno*": (Indique el nombre del ingresante)</li>
+	    	<li>"Sección*": (indique una sección sin división ej: 1ro Mañana)</li>
+	    	<li>"Tipo de inscripción*": Común</li>
+	    	<li>Click en el botón "GUARDAR" (SIEP le mostrará el detalle de la inscripción registrada)</li>
+	    </ul>	
+	  </ul>
+	</div>
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
 	    <h3 class="panel-title">INICIAL Y PRIMARIA | PROMOCIONES </h3>
 	  </div>
 	  <div class="panel-body">
