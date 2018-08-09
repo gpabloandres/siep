@@ -70,6 +70,10 @@ class VacantesController extends AppController
         $apiParams = [];
         $apiParams['por_pagina'] = 10;
         $apiParams['ciclo'] = 2019;
+        $apiParams['estado_inscripcion'] = [
+            'CONFIRMADA',
+            'NO CONFIRMADA',
+        ];
         $apiParams['order'] = 'anio';
         $apiParams['order_dir'] = 'asc';
 
