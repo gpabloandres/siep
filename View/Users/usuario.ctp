@@ -4,6 +4,41 @@
 <div class="TituloSec"><?php echo $nombreCentro ?></div>
 <div id="ContenidoSec">
 <?php if(($userCentroNivel == 'Común - Inicial') || ($userCentroNivel == 'Común - Primario') || ($userCentroNivel == 'Común - Inicial - Primario')): ?>
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">INICIAL Y PRIMARIA | INSCRIPCIONES ABIERTAS</h3>
+	  </div>
+	  <div class="panel-body">
+	    <p> Se desarrollarán los días 9 y 10 de Agosto <a href="https://drive.google.com/file/d/1svHmetvUz-EhyQPEeFD2AK7xpqwsRMHo/view?usp=sharing" target="_blank"> (ABRIR Y DESCARGAR EL MODELO DE PLANILLA) </a>. La operatoria en SIEP incluye los siguiente pasos: </p>
+	  </div>
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item">1º PASO | "Alta de inscripción": Completar los siguientes campos obligatorios como se indican a continuación:
+	    <ul>
+	    	<li>"Ciclo lectivo*": 2019</li>
+	    	<li>"Estado de la inscripción*": NO CONFIRMADA</li>
+	    	<li>"Nombre y apellidos del alumno*": (Indique el nombre del ingresante)</li>
+	    	<li>"Sección*": (indique una sección sin división ej: 1ro Mañana)</li>
+	    	<li>"Tipo de inscripción*": Común</li>
+	    	<li>Click en el botón "GUARDAR" (SIEP le mostrará el detalle de la inscripción registrada)</li>
+	    </ul>	
+	  </ul>
+	</div>
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">INICIAL Y PRIMARIA | PROMOCIONES </h3>
+	  </div>
+	  <div class="panel-body">
+	    <p> A continuación se detallan los pasos a seguir para registrar PROMOCIONES en SIEP <a href="https://drive.google.com/file/d/1VsFgAyMFQuPrFP8uZiGYfHGqADrqtTHv/view?usp=sharing" target="_blank">(VER TAMBIÉN VIDEO TUTORIAL EN LÍNEA)</a>: </p>
+	  </div>
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item">1º PASO | "Identificación de la sección origen ": Desde el menú OFERTAS --> SECCIONES, indicar en "BÚSQUEDA" una sección (sala/grado) origen y luego click en el botón "BUSCAR". </li>
+	    <li class="list-group-item">2º PASO | "Ver el detalle de la sección": click en el botón VERDE de la tarjeta de la sección.	
+	    </li>
+	    <li class="list-group-item">3º PASO | "Promocionar a la sección destino": Desde "OPCIONES", click en el botón "Promocionar". Luego señalar en el listado el/los alumnos para ser promocionados e indicar en "OPCIONES DE PROMOCIÓN" la sección destino. Por último, click en el botón "Confirmar promoción".</li>
+	  </ul>
+	</div>
 	<div class="panel panel-danger">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">INICIAL Y PRIMARIA | IMPORTANTE</h3>
