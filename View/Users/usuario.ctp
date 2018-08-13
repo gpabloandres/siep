@@ -13,7 +13,7 @@
 	  </div>
 	  <!-- List group -->
 	  <ul class="list-group">
-	    <li class="list-group-item">1º PASO | "Alta de inscripción": Completar los siguientes campos obligatorios como se indican a continuación:
+	    <li class="list-group-item">1º PASO | "Alta de inscripción": Desde el menú ALUMNADO --> INSCRIPCIONES, click en el botón "+AGREGAR", completar los siguientes campos obligatorios como se indican a continuación:
 	    <ul>
 	    	<li>"Ciclo lectivo*": 2019</li>
 	    	<li>"Estado de la inscripción*": NO CONFIRMADA</li>

@@ -5,7 +5,7 @@
         <div class="col-xs-2">
             <div class="input select">
                 <?php
-                echo $this->Form->input('ciclo_id', array('options'=>$comboCiclo, 'default'=>$cicloIdActual, 'disabled' => true, 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                echo $this->Form->input('ciclo_id', array('options'=>$comboCiclo, 'default'=>$cicloIdUltimo, 'disabled' => true, 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
                 ?>
             </div>
         </div>
@@ -48,53 +48,53 @@
       <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
       <thead>
         <tr>
-          <th><?php echo $this->Paginator->sort('Centro.sigla', 'Centro');?>  </th>
-          <th><?php echo $this->Paginator->sort('anio','Año');?></th>
-          <th><?php echo $this->Paginator->sort('turno','Turno');?></th>
-        <?php if(!$ocultar) : ?>
-          <th><?php echo $this->Paginator->sort('plazas', 'Plaza');?></th>
-        <?php endif ?>
-          <th><?php echo $this->Paginator->sort('matricula', 'Matricula');?></th>
-          <th><?php echo $this->Paginator->sort('por_hermanos', 'Por Hermanos');?></th>
-        <?php if(!$ocultar) : ?>
-          <th><?php echo $this->Paginator->sort('vacantes', 'VACANTES');?></th>
-        <?php endif ?>
+          <th>Centro</th>
+          <th>Año</th>
+          <th>Turno</th>
+            <?php if(!$ocultar) : ?>
+                <th>Plaza</th>
+            <?php endif ?>
+          <th>Matricula</th>
+            <?php if(!$ocultar) : ?>
+                <th>VACANTES</th>
+            <?php endif ?>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <?php $count=0; ?>
-        <?php foreach($matriculas as $matricula): ?>
+        <?php $count=0;
+        ?>
+        <?php
+        if(isset($matriculas_por_seccion['total'])) :
+        foreach($matriculas_por_seccion['data'] as $seccion): ?>
             <td>
-              <?php echo $matricula['Centro']['sigla']; ?>
+              <?php echo $seccion['nombre']; ?>
             </td>
             <td>
-              <?php echo $matricula['Curso']['anio']; ?>
+              <?php echo $seccion['anio']; ?>
             </td>
             <td>
-              <?php echo $matricula['Curso']['turno']; ?>
+              <?php echo $seccion['turno']; ?>
             </td>
             <?php if(!$ocultar) : ?>
             <td>
-              <?php echo $matricula['Curso']['plazas']; ?>
+              <?php echo $seccion['plazas']; ?>
             </td>
             <?php endif ?>
             <td>
-              <?php echo $matricula['Curso']['matricula']; ?>
-            </td>
-            <td>
-                <?php echo $matricula['Curso']['por_hermanos']; ?>
+              <?php echo $seccion['matriculas']; ?>
             </td>
             <?php if(!$ocultar) : ?>
             <td>
-              <?php echo $matricula['Curso']['vacantes']; ?>
+              <?php echo $seccion['vacantes']; ?>
             </td>
             <?php endif ?>
             <td >
-              <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $matricula['Curso']['id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
+              <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
             </td>
           </tr>
         <?php endforeach; ?>
+        <?php endif; ?>
       </tbody>
       <tfoot>
         <tr>
@@ -110,7 +110,7 @@
                   select: function( event, ui ) {
                     $("#AutocompleteForm").val( ui.item.Centro.sigla );
 
-                    window.location.href = "<?php echo $this->Html->url(array('controller'=>'vacantes'));?>/index/centro_id:"+ui.item.Centro.id;
+                    window.location.href = "<?php echo $this->Html->url(array('controller'=>'vacantes'));?>/index?centro_id="+ui.item.Centro.id;
                     return false;
                   }
                 }).autocomplete( "instance" )._renderItem = function( ul, item ) {
@@ -127,15 +127,15 @@
 
               <?php
               if ($this->Siep->isSuperAdmin()) {
-                  $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años', '1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+                  $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años', '1ro' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
               } else if ($current_user['puesto'] == 'Dirección Jardín') {
                   $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años');
               } else if ($current_user['puesto'] == 'Dirección Escuela Primaria') {
-                  $anios = array('1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+                  $anios = array('1ro' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
               } else if ($current_user['puesto'] == 'Supervisión Inicial/Primaria') {
-                  $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años', '1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+                  $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años', '1ro' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
               } else {
-                  $anios = array('1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+                  $anios = array('1ro' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
               }
               echo $this->Form->input('anio', array('id'=>'filtroAnio','label' =>false, 'empty' => 'Ingrese un año...', 'options' => $anios, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Selecciones una opción de la lista'));
 
@@ -159,8 +159,8 @@
         });
       </script>
     </div>
-
-  <div class="unit text-center">
-    <?php echo $this->element('pagination'); ?>
-  </div>
 </div>
+
+<?php
+echo $this->Siep->pagination($matriculas_por_seccion);
+?>

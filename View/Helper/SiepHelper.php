@@ -1,6 +1,7 @@
 <?php
 
 App::uses('AppHelper', 'View/Helper');
+App::uses('HttpSocket', 'Network/Http');
 
 class SiepHelper extends AppHelper
 {
@@ -52,5 +53,83 @@ class SiepHelper extends AppHelper
         }
         $counter++;
         return $counter;
+    }
+
+    public function consumeApi($route,$params=array(),$method="GET") {
+        try {
+            $hostApi = getenv('HOSTAPI');
+
+            $request = array(
+                'method' => $method,
+                'uri' => array(
+                    'host' => $hostApi,
+                    'path' => $route,
+                    'query' => $params,
+                ),
+                'header' => array(
+                    'Connection' => 'close',
+                    'User-Agent' => 'CakePHP',
+                    'Content-Type' => 'application/json'
+                ),
+                'redirect' => false
+            );
+
+            $httpSocket = new HttpSocket();
+            $response = $httpSocket->request($request);
+
+            $response = $response->body;
+            $apiResponse = json_decode($response,true);
+            return $apiResponse;
+
+        } catch(\Exception $ex){
+            return [
+                'error'=>'API($hostApi) TryError: '.$ex->getMessage()
+            ];
+        }
+    }
+
+    public function pagination($item) {
+        if(isset($item['total']))
+        {
+            echo '<div class="unit text-center"><p>Página 
+            '.$item['current_page'].' de
+            '.$item['last_page'].', mostrando
+            '.$item['per_page'].' resultados de un total de
+            '.$item['total'].', desde
+            '.$item['from'].' hasta
+            '.$item['to'].'</p>';
+
+            $i=1;
+            echo '<div class="paging">';
+            if($item['current_page']>1) {
+                echo '<a href="'.$this->paginationLink($item['current_page']-1).'">&laquo; anterior</a> | ';
+            }
+            for($i;$i<=$item['last_page'];$i++)
+            {
+                if($i == $item['current_page']) {
+                    echo "$i";
+                } else {
+                    echo '<a href="'.$this->paginationLink($i).'">'.$i.'</a>';
+                }
+                if($i != $item['last_page']) {
+                    echo ' | ';
+                }
+            }
+
+            if($item['current_page']<$item['last_page']) {
+                echo ' | <a href="'.$this->paginationLink($item['current_page']+1).'">siguiente &raquo;</a>';
+            }
+            echo '</div></div>';
+        }
+    }
+
+    private function paginationLink($page) {
+        $this->request->query['page'] = $page;
+        return Router::url(null,true).'?'.http_build_query($this->request->query);
+    }
+
+    private function paramLink($params) {
+        $newParams = array_merge($this->request->query,$params);
+        return Router::url(null,true).'?'.http_build_query($newParams);
     }
 }
