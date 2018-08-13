@@ -135,9 +135,10 @@ class PersonasController extends AppController {
 	        	$this->Session->setFlash('No registra inscripción en el ciclo actual', 'default', array('class' => 'alert alert-info'));
 	        }
 	    	if (($existeInscripcionPase) || ($existeInscripcionOrdinaria)) {
-	    		//Obtención del estado de esa inscripción.
-	   		 	$estadoInscripcionArray = $this->Inscripcion->findByLegajoNro($codigoActual,'estado_inscripcion');
-			    $estadoInscripcion = $estadoInscripcionArray['Inscripcion']['estado_inscripcion'];
+	    		//Obtención del id y del estado de esa inscripción.
+	   		 	$estadoInscripcionArray = $this->Inscripcion->findByLegajoNro($codigoActual,'id, estado_inscripcion');
+	   		 	$idInscripcion = $estadoInscripcionArray['Inscripcion']['id'];
+		    	$estadoInscripcion = $estadoInscripcionArray['Inscripcion']['estado_inscripcion'];
 		    	//Obtención del centro de esa inscripción.
 		        $this->loadModel('Centro');
 		        $this->Centro->recursive = 0;
@@ -146,8 +147,19 @@ class PersonasController extends AppController {
 		        $idCentroInscripcion = $idCentroInscripcionArray['Inscripcion']['centro_id'];
 		        $nombreCentroInscripcionArray = $this->Centro->findById($idCentroInscripcion,'nombre');
 		        $nombreCentroInscripcion = $nombreCentroInscripcionArray['Centro']['nombre'];
+		        //Obtención de los datos de la sección de esa inscripción.
+		        $this->loadModel('CursosInscripcions');
+		        $this->CursosInscripcions->recursive = 0;
+		        $this->CursosInscripcions->Behaviors->load('Containable');
+		        $idSeccionInscripcionArray = $this->CursosInscripcions->findByInscripcionId($idInscripcion,'curso_id');
+		        $idSeccionInscripcion = $idSeccionInscripcionArray['CursosInscripcions']['curso_id'];
+		        $this->loadModel('Curso');
+		        $this->Curso->recursive = 0;
+		        $this->Curso->Behaviors->load('Containable');
+		        $nombreSeccionArray = $this->Curso->findById($idSeccionInscripcion,'nombre_completo_curso');
+		        $nombreSeccion = $nombreSeccionArray['Curso']['nombre_completo_curso'];
 		        //Visualización del mensaje al usuario de los datos de inscripción en el ciclo actual.
-		        $this->Session->setFlash("En el ciclo actual registra inscripción en".' '.$nombreCentroInscripcion.' '.'con estado:'.' '.$estadoInscripcion, 'default', array('class' => 'alert alert-info'));
+		        $this->Session->setFlash("En el ciclo actual registra inscripción en".' '.$nombreCentroInscripcion.' '.' en '.$nombreSeccion.' con estado: '.' '.$estadoInscripcion, 'default', array('class' => 'alert alert-info'));
 	    	}
 	    	/*FIN*/
         }
