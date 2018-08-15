@@ -75,6 +75,30 @@
 	</div>
 <?php endif; ?>	
 <?php if($userCentroNivel == 'Común - Secundario'): ?>
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">SECUNDARIA | INSCRIPCIONES POR PASES (Nuevo procedimiento)</h3>
+	  </div>
+	  <div class="panel-body">
+	    <p> A continuación se detallan los pasos a seguir para registrar INSCRIPCIONES POR PASE (cambio de institución en el mismo ciclo dentro de TDF) de ALUMNOS CON PASES EVALUADOS Y APROBADOS por la Supervisión Técnica, entre una institución origen (IO) y una institución destino (ID): </p>
+	  </div>
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item">1º PASO | "Verificación de Baja en la IO": Desde el menú ALTA DE PERSONAS, indicar en "BÚSQUEDA" un alumno y luego click en el botón "BUSCAR". </li>
+	    <li class="list-group-item">2º PASO | "Alta de inscripción por pase": Completar los siguientes campos obligatorios como se indican a continuación:
+	    <ul>
+	    	<li>"Ciclo lectivo*": (indicar el corriente ciclo lectivo)</li>
+	    	<li>"Estado de la inscripción*": CONFIRMADA</li>
+	    	<li>"Nombre y apellidos del alumno*": (Indique el nombre del ingresante)</li>
+	    	<li>"Sección*": (indique una sección)</li>
+	    	<li>"Tipo de inscripción*": Pase</li>
+	    	<li>"Pase": (Indique IO)</li>
+	    	<li>Click en el botón "GUARDAR" (SIEP le mostrará el detalle de la inscripción registrada)</li>
+	    </ul>	
+	    </li>
+	    <li class="list-group-item">3º PASO | "Revisión de la inscripción recién registrada": verifique en "Datos de Alta" figure el nombre correcto de la IO.</li>
+	  </ul>
+	</div>
 	<div class="panel panel-danger">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">SECUNDARIO | IMPORTANTE</h3>
