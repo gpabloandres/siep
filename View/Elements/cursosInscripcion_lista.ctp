@@ -8,6 +8,7 @@
     <?php
         endif;
     ?>
+    <?php echo $this->Form->create('CursosInscripcion',array('type'=>'post','url'=>'confirmarAlumnos', 'novalidate' => true));?>
         <table class="table table-bordered table-hover table-striped table-condensed">
         <thead>
             <tr>
@@ -22,6 +23,11 @@
         <tbody>
             <?php foreach($cursosInscripcions as $cursosInscripcion) : ?>
             <tr>
+                <td>
+                    <?php  if($cursosInscripcion['Inscripcion']['estado_inscripcion']!='CONFIRMADA') : ?>
+                        <input type="checkbox" class="toggle_checkbox" name="id[]" value="<?php echo $cursosInscripcion['Inscripcion']['id']; ?>">
+                    <?php  endif;  ?>
+                </td>
                 <td><?php echo $cursosInscripcion['Ciclo']['nombre']; ?> </td>
                 <td><?php echo $cursosInscripcion['Centro']['nombre']; ?> </td>
                 <td><?php echo $cursosInscripcion['Curso']['anio']." ".$cursosInscripcion['Curso']['division']; ?> </td>
@@ -33,6 +39,48 @@
                 </td>
             </tr>
             <?php endforeach ?>
-        </tbody>
+            <tr id="tdConfirmar" style="display:none;">
+                <td colspan="6">
+                    <div class="text-center">
+                        <input type="submit" class="btn btn-primary" value="Confirmar seleccionados" />
+                    </div>
+                </td>
+            </tr>
+         </tbody>
     </table>
+    <?php echo $this->Form->end(); ?>
 </div>
+
+
+<script>
+    $(function() {
+
+        toggleConfirmButton();
+
+        $("#checkAll").change(function () {
+            var checkboxes = $(this).closest('form').find('.toggle_checkbox');
+            var checked = $(this).prop("checked");
+            checkboxes.prop('checked', checked);
+            checkboxes.closest("tr").toggleClass("info", checked);
+
+            toggleConfirmButton();
+        });
+
+        $('.toggle_checkbox').change(function() {
+            $(this).closest("tr").toggleClass("info", this.checked);
+
+            toggleConfirmButton();
+        });
+    });
+
+    function toggleConfirmButton() {
+        let seleccionados = $('.toggle_checkbox:checked').length;
+        if(seleccionados>0) {
+            $('#tdConfirmar').show();
+        } else {
+            $("#checkAll").prop('checked', false);
+            $('#tdConfirmar').hide();
+        }
+
+    }
+</script>

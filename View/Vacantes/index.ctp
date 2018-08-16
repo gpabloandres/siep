@@ -2,14 +2,7 @@
 <div id="ContenidoSec">
     <?php echo $this->Form->create('Curso',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
     <div class="row">
-        <div class="col-xs-2">
-            <div class="input select">
-                <?php
-                echo $this->Form->input('ciclo_id', array('options'=>$comboCiclo, 'default'=>$cicloIdUltimo, 'disabled' => true, 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-                ?>
-            </div>
-        </div>
-        <div class="col-xs-2">
+         <div class="col-xs-2">
             <div class="input select">
                 <?php
                 echo $this->Form->input('sector', array('options'=>$comboSector, 'empty'=>'- Todos los sectores -', 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
@@ -42,7 +35,7 @@
          $ocultar = true;
      }
 ?>
-<div class="TituloSec">Inscriptos por año [Cuantitativo]</div>
+<div class="TituloSec">Inscriptos 2019</div>
 <div id="ContenidoSec">
     <div class="table-responsive">
       <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
@@ -51,6 +44,7 @@
           <th>Centro</th>
           <th>Año</th>
           <th>Turno</th>
+          <th>Division</th>
             <?php if(!$ocultar) : ?>
                 <th>Plaza</th>
             <?php endif ?>
@@ -75,6 +69,9 @@
             </td>
             <td>
               <?php echo $seccion['turno']; ?>
+            </td>
+            <td>
+              <?php echo $seccion['division']; ?>
             </td>
             <?php if(!$ocultar) : ?>
             <td>
