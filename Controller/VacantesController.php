@@ -94,19 +94,27 @@ class VacantesController extends AppController
         {
             $apiParams['centro_id'] = $userCentro['id'];
         }
+
         if($this->Siep->isUsuario())
         {
-            $userNivelServicio = $userCentro['nivel_servicio'];
-
-            if ($userNivelServicio === 'Común - Inicial - Primario') {
-                $apiParams['centro_id'] = $userCentro['id'];
+            // Supervision Primaria ve Jardines y Escuelas
+            if($this->Siep->isSupervisionInicialPrimaria())
+            {
                 $apiParams['nivel_servicio'] = [
                     'Común - Inicial',
                     'Común - Primario',
                     'Común - Inicial - Primario'
                 ];
-
+            } elseif ($this->Siep->isSupervisionSecundaria())
+            {
+                // Supervision Secundaria, solo ve colegios secundarios
+                $apiParams['nivel_servicio'] = [
+                    'Común - Secundario'
+                ];
             } else {
+                // El resto de los usuarios, ven a los inscriptos de sus establecimientos, en su nivel de servicio
+                $userNivelServicio = $userCentro['nivel_servicio'];
+                $apiParams['centro_id'] = $userCentro['id'];
                 $apiParams['nivel_servicio'] = $userNivelServicio;
             }
         }
