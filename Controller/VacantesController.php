@@ -70,10 +70,8 @@ class VacantesController extends AppController
         $apiParams = [];
         $apiParams['por_pagina'] = 10;
         $apiParams['ciclo'] = 2019;
-        $apiParams['estado_inscripcion'] = [
-            'CONFIRMADA',
-            'NO CONFIRMADA',
-        ];
+        $apiParams['estado_inscripcion'] = ['CONFIRMADA', 'NO CONFIRMADA',];
+        $apiParams['division'] = 'con';
         $apiParams['order'] = 'anio';
         $apiParams['order_dir'] = 'asc';
 
@@ -96,19 +94,27 @@ class VacantesController extends AppController
         {
             $apiParams['centro_id'] = $userCentro['id'];
         }
+
         if($this->Siep->isUsuario())
         {
-            $userNivelServicio = $userCentro['nivel_servicio'];
-
-            if ($userNivelServicio === 'Común - Inicial - Primario') {
-                $apiParams['centro_id'] = $userCentro['id'];
+            // Supervision Primaria ve Jardines y Escuelas
+            if($this->Siep->isSupervisionInicialPrimaria())
+            {
                 $apiParams['nivel_servicio'] = [
                     'Común - Inicial',
                     'Común - Primario',
                     'Común - Inicial - Primario'
                 ];
-
+            } elseif ($this->Siep->isSupervisionSecundaria())
+            {
+                // Supervision Secundaria, solo ve colegios secundarios
+                $apiParams['nivel_servicio'] = [
+                    'Común - Secundario'
+                ];
             } else {
+                // El resto de los usuarios, ven a los inscriptos de sus establecimientos, en su nivel de servicio
+                $userNivelServicio = $userCentro['nivel_servicio'];
+                $apiParams['centro_id'] = $userCentro['id'];
                 $apiParams['nivel_servicio'] = $userNivelServicio;
             }
         }
