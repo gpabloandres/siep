@@ -77,6 +77,26 @@
 <?php if($userCentroNivel == 'Común - Secundario'): ?>
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
+	    <h3 class="panel-title">SECUNDARIA | INSCRIPCIONES ABIERTAS</h3>
+	  </div>
+	  <div class="panel-body">
+	    <p> Se desarrollarán los días 23 y 24 de Agosto <a href="https://drive.google.com/file/d/1Gf7qaDCpvdD8tRp_I4Cs6CIu98vr_U0I/view?usp=sharing" target="_blank"> (ABRIR Y DESCARGAR EL MODELO DE PLANILLA) </a>. La operatoria en SIEP incluye los siguiente pasos: </p>
+	  </div>
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item">1º PASO | "Alta de inscripción": Desde el menú ALUMNADO --> INSCRIPCIONES, click en el botón "+AGREGAR", completar los siguientes campos obligatorios como se indican a continuación:
+	    <ul>
+	    	<li>"Ciclo lectivo*": 2019</li>
+	    	<li>"Estado de la inscripción*": NO CONFIRMADA</li>
+	    	<li>"Nombre y apellidos del alumno*": (Indique el nombre del ingresante)</li>
+	    	<li>"Sección*": (indique una sección sin división ej: 1ro Otro)</li>
+	    	<li>"Tipo de inscripción*": Común</li>
+	    	<li>Click en el botón "GUARDAR" (SIEP le mostrará el detalle de la inscripción registrada)</li>
+	    </ul>	
+	  </ul>
+	</div>
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
 	    <h3 class="panel-title">SECUNDARIA | INSCRIPCIONES POR PASES (Nuevo procedimiento)</h3>
 	  </div>
 	  <div class="panel-body">
