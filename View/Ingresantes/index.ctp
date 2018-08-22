@@ -44,7 +44,6 @@
           <th>Centro</th>
           <th>Año</th>
           <th>Turno</th>
-          <th>Division</th>
             <?php if(!$ocultar) : ?>
                 <th>Plaza</th>
             <?php endif ?>
@@ -52,7 +51,6 @@
             <?php if(!$ocultar) : ?>
                 <th>VACANTES</th>
             <?php endif ?>
-          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -70,9 +68,6 @@
             <td>
               <?php echo $seccion['turno']; ?>
             </td>
-            <td>
-              <?php echo $seccion['division']; ?>
-            </td>
             <?php if(!$ocultar) : ?>
             <td>
               <?php echo $seccion['plazas']; ?>
@@ -86,9 +81,6 @@
               <?php echo $seccion['vacantes']; ?>
             </td>
             <?php endif ?>
-            <td >
-              <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
-            </td>
           </tr>
         <?php endforeach; ?>
         <?php endif; ?>
