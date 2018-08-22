@@ -33,14 +33,14 @@
     });
 </script>
 <div class="row">
-  <div class="col-xs-6 col-sm-3">
-      <?php 
+  <!--<div class="col-xs-6 col-sm-3">
+      <?php/* 
           echo $this->Form->input('created', array('label' => 'Creado*', 'readonly' => true ,'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar'));
-      ?>
-  </div>
+      */?>
+  </div>-->
   <div class="col-xs-6 col-sm-3">
         <?php
-          echo $this->Form->input('ciclo_id', array('label'=>'Ciclo lectivo*', 'readonly'=>true, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+          echo $this->Form->input('ciclo_id', array('label'=>'Ciclo lectivo*', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
         ?>
   </div>
   <div class="col-xs-6 col-sm-3">
@@ -51,7 +51,6 @@
       <?php echo $this->Form->input('usuario_id', array('type' => 'hidden')); ?>
   </div>
 </div><hr />
-
 <div class="row">
   <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />

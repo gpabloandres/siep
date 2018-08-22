@@ -13,7 +13,7 @@
 	  </div>
 	  <!-- List group -->
 	  <ul class="list-group">
-	    <li class="list-group-item">1º PASO | "Alta de inscripción": Completar los siguientes campos obligatorios como se indican a continuación:
+	    <li class="list-group-item">1º PASO | "Alta de inscripción": Desde el menú ALUMNADO --> INSCRIPCIONES, click en el botón "+AGREGAR", completar los siguientes campos obligatorios como se indican a continuación:
 	    <ul>
 	    	<li>"Ciclo lectivo*": 2019</li>
 	    	<li>"Estado de la inscripción*": NO CONFIRMADA</li>
@@ -75,6 +75,50 @@
 	</div>
 <?php endif; ?>	
 <?php if($userCentroNivel == 'Común - Secundario'): ?>
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">SECUNDARIA | INSCRIPCIONES ABIERTAS</h3>
+	  </div>
+	  <div class="panel-body">
+	    <p> Se desarrollarán los días 23 y 24 de Agosto <a href="https://drive.google.com/file/d/1Gf7qaDCpvdD8tRp_I4Cs6CIu98vr_U0I/view?usp=sharing" target="_blank"> (ABRIR Y DESCARGAR EL MODELO DE PLANILLA) </a>. La operatoria en SIEP incluye los siguiente pasos: </p>
+	  </div>
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item">1º PASO | "Alta de inscripción": Desde el menú ALUMNADO --> INSCRIPCIONES, click en el botón "+AGREGAR", completar los siguientes campos obligatorios como se indican a continuación:
+	    <ul>
+	    	<li>"Ciclo lectivo*": 2019</li>
+	    	<li>"Estado de la inscripción*": NO CONFIRMADA</li>
+	    	<li>"Nombre y apellidos del alumno*": (Indique el nombre del ingresante)</li>
+	    	<li>"Sección*": (indique una sección sin división ej: 1ro Otro)</li>
+	    	<li>"Tipo de inscripción*": Común</li>
+	    	<li>Click en el botón "GUARDAR" (SIEP le mostrará el detalle de la inscripción registrada)</li>
+	    </ul>	
+	  </ul>
+	</div>
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">SECUNDARIA | INSCRIPCIONES POR PASES (Nuevo procedimiento)</h3>
+	  </div>
+	  <div class="panel-body">
+	    <p> A continuación se detallan los pasos a seguir para registrar INSCRIPCIONES POR PASE (cambio de institución en el mismo ciclo dentro de TDF) de ALUMNOS CON PASES EVALUADOS Y APROBADOS por la Supervisión Técnica, entre una institución origen (IO) y una institución destino (ID): </p>
+	  </div>
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item">1º PASO | "Verificación de Baja en la IO": Desde el menú ALTA DE PERSONAS, indicar en "BÚSQUEDA" un alumno y luego click en el botón "BUSCAR". </li>
+	    <li class="list-group-item">2º PASO | "Alta de inscripción por pase": Completar los siguientes campos obligatorios como se indican a continuación:
+	    <ul>
+	    	<li>"Ciclo lectivo*": (indicar el corriente ciclo lectivo)</li>
+	    	<li>"Estado de la inscripción*": CONFIRMADA</li>
+	    	<li>"Nombre y apellidos del alumno*": (Indique el nombre del ingresante)</li>
+	    	<li>"Sección*": (indique una sección)</li>
+	    	<li>"Tipo de inscripción*": Pase</li>
+	    	<li>"Pase": (Indique IO)</li>
+	    	<li>Click en el botón "GUARDAR" (SIEP le mostrará el detalle de la inscripción registrada)</li>
+	    </ul>	
+	    </li>
+	    <li class="list-group-item">3º PASO | "Revisión de la inscripción recién registrada": verifique en "Datos de Alta" figure el nombre correcto de la IO.</li>
+	  </ul>
+	</div>
 	<div class="panel panel-danger">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">SECUNDARIO | IMPORTANTE</h3>
