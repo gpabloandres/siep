@@ -62,8 +62,9 @@
       ?>
       <?php
           if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) {
-              echo $this->Form->input('centro_id', array('default'=>$alumno['Alumno']['centro_id'],'label'=>'Institución*', 'empty' => 'Ingrese una institución...', 'class' => 's2_centro form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+              echo $this->Form->input('centro_id', array('default'=>$alumno['Alumno']['centro_id'],'label'=>'Institución*',/* 'empty' => 'Ingrese una institución...',*/ 'disabled'=>true, 'class' => 's2_centro form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
               echo '<br>';
+              echo $this->Form->input('centro_id', array('type' => 'hidden', 'default'=>$alumno['Alumno']['centro_id']));
           }
       ?>
       <?php
