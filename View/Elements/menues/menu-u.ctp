@@ -74,7 +74,7 @@
             <!--<li><?php echo $this->Html->link(__('Alumnos por Unidad Curricular'), '/inscripcions_materias');?></li>-->
             <li><?php echo $this->Html->link(__('Alumnos por Sección [cuantitativo]'), '/matriculas');?></li>
             <li><?php echo $this->Html->link(__('Ingresantes 2019'), '/ingresantes');?></li>
-            <!--<li><?php echo $this->Html->link(__('Inscriptos 2019'), '/vacantes');?></li>-->
+            <li><?php echo $this->Html->link(__('Inscriptos 2019'), '/vacantes');?></li>
             <!--<li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>-->
             <!--<li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>-->
             <!--<li><?php echo $this->Html->link(__('Gráficos'), '/graficos'); ?></li>-->
