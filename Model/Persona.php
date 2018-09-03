@@ -81,9 +81,9 @@ class Persona extends AppModel {
                 'required' => true,
                 'message' => 'Indicar un nº de documento.'
                 ),
-                'numeric' => array(
-                  'rule' => 'naturalNumber',
-                  'message' => 'Indicar número sin puntos ni comas ni espacios.'
+                'alphaBet' => array(
+                'rule' => '/^[ a-zA-Z 0-9]{9,}$/i',
+                'message' => 'Sólo letras y números, mínimo nueve caracteres, sin puntos, guiones ni espacios.'
                 ),
                 'isUnique' => array(
                   'rule' => 'isUnique',
@@ -209,7 +209,7 @@ class Persona extends AppModel {
             'calle_nombre' => array(
                 'alphaBet' => array(
                     'allowEmpty' => true,
-                'rule' => '/^[áÁéÉíÍóÓúÚa-zA-ZñÑ 0-9]{3,}$/i',
+                'rule' => '/^[áÁéÉíÍóÓúÚa-zA-ZñÑ]{3,}$/i',
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 )
             ),
@@ -231,14 +231,14 @@ class Persona extends AppModel {
                 'alphaBet' => array(
                     'allowEmpty' => true,
                 'rule' => '/^[áÁéÉíÍóÓúÚa-zA-ZñÑ 0-9]{1,}$/i',
-                'message' => 'Sólo letras, mínimo un caracter'
+                'message' => 'Sólo letras y números, mínimo un caracter'
                 )
             ),
             'tira_edificio' => array(
                 'alphaBet' => array(
                     'allowEmpty' => true,
                 'rule' => '/^[áÁéÉíÍóÓúÚa-zA-ZñÑ 0-9]{1,}$/i',
-                'message' => 'Sólo letras, mínimo un caracter'
+                'message' => 'Sólo letras y números, mínimo un caracter'
                 )
             ),
         );
