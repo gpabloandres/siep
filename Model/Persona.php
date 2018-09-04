@@ -82,8 +82,8 @@ class Persona extends AppModel {
                 'message' => 'Indicar un nº de documento.'
                 ),
                 'alphaBet' => array(
-                'rule' => '/^[ a-zA-Z 0-9]{9,}$/i',
-                'message' => 'Sólo letras y números, mínimo nueve caracteres, sin puntos, guiones ni espacios.'
+                'rule' => '/^[ a-zA-Z 0-9]{8,}$/i',
+                'message' => 'Sólo letras y números, mínimo ocho caracteres, sin puntos, guiones ni espacios.'
                 ),
                 'isUnique' => array(
                   'rule' => 'isUnique',
