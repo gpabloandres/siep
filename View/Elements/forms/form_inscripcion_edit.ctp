@@ -167,17 +167,17 @@
       <br>
         <div class="input-group">
           <span class="input-group-addon">
-            <?php echo $this->Form->input('fotocopia_dni', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Fotocopia DNI</label>'));?>
+            <?php echo $this->Form->input('fotocopia_dni', array('default'=>$tildeDocumentoString, 'between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Fotocopia DNI</label>'));?>
           </span>
         </div>
         <div class="input-group">
           <span class="input-group-addon">
-            <?php echo $this->Form->input('partida_nacimiento_alumno', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Alumno</label>'));?>
+            <?php echo $this->Form->input('partida_nacimiento_alumno', array('default'=>$tildePartidaString, 'between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Alumno</label>'));?>
           </span>
         </div>
         <div class="input-group">
           <span class="input-group-addon">
-            <?php echo $this->Form->input('certificado_vacunas', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Vacunación</label>'));?>
+            <?php echo $this->Form->input('certificado_vacunas', array('default'=>$tildeVacunasString, 'between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Vacunación</label>'));?>
           </span>
         </div>
         <!--
@@ -192,7 +192,7 @@
         ?>  
         <div class="input-group">
             <span class="input-group-addon">
-             <?php echo $this->Form->input('certificado_septimo', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Primario Completo</label>'));?>
+             <?php echo $this->Form->input('certificado_septimo', array('default'=>$tildeSeptimoString, 'between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Primario Completo</label>'));?>
             </span>
         </div>
         <!--
