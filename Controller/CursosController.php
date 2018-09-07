@@ -134,16 +134,22 @@ class CursosController extends AppController {
 			'fields'=>array('nombre_completo_persona'),
 			'contain'=>false));*/
 		/* FIN */
-		/* OBTIENE NÚMERO DE MATRICULADOS. (INICIO) */
+		/* OBTIENE LOS VALORES DE PLAZAS, MATRÍCULA Y VACANTES. (INICIO) */
 		$cursoId = $this->Curso->id;
-        // Obtiene el valor de plazas
-        $cursoPlazasArray = $this->Curso->findById($cursoId, 'plazas');
-		$cursoPlazasString = $cursoPlazasArray['Curso']['plazas'];
-        // Obtiene el valor de matrícula
-        $cursoMatriculaArray = $this->Curso->findById($cursoId, 'matricula');
-		$cursoMatriculaString = $cursoMatriculaArray['Curso']['matricula'];
-		$vacantes = $cursoPlazasString - $cursoMatriculaString;
-		/* FIN */
+		// Obtiene el valor la división.
+        $cursoDivisionArray = $this->Curso->findById($cursoId, 'division');
+		$cursoDivisionString = $cursoDivisionArray['Curso']['division'];
+		// Sí se trata de una división real, obtiene los valores de Plazas, Matrícula y Vacantes.
+		if ($cursoDivisionString) {
+			// Obtiene el valor de plazas
+	        $cursoPlazasArray = $this->Curso->findById($cursoId, 'plazas');
+			$cursoPlazasString = $cursoPlazasArray['Curso']['plazas'];
+	        // Obtiene el valor de matrícula
+	        $cursoMatriculaArray = $this->Curso->findById($cursoId, 'matricula');
+			$cursoMatriculaString = $cursoMatriculaArray['Curso']['matricula'];
+			$vacantes = $cursoPlazasString - $cursoMatriculaString;
+			/* FIN */
+		}
 		/* MUESTRA UNIDADES CURRICULARES RELACIONADAS DEPENDIENDO EL NIVEL (INICIO). 
 		* Sólo muestra materias para los niveles secundario y superior.
 		*/		
