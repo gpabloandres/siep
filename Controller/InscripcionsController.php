@@ -646,8 +646,13 @@ class InscripcionsController extends AppController {
         $tildeVacunasString = $tildeVacunas['Inscripcion']['certificado_vacunas'];
         $tildeSeptimo = $this->Inscripcion->findById($id, 'certificado_septimo');
         $tildeSeptimoString = $tildeSeptimo['Inscripcion']['certificado_septimo'];
+        //Genera variable para forzar lectura del ciclo de la inscripción.
+        $cicloInscripcionId = $this->Inscripcion->findById($id, 'ciclo_id');
+        $cicloInscripcionIdString = $cicloInscripcionId['Inscripcion']['ciclo_id'];
+        $cicloInscripcionNombre = $this->Ciclo->findById($cicloInscripcionIdString, 'nombre');
+        $cicloInscripcionNombreString = $cicloInscripcionNombre['Ciclo']['nombre'];
         // End submit de formulario
-        $this->set(compact('cursoInscripcion','alumno', 'personaId', 'estadoInscripcionAnteriorArray', 'tildeDocumentoString', 'tildePartidaString', 'tildeVacunasString', 'tildeSeptimoString'));
+        $this->set(compact('cursoInscripcion','alumno', 'personaId', 'estadoInscripcionAnteriorArray', 'tildeDocumentoString', 'tildePartidaString', 'tildeVacunasString', 'tildeSeptimoString', 'cicloInscripcionIdString', 'cicloInscripcionNombreString'));
     }
 
     public function delete($id = null) {
