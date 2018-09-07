@@ -39,8 +39,16 @@
       */?>
   </div>-->
   <div class="col-xs-6 col-sm-3">
-        <?php
-          echo $this->Form->input('ciclo_id', array('label'=>'Ciclo lectivo*', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+        <?php if($cicloInscripcionIdString == '3') { ?>
+                <div>
+                  <p><strong>Ciclo lectivo*</strong></p>
+                  <input class="form-control" label="Ciclo lectivo*" disabled="disabled" data-toggle="tooltip" data-placemente="bottom" value="<?php echo $cicloInscripcionNombreString; ?>">
+                </div><br>
+        <?php echo $this->Form->input('ciclo_id', array('type' => 'hidden', 'default'=>$cicloInscripcionIdString));
+              } else { 
+                  echo $this->Form->input('ciclo_id', array('default'=>$cicloInscripcionIdString, 'label'=>'Ciclo lectivo*', 'disabled'=>true, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                  echo $this->Form->input('ciclo_id', array('type' => 'hidden', 'default'=>$cicloInscripcionIdString));
+              }  
         ?>
   </div>
   <div class="col-xs-6 col-sm-3">
@@ -55,6 +63,7 @@
   <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
       <div>
+            <p><strong>Nombre y apellidos del alumno*</strong></p>
             <input class="form-control" disabled="disabled" label= "Nombre y apellidos del alumno*" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo" value="<?php echo $alumno['Persona']['nombre_completo_persona'];?>">
       </div><br>
       <?php
