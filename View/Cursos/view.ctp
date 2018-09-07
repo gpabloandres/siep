@@ -18,12 +18,14 @@
 							<?php echo ($curso['Curso']['tipo']); ?></p>	
 						<b><?php echo __('Aula: '); ?></b>
 							<?php echo ($curso['Curso']['aula_nro']); ?></p>
+			            <?php if($curso['Curso']['division']): ?>
 			            <b><?php echo __('Plazas: '); ?></b> 
 			            	<span class="badge"><?php echo ($cursoPlazasString); ?></span></button></b>
 						<b><?php echo __(' | Matriculados: '); ?></b>
 							<span class="badge"><?php echo ($cursoMatriculaString); ?></span></button></b><br/><br/>
 						<button class="btn btn-primary" type="button">Vacantes: 
 							<span class="badge"><?php echo ($vacantes); ?></span></button>
+						<?php endif; ?>	
                     </div>
                     <!--<div class="col-md-4 col-sm-6 col-xs-8">	
 			            <b><?php echo __('Organización de cursada: '); ?></b>
