@@ -73,7 +73,7 @@
                                     <li><span class="label label-danger"><?php echo 'Falta Partida Alumno'; ?></span></li><?php endif; ?>
                                     <?php if(!$inscripcion['certificado_vacunas'] == 1): ?>
                                     <li><span class="label label-danger"><?php echo 'Certificado vacunación'; ?></span></li><?php endif; ?>
-                                    <?php if(($current_user['puesto'] == 'Dirección Colegio Secundario' || $current_user['puesto'] == 'Supervisión Secundaria') && (!$inscripcion['certificado_septimo'] == 1)): ?>
+                                    <?php if(($current_user['role'] == 'superadmin' || $current_user['puesto'] == 'Dirección Colegio Secundario' || $current_user['puesto'] == 'Supervisión Secundaria') && ($inscripcion['certificado_septimo'] == 0)): ?>
                                     <li><span class="label label-danger"><?php echo 'Falta Certificado Primaria'; ?></span></li><?php endif; ?>
                                   </ul>
                             </div>
