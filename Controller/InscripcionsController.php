@@ -496,9 +496,10 @@ class InscripcionsController extends AppController {
                 $this->redirect( array( 'action' => 'index' ));
 		    }
             /* INICIO:  Definición del estado de la documentación según el nivel del centro.*/
-            $userCentroId = $this->getUserCentroId();
-            $userCentroNivel = $this->getUserCentroNivel($userCentroId);
-            switch($userCentroNivel) {
+            $CentroId = $this->Inscripcion->findById($id, 'centro_id');
+            $CentroIdString = $CentroId['Inscripcion']['centro_id'];
+            $CentroNivel = $this->getUserCentroNivel($CentroIdString);
+            switch($CentroNivel) {
                 case 'Común - Inicial':
                 case 'Común - Primario':
                     if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1)) {
@@ -515,7 +516,7 @@ class InscripcionsController extends AppController {
                     }                        
                     break;
                 default:
-                    $estadoDocumentacion = "PENDIENTE";
+                    //$estadoDocumentacion = "PENDIENTE";
             }
             //Se genera el estado y se deja en los datos que se intentaran guardar
             $this->request->data['Inscripcion']['estado_documentacion'] = $estadoDocumentacion;
@@ -636,8 +637,17 @@ class InscripcionsController extends AppController {
 				$this->Session->setFlash('La inscripcion no fue grabada. Intente nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
+        //Genera variables para forzar tildes en la vista.
+        $tildeDocumento = $this->Inscripcion->findById($id, 'fotocopia_dni');
+        $tildeDocumentoString = $tildeDocumento['Inscripcion']['fotocopia_dni'];
+        $tildePartida = $this->Inscripcion->findById($id, 'partida_nacimiento_alumno');
+        $tildePartidaString = $tildePartida['Inscripcion']['partida_nacimiento_alumno'];
+        $tildeVacunas = $this->Inscripcion->findById($id, 'certificado_vacunas');
+        $tildeVacunasString = $tildeVacunas['Inscripcion']['certificado_vacunas'];
+        $tildeSeptimo = $this->Inscripcion->findById($id, 'certificado_septimo');
+        $tildeSeptimoString = $tildeSeptimo['Inscripcion']['certificado_septimo'];
         // End submit de formulario
-        $this->set(compact('cursoInscripcion','alumno', 'personaId', 'estadoInscripcionAnteriorArray'));
+        $this->set(compact('cursoInscripcion','alumno', 'personaId', 'estadoInscripcionAnteriorArray', 'tildeDocumentoString', 'tildePartidaString', 'tildeVacunasString', 'tildeSeptimoString'));
     }
 
     public function delete($id = null) {
@@ -742,6 +752,5 @@ class InscripcionsController extends AppController {
             return ['error'=>$ex->getMessage()];
         }
     }
-
 }
 ?>
