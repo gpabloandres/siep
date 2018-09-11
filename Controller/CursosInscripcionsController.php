@@ -106,7 +106,7 @@ class CursosInscripcionsController extends AppController {
 			case 'admin':
 				$this->paginate['CursosInscripcion']['conditions'] = array(
 					'Inscripcion.centro_id' => $userCentroId,
-					'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA')
+					'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA', 'BAJA', 'EGRESO')
 				);
 				$queryExportacionExcel['centro_id'] = $userCentroId;
 				$showExportBtn++;
@@ -124,7 +124,7 @@ class CursosInscripcionsController extends AppController {
 
 					$this->paginate['CursosInscripcion']['conditions'] = array(
 						'Inscripcion.centro_id' => $nivelCentroId,
-						'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA')
+						'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA', 'BAJA', 'EGRESO')
 					);
 				} else
 				{
@@ -134,7 +134,7 @@ class CursosInscripcionsController extends AppController {
 					);
 					$this->paginate['CursosInscripcion']['conditions'] = array(
 						'Inscripcion.centro_id' => $nivelCentroId,
-						'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA')
+						'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA', 'BAJA', 'EGRESO')
 					);
 				}
 				break;
