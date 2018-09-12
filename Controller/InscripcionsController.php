@@ -651,8 +651,14 @@ class InscripcionsController extends AppController {
         $cicloInscripcionIdString = $cicloInscripcionId['Inscripcion']['ciclo_id'];
         $cicloInscripcionNombre = $this->Ciclo->findById($cicloInscripcionIdString, 'nombre');
         $cicloInscripcionNombreString = $cicloInscripcionNombre['Ciclo']['nombre'];
+        /*Verifica sí se trata de una inscripción con denominación SIN VACANTE.*/
+        //Obtiene el string de la inscripción.
+        $inscripcionLegajoNroArray = $this->Inscripcion->findById($id, 'legajo_nro');
+        $inscripcionLegajoNroString = $inscripcionLegajoNroArray['Inscripcion']['legajo_nro'];
+        //Obtiene la denominación 'SINVACANTE'
+        $sinVacante = substr($inscripcionLegajoNroString, -12, 10);
         // End submit de formulario
-        $this->set(compact('cursoInscripcion','alumno', 'personaId', 'estadoInscripcionAnteriorArray', 'tildeDocumentoString', 'tildePartidaString', 'tildeVacunasString', 'tildeSeptimoString', 'cicloInscripcionIdString', 'cicloInscripcionNombreString'));
+        $this->set(compact('cursoInscripcion','alumno', 'personaId', 'estadoInscripcionAnteriorArray', 'tildeDocumentoString', 'tildePartidaString', 'tildeVacunasString', 'tildeSeptimoString', 'cicloInscripcionIdString', 'cicloInscripcionNombreString', 'sinVacante'));
     }
 
     public function delete($id = null) {
