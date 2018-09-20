@@ -45,7 +45,7 @@ class EgresoController extends AppController {
 		$this->loadModel('Ciclo');
 
 		$hoyArray = getdate();
-		$hoyAñoString = $hoyArray['year'] - 1; // Al restar un año... se relizan las promociones en Marzo, con los alumnos del año anterior.
+		$hoyAñoString = $hoyArray['year']; // Al restar un año "-1" ... se relizan las promociones en Marzo, con los alumnos del año anterior.
 		$cicloaPromocionar = $this->Ciclo->find('first', array(
 			'recursive' => -1,
 			'conditions' => array('nombre' => $hoyAñoString)
