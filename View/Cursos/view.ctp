@@ -24,7 +24,7 @@
 						<strong>CICLO 2018</strong><br/>
 						<b><?php echo __('| Matriculados: '); ?></b>
 							<span class="badge"><?php echo ($cursoMatriculaString); ?></span></button></b><br/>
-						<b><?php echo __('| Matriculados: '); ?></b>
+						<b><?php echo __('| Vacantes: '); ?></b>
 							<span class="badge"><?php echo ($vacantes); ?></span></button></b>	
 						<!--<button class="btn btn-primary" type="button">Vacantes: 
 							<span class="badge"><?php echo ($vacantes); ?></span></button>-->
