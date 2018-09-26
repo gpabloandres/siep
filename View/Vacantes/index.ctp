@@ -1,32 +1,60 @@
+<?php
+    // Si el usuario no es Admin, muestro el filtro.
+    if(!$this->Siep->isAdmin()) :
+?>
 <div class="TituloSec">Filtro</div>
 <div id="ContenidoSec">
     <?php echo $this->Form->create('Curso',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
     <div class="row">
-         <div class="col-xs-2">
+          <div class="col-xs-4">
+              <!-- Autocomplete --> 
+              <strong>Nombre de la Institución</strong>
+              <input id="AutocompleteForm" class="form-control" placeholder="Indique el nombre de la institución" type="text">
+            <script>
+              $( function() {
+                $( "#AutocompleteForm" ).autocomplete({
+                  source: "<?php echo $this->Html->url(array('controller'=>'Centros','action'=>'autocompleteCentro'));?>",
+                  minLength: 2,
+                  select: function( event, ui ) {
+                    $("#AutocompleteForm").val( ui.item.Centro.sigla );
+
+                    window.location.href = "<?php echo $this->Html->url(array('controller'=>'vacantes'));?>/index?centro_id="+ui.item.Centro.id;
+                    return false;
+                  }
+                }).autocomplete( "instance" )._renderItem = function( ul, item ) {
+                  return $( "<li>" )
+                      .append( "<div>" +item.Centro.sigla + "</div>" )
+                      .appendTo( ul );
+                };
+              });
+            </script>
+            <!-- End Autocomplete -->
+            </div>
+        <!--<div class="col-xs-2">
             <div class="input select">
                 <?php
                 echo $this->Form->input('sector', array('options'=>$comboSector, 'empty'=>'- Todos los sectores -', 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
                 ?>
             </div>
-        </div>
-        <div class="col-xs-2">
+        </div>-->
+        <!--<div class="col-xs-2">
             <div class="input select">
                 <?php
                 echo $this->Form->input('ciudad_id', array('options'=>$comboCiudad, 'empty'=>'- Todas las ciudades -', 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
                 ?>
             </div>
-        </div>
-
-        <div class="col-xs-2">
+        </div>-->
+        <!--<div class="col-xs-2">
             <div class="text-center">
                 <span class="link">
                     <?php echo $this->Form->button('<span class="glyphicon glyphicon-search"></span> Aplicar filtro', array('class' => 'btn btn-primary')); ?>
                 </span>
             </div>
-        </div>
+        </div>-->
     </div>
     <?php echo $this->Form->end(); ?>
 </div>
+<?php endif; ?>
 <?php
      $ocultar = false;
      if( $current_user['Centro']['nivel_servicio'] === 'Común - Inicial - Primario' ||
@@ -35,7 +63,7 @@
          $ocultar = true;
      }
 ?>
-<div class="TituloSec">Inscriptos 2019</div>
+<div class="TituloSec">Inscripciones 2019</div>
 <div id="ContenidoSec">
     <div class="table-responsive">
       <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
@@ -45,14 +73,15 @@
           <th>Año</th>
           <th>Turno</th>
           <th>Division</th>
-            <?php if(!$ocultar) : ?>
-                <th>Plaza</th>
-            <?php endif ?>
+          <th>Tipo</th>
+          <?php if(!$ocultar) : ?>
+              <th>Plaza</th>
+          <?php endif ?>
           <th>Matricula</th>
-            <?php if(!$ocultar) : ?>
-                <th>VACANTES</th>
-            <?php endif ?>
-          <th>Acciones</th>
+          <?php if(!$ocultar) : ?>
+              <th>VACANTES</th>
+          <?php endif ?>
+          <!--<th>Acciones</th>-->
         </tr>
       </thead>
       <tbody>
@@ -75,6 +104,9 @@
             </td>
             <?php if(!$ocultar) : ?>
             <td>
+              <?php echo $seccion['tipo']; ?>
+            </td>
+            <td>
               <?php echo $seccion['plazas']; ?>
             </td>
             <?php endif ?>
@@ -86,17 +118,17 @@
               <?php echo $seccion['vacantes']; ?>
             </td>
             <?php endif ?>
-            <td >
+            <!--<td >
               <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
-            </td>
+            </td>-->
           </tr>
         <?php endforeach; ?>
         <?php endif; ?>
       </tbody>
-      <tfoot>
+      <!--<tfoot>
         <tr>
           <th>
-            <!-- Autocomplete -->
+            <!-- Autocomplete 
               <input id="AutocompleteForm" class="form-control" placeholder="Buscar institucion por nombre" type="text">
 
             <script>
@@ -117,7 +149,7 @@
                 };
               });
             </script>
-            <!-- End Autocomplete -->
+            <!-- End Autocomplete 
           </th>
           <th>
               <?php echo $this->Form->create('Vacantes',array('id'=>'formFiltroAnio','type'=>'get','url'=>'index', 'novalidate' => true));?>
@@ -144,7 +176,7 @@
 
           </th>
         </tr>
-      </tfoot>
+      </tfoot>-->
     </table>
 
       <script>
