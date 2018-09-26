@@ -12,6 +12,7 @@
         <table class="table table-bordered table-hover table-striped table-condensed">
         <thead>
             <tr>
+                <th></th>
                 <th><?php echo $this->Paginator->sort('ciclo_id', 'Ciclo');?></th>
                 <th><?php echo $this->Paginator->sort('centro_id', 'Centro');?></th>
                 <th><?php echo $this->Paginator->sort('curso_id', 'Curso');?></th>
