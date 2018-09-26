@@ -73,14 +73,14 @@
           <th>Año</th>
           <th>Turno</th>
           <th>Division</th>
-            <?php if(!$ocultar) : ?>
-                <th>Plaza</th>
-            <?php endif ?>
           <th>Tipo</th>
+          <?php if(!$ocultar) : ?>
+              <th>Plaza</th>
+          <?php endif ?>
           <th>Matricula</th>
-            <?php if(!$ocultar) : ?>
-                <th>VACANTES</th>
-            <?php endif ?>
+          <?php if(!$ocultar) : ?>
+              <th>VACANTES</th>
+          <?php endif ?>
           <!--<th>Acciones</th>-->
         </tr>
       </thead>
