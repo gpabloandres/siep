@@ -13,7 +13,7 @@
                 ?>
             </div>
         </div>-->
-            <div class="col-xs-6">
+            <div class="col-xs-4">
                 <!-- Autocomplete -->
                 <strong>Nombre de la Institución</strong>
                 <input id="AutocompleteForm" class="form-control" placeholder="Indicar el nombre de la institución" type="text">

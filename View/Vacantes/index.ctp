@@ -6,7 +6,7 @@
 <div id="ContenidoSec">
     <?php echo $this->Form->create('Curso',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
     <div class="row">
-          <div class="col-xs-6">
+          <div class="col-xs-4">
               <!-- Autocomplete --> 
               <strong>Nombre de la Institución</strong>
               <input id="AutocompleteForm" class="form-control" placeholder="Indique el nombre de la institución" type="text">
