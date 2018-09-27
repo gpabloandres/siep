@@ -78,14 +78,18 @@
     <?php echo $this->Form->input('observaciones', array('label'=>'Observaciones', 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control')); ?>
 </div>
 
-
 <script type="text/javascript">
 	$(function() {
 		moment.locale('es');
 
 		$('#fecha_nacimiento').daterangepicker({
 			singleDatePicker: true,
-			showDropdowns: true
+			showDropdowns: true,
+			minYear: 1901,
+			maxYear: parseInt(moment().format('YYYY'),10)
+		}, function(start, end, label) {
+   			var years = moment().diff(start, 'years');
+			alert("Tiene " + years + " años!"); 
 		});
 	});
 </script>
