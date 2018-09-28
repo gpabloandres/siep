@@ -208,22 +208,22 @@ class Persona extends AppModel {
             ),
             'calle_nombre' => array(
                 'alphaBet' => array(
-                    'allowEmpty' => true,
+                'allowEmpty' => true,
                 'rule' => '/^[ áÁéÉíÍóÓúÚ a-zA-ZñÑ]{3,}$/i',
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 )
             ),
             'calle_nro' => array(
                 'numeric' => array(
-                    'allowEmpty' => true,
+                'allowEmpty' => true,
                 'rule' => 'naturalNumber',
                 'message' => 'Indicar un número de calle (sólo números, sin puntos, ni comas, ni guiones, ni espacios).'
                 )
             ),
             'ciudad_id' => array(
                 'numeric' => array(
+                    'allowEmpty' => true,
                     'rule' => 'naturalNumber',
-                    'required' => true,
                     'message' => 'Indicar ciudad.'
                 )
             ),
