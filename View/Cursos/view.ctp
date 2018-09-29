@@ -101,8 +101,7 @@
 							}
 						} else {
 							if(
-								($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] == 'Sala de 5 años') ||
-								($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] == '7mo')
+								($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] == 'Sala de 5 años') || ($curso['Curso']['tipo'] == 'Múltiple' && $curso['Curso']['anio'] == 'Sala de 4 años') || ($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] == '7mo')
 							) {
 								$showEgreso = true;
 							}
