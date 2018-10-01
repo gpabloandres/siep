@@ -70,8 +70,8 @@
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
             <li><?php echo $this->Html->link(__('Alumnos por Sección [nominal]'), '/cursos_inscripcions');?></li>
-            <li><?php echo $this->Html->link(__('Alumnos por Sección [cuantitativo]'), '/matriculas');?></li>
-            <li><?php echo $this->Html->link(__('Ingresantes 2019'), '/ingresantes');?></li>
+            <li><?php echo $this->Html->link(__('Inscripciones 2018 [cuantitativo]'), '/matriculas');?></li>
+            <li><?php echo $this->Html->link(__('Ingresantes 2019 [cuantitativo]'), '/ingresantes');?></li>
             <!--<li><?php echo $this->Html->link(__('Inscriptos 2019'), '/vacantes');?></li>-->
             <!--<li><?php echo $this->Html->link(__('Gráficos Estadísticos'), '/graficos'); ?></li>-->
             <!--<li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>-->

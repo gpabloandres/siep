@@ -27,8 +27,13 @@
     	<?php 
             if($this->Html->loggedIn()) { 
                 $userRole = $current_user['role'];
+                $userPuesto = $current_user['puesto'];
                 if ($userRole == 'superadmin') {
-                    echo $this->element('menues/menu-sa');
+                    if ($userPuesto == 'Sistemas') {
+                        echo $this->element('menues/menu-sa');
+                    } else {
+                        echo $this->element('menues/menu-u');
+                    }                    
                 } elseif ($userRole == 'admin') {
                     $userPuesto = $current_user['puesto'];
                     switch ($userPuesto) {

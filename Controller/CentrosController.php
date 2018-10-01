@@ -10,13 +10,25 @@ class CentrosController extends AppController {
 
  	public function beforeFilter() {
         parent::beforeFilter();
-        //Si el usuario tiene un rol de superadmin le damos acceso a todo.
-        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
-        if($this->Auth->user('role') === 'superadmin') {
-	        $this->Auth->allow();
-	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) {
-	        $this->Auth->allow('index', 'view', 'autocompleteCentro', 'autocompleteSeccionDependiente');
-	    }
+        /* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
+        *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        */
+        switch($this->Auth->user('role'))
+		{
+			case 'superadmin':
+				if ($this->Auth->user('puesto') === 'Sistemas') {
+					$this->Auth->allow();				
+				} else {
+					// Sí se es un ATEI
+					$this->Auth->allow('index', 'view', 'autocompleteCentro', 'autocompleteSeccionDependiente');	
+				}
+				break;
+			case 'admin':
+			case 'usuario':
+				$this->Auth->allow('index', 'view', 'autocompleteCentro', 'autocompleteSeccionDependiente');
+				break;
+		}
+		/* FIN */
     }
 
  	function index() {
