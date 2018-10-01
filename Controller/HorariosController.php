@@ -6,13 +6,25 @@ class HorariosController extends AppController {
 
     function beforeFilter(){
 	    parent::beforeFilter();
-		//Si el usuario tiene un rol de superadmin le damos acceso a todo.
-        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
-        if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
-	        $this->Auth->allow();
-	    } elseif ($this->Auth->user('role') === 'usuario') { 
-	        $this->Auth->allow('index', 'view');
-	    }
+		/* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
+        *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        */
+        switch($this->Auth->user('role'))
+		{
+			case 'superadmin':
+				if ($this->Auth->user('puesto') === 'Sistemas') {
+					$this->Auth->allow();				
+				} else {
+					//En caso de ser ATEI
+					$this->Auth->allow('index', 'view');	
+				}
+				break;
+			case 'usuario':
+			case 'admin':
+				$this->Auth->allow('index', 'view');
+				break;
+		}
+		/* FIN */
     }
 	
 	function view($id = null) {

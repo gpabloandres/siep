@@ -24,7 +24,7 @@
        <div class="text-right">
            <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'personas', 'action' => 'view', $persona['Persona']['id']), array('class' => 'btn btn-success', 'escape' => false)); ?></span>
             <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-edit"></i>', array('controller' => 'personas', 'action' => 'edit', $persona['Persona']['id']), array('class' => 'btn btn-warning', 'escape' => false)); ?></span>
-          <?php if($current_user['role'] == 'superadmin'): ?>
+          <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
             <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-trash"></i>', array('controller' => 'personas', 'action' => 'delete', $persona['Persona']['id']), array('class' => 'btn btn-danger', 'escape' => false)); ?></span>
           <?php endif; ?>
 	   </div>
