@@ -209,8 +209,8 @@ class Persona extends AppModel {
             'calle_nombre' => array(
                 'alphaBet' => array(
                 'allowEmpty' => true,
-                'rule' => '/^[ áÁéÉíÍóÓúÚ a-zA-ZñÑ]{3,}$/i',
-                'message' => 'Sólo letras, mínimo tres caracteres'
+                'rule' => '/^[ áÁéÉíÍóÓúÚ a-zA-ZñÑ 0-9]{3,}$/i',
+                'message' => 'Sólo letras y números, sin puntos, ni comas, ni guiones, ni espacios.'
                 )
             ),
             'calle_nro' => array(
