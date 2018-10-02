@@ -52,7 +52,9 @@ class UsersController extends AppController {
         $nombreCentroArray = $this->Centro->findById($userCentroId, 'nombre');
         $nombreCentro = $nombreCentroArray['Centro']['nombre'];
 		$userCentroNivel = $this->getUserCentroNivel($userCentroId);
-		$this->set(compact('users', 'nombreCentro', 'userCentroNivel'));
+		//Obtención del puesto del usuario.
+		$userPuesto = $this->Auth->user('puesto');
+		$this->set(compact('users', 'nombreCentro', 'userCentroNivel', 'userPuesto'));
     	$this->render('/Users/usuario');
     }
 	
