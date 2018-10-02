@@ -9,7 +9,7 @@
       <?php //if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
         <!--<span class="link"><?php //echo $this->Html->link('<i class= "glyphicon glyphicon-edit"></i>', array('controller' => 'alumnos', 'action' => 'edit', $alumno['Alumno']['id']), array('class' => 'btn btn-warning','escape' => false)); ?></span>-->
       <?php //endif; ?>
-      <?php if($current_user['role'] == 'superadmin'): ?>
+      <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
         <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-edit"></i>', array('controller' => 'alumnos', 'action' => 'edit', $alumno['Alumno']['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
         </span>
         <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-trash"></i>', array('controller' => 'alumnos', 'action' => 'delete', $alumno['Alumno']['id']), array('confirm' => 'Está seguro de borrar a '.$alumno['Alumno']['id'], 'class' => 'btn btn-danger','escape' => false)); ?>

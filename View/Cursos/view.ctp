@@ -123,7 +123,7 @@
 					</div>
 
 
-				<?php if($current_user['role'] == 'superadmin'): ?>
+				<?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
 				<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $curso['Curso']['id'])); ?></div>
 				<div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $curso['Curso']['id']), null, sprintf(__('Esta seguro de borrar el curso %s?'), $curso['Curso']['division'])); ?></div>
 			  <?php endif; ?>	

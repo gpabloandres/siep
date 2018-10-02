@@ -11,12 +11,15 @@ class ReubicacionController extends AppController {
 		switch($this->Auth->user('role'))
 		{
 			case 'superadmin':
-				$this->Auth->allow();
-				break;
-			case 'admin':
-				$this->Auth->allow('index','confirmarAlumnos');
-				break;
+				if ($this->Auth->user('puesto') === 'Sistemas') {
+                    $this->Auth->allow();               
+                } else {
+                    //En caso de ser ATEI
+                    $this->Auth->allow('index','confirmarAlumnos');    
+                }
+                break;
 			case 'usuario':
+			case 'admin':
 				$this->Auth->allow('index','confirmarAlumnos');
 				break;
 		}

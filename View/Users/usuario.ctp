@@ -3,7 +3,7 @@
 <!-- start main -->
 <div class="TituloSec"><?php echo $nombreCentro ?></div>
 <div id="ContenidoSec">
-<?php if(($userCentroNivel == 'Común - Inicial') || ($userCentroNivel == 'Común - Primario') || ($userCentroNivel == 'Común - Inicial - Primario')): ?>
+<?php if(($userCentroNivel == 'Común - Inicial') || ($userCentroNivel == 'Común - Primario') || ($userCentroNivel == 'Común - Inicial - Primario') || ($userPuesto === 'Atei')): ?>
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">INICIAL Y PRIMARIA | INSCRIPCIONES ABIERTAS</h3>
@@ -74,7 +74,7 @@
 	  </ul>
 	</div>
 <?php endif; ?>	
-<?php if($userCentroNivel == 'Común - Secundario'): ?>
+<?php if($userCentroNivel == 'Común - Secundario' || ($userPuesto === 'Atei')): ?>
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">SECUNDARIA | INSCRIPCIONES ABIERTAS</h3>
