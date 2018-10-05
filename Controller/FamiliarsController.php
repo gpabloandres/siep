@@ -178,10 +178,18 @@ class FamiliarsController extends AppController {
 		  	}
 		  	//Obtengo personaId
             $personaId = $this->request->data['Persona']['persona_id'];
+            /*
             //Si no se definió la persona, vuelve al formulario anterior.
             if (empty($personaId)) {
                 $this->Session->setFlash('No se definio el familiar.', 'default', array('class' => 'alert alert-danger'));
                 $this->redirect($this->referer());
+            }
+            */
+            //Si no se redefinió la persona, obtiene el registrado en base de datos.
+            if (empty($personaId)) {
+            	$personaIdArray = $this->Familiar->findById($id, 'persona_id');    
+            	$personaId = $personaIdArray['Familiar']['persona_id'];
+            	$flag = 1;
             }
             // Propone guardar el id de persona en el campo persona_id. 
             $this->request->data['Familiar']['persona_id'] = $personaId;
@@ -189,7 +197,7 @@ class FamiliarsController extends AppController {
             //Obtención del/los id Familiar de la Persona.
             $verificaFamiliarIdPersonaArray = $this->Familiar->findByPersonaId($personaId, 'id');
             //Si la Persona está asociada a id de familiar.
-            if ($verificaFamiliarIdPersonaArray) {
+            if ($verificaFamiliarIdPersonaArray && $flag != 1) {
             	$verificaFamiliarIdPersona = $verificaFamiliarIdPersonaArray['Familiar']['id'];
             	//Obtención del id del alumno.
             	$AlumnoIdObtenidoArray = $this->Familiar->AlumnosFamiliar->findByFamiliarId($verificaFamiliarIdPersona, 'alumno_id');
