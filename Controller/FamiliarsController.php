@@ -114,12 +114,6 @@ class FamiliarsController extends AppController {
                 $this->Session->setFlash('No se definio el familiar.', 'default', array('class' => 'alert alert-danger'));
                 $this->redirect($this->referer());
             }
-            //Verifica que el alumno ya no registre el familiar a vincular.
-            $verficaPersonaId = $this->Familiar->AlumnosFamiliar->findByFamiliarId($);
-            if (count($verficaPersonaId) != 0) {
-                        $this->Session->setFlash('El alumno ya está vinculado al familiar señalado.', 'default', array('class' => 'alert alert-danger'));
-                        $this->redirect($this->referer());
-            }
             // Propone guardar el id de persona en el campo persona_id. 
             $this->request->data['Familiar']['persona_id'] = $personaId;
             /* FIN */
@@ -138,6 +132,25 @@ class FamiliarsController extends AppController {
             $alumnoIdArray = $this->Alumno->findByPersonaId($alumnoPersonaId, 'id');
 			$alumnoId = $alumnoIdArray['Alumno']['id'];
 			$this->request->data['Alumno']['alumno_id'] = $alumnoId;            
+            
+
+			/* Verifica que el familiar ya esté vinculado al alumno. (INICIO) */
+            //Obtención del/los id Familiar de la Persona.
+            $verificaFamiliarIdPersonaArray = $this->Familiar->findByPersonaId($personaId, 'id');
+            //Si la Persona está asociada a id de familiar.
+            if ($verificaFamiliarIdPersonaArray) {
+            	$verificaFamiliarIdPersona = $verificaFamiliarIdPersonaArray['Familiar']['id'];
+            	//Obtención del id del alumno.
+            	$AlumnoIdObtenidoArray = $this->Familiar->AlumnosFamiliar->findByFamiliarId($verificaFamiliarIdPersona, 'alumno_id');
+            	$AlumnoIdObtenido = $AlumnoIdObtenidoArray['AlumnosFamiliar']['alumno_id'];
+            	if ($AlumnoIdObtenido == $alumnoId) {
+            		$this->Session->setFlash('El alumno ya está vinculado al familiar señalado.', 'default', array('class' => 'alert alert-danger'));
+                        $this->redirect($this->referer());
+            	}
+            }
+            /* FIN */
+
+
             if ($this->Familiar->save($this->data)) {
 				$this->Session->setFlash('El familiar ha sido grabado', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Familiar->id;
