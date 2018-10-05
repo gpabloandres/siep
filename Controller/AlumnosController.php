@@ -65,7 +65,7 @@ class AlumnosController extends AppController {
 	}
 
 	public function view($id = null) {
-		//$this->Alumno->recursive = 0;
+		$this->Alumno->recursive = 1;
 		if (!$id) {
 			$this->Session->setFlash('Alumno no valido', 'default', array('class' => 'alert alert-danger'));
 			$this->redirect(array('action' => 'index'));
@@ -88,16 +88,10 @@ class AlumnosController extends AppController {
         $personaEdadNumeroArray = $this->Persona->findById($personaId, 'edad');
         $alumnoEdad = $personaEdadNumeroArray['Persona']['edad'];
     	// Datos relacionados.
-    	//Obtención del nombre de para los familiares relacionados.
-        //$familiarNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
-        $alumnoId = $this->Alumno->primaryKey = $id;
-        $familiarVinculo = $this->Persona->Familiar->find('list', array('fields' => array('vinculo'), 'conditions' => array('id' => $alumnoId)));
-        /*
-        $familiarCuilCuit = $this->Persona->find('list', array('fields' => array('cuil_cuit')));
-        $familiarTelefono = $this->Persona->find('list', array('fields' => array('telefono_nro')));
-        $familiarEmail = $this->Persona->find('list', array('fields' => array('email')));
-		*/
-    	//Obtención del nombre del centro para las inscripciones relacionadas.
+    	//Obtención de datos de los familiares.
+        $familiarNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'contain'=>false));
+        $familiarTelefono = $this->Persona->find('list', array('fields' => array('telefono_nro'), 'contain'=>false));
+        //Obtención del nombre del centro para las inscripciones relacionadas.
     	$this->loadModel('Centro');
         $this->Centro->recursive = 0;
         $this->Centro->Behaviors->load('Containable');
@@ -111,7 +105,7 @@ class AlumnosController extends AppController {
         $this->Ciclo->recursive = 0;
         $this->Ciclo->Behaviors->load('Containable');
         $cicloNombre = $this->Ciclo->find('list', array('fields' => array('nombre'), 'contain'=>false));
-		$this->set(compact('alumnoNombre', 'alumnoDocumentoTipo', 'alumnoDocumentoNumero', 'alumnoEdad', 'centroNombre', 'cicloNombre', 'personaId', 'personaNombre', 'foto', 'materiaAlia', 'barrioNombre', 'familiarNombre', 'familiarVinculo', 'nivelCentro'));
+		$this->set(compact('alumnoNombre', 'alumnoDocumentoTipo', 'alumnoDocumentoNumero', 'alumnoEdad', 'centroNombre', 'cicloNombre', 'personaId', 'personaNombre', 'foto', 'materiaAlia', 'barrioNombre', 'familiarNombre', 'familiarVinculo', 'familiarTelefono', 'nivelCentro'));
     }
 
 	public function add() {
