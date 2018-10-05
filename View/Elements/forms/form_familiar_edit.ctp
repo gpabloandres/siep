@@ -1,24 +1,18 @@
 <?php echo $this->Html->css(array('/js/select2/select2.min')); ?>
 <?php echo $this->Html->script(array('tooltip', 'datepicker', 'moment', 'bootstrap-datetimepicker','select2/select2.min')); ?>
-
 <script>
     $(function(){
         $('.s2_alumno').select2();
     });
 </script>
-
 <div class="row">
 </div><hr />
 <div class="row">
    	<div class="col-md-6 col-sm-6 col-xs-12">
 		<div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
-			<?php /*    
-	            echo $this->Form->input('persona_id', array('label'=>'Tutor*', 'empty' => 'Ingrese una persona como Tutor...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-	        */ ?>
-		    <!-- Autocomplete para nombre de Personas -->
-            <div>
-                <strong><h5>Nombres y Apellidos del Padre/Tutor*</h5></strong>
-                <input id="PersonaNombreCompleto" class="form-control" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo">
+			<div>
+                <strong><h5>Nombres y Apellidos del Padre/Madre/Tutor*</h5></strong>
+                <input id="PersonaNombreCompleto" class="form-control" data-toggle="tooltip" data-placemente="bottom" value="<?php echo $familiarPersonaNombre;?>">
                 <input id="PersonaId" name="data[Persona][persona_id]" type="text" style="display:none;">
                 <div class="alert alert-danger" role="alert" id="AutocompleteError" style="display:none;">
                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -27,6 +21,7 @@
                         <?php echo $this->Html->link("Crear persona",array('controller'=>'personas','action'=>'add'));?>
                 </div>
             </div><br>
+            <!-- Autocomplete para nombre de Personas -->
             <script>
                     $( function() {
                         $( "#PersonaNombreCompleto" ).autocomplete({
@@ -63,50 +58,11 @@
                     });
             </script><br>
            <!-- End Autocomplete -->
-        <?php  
-            if ($current_user['role'] == 'admin') { 
-              echo $this->Form->input('Alumno', array('label'=>'Alumno*', 'empty' => 'Ingrese un alumno...', 'options'=>$alumnosNombre ,'between' => '<br>', 'class' => 's2_alumno form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-            } else if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) {
-          ?>
-          <!-- Autocomplete -->
             <div>
-                <strong><h5>Nombre Completo del Alumno*</h5></strong>
-                <input id="AutocompleteAlumno" class="form-control" placeholder="Buscar alumno por DNI, nombre y/o apellido">
-                <div class="alert alert-danger" role="alert" id="AutocompleteAlumnoError" style="display:none;">
-                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                    <span class="sr-only">Error:</span>
-                    No se encontraron resultados de busqueda
-                </div>
-            </div>
-            <hr />
-            <script>
-                $( function() {
-                    $( "#AutocompleteAlumno" ).autocomplete({
-                        source: "<?php echo $this->Html->url(array('action'=>'autocompleteNombreAlumno'));?>",
-                        minLength: 2,
-                        select: function( event, ui ) {
-                            var nombre_completo = ui.item.Persona.apellidos +" "+ ui.item.Persona.nombres +' - ' +ui.item.Persona.documento_nro;
-                            $("#AutocompleteAlumno").val( nombre_completo );
-                            return false;
-                        },
-                        response: function(event, ui) {
-                            if (ui.content.length === 0)
-                            {
-                                $("#AutocompleteAlumnoError").show();
-                            } else {
-                                $("#AutocompleteAlumnoError").hide();
-                            }
-                        }
-                    }).autocomplete( "instance" )._renderItem = function( ul, item ) {
-                        var nombre_completo = item.Persona.apellidos +" "+ item.Persona.nombres +' - ' +item.Persona.documento_nro;
-                        return $( "<li>" )
-                            .append( "<div>" +nombre_completo+ "</div>" )
-                            .appendTo( ul );
-                    };
-                });
-            </script>
-            <!-- End Autocomplete -->
-        <?php } ?>
+                <strong><h5>Nombre y apellidos del alumno*</h5></strong>
+                <input class="form-control" disabled="disabled" label= "Nombre y apellidos del alumno*" data-toggle="tooltip" data-placemente="bottom" value="<?php echo $alumnoPersonaNombre;?>">
+                <?php echo $this->Form->input('Familiar.alumno_id', array('type' => 'hidden', 'default'=>$alumnoId)); ?>
+            </div><br>
         </div>
 	  	<?php echo '</div><div class="col-md-6 col-sm-6 col-xs-12">'; ?>
       	<div class="unit"><strong><h3>Datos Específicos</h3></strong><hr />

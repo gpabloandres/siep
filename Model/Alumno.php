@@ -6,6 +6,7 @@ class Alumno extends AppModel {
 	var $name = 'Alumno';
     //var $displayField = 'apellido';
 	//public $virtualFields = array('nombre_completo_alumno'=> 'CONCAT(Alumno.apellidos, " ", Alumno.nombres)');
+	public $actsAs = array('Containable');
     
     var $belongsTo = array(
 		'Persona' => array(
@@ -18,6 +19,7 @@ class Alumno extends AppModel {
 	);
 
 	var $hasMany = array(
+	    /*
 	    'Integracion' => array(
 	      'className' => 'Integracion',
 	      'foreignKey' => 'alumno_id',
@@ -31,6 +33,8 @@ class Alumno extends AppModel {
 	      'finderQuery' => '',
 	      'counterQuery' => ''
 	    ),
+	    */
+	    /*
 	    'Servicio' => array(
 	      'className' => 'Servicio',
 	      'foreignKey' => 'alumno_id',
@@ -44,6 +48,7 @@ class Alumno extends AppModel {
 	      'finderQuery' => '',
 	      'counterQuery' => ''
 	    ),
+	    */
 	    'Inscripcion' => array(
 	      'className' => 'Inscripcion',
 	      'foreignKey' => 'alumno_id',
@@ -57,6 +62,7 @@ class Alumno extends AppModel {
 	      'finderQuery' => '',
 	      'counterQuery' => ''
 	    ),
+	    /*
 	    'Inasistencia' => array(
 	      'className' => 'Inasistencia',
 	      'foreignKey' => 'alumno_id',
@@ -70,6 +76,8 @@ class Alumno extends AppModel {
 	      'finderQuery' => '',
 	      'counterQuery' => ''
 	    ),
+	    */
+	    /*
 	    'Nota' => array(
 	      'className' => 'Nota',
 	      'foreignKey' => 'alumno_id',
@@ -83,6 +91,8 @@ class Alumno extends AppModel {
 	      'finderQuery' => '',
 	      'counterQuery' => ''
 	    ),
+	    */
+	    /*
 	    'Pase' => array(
 	      'className' => 'Pase',
 	      'foreignKey' => 'alumno_id',
@@ -96,6 +106,7 @@ class Alumno extends AppModel {
 	      'finderQuery' => '',
 	      'counterQuery' => ''
 	    )
+	    */
 	);
 
    /**
@@ -119,6 +130,7 @@ class Alumno extends AppModel {
 			'deleteQuery' => '',
 			'insertQuery' => ''
 		),
+		/*
 		'Mesaexamen' => array(
 			'className' => 'Mesaexamen',
 			'joinTable' => 'alumnos_mesaexamens',
@@ -134,6 +146,7 @@ class Alumno extends AppModel {
 			'deleteQuery' => '',
 			'insertQuery' => ''
 		)
+		*/
 	);
 
 //Validaciones

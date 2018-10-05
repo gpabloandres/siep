@@ -48,24 +48,21 @@
 	<?php if (!empty($alumno['Familiar'])):?>
 		<div class="col-xs-12 col-sm-6 col-md-8">
 			<?php foreach ($alumno['Familiar'] as $familiar): ?>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="unit">
                     <?php echo '<b>Vinculo:</b> '.$familiar['vinculo'];?><br>
-                    <?php echo '<b>Nombre:</b> '.$personaNombre[$familiar['persona_id']];?><br>
-                    <!--
-                    <?php //echo '<b>Cuil/Cuit:</b> '.$familiarCuilCuit[$familiar['persona_id']];?><br>
-                    <?php //echo '<b>Telefono:</b> '.$familiarTelefono[$familiar['persona_id']];?><br>
-                    <?php //echo '<b>Email:</b> '.$familiarEmail[$familiar['persona_id']];?><br>
-                    -->
-                <div class="text-right">
-                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'familiars', 'action' => 'view', $familiar['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'familiars', 'action' => 'edit', $familiar['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
-                   <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?> 
-                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'familiars', 'action' => 'delete', $familiar['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
-                   <?php endif; ?> 
-                </div>
-		    </div>
-	    </div>
+                    <?php echo '<b>Nombre:</b> '.$familiarNombre[$familiar['persona_id']];?><br>
+                    <?php echo '<b>Telefono:</b> '.$familiarTelefono[$familiar['persona_id']];?>
+                    <hr>
+                    <div class="text-right">
+	                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'familiars', 'action' => 'view', $familiar['id']), array('class' => 'btn btn-success','escape' => false)); ?>
+	                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'familiars', 'action' => 'edit', $familiar['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
+	                   <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?> 
+	                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'familiars', 'action' => 'delete', $familiar['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
+	                   <?php endif; ?> 
+	                </div>
+		    	</div>
+	    	</div>
 	    <?php endforeach; ?>
     </div>
 	<?php else: echo '<div class="col-md-12"><div class="unit text-center">No se encuentran relaciones.</div></div>'; ?>
@@ -117,6 +114,7 @@
 	</div>
 </div>
 <!-- end Inscripciones Relacionadas -->
+<?php /*
 <?php if ((($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) || (($nivelCentro === 'Común - Secundario'))): ?>
 <!-- Pases Relacionados -->
 	<div id="click_03" class="titulo_acordeon">Pases Relacionados <span class="caret"></span></div>

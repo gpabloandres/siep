@@ -5,7 +5,7 @@
 <?php echo $this->Form->create('Familiar', array('novalidate' => true));?>
 
 	         <div class="unit">
-                    <?php echo $this->element('forms/form_familiar'); ?>
+                    <?php echo $this->element('forms/form_familiar_edit'); ?>
              </div>
              <?php echo $this->Form->input('id', array('type' => 'hidden')); ?>
              <div class="text-center">
