@@ -12,9 +12,52 @@
 		<div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
 			<div>
                 <strong><h5>Nombres y Apellidos del Padre/Madre/Tutor*</h5></strong>
-                <input class="form-control" disabled="disabled" label= "Nombre y apellidos del alumno*" data-toggle="tooltip" data-placemente="bottom" value="<?php echo $familiarPersonaNombre;?>">
-                <?php echo $this->Form->input('persona_id', array('type' => 'hidden', 'default'=>$familiarPersonaId)); ?>
+                <input id="PersonaNombreCompleto" class="form-control" data-toggle="tooltip" data-placemente="bottom" value="<?php echo $familiarPersonaNombre;?>">
+                <input id="PersonaId" name="data[Persona][persona_id]" type="text" style="display:none;">
+                <div class="alert alert-danger" role="alert" id="AutocompleteError" style="display:none;">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span>
+                        La persona no fue localizada.
+                        <?php echo $this->Html->link("Crear persona",array('controller'=>'personas','action'=>'add'));?>
+                </div>
             </div><br>
+            <!-- Autocomplete para nombre de Personas -->
+            <script>
+                    $( function() {
+                        $( "#PersonaNombreCompleto" ).autocomplete({
+                            source: "<?php echo $this->Html->url(array('action'=>'autocompleteNombrePersona'));?>",
+                            minLength: 2,
+                            // Evento: se ejecuta al seleccionar el resultado
+                            select: function( event, ui ) {
+                                // Elimina ID de persona previo a establecer la seleccion
+                                $("#PersonaId").val("");
+                                if(ui.item != undefined) {
+                                    var nombre_completo = ui.item.Persona.nombre_completo_persona;
+                                    $("#PersonaNombreCompleto").val(nombre_completo);
+                                    $("#PersonaId").val(ui.item.Persona.id);
+                                    return false;
+                                }
+                            },
+                            response: function(event, ui) {
+                                // Elimina ID de persona al obtener respuesta
+                                $("#PersonaId").val("");
+                                if (ui.content.length === 0) {
+                                    $("#AutocompleteError").show();
+                                    $("#PersonaId").val("");
+                                } else {
+                                    $("#AutocompleteError").hide();
+                                }
+                            }
+                        }).autocomplete("instance")._renderItem = function( ul, item ) {
+                            // Renderiza el resultado de la respuesta
+                            var nombre_completo = item.Persona.nombre_completo_persona + " - "+item.Persona.documento_nro;
+                            return $( "<li>" )
+                                .append( "<div>" +nombre_completo+ "</div>" )
+                                .appendTo( ul );
+                        };
+                    });
+            </script><br>
+           <!-- End Autocomplete -->
             <div>
                 <strong><h5>Nombre y apellidos del alumno*</h5></strong>
                 <input class="form-control" disabled="disabled" label= "Nombre y apellidos del alumno*" data-toggle="tooltip" data-placemente="bottom" value="<?php echo $alumnoPersonaNombre;?>">

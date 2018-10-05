@@ -126,15 +126,15 @@ class FamiliarsController extends AppController {
                 $this->redirect($this->referer());
             }
             /* FIN */
+            //Obtención del id del alumno desde el id de persona.
             $this->loadModel('Alumno');
             $this->Alumno->Behaviors->load('Containable');
             $this->Alumno->recursive = 0;
             $alumnoIdArray = $this->Alumno->findByPersonaId($alumnoPersonaId, 'id');
 			$alumnoId = $alumnoIdArray['Alumno']['id'];
-			$this->request->data['Alumno']['alumno_id'] = $alumnoId;            
-            
-
-			/* Verifica que el familiar ya esté vinculado al alumno. (INICIO) */
+			//Propone guardar el id de alumno.
+			$this->request->data['Alumno']['alumno_id'] = $alumnoId;
+			/* INICIO: Verifica que el familiar ya esté vinculado al alumno. */
             //Obtención del/los id Familiar de la Persona.
             $verificaFamiliarIdPersonaArray = $this->Familiar->findByPersonaId($personaId, 'id');
             //Si la Persona está asociada a id de familiar.
@@ -149,8 +149,6 @@ class FamiliarsController extends AppController {
             	}
             }
             /* FIN */
-
-
             if ($this->Familiar->save($this->data)) {
 				$this->Session->setFlash('El familiar ha sido grabado', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Familiar->id;
@@ -173,12 +171,39 @@ class FamiliarsController extends AppController {
 			$this->redirect(array('controller' => 'personas', 'action' => 'index'));
 		}
 		if (!empty($this->data)) {
-		  //abort if cancel button was pressed  
-          if(isset($this->params['data']['cancel'])){
+		  	//abort if cancel button was pressed  
+          	if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array('controller' => 'familiars', 'action' => 'view', $id));
-		  }
-		  if ($this->Familiar->save($this->data)) {
+		  	}
+		  	//Obtengo personaId
+            $personaId = $this->request->data['Persona']['persona_id'];
+            //Si no se definió la persona, vuelve al formulario anterior.
+            if (empty($personaId)) {
+                $this->Session->setFlash('No se definio el familiar.', 'default', array('class' => 'alert alert-danger'));
+                $this->redirect($this->referer());
+            }
+            // Propone guardar el id de persona en el campo persona_id. 
+            $this->request->data['Familiar']['persona_id'] = $personaId;
+		  	/* Verifica que el familiar ya esté vinculado al alumno. (INICIO) */
+            //Obtención del/los id Familiar de la Persona.
+            $verificaFamiliarIdPersonaArray = $this->Familiar->findByPersonaId($personaId, 'id');
+            //Si la Persona está asociada a id de familiar.
+            if ($verificaFamiliarIdPersonaArray) {
+            	$verificaFamiliarIdPersona = $verificaFamiliarIdPersonaArray['Familiar']['id'];
+            	//Obtención del id del alumno.
+            	$AlumnoIdObtenidoArray = $this->Familiar->AlumnosFamiliar->findByFamiliarId($verificaFamiliarIdPersona, 'alumno_id');
+            	$AlumnoIdObtenido = $AlumnoIdObtenidoArray['AlumnosFamiliar']['alumno_id'];
+            	//Obtención del ID del alumno.
+				$alumnoIdArray = $this->Familiar->AlumnosFamiliar->findByFamiliarId($id, 'alumno_id');
+				$alumnoId = $alumnoIdArray['AlumnosFamiliar']['alumno_id'];
+            	if ($AlumnoIdObtenido == $alumnoId) {
+            		$this->Session->setFlash('El alumno ya está vinculado al familiar señalado.', 'default', array('class' => 'alert alert-danger'));
+                        $this->redirect($this->referer());
+            	}
+            }
+            /* FIN */
+		  	if ($this->Familiar->save($this->data)) {
 				$this->Session->setFlash('El familiar ha sido grabado', 'default', array('class' => 'alert alert-success'));
 				//$this->redirect($this->referer());
 				//$this->redirect(array('controller' => 'alumnos','action' => 'index'));
@@ -202,7 +227,6 @@ class FamiliarsController extends AppController {
 		//Obtención del ID del alumno.
 		$alumnoIdArray = $this->Familiar->AlumnosFamiliar->findByFamiliarId($id, 'alumno_id');
 		$alumnoId = $alumnoIdArray['AlumnosFamiliar']['alumno_id'];
-		print_r($alumnoId);
 		//Obtención del nombre de la persona.
 		$this->loadModel('Alumno');
         $this->Alumno->recursive = 0;
