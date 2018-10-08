@@ -182,7 +182,8 @@ class Mesaexamen extends AppModel {
  *
  * @var array
  */
-	var $hasAndBelongsToMany = array(
+	/*
+  var $hasAndBelongsToMany = array(
 		'Alumno' => array(
 			'className' => 'Alumno',
 			'joinTable' => 'alumnos_mesaexamens',
@@ -199,4 +200,5 @@ class Mesaexamen extends AppModel {
 			'insertQuery' => ''
 		)
 	);
+  */
 }

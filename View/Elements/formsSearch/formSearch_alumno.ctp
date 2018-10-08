@@ -12,7 +12,7 @@
     <div class="alert alert-danger" role="alert" id="AutocompleteAlumnoError" style="display:none;">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
         <span class="sr-only">Error:</span>
-        No se encontraron resultados de busqueda
+        No se encontró al alumno buscado.
     </div>
 </div>
 <hr />
