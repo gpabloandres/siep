@@ -126,11 +126,13 @@ class FamiliarsController extends AppController {
                 $this->redirect($this->referer());
             }
             /* FIN */
-            //Obtención del id del alumno desde el id de persona.
+            //Obtención del id del alumno del centro desde el id de persona.
             $this->loadModel('Alumno');
             $this->Alumno->Behaviors->load('Containable');
             $this->Alumno->recursive = 0;
-            $alumnoIdArray = $this->Alumno->findByPersonaId($alumnoPersonaId, 'id');
+            $userCentroId = $this->getUserCentroId();
+            //Obtención de id del alumno del centro que vincula al familiar.
+            $alumnoIdArray = $this->Alumno->findByPersonaIdAndCentroId($alumnoPersonaId, $userCentroId, 'id');
 			$alumnoId = $alumnoIdArray['Alumno']['id'];
 			//Propone guardar el id de alumno.
 			$this->request->data['Alumno']['alumno_id'] = $alumnoId;
