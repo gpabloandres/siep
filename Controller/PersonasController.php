@@ -223,10 +223,12 @@ class PersonasController extends AppController {
 			$this->Session->setFlash('Persona no válida', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
+		/*
 		if(!$this->adminCanEdit($id)) {
 			$this->Session->setFlash('No tiene permisos para editar a esta persona, no pertenece a su establecimiento', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
+		*/
 		if (!empty($this->data)) {
 		  //abort if cancel button was pressed
         	if(isset($this->params['data']['cancel'])) {
