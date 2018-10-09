@@ -645,6 +645,7 @@ class InscripcionsController extends AppController {
 				$this->Session->setFlash('La inscripcion no fue grabada. Intente nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
+        //End submit de formulario
         //Genera variables para forzar tildes en la vista.
         $tildeDocumento = $this->Inscripcion->findById($id, 'fotocopia_dni');
         $tildeDocumentoString = $tildeDocumento['Inscripcion']['fotocopia_dni'];
@@ -665,8 +666,35 @@ class InscripcionsController extends AppController {
         $inscripcionLegajoNroString = $inscripcionLegajoNroArray['Inscripcion']['legajo_nro'];
         //Obtiene la denominación 'SINVACANTE'
         $sinVacante = substr($inscripcionLegajoNroString, -12, 10);
-        // End submit de formulario
-        $this->set(compact('cursoInscripcion','alumno', 'personaId', 'estadoInscripcionAnteriorArray', 'tildeDocumentoString', 'tildePartidaString', 'tildeVacunasString', 'tildeSeptimoString', 'cicloInscripcionIdString', 'cicloInscripcionNombreString', 'sinVacante'));
+        //Fuerza guardar Datos de Baja.
+        $fechaBajaArray = $this->Inscripcion->findById($id, 'fecha_baja');    
+        $fechaBaja = $fechaBajaArray['Inscripcion']['fecha_baja'];
+        $bajaTipoArray = $this->Inscripcion->findById($id, 'tipo_baja');    
+        $bajaTipo = $bajaTipoArray['Inscripcion']['tipo_baja'];
+        $bajaTipoArray = $this->Inscripcion->findById($id, 'tipo_baja');    
+        $bajaTipo = $bajaTipoArray['Inscripcion']['tipo_baja'];
+        $bajaMotivoArray = $this->Inscripcion->findById($id, 'motivo_baja');    
+        $bajaMotivo = $bajaMotivoArray['Inscripcion']['motivo_baja'];
+        //Fuerza guardar Datos de Egreso.
+        $fechaEgresoArray = $this->Inscripcion->findById($id, 'fecha_egreso');    
+        $fechaEgreso = $fechaEgresoArray['Inscripcion']['fecha_egreso'];
+        $fechaEmisionTituloArray = $this->Inscripcion->findById($id, 'fecha_emision_titulo');    
+        $fechaEmisionTitulo = $fechaEmisionTituloArray['Inscripcion']['fecha_emision_titulo'];
+        $notaFinalArray = $this->Inscripcion->findById($id, 'fecha_nota');    
+        $notaFinal = $notaFinalArray['Inscripcion']['fecha_nota'];
+        $actaNroArray = $this->Inscripcion->findById($id, 'acta_nro');    
+        $actaNro = $actaNroArray['Inscripcion']['acta_nro'];
+        $libroNroArray = $this->Inscripcion->findById($id, 'libro_nro');    
+        $libroNro = $libroNroArray['Inscripcion']['libro_nro'];
+        $folioNroArray = $this->Inscripcion->findById($id, 'folio_nro');    
+        $folioNro = $folioNroArray['Inscripcion']['folio_nro'];
+        $tituloNroArray = $this->Inscripcion->findById($id, 'titulo_nro');    
+        $tituloNro = $tituloNroArray['Inscripcion']['titulo_nro'];
+        //Fuerza guardar observaciones.
+        $obsArray = $this->Inscripcion->findById($id, 'observaciones');    
+        $obs = $obsArray['Inscripcion']['observaciones'];
+        //Envia datos a la vista.
+        $this->set(compact('cursoInscripcion','alumno', 'personaId', 'estadoInscripcionAnteriorArray', 'tildeDocumentoString', 'tildePartidaString', 'tildeVacunasString', 'tildeSeptimoString', 'cicloInscripcionIdString', 'cicloInscripcionNombreString', 'sinVacante', 'fechaBaja', 'bajaTipo', 'bajaMotivo', 'fechaEgreso', 'fechaEmisionTitulo', 'notaFinal', 'actaNro', 'libroNro', 'folioNro', 'tituloNro', 'obs'));
     }
 
     public function delete($id = null) {
