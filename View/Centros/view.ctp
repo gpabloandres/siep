@@ -14,6 +14,8 @@
                       <div id="click_01" class="titulo_acordeon_datos">Datos Generales <span class="caret"></span></div>
                       <div id="acordeon_01">
                         <div class="unit">
+							<b><?php echo __('CUE: '); ?></b>
+							<?php echo ($centro['Centro']['cue']); ?></p>
 							<b><?php echo __('Nombre: '); ?></b>
 							<?php echo ($centro['Centro']['nombre']); ?></p>
 							<b><?php echo __('Fecha de Fundación: '); ?></b>
@@ -36,15 +38,15 @@
 	                        	<b><?php echo __('Domicilio: '); ?></b>
 								<?php echo $centro['Centro']['direccion']; ?></p>
 								<b><?php echo __('Barrio: '); ?></b>
-									<?php echo $barrios[$centro['Centro']['barrio_id']]; ?></p>
+									<?php echo $barrioNombre; ?></p>
 								<b><?php echo __('Código Postal: '); ?></b>
 									<?php echo $centro['Centro']['cp']; ?></p>
 								<b><?php echo __('Código de Localidad: '); ?></b>
 									<?php echo $centro['Centro']['codigo_localidad']; ?></p>
 								<b><?php echo __('Ciudad: '); ?></b>
-									<?php echo $ciudades[$centro['Centro']['ciudad_id']]; ?></p>
+									<?php echo $ciudadNombre; ?></p>
 								<b><?php echo __('Departamento: '); ?></b>
-								<?php echo $departamentos[$centro['Centro']['departamento_id']]; ?></p>
+								<?php echo $departamentoNombre; ?></p>
 							    <b><?php echo __('Telefono: '); ?></b>
 									<?php echo $centro['Centro']['telefono']; ?></p>
 		                        <b><?php echo __('Email: '); ?></b>
@@ -71,7 +73,10 @@
                 <!--<div class="opcion"><?php echo $this->Html->link(__('Listar Inasistencias'), array('controller' => 'inasistencias', 'action' => 'index')); ?></div>-->
 			  	<!--<div class="opcion"><?php echo $this->Html->link(__('Exportar a PDF'), array('action' => 'view', $centro['Centro']['id'], 'ext' => 'pdf')); ?></div>-->
 				*/ ?>
-			  <?php if($current_user['role'] == 'superadmin'): ?>
+			  <?php if($current_user['role'] == 'admin' && $current_user['centro_id'] == $id): ?>
+				<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $centro['Centro']['id'])); ?></div>
+		      <?php endif; ?>
+			  <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
 				<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $centro['Centro']['id'])); ?></div>
 		        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $centro['Centro']['id']), null, sprintf(__('Esta seguro de borrar el centro %s?'), $centro['Centro']['sigla'])); ?></div>
 		      <?php endif; ?>
@@ -183,7 +188,8 @@
 </div>
 <!-- end Titulaciones Relacionadas -->
 */ ?>
-<?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
+<?php /*
+<?php if(($current_user['puesto'] == 'Sistemas') || ($current_user['puesto'] == 'Atei')): ?>
 <!-- Cursos Relacionados -->
 <div id="click_04" class="titulo_acordeon">Secciones Relacionadas <span class="caret"></span></div>
 <div id="acordeon_04">
@@ -217,6 +223,7 @@
 </div>
 <?php endif ?>
 <!-- end Cursos Relacionados -->
+*/ ?>
 <?php /*
 <!-- Inscripciones Relacionadas
 	<div id="click_02" class="titulo_acordeon">Inscripciones Relacionadas <span class="caret"></span></div>
@@ -255,7 +262,7 @@
 </div>
 <!-- end Inscripciones Relacionadas -->
 */ ?>
-<?php if($current_user['role'] == 'superadmin'): ?>
+<?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
 <!-- Empleados Relacionados -->
 <div id="click_05" class="titulo_acordeon">Usuarios Relacionados <span class="caret"></span></div>
 <div id="acordeon_05">
