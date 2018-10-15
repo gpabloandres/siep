@@ -12,8 +12,7 @@
 
         <span class="name"><span class="glyphicon glyphicon-earphone"></span> <b>Tel:</b> <?php echo ($centro['Centro']['telefono']); ?> </span><br/>
 
-        <span class="name"><span class="glyphicon glyphicon-envelope"></span> <b>Email:</b> <?php echo $this->Html->link($centro['Centro']['email'], 'mailto:'.$centro['Centro']['email']); ?> </span><br/>
-
+        <span class="name"><span class="glyphicon glyphicon-envelope"></span> <b>Email:</b> <?php echo $this->Html->link($centro['Centro']['email'], 'mailto:'.$centro['Centro']['email']); ?> </span><hr/>
         <div class="text-right">
 	        <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-eye-open"></i>', array('action' => 'view', $centro['Centro']['id']), array('class' => 'btn btn-success','escape' => false)); ?></span>
 	      <?php if($current_user['role'] == 'superadmin'): ?>

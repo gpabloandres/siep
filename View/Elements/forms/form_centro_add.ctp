@@ -21,7 +21,7 @@
 			?>
 		</div>
 	<?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>
-    <div class="unit"><strong><h3>Datos de Contacto</h3></strong><hr />
+    <div class="unit"><strong><h3>Datos de Ubicación</h3></strong><hr />
 	  	<?php
 			$ambitos = array('URBANO' => 'URBANO', 'RURAL' => 'RURAL');
 	        echo $this->Form->input('ambito', array('label' => 'Ambito*', 'empty' => 'Ingrese un ámbito...', 'options' => $ambitos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
