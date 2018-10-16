@@ -136,7 +136,7 @@ class Centro extends AppModel {
 	                        'message' => 'Este nombre de centro esta siendo usado.'
 	                    ),
 					    'alphaBet' => array(
-			                'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ0-9º°-]{5,}$/i',
+			                'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ0-9º°.-]{5,}$/i',
 						    'message' => 'Indicar la denominación correcta de la institución.'
 		                )
                     ),
@@ -146,7 +146,7 @@ class Centro extends AppModel {
                             'message' => 'Esta sigla de centro esta siendo usado.'
                             ),
     					'alphaBet' => array(
-						   	'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ0-9º°-]{5,}$/i',
+						   	'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ0-9º°.-]{5,}$/i',
 						   	'message' => 'Indicar una sigla válida de la institución.'
 						)
     	            ),
