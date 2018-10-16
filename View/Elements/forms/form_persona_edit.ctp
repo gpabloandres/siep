@@ -79,7 +79,7 @@
 			echo $this->Form->input('tira_edificio', array('label' => 'Tira/Edificio','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el número o letra de Tira/Edificio', 'placeholder' => 'Ingrese referencia de la Tira/Edificio...'));
 			echo $this->Form->input('ciudad_id', array('label' => 'Ciudad', 'empty' => 'Ingrese una ciudad...', 'options' => $ciudades,'id'=>'comboCiudad', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione la ciudad del domicilio real', 'placeholder' => 'Ingrese una ciudad...'));
 			echo $this->Form->input('barrio_id', array('label' => 'Barrio','id'=>'comboBarrio','options'=>$barrios ,'empty' => 'Ingrese un barrio...','between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));
-			echo $this->Form->input('asentamiento_id', array('label' => 'Asentamiento','id'=>'comboAsentamiento', 'empty' => 'Ingrese un asentamiento...',  'options' => $asentamientos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));
+			echo $this->Form->input('asentamiento_id', array('label' => 'Barrio informal','id'=>'comboAsentamiento', 'empty' => 'Ingrese un barrio informal...',  'options' => $asentamientos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));
 			$pendientes = array('SI' => 'SI', 'NO' => 'NO');
 	    ?>
     </div>
