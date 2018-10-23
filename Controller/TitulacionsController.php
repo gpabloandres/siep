@@ -7,13 +7,25 @@ class TitulacionsController extends AppController {
 
     function beforeFilter(){
 	    parent::beforeFilter();
-		//Si el usuario tiene un rol de superadmin le damos acceso a todo.
-        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
-        if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
-	        $this->Auth->allow();
-	    } elseif ($this->Auth->user('role') === 'usuario') { 
-	        $this->Auth->allow('index', 'view');
-	    }
+		/* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
+        *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        */
+        switch($this->Auth->user('role'))
+        {
+            case 'superadmin':
+                if ($this->Auth->user('puesto') === 'Sistemas') {
+                    $this->Auth->allow();               
+                } else {
+                    //En caso de ser ATEI
+                    $this->Auth->allow('index', 'add', 'view', 'edit', 'autocompleteTitulacions');    
+                }
+                break;
+            case 'usuario':
+            case 'admin':
+                $this->Auth->allow('index', 'view', 'autocompleteTitulacions');
+                break;
+        }
+        /* FIN */
     }	
 
 	function index() {
@@ -168,13 +180,14 @@ class TitulacionsController extends AppController {
 			} else if ($userRole === 'usuario') {
 				// Obtiene el id de titulacion del nivel del centro correspondiente.
 				$this->loadModel('Centro');
-				$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
-				$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
-				$titulacionsId = $this->Titulacion->CentrosTitulacion->find('list', array('fields'=>array('titulacion_id'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
+        		$this->Centro->recursive = 0;
+        		$this->Centro->Behaviors->load('Containable');
+        		$nivelCentroArray = $this->Centro->findById($userCentroId, 'nivel_servicio');
+        		$nivelCentro = $nivelCentroArray['Centro']['nivel_servicio'];
+        		$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+        		$titulacionesId = $this->Titulacion->CentrosTitulacion->find('list', array('fields'=>array('titulacion_id'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
 				// Consulta por esos id de titulaciones.
-				$titulaciones = $this->Titulacion->find('all', array(
-					'recursive'	=> -1,
-					// Condiciona la búsqueda también por id de titulaciones del nivel del centro correspondiente.
+				$titulaciones = $this->Titulacion->find('all', array(//'recursive'	=> -1, // Condiciona la búsqueda también por id de titulaciones del nivel del centro correspondiente.
 					'conditions' => array($conditions, 'id' => $titulacionesId),
 					'fields' 	=> array('id', 'nombre')
 					)
