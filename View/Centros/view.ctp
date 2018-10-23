@@ -154,7 +154,6 @@
 	</div>
 </div>-->
 */ ?>
-<?php /*
 <!-- Titulaciones Relacionadas -->
 <div id="click_03" class="titulo_acordeon">Titulaciones Relacionadas <span class="caret"></span></div>
 <div id="acordeon_03">
@@ -169,11 +168,11 @@
 		            <?php echo '<b>Organización del plan:</b> '.$titulacion['organizacion_plan'];?><br>
 					<!--<?php echo '<b>Plan de estudio:</b> '.$titulacion['plan_estudio'];?><br>-->
 					<!--<?php echo '<b>Organización de la cursada:</b> '.$titulacion['organizacion_cursada'];?><br>-->
-		            <?php echo '<b>Forma del dictado:</b> '.$titulacion['forma_dictado'];?><br>
+		            <!--<?php echo '<b>Forma del dictado:</b> '.$titulacion['forma_dictado'];?><br>-->
 			        <hr>
                     <div class="text-right">
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'titulacions', 'action' => 'view', $titulacion['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-                        <?php if($current_user['role'] == 'superadmin'): ?>
+                        <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'titulacions', 'action' => 'edit', $titulacion['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'titulacions', 'action' => 'delete', $titulacion['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
                         <?php endif; ?>
@@ -187,7 +186,6 @@
     </div>
 </div>
 <!-- end Titulaciones Relacionadas -->
-*/ ?>
 <?php /*
 <?php if(($current_user['puesto'] == 'Sistemas') || ($current_user['puesto'] == 'Atei')): ?>
 <!-- Cursos Relacionados -->
