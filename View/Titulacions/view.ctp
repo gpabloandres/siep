@@ -91,8 +91,10 @@
        <div class="unit">
             <div class="subtitulo">Opciones</div>
             <div class="opcion"><?php echo $this->Html->link('Listar Titulaciones', array('controller' => 'titulacions', 'action' => 'index')); ?></div>
+            <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
             <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $titulacion['Titulacion']['id'])); ?></div>
             <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $titulacion['Titulacion']['id']), null, sprintf(__('Esta seguro de borrar la titulación %s?'), $titulacion['Titulacion']['nombre'])); ?></div>
+            <?php endif; ?>
         </div>
     </div>
  </div>
@@ -113,7 +115,7 @@
           <hr>
             <div class="text-right">
               <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'centros', 'action' => 'view', $centro['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-              <?php if($current_user['role'] == 'superadmin'): ?>
+              <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
               <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'centros', 'action' => 'edit', $centro['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
               <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'centros', 'action' => 'delete', $centro['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
               <?php endif; ?>  
@@ -176,7 +178,7 @@
           <hr>
           <div class="text-right">
             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'cursos', 'action' => 'view', $curso['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-            <?php if($current_user['role'] == 'superadmin'): ?>
+            <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'cursos', 'action' => 'edit', $curso['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'cursos', 'action' => 'delete', $curso['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
             <?php endif; ?>  
