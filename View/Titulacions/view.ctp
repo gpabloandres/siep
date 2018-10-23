@@ -127,6 +127,8 @@
   </div>
 </div>
 <!-- end Centros Relacionados -->
+<?php if (($current_user['role'] == 'superadmin') && ($current_user['puesto'] == 'Sistemas')) :
+?>  
 <!-- Diseños Curriculares Relacionados -->
 <div id="click_05" class="titulo_acordeon">Diseños Curriculares Relacionados <span class="caret"></span></div>
 <div id="acordeon_05">
@@ -155,6 +157,9 @@
   </div>
 </div>
 <!-- end Diseños Relacionados -->
+<?php endif; ?>
+<?php if (($current_user['role'] == 'superadmin') && ($current_user['puesto'] == 'Sistemas')) :
+?>
 <!-- Cursos Relacionados -->
 <div id="click_06" class="titulo_acordeon">Secciones Relacionadas <span class="caret"></span></div>
 <div id="acordeon_06">
@@ -185,4 +190,5 @@
     </div>
 </div>
 <!-- end Cursos Relacionados -->
+<?php endif; ?>
 </div>
