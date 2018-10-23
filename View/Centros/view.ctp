@@ -165,7 +165,7 @@
                 <div class="unit">
 					<?php echo '<b>Nombre:</b> '.$titulacion['nombre'];?><br>
 					<?php echo '<b>Orientación:</b> '.$titulacion['orientacion'];?><br>
-		            <?php echo '<b>Organización del plan:</b> '.$titulacion['organizacion_plan'];?><br>
+		            <?php echo '<b>Organización del plan:</b> '.$titulacion['organizacion_plan'];?>
 					<!--<?php echo '<b>Plan de estudio:</b> '.$titulacion['plan_estudio'];?><br>-->
 					<!--<?php echo '<b>Organización de la cursada:</b> '.$titulacion['organizacion_cursada'];?><br>-->
 		            <!--<?php echo '<b>Forma del dictado:</b> '.$titulacion['forma_dictado'];?><br>-->
