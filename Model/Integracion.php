@@ -1,4 +1,4 @@
-<?php
+<?php /*
 class Integracion extends AppModel {
 	var $name = 'Integracion';
 	public $actsAs = array('Containable');

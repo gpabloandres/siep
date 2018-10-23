@@ -7,13 +7,25 @@ class TitulacionsController extends AppController {
 
     function beforeFilter(){
 	    parent::beforeFilter();
-		//Si el usuario tiene un rol de superadmin le damos acceso a todo.
-        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
-        if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
-	        $this->Auth->allow();
-	    } elseif ($this->Auth->user('role') === 'usuario') { 
-	        $this->Auth->allow('index', 'view');
-	    }
+		/* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
+        *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        */
+        switch($this->Auth->user('role'))
+        {
+            case 'superadmin':
+                if ($this->Auth->user('puesto') === 'Sistemas') {
+                    $this->Auth->allow();               
+                } else {
+                    //En caso de ser ATEI
+                    $this->Auth->allow('index', 'add', 'view', 'edit', 'autocompleteTitulacions');    
+                }
+                break;
+            case 'usuario':
+            case 'admin':
+                $this->Auth->allow('index', 'view', 'autocompleteTitulacions');
+                break;
+        }
+        /* FIN */
     }	
 
 	function index() {
@@ -26,7 +38,6 @@ class TitulacionsController extends AppController {
 			$this->paginate['Titulacion']['conditions'] = array('Titulacion.id' => $titulacionsId);
 		}
 		*/
-
 		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
 		*  Sí el usuario es "admin" muestra las titulaciones del establecimiento. 
 		*  Sino sí es "usuario" externo muestra las titulaciones del nivel.
@@ -46,40 +57,43 @@ class TitulacionsController extends AppController {
 		/* FIN */
 		$this->redirectToNamed();
 		$conditions = array();
-		if(!empty($this->params['named']['nombre']))
-		{
+		if(!empty($this->params['named']['nombre'])) {
 			$conditions['Titulacion.nombre ='] = $this->params['named']['nombre'];
 		}
 		$titulacions = $this->paginate('Titulacion', $conditions);
-		
+		//Obtiene los nombres de los centros.
 		$centros = $this->Titulacion->CentrosTitulacion->find('list', array('fields' => array('centro_id'), array('conditions' => array('titulacion_id' => $titulacions))));
-		
 		$this->set(compact('titulacions', 'centros', $centros));
 	}
 
 	function view($id = null) {
+		$this->Titulacion->recursive = 1;
 		if (!$id) {
 			$this->Session->setFlash(__('Titulación no valida.'));
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('titulacion', $this->Titulacion->read(null, $id));
-		$resolucionsId = $this->Titulacion->Disenocurricular->find('list', array('fields'=>array('resolucion_id')));
+		$resolucionsId = $this->Titulacion->DisenoCurriculars->find('list', array('fields'=>array('resolucion_id')));
         $this->loadModel('Resolucion');
+        $this->Resolucion->recursive = 0;
+        $this->Resolucion->Behaviors->load('Containable');
         $resolucions = $this->Resolucion->find('list', array('fields'=>array('numero_completo_resolucion'), 'conditions' => array('id' => $resolucionsId)));
 		$this->loadModel('Ciudad');
+		$this->Ciudad->recursive = 0;
+        $this->Ciudad->Behaviors->load('Containable');
 		$ciudades = $this->Ciudad->find('list', array('fields'=>array('nombre')));
 		$this->set(compact('resolucions', 'ciudades'));	
 	}
 
 	function add() {
-		  //abort if cancel button was pressed  
-          if(isset($this->params['data']['cancel'])){
-                $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
-                $this->redirect( array( 'action' => 'index' ));
-		  }
-		  if (!empty($this->data)) {
+		$this->Titulacion->recursive = 0;
+		//abort if cancel button was pressed  
+        if(isset($this->params['data']['cancel'])) {
+            $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
+            $this->redirect( array( 'action' => 'index' ));
+		}
+		if (!empty($this->data)) {
 		    $this->Titulacion->create();
-			
 			if ($this->Titulacion->save($this->data)) {
 				$this->Session->setFlash('La titulacion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				//$this->redirect(array('action' => 'index'));
@@ -94,6 +108,7 @@ class TitulacionsController extends AppController {
 	}
 
 	function edit($id = null) {
+		$this->Titulacion->recursive = 0;
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash('Titulacion no valida.', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
@@ -103,7 +118,7 @@ class TitulacionsController extends AppController {
             if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
-		  }
+			}
 			if ($this->Titulacion->save($this->data)) {
 				$this->Session->setFlash('La titulación ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				//$this->redirect(array('action' => 'index'));
@@ -165,13 +180,14 @@ class TitulacionsController extends AppController {
 			} else if ($userRole === 'usuario') {
 				// Obtiene el id de titulacion del nivel del centro correspondiente.
 				$this->loadModel('Centro');
-				$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
-				$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
-				$titulacionsId = $this->Titulacion->CentrosTitulacion->find('list', array('fields'=>array('titulacion_id'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
+        		$this->Centro->recursive = 0;
+        		$this->Centro->Behaviors->load('Containable');
+        		$nivelCentroArray = $this->Centro->findById($userCentroId, 'nivel_servicio');
+        		$nivelCentro = $nivelCentroArray['Centro']['nivel_servicio'];
+        		$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+        		$titulacionesId = $this->Titulacion->CentrosTitulacion->find('list', array('fields'=>array('titulacion_id'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
 				// Consulta por esos id de titulaciones.
-				$titulaciones = $this->Titulacion->find('all', array(
-					'recursive'	=> -1,
-					// Condiciona la búsqueda también por id de titulaciones del nivel del centro correspondiente.
+				$titulaciones = $this->Titulacion->find('all', array(//'recursive'	=> -1, // Condiciona la búsqueda también por id de titulaciones del nivel del centro correspondiente.
 					'conditions' => array($conditions, 'id' => $titulacionesId),
 					'fields' 	=> array('id', 'nombre')
 					)

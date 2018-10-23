@@ -51,7 +51,7 @@ class CentrosController extends AppController {
 	}
 
 	function view($id = null) {
-		$this->Centro->recursive = 0;
+		$this->Centro->recursive = 1;
 		if (!$id) {
 			$this->Session->setFlash('Centro no valido', 'default', array('class' => 'alert alert-danger'));
 			$this->redirect(array('action' => 'index'));
