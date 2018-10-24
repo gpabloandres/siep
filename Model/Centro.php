@@ -183,11 +183,13 @@ class Centro extends AppModel {
                     	       'rule' => array('minLength', 5),
                         	   'allowEmpty' => true,
                            	   'message' => 'Indicar nombres del equipo directivo (Director, Vicedirector y Secretario).'
-		   		    		),
+		   		    		)
+							/*
 							'alphaBet' => array(
-				            	'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ,.]{5,}$/i',
+				            	'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ,. ]{5,}$/i',
 					  			'message' => 'Indicar nombres del equipo directivo (Sólo letras, espacios, puntos y comas)'
 		                	)
+		                	*/
                     ),
 				    'ambito' => array(
 		 	    			'minLength' => array(
