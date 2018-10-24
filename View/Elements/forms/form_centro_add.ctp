@@ -25,7 +25,7 @@
 	  	<?php
 			$ambitos = array('URBANO' => 'URBANO', 'RURAL' => 'RURAL');
 	        echo $this->Form->input('ambito', array('label' => 'Ambito*', 'empty' => 'Ingrese un ámbito...', 'options' => $ambitos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
-			echo $this->Form->input('direccion', array('id'=>'direccion', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese una dirección', 'placeholder' => 'Ingrese la dirección...'));
+			echo $this->Form->input('direccion', array('label' => 'Dirección*', 'id'=>'direccion', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese una dirección', 'placeholder' => 'Ingrese la dirección...'));
 			echo $this->Form->input('cp', array('between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un código postal', 'placeholder' => 'Ingrese el código postal...'));
 			echo $this->Form->input('codigo_localidad', array('between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un código de localidad', 'placeholder' => 'Ingrese el código de localidad...'));
 			echo $this->Form->input('departamento_id', array('label' => '*Departamento', 'id'=> 'comboDepto','options' => $departamentos,'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom','empty' => 'Ingrese un departamento...', 'title' => 'Seleccione una opción...'));
@@ -38,7 +38,7 @@
 	  	<?php
 			echo $this->Form->input('email', array('id'=>'email', 'label' => 'Email*', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca un email de contacto válido', 'Placeholder' => 'Ingrese un email de contacto.'));
 			echo $this->Form->input('url', array('id'=>'url', 'label' => 'URL', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca un sitio web válido', 'Placeholder' => 'Ingrese un sitio web.'));
-			echo $this->Form->input('telefono', array('id'=>'telefono', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un teléfono', 'placeholder' => 'Ingrese un número de teléfono...'));
+			echo $this->Form->input('telefono', array('label' => 'Teléfono fijo*', 'id'=>'telefono', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un teléfono fijo', 'placeholder' => 'Ingrese un número de teléfono fijo...'));
 			?>
 	</div>
 </div>

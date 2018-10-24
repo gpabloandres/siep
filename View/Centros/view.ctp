@@ -24,7 +24,7 @@
 							<?php echo ($centro['Centro']['sector']); ?></p>
 							<b><?php echo __('Nivel - Servicio: '); ?></b>
 							<?php echo ($centro['Centro']['nivel_servicio']); ?></p>
-							<b><?php echo __('Director: '); ?></b>
+							<b><?php echo __('Equipo Directivo: '); ?></b>
 				    			<?php echo $centro['Centro']['equipoDirectivo']; ?></p>
 							<b><?php echo __('Ámbito: '); ?></b>
 								<?php echo $centro['Centro']['ambito']; ?></p>
@@ -47,7 +47,7 @@
 									<?php echo $ciudadNombre; ?></p>
 								<b><?php echo __('Departamento: '); ?></b>
 								<?php echo $departamentoNombre; ?></p>
-							    <b><?php echo __('Telefono: '); ?></b>
+							    <b><?php echo __('Telefono fijo: '); ?></b>
 									<?php echo $centro['Centro']['telefono']; ?></p>
 		                        <b><?php echo __('Email: '); ?></b>
 									<?php echo ($this->Html->link($centro['Centro']['email'],'mailto:'.$centro['Centro']['email'])); ?></p>
