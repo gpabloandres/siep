@@ -165,6 +165,7 @@ class TitulacionsController extends AppController {
 				$conditions[] = array('nombre LIKE' => '%' . $termino . '%');
 			}
 			$userRole = $this->Auth->user('role');
+			$userPuesto = $this->Auth->user('puesto');
 			$userCentroId = $this->getUserCentroId();
 			if ($userRole === 'admin') {
 				// Obtiene el id de titulacion del centro correspondiente.
@@ -173,7 +174,7 @@ class TitulacionsController extends AppController {
 				$titulaciones = $this->Titulacion->find('all', array(
 					'recursive'	=> -1,
 					// Condiciona la búsqueda también por id de titulacion del centro correspondiente.
-					'conditions' => array($conditions, 'id' => $titulacionesId),
+					'conditions' => array($conditions, 'id' => $titulacionesId, 'status' => 1),
 					'fields' 	=> array('id', 'nombre')
 					)
 				);
@@ -188,7 +189,15 @@ class TitulacionsController extends AppController {
         		$titulacionesId = $this->Titulacion->CentrosTitulacion->find('list', array('fields'=>array('titulacion_id'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
 				// Consulta por esos id de titulaciones.
 				$titulaciones = $this->Titulacion->find('all', array(//'recursive'	=> -1, // Condiciona la búsqueda también por id de titulaciones del nivel del centro correspondiente.
-					'conditions' => array($conditions, 'id' => $titulacionesId),
+					'conditions' => array($conditions, 'id' => $titulacionesId, 'status' => 1),
+					'fields' 	=> array('id', 'nombre')
+					)
+				);
+			} else if ($userRole === 'superadmin' && $userPuesto === 'Atei') {
+				$titulaciones = $this->Titulacion->find('all', array(
+					'recursive'	=> -1,
+					// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente.
+					'conditions' => array($conditions, 'status' => 1),
 					'fields' 	=> array('id', 'nombre')
 					)
 				);
@@ -200,7 +209,7 @@ class TitulacionsController extends AppController {
 					'fields' 	=> array('id', 'nombre')
 					)
 				);
-			}
+			}	
 			echo json_encode($titulaciones);
 			}
 			// No renderiza el layout
