@@ -5,7 +5,7 @@
 <?php echo $this->Form->create('Curso', array('novalidate' => true));?>
 
 	         <div class="unit">
-               <?php echo $this->element('forms/form_curso'); ?><p>
+               <?php echo $this->element('forms/form_curso_add'); ?><p>
              </div>
              <div class="text-center">
               <div class="submit">                 
