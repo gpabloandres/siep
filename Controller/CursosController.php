@@ -22,7 +22,7 @@ class CursosController extends AppController {
 					$this->Auth->allow();				
 				} else {
 					// Sí es un ATEI.
-					$this->Auth->allow('index', 'view');	
+					$this->Auth->allow('index', 'view', 'edit');	
 				}
 				break;
 			case 'admin':
@@ -30,7 +30,14 @@ class CursosController extends AppController {
 				$this->Auth->allow('index', 'view');
 				break;
 		}
-	    /* FIN */ 
+	    /* FIN */
+		/* FUNCIÓN PRIVADA "LISTS" (INICIO).
+        *Si se ejecutan las acciones add/edit activa la función privada "lists".
+		*/
+		if ($this->ifActionIs(array('add', 'edit'))) {
+			$this->__lists();
+		}
+		/* FIN */ 
     } 
 
 	function index() {
@@ -205,15 +212,13 @@ class CursosController extends AppController {
 				$this->Session->setFlash('La sección no fué grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-		$this->Curso->Titulacion->recursive = 0;
-		$titulacions = $this->Curso->Titulacion->find('list');
-		$this->Curso->Materia->recursive = 0;
-		$materias = $this->Curso->Materia->find('list');
+		//$this->Curso->Materia->recursive = 0;
+		//$materias = $this->Curso->Materia->find('list');
 		$this->Curso->Centro->recursive = 0;
 		$centros = $this->Curso->Centro->find('list');
 		$this->Inscripcion->recursive = 0;
 		$inscripcions = $this->Inscripcion->find('list');
-		$this->set(compact('titulacions', 'materias', 'ciclos', 'inscripcions', $inscripcions, 'centros'));
+		$this->set(compact(/*'materias', */'ciclos', 'inscripcions', $inscripcions, 'centros'));
 	}
 
 	function edit($id = null) {
@@ -261,15 +266,14 @@ class CursosController extends AppController {
 		}
 		$this->Curso->Centro->recursive = 0;
 		$centros = $this->Curso->Centro->find('list');
-		$this->Curso->Titulacion->recursive = 0;
-		$titulacions = $this->Curso->Titulacion->find('list');
+		//Obtención del ciclo.
 		$this->loadModel('Ciclo');
 		$this->Ciclo->recursive = 0;
         $this->Ciclo->Behaviors->load('Containable');
 		$ciclos = $this->Ciclo->find('list');
 		$this->Inscripcion->recursive = 0;
 		$inscripcions = $this->Inscripcion->find('list');
-		$this->set(compact('centros', 'titulacions', 'modalidads', 'ciclos', 'inscripcions', $inscripcions));
+		$this->set(compact('centros', 'modalidads', 'ciclos', 'inscripcions', $inscripcions, 'titulaciones'));
 	}
 
 	function delete($id = null) {
@@ -307,5 +311,18 @@ class CursosController extends AppController {
 		$this->Session->setFlash('El curso no pudo ser reactivado', 'default', array('class' => 'alert alert-danger'));
         $this->redirect(array('action' => 'index'));
     }
+
+    //Métodos privados
+	private function __lists(){
+		//Obtención de las titulaciones.
+		$this->loadModel('Titulacion');
+		$this->Titulacion->recursive = 0;
+        $this->Titulacion->Behaviors->load('Containable');
+		$titulaciones = $this->Titulacion->find('list', array(
+			'fields'=>array('nombre'),
+			'contain'=>false,
+			'conditions'=>array('status'=>1)));
+		$this->set(compact('titulaciones'));
+	}	
 }
 ?>
