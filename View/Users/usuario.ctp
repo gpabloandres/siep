@@ -171,7 +171,8 @@
 	</div>
 !-->
 <?php endif; ?>	
-<!-- Visualizable por todos los roles de usuarios -->	
+<!-- Visualizable por todos los roles de usuarios excepto los de Primario y Secundario de adultos. -->
+<?php if($userCentroNivel != 'Adultos - Secundario' && $userCentroNivel != 'Adultos - Primario') : ?>
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">INICIAL, PRIMARIA Y SECUNDARIA | INSCRIPCIONES POR HERMANOS</h3>
@@ -196,4 +197,5 @@
 	    <li class="list-group-item">3º PASO | "Revisión de la inscripción recién registrada": verifique en "Datos de Alta" figure el nombre correcto del hermano.</li>
 	  </ul>
 	</div>
+<?php endif; ?>	
 </div>
