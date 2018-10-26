@@ -185,6 +185,7 @@
             <?php echo $this->Form->input('fotocopia_dni', array('default'=>$tildeDocumentoString, 'between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Fotocopia DNI</label>'));?>
           </span>
         </div>
+      <?php if ($userCentroNivel != 'Adultos - Secundario' && $userCentroNivel != 'Adultos - Primario') : ?>  
         <div class="input-group">
           <span class="input-group-addon">
             <?php echo $this->Form->input('partida_nacimiento_alumno', array('default'=>$tildePartidaString, 'between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Alumno</label>'));?>
@@ -195,6 +196,7 @@
             <?php echo $this->Form->input('certificado_vacunas', array('default'=>$tildeVacunasString, 'between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Vacunación</label>'));?>
           </span>
         </div>
+      <?php endif; ?>  
         <!--
         <div class="input-group">
             <span class="input-group-addon">
@@ -203,7 +205,7 @@
         </div>
         -->
         <?php 
-          if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria')) {
+          if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria') || ($userCentroNivel == 'Adultos - Secundario') || ($userCentroNivel == 'Adultos - Primario')) {
         ?>  
         <div class="input-group">
             <span class="input-group-addon">

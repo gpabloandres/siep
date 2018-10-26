@@ -180,8 +180,11 @@ class InscripcionsController extends AppController {
         //Obtención del estado de inscripción para habilitar acceso a impresión de constancia de alumno regular.
         $estadoInscripcionArray = $this->Inscripcion->findById($id, 'estado_inscripcion');
         $estadoInscripcion = $estadoInscripcionArray['Inscripcion']['estado_inscripcion'];
+        //Obtención del nivel del centro del usuario.
+        $userCentroId = $this->getUserCentroId();
+        $userCentroNivel = $this->getUserCentroNivel($userCentroId);
         //Envío de dato a la vista.
-        $this->set(compact('estadoInscripcion'));
+        $this->set(compact('estadoInscripcion', 'userCentroNivel'));
     }
 
 	public function add() {
@@ -385,6 +388,14 @@ class InscripcionsController extends AppController {
                                 $estadoDocumentacion = "PENDIENTE";   
                         }                        
                     break;
+                case 'Adultos - Secundario':
+                case 'Adultos - Primario':
+                    if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['certificado_septimo'] ==1)) {
+                        $estadoDocumentacion = "COMPLETA";
+                    } else {
+                        $estadoDocumentacion = "PENDIENTE";   
+                    }                        
+                    break;    
                 default:
                        $estadoDocumentacion = "PENDIENTE";
             }
@@ -523,6 +534,14 @@ class InscripcionsController extends AppController {
                         $estadoDocumentacion = "PENDIENTE";   
                     }                        
                     break;
+                case 'Adultos - Secundario':
+                case 'Adultos - Primario':
+                    if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['certificado_septimo'] ==1)) {
+                        $estadoDocumentacion = "COMPLETA";
+                    } else {
+                        $estadoDocumentacion = "PENDIENTE";   
+                    }                        
+                    break;    
                 default:
                     //$estadoDocumentacion = "PENDIENTE";
             }
@@ -733,6 +752,7 @@ class InscripcionsController extends AppController {
         *  Sino sí es usuario de otro nivel ve los correspondiente.
         */
 		$userCentroId = $this->getUserCentroId();
+        $userCentroNivel = $this->getUserCentroNivel($userCentroId);
         $nivelCentro = $this->Inscripcion->Centro->find('list', array('fields'=>array('nivel_servicio'), 'contain'=>false, 'conditions'=>array('id'=>$userCentroId)));
         $userRol = $this->Auth->user('role');
 		$this->Inscripcion->Curso->recursive = 0;
@@ -769,7 +789,7 @@ class InscripcionsController extends AppController {
 			$personaId = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'contain'=>false));
 		}
 		/* FIN */
-        $this->set(compact('ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual','cicloIdUltimo'));
+        $this->set(compact('ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual','cicloIdUltimo', 'userCentroNivel'));
 	}
 
 	private function __getCodigo($ciclo, $personaDocString){

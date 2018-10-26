@@ -67,13 +67,18 @@
                                 <?php endif; ?></p>
                                 <b><?php echo __('Documentación:'); ?></b>
                                   <ul>
-                                    <?php if(!$inscripcion['fotocopia_dni'] == 1): ?>
-                                    <li><span class="label label-danger"><?php echo 'Falta Fotocopia DNI'; ?></span></li><?php endif; ?>
+                                   <?php if(!$inscripcion['fotocopia_dni'] == 1): ?>
+                                    <li><span class="label label-danger"><?php echo 'Falta Fotocopia DNI'; ?></span></li>
+                                   <?php endif; ?>
+                                   <?php if($userCentroNivel != 'Adultos - Secundario' && $userCentroNivel != 'Adultos - Primario') : ?>
                                     <?php if(!$inscripcion['partida_nacimiento_alumno'] == 1): ?>
-                                    <li><span class="label label-danger"><?php echo 'Falta Partida Alumno'; ?></span></li><?php endif; ?>
+                                        <li><span class="label label-danger"><?php echo 'Falta Partida Alumno'; ?></span></li>
+                                    <?php endif; ?>
                                     <?php if(!$inscripcion['certificado_vacunas'] == 1): ?>
-                                    <li><span class="label label-danger"><?php echo 'Certificado vacunación'; ?></span></li><?php endif; ?>
-                                    <?php if(($current_user['role'] == 'superadmin' || $current_user['puesto'] == 'Dirección Colegio Secundario' || $current_user['puesto'] == 'Supervisión Secundaria') && ($inscripcion['certificado_septimo'] == 0)): ?>
+                                        <li><span class="label label-danger"><?php echo 'Certificado vacunación'; ?></span></li>
+                                    <?php endif; ?>
+                                   <?php endif; ?> 
+                                    <?php if(($current_user['role'] == 'superadmin' || $current_user['puesto'] == 'Dirección Colegio Secundario' || $current_user['puesto'] == 'Supervisión Secundaria' || $userCentroNivel == 'Adultos - Secundario' || $userCentroNivel == 'Adultos - Primario') && ($inscripcion['certificado_septimo'] == 0)): ?>
                                     <li><span class="label label-danger"><?php echo 'Falta Certificado Primaria'; ?></span></li><?php endif; ?>
                                   </ul>
                             </div>
