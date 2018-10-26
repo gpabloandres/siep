@@ -35,6 +35,13 @@ class UsersController extends AppController {
 				break;
 		}
 		/* FIN */
+		/* FUNCIÓN PRIVADA "LISTS" (INICIO).
+        *Si se ejecutan las acciones add/edit activa la función privada "lists".
+		
+		if ($this->ifActionIs(array('add', 'edit'))) {
+			$this->__lists();
+		}
+		/* FIN */
     }     
      
 	//Acción para redirigir a los usuarios con rol usuario común
@@ -54,7 +61,10 @@ class UsersController extends AppController {
 		$userCentroNivel = $this->getUserCentroNivel($userCentroId);
 		//Obtención del puesto del usuario.
 		$userPuesto = $this->Auth->user('puesto');
-		$this->set(compact('users', 'nombreCentro', 'userCentroNivel', 'userPuesto'));
+		//Obtención del nivel del centro del usuario.
+		$userCentroId = $this->getUserCentroId();
+        $userCentroNivel = $this->getUserCentroNivel($userCentroId);
+		$this->set(compact('users', 'nombreCentro', 'userCentroNivel', 'userPuesto', 'userCentroNivel'));
     	$this->render('/Users/usuario');
     }
 	
@@ -91,7 +101,7 @@ class UsersController extends AppController {
 			$conditions['User.username ='] = $this->params['named']['username'];
 		}
 		$users = $this->paginate('User', $conditions);
-     	$this->set(compact('users'));
+		$this->set(compact('users'));
     }
 
 	public function view($id = null) {
@@ -193,6 +203,11 @@ class UsersController extends AppController {
 		$this->Session->setFlash('El usuario no pudo ser reactivado', 'default', array('class' => 'alert alert-danger'));
         $this->redirect(array('action' => 'index'));
     }
-	
+
+    //Métodos privados
+	/*
+	private function __lists(){
+	}
+	*/
 }
 ?>
