@@ -49,6 +49,7 @@
 		if($this->request->data['Persona']['familiar']!=0) {
 			echo $this->Form->input('pueblosoriginario_id', array('label' => 'Pueblo originario', 'empty' => 'Ingrese una comunidad...', 'options' => $nativos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Si pertenece a algún pueblo originario seleccione una opción de la lista'));
 			//Sí el usuario es del nivel Inicial/Primario no muestra los siguientes campos.
+			/*
 			if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria') || ($current_user['puesto'] == 'Dirección Instituto Superior') || ($current_user['puesto'] == 'Supervisión Secundaria')) {
 				$estadosCiviles = array('Soltero' => 'Soltero', 'Casado' => 'Casado', 'Viudo' => 'Viudo', 'Divorciado' => 'Divorciado', 'Concubinato' => 'Concubinato', 'Unión civil' => 'Unión civil');
 				echo $this->Form->input('estado_civil', array('label' => 'Estado civil*', 'empty' => 'Ingrese un estado...', 'options' => $estadosCiviles, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
@@ -57,8 +58,8 @@
 				$horarios = array('mañana'=>'mañana','mañana y tarde'=>'mañana y tarde','tarde'=>'tarde','tarde y noche'=>'tarde y noche','noche'=>'noche', 'noche y mañana'=>'noche y mañana');
 				echo $this->Form->input('horario_de_trabajo', array('label'=>'Horario de Trabajo*', 'options' => $horarios, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Indique un horario de trabajo', 'placeholder' => 'Ingrese un horario de trabajo...'));
 			}
+			*/
 		} // Estos campos se muestran si la persona es familiar
-
 		// Solo el superadmin asigna Agentes
 			if ($current_user['role'] == 'superadmin') {
 				echo $this->Form->input('agente', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<i></i><br>Agente</label>'));

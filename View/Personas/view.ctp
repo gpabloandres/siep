@@ -30,24 +30,18 @@
                     <?php echo ($persona['Persona']['documento_tipo']).' '.($persona['Persona']['documento_nro']); ?></p>
                     <b><?php echo __('Edad: '); ?></b>
                     <?php echo ($persona['Persona']['edad']); ?></p>
-	                </div>
+                    </div>
                     <div class="col-md-8 col-sm-6 col-xs-8">
-                    <b><?php echo __('División Política: '); ?></b>
-                    <?php echo ($persona['Persona']['division_politica']); ?></p>
+                    <b><?php echo __('Fecha de Nacimiento: '); ?></b>
+                    <?php echo ($this->Time->format($persona['Persona']['fecha_nac'], '%A %d de %b de %Y'.' ( '.$this->Time->format($persona['Persona']['fecha_nac'], '%d-%m-%Y', 'invalid').' )')); ?></p>
                     <b><?php echo __('Lugar de Nacimiento: '); ?></b>
-                    <?php echo ($persona['Persona']['pcia_nac']); ?></p>
-                    <b><?php echo __('Domicilio: '); ?></b><br>
-                    <?php echo ' Calle: '.$persona['Persona']['calle_nombre'].' N° '.$persona['Persona']['calle_nro'].' | Dto/Casa: '.$persona['Persona']['depto_casa'].' |  Tira/Edificio: '.$persona['Persona']['tira_edificio'].' | Ciudad: '.$ciudadNombre[$persona['Persona']['ciudad_id']]; ?></p>
-                     <!-- Sí tiene barrio guardado lo muestra. -->
-                    <?php if (($barrioNombre[$persona['Persona']['barrio_id']]) !== null):?>
-                          <b><?php echo __('Barrio: '); ?></b>
-                          <?php echo ($barrioNombre[$persona['Persona']['barrio_id']]); ?></p>
-                    <?php else: ?> <!-- Sí no tiene barrio guardado consulta si tiene asentamiento. -->
-                          <?php if (($AsentamientoNombre[$persona['Persona']['asentamiento_id']]) !== null):?>
-                          <b><?php echo __('Asentamiento: '); ?></b>
-                          <?php echo $AsentamientoNombre[$persona['Persona']['asentamiento_id']]; ?></p>
-                          <?php endif; ?>
-                    <?php endif; ?>
+                    <?php echo ($persona['Persona']['pcia_nac'].' ( '.$persona['Persona']['division_politica'].' )'); ?></p>
+                    <b><?php echo __('Domicilio Actual: '); ?></b><br>
+                    <b><?php echo '| Calle: '?></b><?php echo $persona['Persona']['calle_nombre'];?><b><?php echo ' | N°: ';?></b><?php echo $persona['Persona']['calle_nro'];?><b><?php echo ' | Dto/Casa: ';?></b><?php echo $persona['Persona']['depto_casa'];?><b><?php echo ' | Tira/Edificio: ';?></b><?php echo $persona['Persona']['tira_edificio'];?><br>
+                    <b><?php echo '| Ciudad: ';?></b><?php echo $personaCiudadNombre; ?><br>
+                    <!-- Sí tiene barrio guardado lo muestra. -->
+                    <b><?php echo __(' | Barrio: '); ?></b><?php echo $personaBarrioNombre; ?><br>
+                    <b><?php echo __(' | Barrio Informal: '); ?></b><?php echo $personaAsentamientoNombre; ?></p>
                     <b><?php echo __('Telefono: '); ?></b>
                     <?php echo $persona['Persona']['telefono_nro']; ?></p>
                     <b><?php echo __('Email: '); ?></b>
