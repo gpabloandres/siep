@@ -174,8 +174,10 @@ class PersonasController extends AppController {
         }
     	//Obtención del nombre de la ciudad del domicilio actual.
     	$personaCiudadIdArray = $this->Persona->findById($id,'ciudad_id');
-		$personaCiudadId = $personaCiudadIdArray['Persona']['ciudad_id'];
-    	$this->loadModel('Ciudad');
+		if($personaCiudadIdArray) :
+			$personaCiudadId = $personaCiudadIdArray['Persona']['ciudad_id'];
+    	endif;
+		$this->loadModel('Ciudad');
 		$this->Ciudad->recursive = 0;
 		$this->Ciudad->Behaviors->load('Containable');
 		$personaCiudadNombreArray = $this->Ciudad->findById($personaCiudadId,'nombre');
@@ -191,7 +193,9 @@ class PersonasController extends AppController {
 		$this->Barrio->recursive = 0;
 		$this->Barrio->Behaviors->load('Containable');
 		$personaBarrioNombreArray = $this->Barrio->findById($personaBarrioId,'nombre');
-		$personaBarrioNombre = $personaBarrioNombreArray['Barrio']['nombre'];
+		if($personaBarrioNombreArray) :
+			$personaBarrioNombre = $personaBarrioNombreArray['Barrio']['nombre'];
+		endif;
 		//Obtención del nombre del asentamiento del domicilio actual.
     	$personaAsentamientoIdArray = $this->Persona->findById($id,'asentamiento_id');
 		if($personaAsentamientoIdArray) :
