@@ -19,7 +19,7 @@ class FamiliarsController extends AppController {
 					$this->Auth->allow();				
 				} else {
 					//En caso de ser ATEI
-					$this->Auth->allow('add', 'view', 'edit', 'autocompleteNombrePersona', 'autocompleteNombreAlumno');	
+					$this->Auth->allow('view');	
 				}
 				break;
 			case 'usuario':
@@ -95,8 +95,19 @@ class FamiliarsController extends AppController {
         $familiarAutorizadoRetirarArray = $this->Familiar->findById($id, 'autorizado_retirar');
         $familiarAutorizadoRetirar = $familiarAutorizadoRetirarArray['Familiar']['autorizado_retirar'];
         $familiarAutorizadoRetirarRta = ($familiarAutorizadoRetirar == 1) ? 'SI' : 'NO';
-        $this->set(compact('familiarNombre', 'familiarNacionalidad', 'familiarDNI', 'familiarOcupacion', 'familiarLugarTrabaja', 'ciudadNombre', 'familiarCalleNombre', 'familiarCalleNumero', 'familiarTelefono', 'familiarEmail', 'familiarConvivienteRta', 'familiarAutorizadoRetirarRta'/*, 'alumnoPersonaId', 'alumnoDocumentoTipo', 'alumnoDocumentoNro'*/));
-	}
+        //Obtención de clave para permitir editar sólo a los usuarios "admin" del mismo centro al alumno relacionado o a los "superadmin" o "usuarios".
+        $familiarAlumnoId = $this->Familiar->AlumnosFamiliar->find('list', array('fields'=>array('alumno_id'), 'conditions'=>array('familiar_id'=>$id)));
+        $this->loadModel('Alumno');
+        $this->Alumno->recursive = 0;
+        $this->Alumno->Behaviors->load('Containable');
+        $AlumnoCentroIds = $this->Alumno->find('list', array('fields'=>array('centro_id'), 'containable'=>true, 'conditions'=>array('id'=>$familiarAlumnoId)));
+        $userCentroId = $this->getUserCentroId();
+        $clave = array_search($userCentroId, $AlumnoCentroIds);
+	    //Envío de datos a la vista.        
+        $this->set(compact('familiarNombre', 'familiarNacionalidad', 'familiarDNI', 'familiarOcupacion', 'familiarLugarTrabaja', 'ciudadNombre', 'familiarCalleNombre', 'familiarCalleNumero', 'familiarTelefono', 'familiarEmail', 'familiarConvivienteRta', 'familiarAutorizadoRetirarRta'/*, 'alumnoPersonaId', 'alumnoDocumentoTipo', 'alumnoDocumentoNro'*/, 'clave'));
+
+
+    }
 
 	function add() {
 		  //abort if cancel button was pressed  
