@@ -13,10 +13,10 @@
                         <?php echo ($familiarDNI); ?><br>
                         <b>Nacionalidad:</b>        
                         <?php echo ($familiarNacionalidad); ?><br>
-                        <b>Ocupación:</b>       
-                        <?php echo ($familiarOcupacion); ?><br>
+                        <!--<b>Ocupación:</b>       
+                        <?php// echo ($familiarOcupacion); ?><br>
                         <b>Lugar de trabajo:</b>        
-                        <?php echo ($familiarLugarTrabaja); ?>
+                        <?php// echo ($familiarLugarTrabaja); ?>-->
                 </div>
                 <div class="col-md-6 col-sm-6">
                     <div class="subtitulo"><?php echo 'Datos de Contacto'; ?></div>
@@ -41,9 +41,10 @@
         <div class="unit">
             <div class="subtitulo">Opciones</div>
             <div class="opcion"><?php echo $this->Html->link(__('Listar Alumnos'), array('action' => 'index', 'controller' => 'alumnos')); ?></div>
+          <?php if(($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') || ($current_user['role'] == 'usuario') || ($clave != '')): ?>  
             <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $familiar['Familiar']['id'])); ?></div>
-          <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>  
-            <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $familiar['Familiar']['id'] ), null, sprintf(__('Esta seguro de borrar el familiar "'.$familiar['Familiar']['id'].'"'), $this->Form->value('Familiar.id'))); ?>
+          <?php endif; ?>
+          <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>  <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $familiar['Familiar']['id'] ), null, sprintf(__('Esta seguro de borrar el familiar "'.$familiar['Familiar']['id'].'"'), $this->Form->value('Familiar.id'))); ?>
             </div>
           <?php endif; ?>  
         </div>

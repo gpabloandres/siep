@@ -150,15 +150,18 @@
           <div class="col-md-4">
               <div class="unit">
  			      <div class="subtitulo">Opciones</div>
-                  <div class="opcion"><a href="http://api.sieptdf.org/api/constancia/<?php echo $inscripcion['id'];?>">Constancia de Inscripción</a></div>
-                <?php //Se visualiza solo sí la inscripción del alumno tiene estado CONFIRMADA. 
-                  if($estadoInscripcion === 'CONFIRMADA'): ?>
-                  <div class="opcion"><a href="http://api.sieptdf.org/api/constancia_regular/<?php echo $inscripcion['id'];?>">Constancia de Alumno Regular</a></div>
-                <?php endif; ?>
                   <div class="opcion"><?php echo $this->Html->link(__('Listar Inscripciones'), array('action' => 'index')); ?></div>
-                  <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $inscripcion['id'])); ?> </div>
+                <?php 
+                //Se visualiza solo sí la inscripción del alumno tiene estado CONFIRMADA o se trata de un "superusuario", "usuario" o "admin" del mismo centro que la inscripción. 
+                  if($current_user['role'] == 'superadmin' || $current_user['role'] == 'usuario' || $userCentroId == $centroInscripcion):
+                    if($estadoInscripcion === 'CONFIRMADA'): ?>
+                        <div class="opcion"><a href="http://api.sieptdf.org/api/constancia/<?php echo $inscripcion['id'];?>">Constancia de Inscripción</a></div>
+                        <div class="opcion"><a href="http://api.sieptdf.org/api/constancia_regular/<?php echo $inscripcion['id'];?>">Constancia de Alumno Regular</a></div>
+                    <?php endif; ?>
+                    <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $inscripcion['id'])); ?> </div>
+                <?php endif; ?>  
                 <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?> 
-                  <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $inscripcion['id']), null, sprintf(__('Esta seguro de borrar la inscripción %s?'), $inscripcion['id'])); ?></div>
+                    <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $inscripcion['id']), null, sprintf(__('Esta seguro de borrar la inscripción %s?'), $inscripcion['id'])); ?></div>
                 <?php endif; ?>  
               </div>
           </div>

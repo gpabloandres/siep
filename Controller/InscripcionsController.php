@@ -183,8 +183,11 @@ class InscripcionsController extends AppController {
         //Obtención del nivel del centro del usuario.
         $userCentroId = $this->getUserCentroId();
         $userCentroNivel = $this->getUserCentroNivel($userCentroId);
+        //Obtención del id del centro para permitir editar sólo a los usuarios "admin" del mismo centro de la inscripción o a los "superadmin" o "usuarios".
+        $centroInscripcionArray = $this->Inscripcion->findById($id, 'centro_id');
+        $centroInscripcion = $centroInscripcionArray['Inscripcion']['centro_id'];
         //Envío de dato a la vista.
-        $this->set(compact('estadoInscripcion', 'userCentroNivel'));
+        $this->set(compact('estadoInscripcion', 'userCentroNivel', 'userCentroId', 'centroInscripcion'));
     }
 
 	public function add() {
