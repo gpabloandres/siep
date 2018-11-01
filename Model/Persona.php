@@ -158,7 +158,7 @@ class Persona extends AppModel {
             'ocupacion' => array(
                 'alphaBet' => array(
                 'rule' => '/^[ a-zA-ZñÑ]{0,}$/i',
-								'required' => false,
+				'required' => false,
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 )
             ),
