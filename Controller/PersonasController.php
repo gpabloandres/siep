@@ -260,12 +260,17 @@ class PersonasController extends AppController {
 			$this->Session->setFlash('Persona no válida', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
-		/*
-		if(!$this->adminCanEdit($id)) {
-			$this->Session->setFlash('No tiene permisos para editar a esta persona, no pertenece a su establecimiento', 'default', array('class' => 'alert alert-warning'));
-			$this->redirect(array('action' => 'index'));
-		}
-		*/
+		//Consulta sí es familiar y/o alumno para definir permiso de edición.
+		$personaEsFamiliarAlumnoArray = $this->Persona->findById($id,'familiar, alumno');
+	    $personaEsFamiliar = $personaEsFamiliarAlumnoArray['Persona']['familiar'];
+		$personaEsAlumno = $personaEsFamiliarAlumnoArray['Persona']['alumno'];
+		//Sí no es familiar no limita la edición a los "admin" del centro.
+		if ($personaEsFamiliar == 0 || $personaEsAlumno == 1) :
+			if(!$this->adminCanEdit($id)) {
+				$this->Session->setFlash('No tiene permisos para editar a esta persona, no pertenece a su establecimiento', 'default', array('class' => 'alert alert-warning'));
+				$this->redirect(array('action' => 'index'));
+			}
+		endif;
 		if (!empty($this->data)) {
 		  //abort if cancel button was pressed
         	if(isset($this->params['data']['cancel'])) {
