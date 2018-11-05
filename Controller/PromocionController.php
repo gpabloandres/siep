@@ -174,16 +174,23 @@ class PromocionController extends AppController {
 
 		$centro = array_pop($centro);
 		$curso = array_pop($curso);
-
-		$secciones = $this->Curso->find('list', array(
+		//Sí el usuario es del nivel Secundario, visualiza en las opciones las secciones ficticias. 
+		if($nivelServicio == 'Común - Secundario') {
+			$secciones = $this->Curso->find('list', array(
+			'recursive'=>-1,
+			'fields'=>array('id','nombre_completo_curso'),
+			'conditions'=>array(
+				'centro_id'=>$this->params['named']['centro_id']))
+			);	
+		} else {
+			$secciones = $this->Curso->find('list', array(
 			'recursive'=>-1,
 			'fields'=>array('id','nombre_completo_curso'),
 			'conditions'=>array(
 				'centro_id'=>$this->params['named']['centro_id'],
-				'division !='=> ''
-			)
-		));
-
+				'division !='=> ''))
+			);
+		}	
 		$this->set(compact('cicloaPromocionar','centro','curso','cursosInscripcions','cicloaPromocionar','cicloSiguienteNombre','secciones'));
 	}
 
