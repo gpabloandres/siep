@@ -171,30 +171,65 @@
 	</div>
 !-->
 <?php endif; ?>	
-<!-- Visualizable por todos los roles de usuarios excepto los de Primario y Secundario de adultos. -->
-<?php if($userCentroNivel != 'Adultos - Secundario' && $userCentroNivel != 'Adultos - Primario') : ?>
+<!-- Visualizable sólo para los roles de usuarios de Secundario de adultos. -->
+<?php if($userCentroNivel == 'Adultos - Primario' || $userCentroNivel == 'Adultos - Secundario' || $userPuesto === 'Atei') : ?>
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
-	    <h3 class="panel-title">INICIAL, PRIMARIA Y SECUNDARIA | INSCRIPCIONES POR HERMANOS</h3>
+	    <h3 class="panel-title">PRIMARIO/SECUNDARIO | ADULTOS | INSCRIPCIONES POR PASES (Nuevo procedimiento)</h3>
 	  </div>
 	  <div class="panel-body">
-	    <p> Se desarrollarán en todos los niveles los días 6 y 7 de Agosto. La operatoria en SIEP incluye los siguiente pasos: </p>
+	    <p> A continuación se detallan los pasos a seguir para registrar inscripciones por pases en SIEP entre una institución origen (IO) y una institución destino (ID): </p>
 	  </div>
 	  <!-- List group -->
 	  <ul class="list-group">
-	    <li class="list-group-item">1º PASO | "Acceso al formulario p/agregar inscripción": Desde el menú ALUMNADO --> INSCRIPCIONES, click en el botón "+AGREGAR". </li>
-	    <li class="list-group-item">2º PASO | "Alta de inscripción por hermano": Completar los siguientes campos obligatorios como se indican a continuación:
+	    <li class="list-group-item">1º PASO | "Verificación de Baja en la IO": Desde el menú ALTA DE PERSONAS, indicar en "BÚSQUEDA" un alumno y luego click en el botón "BUSCAR". </li>
+	    <li class="list-group-item">2º PASO | "Alta de inscripción por pase": Completar los siguientes campos obligatorios como se indican a continuación:
 	    <ul>
-	    	<li>"Ciclo lectivo*": 2019</li>
+	    	<li>"Ciclo lectivo*": (indicar el corriente ciclo lectivo)</li>
 	    	<li>"Estado de la inscripción*": CONFIRMADA</li>
 	    	<li>"Nombre y apellidos del alumno*": (Indique el nombre del ingresante)</li>
 	    	<li>"Sección*": (indique una sección sin división ej: 1ro Mañana)</li>
-	    	<li>"Tipo de inscripción*": Hermano de alumno regular</li>
-	    	<li>"Hermano de Alumno Regular": (Indique el alumno que corresponda)</li>
+	    	<li>"Tipo de inscripción*": Pase</li>
+	    	<li>"Pase": (Indique IO)</li>
 	    	<li>Click en el botón "GUARDAR" (SIEP le mostrará el detalle de la inscripción registrada)</li>
 	    </ul>	
 	    </li>
-	    <li class="list-group-item">3º PASO | "Revisión de la inscripción recién registrada": verifique en "Datos de Alta" figure el nombre correcto del hermano.</li>
+	    <li class="list-group-item">3º PASO | "Revisión de la inscripción recién registrada": verifique en "Datos de Alta" figure el nombre correcto de la IO.</li>
+	  </ul>
+	</div>
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">PRIMARIO/SECUNDARIO | ADULTOS | INSCRIPCIONES ABIERTAS</h3>
+	  </div>
+	  <div class="panel-body">
+	    <p> Se desarrollan durante todo el año <a href="https://drive.google.com/file/d/1Gf7qaDCpvdD8tRp_I4Cs6CIu98vr_U0I/view?usp=sharing" target="_blank"> (ABRIR Y DESCARGAR EL MODELO DE PLANILLA) </a>. La operatoria en SIEP incluye los siguiente pasos: </p>
+	  </div>
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item">1º PASO | "Alta de inscripción": Desde el menú ALUMNADO --> INSCRIPCIONES, click en el botón "+AGREGAR", completar los siguientes campos obligatorios como se indican a continuación:
+	    <ul>
+	    	<li>"Ciclo lectivo*": 2019</li>
+	    	<li>"Estado de la inscripción*": NO CONFIRMADA</li>
+	    	<li>"Nombre y apellidos del alumno*": (Indique el nombre del ingresante)</li>
+	    	<li>"Sección*": (indique una sección sin división ej: 1ro Otro)</li>
+	    	<li>"Tipo de inscripción*": Común</li>
+	    	<li>Click en el botón "GUARDAR" (SIEP le mostrará el detalle de la inscripción registrada)</li>
+	    </ul>	
+	  </ul>
+	</div>
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">PRIMARIO/SECUNDARIO | ADULTOS | PROMOCIONES </h3>
+	  </div>
+	  <div class="panel-body">
+	    <p> A continuación se detallan los pasos a seguir para registrar PROMOCIONES en SIEP <a href="https://drive.google.com/file/d/1VsFgAyMFQuPrFP8uZiGYfHGqADrqtTHv/view?usp=sharing" target="_blank">(VER TAMBIÉN VIDEO TUTORIAL EN LÍNEA)</a>: </p>
+	  </div>
+	  <!-- List group -->
+	  <ul class="list-group">
+	    <li class="list-group-item">1º PASO | "Identificación de la sección origen ": Desde el menú OFERTAS --> SECCIONES, indicar en "BÚSQUEDA" una sección (sala/grado) origen y luego click en el botón "BUSCAR". </li>
+	    <li class="list-group-item">2º PASO | "Ver el detalle de la sección": click en el botón VERDE de la tarjeta de la sección.	
+	    </li>
+	    <li class="list-group-item">3º PASO | "Promocionar a la sección destino": Desde "OPCIONES", click en el botón "Promocionar". Luego señalar en el listado el/los alumnos para ser promocionados e indicar en "OPCIONES DE PROMOCIÓN" la sección destino. Por último, click en el botón "Confirmar promoción".</li>
 	  </ul>
 	</div>
 <?php endif; ?>	
