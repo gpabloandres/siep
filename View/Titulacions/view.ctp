@@ -91,10 +91,12 @@
        <div class="unit">
             <div class="subtitulo">Opciones</div>
             <div class="opcion"><?php echo $this->Html->link('Listar Titulaciones', array('controller' => 'titulacions', 'action' => 'index')); ?></div>
-            <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
+          <?php if(($current_user['role'] == 'superadmin') && ($current_user['puesto'] == 'Sistemas' || $current_user['puesto'] == 'Atei')): ?>
             <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $titulacion['Titulacion']['id'])); ?></div>
+          <?php endif; ?>
+          <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>  
             <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $titulacion['Titulacion']['id']), null, sprintf(__('Esta seguro de borrar la titulación %s?'), $titulacion['Titulacion']['nombre'])); ?></div>
-            <?php endif; ?>
+          <?php endif; ?>
         </div>
     </div>
  </div>
