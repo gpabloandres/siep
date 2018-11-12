@@ -46,7 +46,7 @@ class Persona extends AppModel {
                 'message' => 'Indicar los nombres.'
                 ),
                 'alphaBet' => array(
-                'rule' => '/^[ áÁéÉíÍóÓúÚ a-zA-ZñÑ]{3,}$/i',
+                'rule' => '/^[ áÁéÉíÍóÓúÚüÜ a-zA-ZñÑ]{3,}$/i',
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 ),
             ),
@@ -57,7 +57,7 @@ class Persona extends AppModel {
                 'message' => 'Indicar los apellidos.'
                 ),
                 'alphaBet' => array(
-                'rule' => '/^[ áÁéÉíÍóÓúÚ a-zA-ZñÑ]{3,}$/i',
+                'rule' => '/^[ áÁéÉíÍóÓúÚüÜ a-zA-ZñÑ]{3,}$/i',
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 ),
             ),
