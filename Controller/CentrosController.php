@@ -250,7 +250,7 @@ class CentrosController extends AppController {
 
 		$centro = $this->Centro->find('all', array(
 			'recursive'	=> -1,
-			'conditions' => $conditions,
+			'conditions' => array($conditions, 'status'=>1),
 			'fields' 	=> array('id', 'sigla'))
 			);
 
