@@ -64,9 +64,13 @@
               echo $this->Form->input('turno', array('label'=>'Turno*', 'readonly' => true, ' between' => '<br>', 'class' => 'form-control'));
           }
           if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
+              /*
               echo $this->Form->input('aula_nro', array('label' => 'Aula Nro*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca un número de aula', 'Placeholder' => 'Ingrese un nº de Aula...'));
+              */
           } else {
+              /*
               echo $this->Form->input('aula_nro', array('label'=>'Aula Nro*', 'readonly' => true, ' between' => '<br>', 'class' => 'form-control'));
+              */
           }          
           if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
               echo $this->Form->input('plazas', array('between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca la cantidad de plazas admitidas en la sección...', 'Placeholder' => 'Ingrese cantidad máxima de plazas'));
