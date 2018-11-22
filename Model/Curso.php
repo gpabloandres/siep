@@ -93,7 +93,10 @@ class Curso extends AppModel {
                    'division' => array(
                         'required' => array(
 						   	'rule' => 'notBlank',
+						   	/*
 						   	'required' => 'create',
+						   	*/
+						   	'allowEmpty' => true,
                            	'message' => 'Ingrese una división válida',
 						)	
                     ),
