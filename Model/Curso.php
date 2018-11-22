@@ -93,7 +93,10 @@ class Curso extends AppModel {
                    'division' => array(
                         'required' => array(
 						   	'rule' => 'notBlank',
+						   	/*
 						   	'required' => 'create',
+						   	*/
+						   	'allowEmpty' => true,
                            	'message' => 'Ingrese una división válida',
 						)	
                     ),
@@ -133,6 +136,7 @@ class Curso extends AppModel {
 			                'message' => 'Indicar número sin puntos ni comas ni espacios.'
 		                )
 		            ),
+		            /*
 				   'aula_nro' => array(
                         'numeric' => array(
 							'rule' => 'naturalNumber',
@@ -140,6 +144,7 @@ class Curso extends AppModel {
 							'message' => 'Indicar número sin puntos ni comas ni espacios.'
 						)
                    ),
+                   */
                    'titulacion_id' => array(
                         'required' => array(
 						   'rule' => 'notBlank',
