@@ -203,8 +203,9 @@ class InscripcionsController extends AppController {
         */
         $cicloIdActualArray = $this->Ciclo->findByNombre($nombreCicloActual, 'id');
         $cicloIdActual = $cicloIdActualArray['Ciclo']['id']; 
+        $cicloIdPosterior = $cicloIdActual + 2;
         //Envío de dato a la vista.
-        $this->set(compact('estadoInscripcion', 'userCentroNivel', 'userCentroId', 'centroInscripcion', 'cicloInscripcion', 'cicloIdActual'));
+        $this->set(compact('estadoInscripcion', 'userCentroNivel', 'userCentroId', 'centroInscripcion', 'cicloInscripcion', 'cicloIdActual', 'cicloIdPosterior'));
     }
 
 	public function add() {
