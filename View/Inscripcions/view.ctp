@@ -152,9 +152,10 @@
  			      <div class="subtitulo">Opciones</div>
                   <div class="opcion"><?php echo $this->Html->link(__('Listar Inscripciones'), array('action' => 'index')); ?></div>
                 <?php 
-                //Se visualiza solo sí la inscripción del alumno tiene estado CONFIRMADA o se trata de un "superusuario", "usuario" o "admin" del mismo centro que la inscripción. 
+                //Se visualiza solo sí se trata de un "superusuario", "usuario" o "admin" del mismo centro que la inscripción. 
                   if($current_user['role'] == 'superadmin' || $current_user['role'] == 'usuario' || $userCentroId == $centroInscripcion):
-                    if($estadoInscripcion === 'CONFIRMADA'): ?>
+                    // y sí la inscripción del alumno tiene estado CONFIRMADA y es del ciclo actual. 
+                    if($estadoInscripcion === 'CONFIRMADA' && $cicloInscripcion == $cicloIdActual): ?>
                         <div class="opcion"><a href="http://api.sieptdf.org/api/constancia/<?php echo $inscripcion['id'];?>">Constancia de Inscripción</a></div>
                         <div class="opcion"><a href="http://api.sieptdf.org/api/constancia_regular/<?php echo $inscripcion['id'];?>">Constancia de Alumno Regular</a></div>
                     <?php endif; ?>
