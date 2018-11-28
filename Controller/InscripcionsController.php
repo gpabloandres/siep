@@ -186,8 +186,25 @@ class InscripcionsController extends AppController {
         //Obtención del id del centro para permitir editar sólo a los usuarios "admin" del mismo centro de la inscripción o a los "superadmin" o "usuarios".
         $centroInscripcionArray = $this->Inscripcion->findById($id, 'centro_id');
         $centroInscripcion = $centroInscripcionArray['Inscripcion']['centro_id'];
+        //Obtención del id del ciclo para permitir descargar CONSTANCIA DE ALUMNO REGULAR sólo sí coincide con el ciclo actual.
+        $cicloInscripcionArray = $this->Inscripcion->findById($id, 'ciclo_id');
+        $cicloInscripcion = $cicloInscripcionArray['Inscripcion']['ciclo_id'];
+        // Obtención del ciclo actual.
+        $hoyArray = getdate();
+        $nombreCicloActual = $hoyArray['year'];
+        $this->loadModel('Ciclo');
+        $this->Ciclo->recursive = 0;
+        $this->Ciclo->Behaviors->load('Containable');
+        /*
+        $cicloActual = $this->Ciclo->find('first', array(
+            'contain' => false,
+            'conditions' => array('nombre' => $hoyArray['year'])
+        ));
+        */
+        $cicloIdActualArray = $this->Ciclo->findByNombre($nombreCicloActual, 'id');
+        $cicloIdActual = $cicloIdActualArray['Ciclo']['id']; 
         //Envío de dato a la vista.
-        $this->set(compact('estadoInscripcion', 'userCentroNivel', 'userCentroId', 'centroInscripcion'));
+        $this->set(compact('estadoInscripcion', 'userCentroNivel', 'userCentroId', 'centroInscripcion', 'cicloInscripcion', 'cicloIdActual'));
     }
 
 	public function add() {
