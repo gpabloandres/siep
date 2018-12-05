@@ -155,7 +155,7 @@
                 //Se visualiza solo sí se trata de un "superusuario", "usuario" o "admin" del mismo centro que la inscripción. 
                   if($current_user['role'] == 'superadmin' || $current_user['role'] == 'usuario' || $userCentroId == $centroInscripcion):
                     // y sí la inscripción del alumno tiene estado CONFIRMADA y es del ciclo actual. 
-                    if($estadoInscripcion === 'CONFIRMADA' && ($cicloInscripcion == $cicloIdActual) || ($cicloInscripcion == $cicloIdPosterior)): ?>
+                    if(($estadoInscripcion === 'CONFIRMADA' || $estadoInscripcion === 'EGRESO') && ($cicloInscripcion == $cicloIdActual) || ($cicloInscripcion == $cicloIdPosterior)): ?>
                         <div class="opcion"><a href="http://api.sieptdf.org/api/constancia/<?php echo $inscripcion['id'];?>">Constancia de Inscripción</a></div>
                         <div class="opcion"><a href="http://api.sieptdf.org/api/constancia_regular/<?php echo $inscripcion['id'];?>">Constancia de Alumno Regular</a></div>
                     <?php endif; ?>
