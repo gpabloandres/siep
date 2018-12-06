@@ -89,11 +89,12 @@
 					<?php
 						if($curso['Curso']['anio'] == '6to')
 						{
+							/*Deben mostrar la opción "EGRESAR" los 7mos de las secciones con orientación técnica y los 6tos de las secciones con orientación bachiller*/
 							if(
 								($curso['Centro']['cue'] == '940007700') ||
-								($curso['Centro']['cue'] == '940008300') ||
+								($curso['Centro']['cue'] == '940008300')/* ||
 								($curso['Centro']['cue'] == '940015900') ||
-								($curso['Centro']['cue'] == '940015700')
+								($curso['Centro']['cue'] == '940015700')*/
 							) {
 								$showEgreso = false;
 							} else {
