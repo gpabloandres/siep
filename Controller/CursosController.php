@@ -120,7 +120,25 @@ class CursosController extends AppController {
 			$centros = $this->Curso->Centro->find('list', array('fields'=>array('sigla'), 'contain'=>false, 'conditions'=>array('id'=>$userCentroId)));
 		}
 		/* FIN */
-		$this->set(compact('cursos', 'centros', 'comboAnio','comboDivision','comboSecciones'));
+		//Obtención de los nombres de las titulaciones para mostrar en las secciones.
+		$this->loadModel('Titulacion');
+		$this->Titulacion->recursive = 0;
+        $this->Titulacion->Behaviors->load('Containable');
+		$titulacionesNombres = $this->Titulacion->find('list', array(
+			'fields'=>array('nombre_abreviado'),
+			'contain'=>false,
+			'conditions'=>array('status'=>1)));
+		//Obtención de los niveles para filtrar mostrar titulaciones.
+		$centrosIds = $this->Centro->find('list', array(
+			'fields'=>array('id'),
+			'contain'=>false,
+			'conditions'=>array(
+				'status'=>1,
+				'OR'=>(array(
+					array('nivel_servicio'=>'Común - Secundario'),
+					array('nivel_servicio'=>'Adultos - Secundario'))))
+			));
+		$this->set(compact('cursos', 'centros', 'comboAnio','comboDivision','comboSecciones', 'titulacionesNombres', 'centrosIds'));
 	}
 
 	function view($id = null) {
