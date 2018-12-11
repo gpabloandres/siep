@@ -6,7 +6,10 @@
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Año: </b> <?php echo $curso['Curso']['anio']; ?></span><br/>
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>División: </b> <?php echo $curso['Curso']['division']; ?></span><br/>
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Turno: </b> <?php echo $curso['Curso']['turno']; ?></span></br>
-        <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Tipo: </b> <?php echo $curso['Curso']['tipo']; ?></span>
+        <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Tipo: </b> <?php echo $curso['Curso']['tipo']; ?></span></br>
+    <?php if (array_key_exists($curso['Curso']['centro_id'], $centrosIds)): ?>
+        <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Titulación: </br></b> <?php echo $titulacionesNombres[$curso['Curso']['titulacion_id']]; ?></span>
+    <?php endif; ?>
         <hr />
         <div class="text-right">
             <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-eye-open"></i>', array('controller' => 'cursos', 'action' => 'view', $curso['Curso']['id']), array('class' => 'btn btn-success','escape' => false)); ?></span>
