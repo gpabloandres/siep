@@ -4,7 +4,6 @@
       <?php //echo $this->Form->input('created', array('label' => 'Creado*', 'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar')); ?>
   </div>
 </div><hr />-->
-<?php echo $this->Form->input('created', array('type' => 'hidden', 'default'=>$titulacionesCentros)); ?>
 <div class="row">
   <div class="col-md-4 col-sm-6 col-xs-12">
 	  <?php
