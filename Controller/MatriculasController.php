@@ -144,8 +144,15 @@ class MatriculasController extends AppController
                 'fields'=> array('Curso.division','Curso.division')
             ));
         }
-
-        $this->set(compact('matriculas','comboAnio','comboDivision','comboCiclo','cicloIdUltimo','cicloIdActual'));
+        //Obtención de los nombres de las titulaciones para mostrar en las secciones.
+        $this->loadModel('Titulacion');
+        $this->Titulacion->recursive = 0;
+        $this->Titulacion->Behaviors->load('Containable');
+        $titulacionesNombres = $this->Titulacion->find('list', array(
+            'fields'=>array('nombre_abreviado'),
+            'contain'=>false,
+            'conditions'=>array('status'=>1)));
+        $this->set(compact('matriculas','comboAnio','comboDivision','comboCiclo','cicloIdUltimo','cicloIdActual', 'titulacionesNombres'));
   	}
 
     /*

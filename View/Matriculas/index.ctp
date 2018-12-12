@@ -77,7 +77,14 @@
     </div>
 </div><br>
 <?php endif; ?>
-
+<?php
+     $ocultar = false;
+     if( $current_user['Centro']['nivel_servicio'] === 'Común - Inicial - Primario' ||
+         $current_user['Centro']['nivel_servicio'] === 'Común - Inicial' ||
+         $current_user['Centro']['nivel_servicio'] === 'Común - Primario' ) {
+         $ocultar = true;
+     }
+?>
 <div class="TituloSec">Inscripciones 2018</div>
 <div id="ContenidoSec">
 
@@ -90,6 +97,9 @@
           <th><?php echo $this->Paginator->sort('division', 'Division');?></th>
           <th><?php echo $this->Paginator->sort('tipo', 'Tipo');?></th>
           <th><?php echo $this->Paginator->sort('turno', 'Turno');?></th>
+        <?php if(!$ocultar) : ?>
+          <th><?php echo $this->Paginator->sort('titulacion', 'Titulación');?></th>
+        <?php endif; ?>  
           <th><?php echo $this->Paginator->sort('plazas', 'Plazas');?></th>
           <th><?php echo $this->Paginator->sort('matricula', 'Matriculas');?></th>
           <th><?php echo $this->Paginator->sort('vacantes', 'Vacantes');?></th>
@@ -114,6 +124,11 @@
             <td>
               <?php echo $matricula['Curso']['turno']; ?>
             </td>
+          <?php if(!$ocultar) : ?>  
+            <td>
+              <?php echo $titulacionesNombres[$matricula['Curso']['titulacion_id']]; ?>
+            </td>
+          <?php endif; ?>  
             <td>
               <?php echo $matricula['Curso']['plazas']; ?>
             </td>

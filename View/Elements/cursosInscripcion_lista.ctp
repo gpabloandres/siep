@@ -30,7 +30,7 @@
                     <?php  endif;  ?>
                 </td>
                 <td><?php echo $cursosInscripcion['Ciclo']['nombre']; ?> </td>
-                <td><?php echo $cursosInscripcion['Centro']['nombre']; ?> </td>
+                <td><?php echo $cursosInscripcion['Centro']['sigla']; ?> </td>
                 <td><?php echo $cursosInscripcion['Curso']['anio']." ".$cursosInscripcion['Curso']['division']; ?> </td>
                 <td><?php echo $cursosInscripcion['Curso']['turno']; ?> </td>
                 <td><?php echo $cursosInscripcion['Persona']['documento_nro']; ?> </td>

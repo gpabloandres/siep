@@ -75,7 +75,8 @@
           <th>Division</th>
           <th>Tipo</th>
           <?php if(!$ocultar) : ?>
-              <th>Plaza</th>
+            <th>Titulación</th>
+            <th>Plaza</th>
           <?php endif ?>
           <th>Matricula</th>
           <?php if(!$ocultar) : ?>
@@ -102,9 +103,12 @@
             <td>
               <?php echo $seccion['division']; ?>
             </td>
-            <?php if(!$ocultar) : ?>
             <td>
               <?php echo $seccion['tipo']; ?>
+            </td>
+            <?php if(!$ocultar) : ?>
+            <td>
+              <?php echo $titulacionesNombres[$seccion['titulacion_id']]; ?>
             </td>
             <td>
               <?php echo $seccion['plazas']; ?>
