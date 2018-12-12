@@ -3,7 +3,7 @@
 <div class="titulacions form">
 <?php echo $this->Form->create('Titulacion', array('type' => 'file', 'novalidate' => 'novalidate'));?>
 	         <div class="unit">
-               <?php echo $this->element('forms/form_titulacion'); ?><p>
+               <?php echo $this->element('forms/form_titulacion_add'); ?><p>
              </div>
              <div class="text-center">
               <div class="submit">                 
