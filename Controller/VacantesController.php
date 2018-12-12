@@ -126,7 +126,16 @@ class VacantesController extends AppController
             // Manejar error de API
         }
 
-        $this->set(compact('matriculas_por_seccion','cicloIdUltimo','cicloIdActual','comboCiclo','comboCiudad','comboSector'));
+        //Obtención de los nombres de las titulaciones para mostrar en las secciones.
+        $this->loadModel('Titulacion');
+        $this->Titulacion->recursive = 0;
+        $this->Titulacion->Behaviors->load('Containable');
+        $titulacionesNombres = $this->Titulacion->find('list', array(
+            'fields'=>array('nombre_abreviado'),
+            'contain'=>false,
+            'conditions'=>array('status'=>1)));
+        
+        $this->set(compact('matriculas_por_seccion','cicloIdUltimo','cicloIdActual','comboCiclo','comboCiudad','comboSector', 'titulacionesNombres'));
     }
 
     public function recuento()
