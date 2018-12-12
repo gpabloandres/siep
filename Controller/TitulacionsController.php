@@ -132,7 +132,12 @@ class TitulacionsController extends AppController {
 			$this->data = $this->Titulacion->read(null, $id);
 		}
 		$centros = $this->Centro->find('list');
-		$this->set(compact('centros', $centros));
+		//Obtención de la fecha de creación del registro para forzar guardar el registro.
+		$titulacionCreatedArray = $this->Titulacion->findById($id, 'created');
+		$titulacionCreated = $titulacionCreatedArray['Titulacion']['created'];
+		//Obtención de centros relacionados a la titulación para forzar guardar el registro.
+		$titulacionesCentros = $this->Titulacion->CentrosTitulacion->find('list', array('fields'=>array('centro_id'), 'conditions'=>array('titulacion_id'=>$id)));
+		$this->set(compact('centros', $centros, 'titulacionesCentros', 'titulacionCreated'));
 	}
 
 	function delete($id = null) {
