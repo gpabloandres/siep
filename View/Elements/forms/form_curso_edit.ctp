@@ -42,16 +42,20 @@
   <div class="col-md-6 col-sm-6 col-xs-12"><!--<div class="subtitulo">Datos de contacto</div>-->
 		<div class="unit"><strong><h3>Datos Específicos</h3></strong><hr />
 			<?php		
-          if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria') || ($current_user['puesto'] == 'Dirección Instituto Superior') || ($current_user['puesto'] == 'Supervisión Secundaria')) {
+          /*
+          if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria') || ($current_user['puesto'] == 'Dirección Instituto Superior') || ($current_user['puesto'] == 'Supervisión Secundaria')) */
+          if(($current_user['role'] == 'superadmin') && (($current_user['puesto'] == 'Sistemas') || ($current_user['puesto'] == 'Atei'))) {
             echo $this->Form->input('titulacion_id', array('label' => 'Titulación', 'empty' => 'Ingrese una titulación...', 'options'=>$titulaciones, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
-            //Define opciones de TIPOS.
-            $tipos = array('Independiente' => 'Independiente', 'Independiente de recuperación' => 'Independiente de recuperación', 'Independiente semipresencial' => 'Independiente semipresencial', 'Independiente presencial y semipresencial' => 'Independiente presencial y semipresencial', 'Múltiple' => 'Múltiple', 'Múltiple de recuperación' => 'Múltiple de recuperación', 'Múltiple semipresencial' => 'Múltiple semipresencial', 'Múltiple presencial y semipresencial' => 'Múltiple presencial y semipresencial', 'No Corresponde' => 'No Corresponde', 'Independiente presencial y semipresencial (violeta)' => 'Independiente presencial y semipresencial (violeta)','Mixta / Bimodal' => 'Mixta / Bimodal', 'Múltiple presencial y semipresencial (violeta)' => 'Múltiple presencial y semipresencial (violeta)', 'Multinivel' => 'Multinivel', 'Multiplan' => 'Multiplan');
+            } else {
+              echo $this->Form->input('titulacion_id', array('label'=>'Titulación*', 'readonly' => true, 'options'=>$titulaciones, 'between' => '<br>', 'class' => 'form-control'));
+            }
+          //Define opciones de TIPOS.
+          $tipos = array('Independiente' => 'Independiente', 'Independiente de recuperación' => 'Independiente de recuperación', 'Independiente semipresencial' => 'Independiente semipresencial', 'Independiente presencial y semipresencial' => 'Independiente presencial y semipresencial', 'Múltiple' => 'Múltiple', 'Múltiple de recuperación' => 'Múltiple de recuperación', 'Múltiple semipresencial' => 'Múltiple semipresencial', 'Múltiple presencial y semipresencial' => 'Múltiple presencial y semipresencial', 'No Corresponde' => 'No Corresponde', 'Independiente presencial y semipresencial (violeta)' => 'Independiente presencial y semipresencial (violeta)','Mixta / Bimodal' => 'Mixta / Bimodal', 'Múltiple presencial y semipresencial (violeta)' => 'Múltiple presencial y semipresencial (violeta)', 'Multinivel' => 'Multinivel', 'Multiplan' => 'Multiplan');
           if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
               echo $this->Form->input('tipo', array('empty' => 'Ingrese un tipo...', 'options' => $tipos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
           } else {
               echo $this->Form->input('tipo', array('label'=>'Tipo*', 'readonly' => true, ' between' => '<br>', 'class' => 'form-control'));
-            }
-          }  
+          }
           //Define opciones de TURNOS según nivel.
           if (($current_user['puesto'] == 'Dirección Jardín/Escuela') || ($current_user['puesto'] == 'Supervisión Inicial/Primaria')) {
               $turnos = array('Mañana' => 'Mañana', 'Tarde' =>'Tarde', 'Mañana Extendida' =>'Mañana Extendida', 'Tarde Extendida' => 'Tarde Extendida', 'Doble Extendida' =>'Doble Extendida', 'Otro' =>'Otro');
@@ -72,7 +76,7 @@
               echo $this->Form->input('aula_nro', array('label'=>'Aula Nro*', 'readonly' => true, ' between' => '<br>', 'class' => 'form-control'));
               */
           }          
-          if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
+          if (($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') || ($current_user['role'] == 'usuario' && $current_user['puesto'] == 'Supervisión Secundaria')) {
               echo $this->Form->input('plazas', array('between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca la cantidad de plazas admitidas en la sección...', 'Placeholder' => 'Ingrese cantidad máxima de plazas'));
           } else {
               echo $this->Form->input('plazas', array('label'=>'Plazas*', 'readonly' => true, ' between' => '<br>', 'class' => 'form-control'));

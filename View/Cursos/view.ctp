@@ -124,7 +124,7 @@
 					</div>
 
 
-			  <?php if($current_user['role'] == 'superadmin' && ($current_user['puesto'] == 'Sistemas') || ($current_user['puesto'] == 'Atei')): ?>
+			  <?php if(($current_user['role'] == 'superadmin' && ($current_user['puesto'] == 'Sistemas' || $current_user['puesto'] == 'Atei')) || ($current_user['role'] == 'usuario' && ($current_user['puesto'] == 'Supervisión Secundaria'))): ?>
 				<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $curso['Curso']['id'])); ?></div>
               <?php endif; ?>
               <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>

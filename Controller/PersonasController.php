@@ -116,8 +116,13 @@ class PersonasController extends AppController {
 	    	$persona = $this->Persona->findById($id,'id, documento_nro');
 	        $personaDni = $persona['Persona']['documento_nro'];
 	    	//Obtención del ciclo actual.
-	    	$ciclo = '18';
-	    	//Obtención del tipo y estado de inscripción actual.
+			$cicloIdActual = $this->getActualCicloId();
+			$this->loadModel('Ciclo');
+			$this->Ciclo->recursive = 0;
+			$this->Ciclo->Behaviors->load('Containable');
+			$ciclos = $this->Ciclo->findById($cicloIdActual, 'nombre');
+            $ciclo = substr($ciclos['Ciclo']['nombre'], -2);
+			//Obtención del tipo y estado de inscripción actual.
 	    	$this->loadModel('Inscripcion');
 	        $this->Inscripcion->recursive = 0;
 	        $this->Inscripcion->Behaviors->load('Containable');
