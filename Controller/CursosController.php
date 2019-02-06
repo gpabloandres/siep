@@ -27,7 +27,11 @@ class CursosController extends AppController {
 				break;
 			case 'admin':
 			case 'usuario':
-				$this->Auth->allow('index', 'view');
+				if($this->Auth->user('puesto') === 'Supervisión Secundaria') {
+					$this->Auth->allow('index', 'view', 'edit');	
+				} else {
+					$this->Auth->allow('index', 'view');
+				}
 				break;
 		}
 	    /* FIN */
