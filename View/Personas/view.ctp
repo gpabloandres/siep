@@ -42,8 +42,8 @@
                     <!-- Sí tiene barrio guardado lo muestra. -->
                     <b><?php echo __(' | Barrio: '); ?></b><?php echo $personaBarrioNombre; ?><br>
                     <b><?php echo __(' | Barrio Informal: '); ?></b><?php echo $personaAsentamientoNombre; ?></p>
-                    <b><?php echo __('Telefono: '); ?></b>
-                    <?php echo $persona['Persona']['telefono_nro']; ?></p>
+                    <b><?php echo __('Telefonos: '); ?></b>
+                    <?php echo $persona['Persona']['telefono_nro'].' | '.$persona['Persona']['telefono_nro_alt']; ?></p>
                     <b><?php echo __('Email: '); ?></b>
                     <?php echo ($this->Html->link($persona['Persona']['email'],'mailto:'.$persona['Persona']['email'])); ?></p>
                     <!--
