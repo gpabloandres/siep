@@ -201,6 +201,13 @@ class Persona extends AppModel {
                 'message' => 'Indicar un número de teléfono (mínimo 6 números, sólo números, sin puntos, ni comas, ni guiones, ni espacios).'
                 )
             ),
+            'telefono_nro_alt' => array(
+                'numeric' => array(
+                'rule' => '/^[ 0-9]{6,}$/i',
+                'allowEmpty' => true,
+                'message' => 'Indicar un número de teléfono alternativo (mínimo 6 números, sólo números, sin puntos, ni comas, ni guiones, ni espacios).'
+                )
+            ),
             'email' => array(
                 'rule' => 'email',
                 'allowEmpty' => true,
