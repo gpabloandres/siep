@@ -224,6 +224,8 @@ class InscripcionsController extends AppController {
         $userData = $this->Auth->user();
         if($userRole == 'admin') {
             switch($userData['Centro']['nivel_servicio']) {
+                case 'Maternal - Inicial':
+                case 'Especial - Primario':
                 case 'Común - Inicial':
                 case 'Común - Primario':
                 case 'Común - Secundario':
@@ -254,6 +256,7 @@ class InscripcionsController extends AppController {
                     $userCentroId = $this->request->data['Inscripcion']['centro_id'];
                 break;
                 case 'admin':
+                    // Usa el centro al que pertenece el usuario.
                     $this->request->data['Inscripcion']['centro_id'] = $userCentroId;
                 break;
             }
@@ -263,7 +266,7 @@ class InscripcionsController extends AppController {
             $this->Inscripcion->Ciclo->recursive = 0;
             $ciclos = $this->Inscripcion->Ciclo->findById($cicloId, 'nombre');
             $ciclo = substr($ciclos['Ciclo']['nombre'], -2);
-            // Obtiene la división del curso...
+            // Obtención de la división del curso.
             $this->loadModel('Curso');
             $this->Curso->recursive = 0;
             $this->Curso->Behaviors->load('Containable');
@@ -271,64 +274,106 @@ class InscripcionsController extends AppController {
             $cursoIdString = $cursoIdArray['Curso'];
             $divisionArray = $this->Curso->findById($cursoIdString, 'division');
             $divisionString = $divisionArray['Curso']['division'];
-            // No hay que continuar con la inscripcion si no se definio el centro_id, y el curso!
+            // No continua la inscripcion si no se definió el centro y el curso.
             if (count($divisionArray)<=0) {
                 $this->Session->setFlash('No definio la sección.', 'default', array('class' => 'alert alert-danger'));
                 $this->redirect($this->referer());
             }
             /* INICIO: VERIFICACION DE DEFINICIÓN DE LA PERSONA */
-            //Antes que nada obtengo personaId
+            // Obtención del id de la persona.
             $personaId = $this->request->data['Persona']['persona_id'];
+            // Si no está definido el id de persona, vuelve al formulario anterior.
             if (empty($personaId)) {
-                //No esta definida? terminamos volvemos al formulario anterior
                 $this->Session->setFlash('No se definio la persona.', 'default', array('class' => 'alert alert-danger'));
                 $this->redirect($this->referer());
             }
             /* FIN */
-            /* INICIO: GENERACIÓN DEL CÓDIGO DE INSCRIPCIÓN */
+            /* INICIO: GENERACIÓN DEL CÓDIGO DE INSCRIPCIÓN ÚNICO.*/
             //Obtención del DNI de la persona.
             $this->loadModel('Persona');
             $this->Persona->recursive = 0;
             $this->Persona->Behaviors->load('Containable');
             $persona = $this->Persona->findById($personaId,'id, documento_nro');
             $personaDni = $persona['Persona']['documento_nro'];
-            //Genera del código de inscripción y se deja en los datos que se intentaran guardar.
-            //Obtiene el tipo de inscripción actual. 
+            // Obtención del tipo de inscripción actual. 
             $tipoInscripcionActual = $this->request->data['Inscripcion']['tipo_inscripcion'];
-            // Obtiene número de pase para el ciclo actual.
-            // Sí el tipo de inscripción actual es PASE, genera un código específico.
-            if ($tipoInscripcionActual == 'Pase') {
-                $paseNro = 0;
-                //Busca el número de pase que corresponde al ciclo actual.
-                do { 
-                    $paseNro += 1;
-                    $codigoPrueba = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
-                    $cuentaInscripcionPase = $this->Inscripcion->find('count',array(
-                                    'contain' => false,
-                                    'conditions' => array('Inscripcion.legajo_nro' => $codigoPrueba)
-                                    ));
-                } while ($cuentaInscripcionPase != 0);
-                $codigoActualPase = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
-            } 
-            $codigoActual = $this->__getCodigo($ciclo, $personaDni);
-            /* FIN */
-            /* INICIO: Comprobación de unicidad del código de inscripción en la base de datos. */
-            $existePersonaInscripta = $this->Inscripcion->find('first',array(
-                 'contain' => false,
-                 'conditions' => array('Inscripcion.legajo_nro' => $codigoActual)
-            ));
+            // Obtención del nivel de servicio del centro.
             $this->loadModel('Centro');
             $this->Centro->recursive = 0;
             $this->Centro->Behaviors->load('Containable');
-            //
+            // Generación del código específico.
+            switch ($tipoInscripcionActual) {
+                case 'Pase': // Obtención del número de pase para el ciclo actual.
+                    //Sí el tipo de inscripción actual es PASE, genera un código específico.
+                    $paseNro = 0;
+                    //Busca el número de pase que corresponde al ciclo actual.
+                    do { 
+                        $paseNro += 1;
+                        $codigoPrueba = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
+                        $cuentaInscripcionPase = $this->Inscripcion->find('count',array(
+                                    'contain' => false,
+                                    'conditions' => array('Inscripcion.legajo_nro' => $codigoPrueba)
+                                    ));
+                    } while ($cuentaInscripcionPase != 0);
+                    // Genera código actual de inscripción específico para PASE.
+                    $codigoActualPase = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
+                    // Comprobación de la unicidad del código de inscripción para PASE.
+                    $existePersonaInscripta = $this->Inscripcion->find('first',array(
+                        'contain' => false,
+                        'conditions' => array('Inscripcion.legajo_nro' => $codigoActualPase)
+                    ));
+                    break;
+                case 'Común':
+                case 'Hermano de alumno regular':
+                case 'Integración':
+                case 'Situación social':
+                    $centroNivelServicioArray = $this->Centro->findById($userCentroId,'nivel_servicio');
+                    $centroNivelServicio = $centroNivelServicioArray['Centro']['nivel_servicio'];
+                    // Si el centro no es Maternal ni Especial, genera código estádar.
+                    //Sino, genera un codigo específico para Maternal o Especial.
+                    if ($centroNivelServicio != 'Maternal - Inicial' && $centroNivelServicio != 'Especial - Primario') {
+                        // Generación del código de inscripción estándar. 
+                        $codigoActual = $this->__getCodigo($ciclo, $personaDni);
+                    } else {
+                        // Sí el centro es Maternal.
+                        // Sino si el centro es Especial.
+                        if ($centroNivelServicio === 'Maternal - Inicial') {
+                            // Generación del código de inscripción para Maternal. 
+                            $codigoActual = $this->__getCodigoMaternal($ciclo, $personaDni);
+                        } else if ($centroNivelServicio === 'Especial - Primario') {
+                            // Generación del código de inscripción para Maternal. 
+                            $codigoActual = $this->__getCodigoEspecial($ciclo, $personaDni);
+                        }
+                    }
+                    // Comprobación de unicidad del código de inscripción estándar.
+                    $existePersonaInscripta = $this->Inscripcion->find('first',array(
+                        'contain' => false,
+                        'conditions' => array(
+                            'Inscripcion.legajo_nro' => $codigoActual)));                    
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+            /* FIN */
+            // Validación para el registro del código de inscripción específicos generado.
             switch ($tipoInscripcionActual) {
                 case 'Pase':
                     //Si existe una inscripción del actual ciclo relacionada continúa el proceso. Sino indica mensaje y detiene el proceso.                        
                     if (isset($existePersonaInscripta['Inscripcion']['legajo_nro'])) {
-                        //Obtención del estado actual de la inscripción
-                        $inscripcionEstadoActualArray = $this->Inscripcion->findByLegajoNro($codigoActual, 'estado_inscripcion');
-                        $inscripcionEstadoActual = $inscripcionEstadoActualArray['Inscripcion']['estado_inscripcion'];
-                        //Si es estado de inscripción actual es BAJA, continúa con la nueva inscripción por pase. Sino indica mensaje y detiene el proceso.
+                        //Sí se trata del primer pase.
+                        if ($paseNro-1 == 0) {
+                            //Genera código de inscripción estandar actual. 
+                            $codigoActual = $this->__getCodigo($ciclo, $personaDni);
+                            //Obtención del estado actual de la inscripción estándar.
+                            $inscripcionEstadoActualArray = $this->Inscripcion->findByLegajoNro($codigoActual, 'estado_inscripcion');
+                            $inscripcionEstadoActual = $inscripcionEstadoActualArray['Inscripcion']['estado_inscripcion'];
+                        } else {
+                            //Obtención del estado actual de la inscripción por PASE.
+                            $inscripcionEstadoActualArray = $this->Inscripcion->findByLegajoNro($codigoActualPase, 'estado_inscripcion');
+                            $inscripcionEstadoActual = $inscripcionEstadoActualArray['Inscripcion']['estado_inscripcion'];
+                        }
+                        //Si el estado de inscripción actual es BAJA, continúa con la nueva inscripción por pase. Sino indica mensaje y detiene el proceso.
                         if ($inscripcionEstadoActual == 'BAJA') {
                            $this->request->data['Inscripcion']['legajo_nro'] = $codigoActualPase;
                         } else {
@@ -409,14 +454,6 @@ class InscripcionsController extends AppController {
                                 $estadoDocumentacion = "PENDIENTE";   
                         }                        
                     break;
-                case 'Adultos - Secundario':
-                case 'Adultos - Primario':
-                    if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['certificado_septimo'] ==1)) {
-                        $estadoDocumentacion = "COMPLETA";
-                    } else {
-                        $estadoDocumentacion = "PENDIENTE";   
-                    }                        
-                    break;    
                 default:
                        $estadoDocumentacion = "PENDIENTE";
             }
@@ -443,7 +480,7 @@ class InscripcionsController extends AppController {
                 }
             /* FIN */
             if ($this->Inscripcion->save($this->data)) {
-                /* ATUALIZA MATRÍCULA Y VACANTES (INICIO).
+                /* INICIO: ATUALIZACIÓN DE LA MATRÍCULAS Y VACANTES.
                 *  Al registrarse una Inscripción sí es para el ciclo actual o para un agrupamiento 
                 *  para el próximo ciclo, actualiza valores de matrícula y vacantes del curso correspondiente.
                 */
@@ -542,6 +579,8 @@ class InscripcionsController extends AppController {
             switch($CentroNivel) {
                 case 'Común - Inicial':
                 case 'Común - Primario':
+                case 'Maternal - Inicial':
+                case 'Especial - Primario':
                     if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1)) {
                         $estadoDocumentacion = "COMPLETA";
                     } else {
@@ -813,9 +852,11 @@ class InscripcionsController extends AppController {
         $this->set(compact('ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual','cicloIdUltimo', 'userCentroNivel'));
 	}
 
-	private function __getCodigo($ciclo, $personaDocString){
-		$legajo = $personaDocString."-".$ciclo;
-		return $legajo;
+    /* INICIO: FUNCIONES PARA GENERACIÓN DE CÓDIGOS DE INSCRIPCIÓN ESPECÍFICOS */
+
+    private function __getCodigo($ciclo, $personaDocString){
+        $legajo = $personaDocString."-".$ciclo;
+        return $legajo;
     }
 
     private function __getCodigoPase($ciclo, $personaDocString, $paseNro){
@@ -823,6 +864,18 @@ class InscripcionsController extends AppController {
         return $legajo;
     }
 
+    private function __getCodigoMaternal($ciclo, $personaDocString){
+        $legajo = $personaDocString."-".$ciclo."-"."MATERNAL";
+        return $legajo;
+    }
+
+    private function __getCodigoEspecial($ciclo, $personaDocString){
+        $legajo = $personaDocString."-".$ciclo."-"."ESPECIAL";
+        return $legajo;
+    }
+    
+    /* FIN */
+    
     private function consumeApiFindInscripcion($inscripcioId) {
         try
         {

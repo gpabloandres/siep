@@ -126,92 +126,172 @@ class PersonasController extends AppController {
 	    	$this->loadModel('Inscripcion');
 	        $this->Inscripcion->recursive = 0;
 	        $this->Inscripcion->Behaviors->load('Containable');
-	    	//Obtención de los posibles códigos de inscripción (Ordinaria o Pase).
-	    	$codigoActualPosible = $this->__getCodigo($ciclo, $personaDni);
+	    	//Obtención de los posibles códigos de inscripción (Ordinario, Pase, Maternal, Especial).
+	    	$codigoOrdinarioActualPosible = $this->__getCodigoOrdinario($ciclo, $personaDni);
 	    	$paseNro = 1; 
-	        $codigoActualPasePosible = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
-	    	//Verificación de existencia de inscripciones Ordinarias o por Pase con los códigos posibles.
-	    	$existeInscripcionOrdinaria = $this->Inscripcion->find('first',array(
-	                 'contain' => false,
-	                 'conditions' => array('Inscripcion.legajo_nro' => $codigoActualPosible)));
-	    	$existeInscripcionPase = $this->Inscripcion->find('first',array(
-	                 'contain' => false,
-	                 'conditions' => array('Inscripcion.legajo_nro' => $codigoActualPasePosible)));
+	        $codigoPaseActualPosible = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
+			$codigoMaternalActualPosible = $this->__getCodigoMaternal($ciclo, $personaDni);
+			$codigoEspecialActualPosible = $this->__getCodigoEspecial($ciclo, $personaDni);
+			//Verificación de existencia de inscripciones Ordinarias o por Pase con los códigos posibles.
+			if($codigoOrdinarioActualPosible) {
+				$existeInscripcionOrdinaria = $this->Inscripcion->find('first',array(
+					'contain' => false,
+					'conditions' => array('Inscripcion.legajo_nro' => $codigoOrdinarioActualPosible)));	
+			}
+			if($codigoPaseActualPosible) {
+				$existeInscripcionPase = $this->Inscripcion->find('first',array(
+					'contain' => false,
+					'conditions' => array('Inscripcion.legajo_nro' => $codigoPaseActualPosible)));
+			}
+	    	if($codigoMaternalActualPosible) {
+				$existeInscripcionMaternal = $this->Inscripcion->find('first',array(
+					'contain' => false,
+					'conditions' => array('Inscripcion.legajo_nro' => $codigoMaternalActualPosible)));
+			}
+			if($codigoEspecialActualPosible) {
+				$existeInscripcionEspecial = $this->Inscripcion->find('first',array(
+					'contain' => false,
+					'conditions' => array('Inscripcion.legajo_nro' => $codigoEspecialActualPosible)));
+			}
 	    	//Identificación del código de inscripción cualquiera sea el tipo.
 	    	if (isset($existeInscripcionPase['Inscripcion']['legajo_nro'])) {
-	    		$codigoActual = $codigoActualPasePosible;
+	    		$codigoPaseActual = $codigoPaseActualPosible;
 	    		$tipoInscripcion = 'Pase';
-	    	} else if (isset($existeInscripcionOrdinaria['Inscripcion']['legajo_nro'])) {
-	    		$codigoActual = $codigoActualPosible;
-	    		$tipoInscripcionArray = $this->Inscripcion->findByLegajoNro($codigoActual,'tipo_inscripcion');
-	        	$tipoInscripcion = $tipoInscripcionArray['Inscripcion']['tipo_inscripcion'];
-	        } else {
+			} 
+			if(isset($existeInscripcionOrdinaria['Inscripcion']['legajo_nro'])) {
+				$codigoOrdinarioActual = $codigoOrdinarioActualPosible;
+				$tipoInscripcionOrdinariaArray = $this->Inscripcion->findByLegajoNro($codigoOrdinarioActual,'tipo_inscripcion');
+	        	$tipoInscripcionOrdinaria = $tipoInscripcionOrdinariaArray['Inscripcion']['tipo_inscripcion'];
+			}
+			if(isset($existeInscripcionMaternal['Inscripcion']['legajo_nro'])) {
+				$codigoMaternalActual = $codigoMaternalActualPosible;
+				$tipoInscripcionMaternalArray = $this->Inscripcion->findByLegajoNro($codigoMaternalActual,'tipo_inscripcion');
+	        	$tipoInscripcionMaternal = $tipoInscripcionMaternalArray['Inscripcion']['tipo_inscripcion'];
+			}
+			if(isset($existeInscripcionEspecial['Inscripcion']['legajo_nro'])) {
+				$codigoEspecialActual = $codigoEspecialActualPosible;
+				$tipoInscripcionEspecialArray = $this->Inscripcion->findByLegajoNro($codigoEspecialActual,'tipo_inscripcion');
+	        	$tipoInscripcionEspecial = $tipoInscripcionEspecialArray['Inscripcion']['tipo_inscripcion'];
+			}
+			if(!$existeInscripcionPase && !$existeInscripcionOrdinaria && !$existeInscripcionMaternal && !$existeInscripcionEspecial) {
 	        	$this->Session->setFlash('No registra inscripción en el ciclo actual', 'default', array('class' => 'alert alert-info'));
 	        }
-	    	if (($existeInscripcionPase) || ($existeInscripcionOrdinaria)) {
-	    		//Obtención del id y del estado de esa inscripción.
-	   		 	$estadoInscripcionArray = $this->Inscripcion->findByLegajoNro($codigoActual,'id, estado_inscripcion');
-	   		 	$idInscripcion = $estadoInscripcionArray['Inscripcion']['id'];
-		    	$estadoInscripcion = $estadoInscripcionArray['Inscripcion']['estado_inscripcion'];
-		    	//Obtención del centro de esa inscripción.
-		        $this->loadModel('Centro');
-		        $this->Centro->recursive = 0;
-		        $this->Centro->Behaviors->load('Containable');
-		        $idCentroInscripcionArray = $this->Inscripcion->findByLegajoNro($codigoActual,'centro_id');
-		        $idCentroInscripcion = $idCentroInscripcionArray['Inscripcion']['centro_id'];
-		        $nombreCentroInscripcionArray = $this->Centro->findById($idCentroInscripcion,'nombre');
-		        $nombreCentroInscripcion = $nombreCentroInscripcionArray['Centro']['nombre'];
-		        //Obtención de los datos de la sección de esa inscripción.
-		        $this->loadModel('CursosInscripcions');
-		        $this->CursosInscripcions->recursive = 0;
-		        $this->CursosInscripcions->Behaviors->load('Containable');
-		        $idSeccionInscripcionArray = $this->CursosInscripcions->findByInscripcionId($idInscripcion,'curso_id');
-		        $idSeccionInscripcion = $idSeccionInscripcionArray['CursosInscripcions']['curso_id'];
-		        $this->loadModel('Curso');
-		        $this->Curso->recursive = 0;
-		        $this->Curso->Behaviors->load('Containable');
-		        $nombreSeccionArray = $this->Curso->findById($idSeccionInscripcion,'nombre_completo_curso');
-		        $nombreSeccion = $nombreSeccionArray['Curso']['nombre_completo_curso'];
-		        //Visualización del mensaje al usuario de los datos de inscripción en el ciclo actual.
-		        $this->Session->setFlash("En el ciclo actual registra inscripción en".' '.$nombreCentroInscripcion.' '.' en '.$nombreSeccion.' con estado: '.' '.$estadoInscripcion, 'default', array('class' => 'alert alert-info'));
-	    	}
-	    	/*FIN*/
-        }
-    	//Obtención del nombre de la ciudad del domicilio actual.
+	    	//Obtención del id y del estado de esa inscripción.
+            if($existeInscripcionOrdinaria) {
+                $estadoInscripcionOrdinariaArray = $this->Inscripcion->findByLegajoNro($codigoOrdinarioActual,'id, estado_inscripcion');
+                $idInscripcionOrdinaria = $estadoInscripcionOrdinariaArray['Inscripcion']['id'];
+                $estadoInscripcionOrdinaria = $estadoInscripcionOrdinariaArray['Inscripcion']['estado_inscripcion'];
+			} 
+			if($existeInscripcionMaternal) {
+                $estadoInscripcionMaternalArray = $this->Inscripcion->findByLegajoNro($codigoMaternalActual,'id, estado_inscripcion');
+                $idInscripcionMaternal = $estadoInscripcionMaternalArray['Inscripcion']['id'];
+                $estadoInscripcionMaternal = $estadoInscripcionMaternalArray['Inscripcion']['estado_inscripcion'];
+			}
+			if($existeInscripcionEspecial) {
+                $estadoInscripcionEspecialArray = $this->Inscripcion->findByLegajoNro($codigoEspecialActual,'id, estado_inscripcion');
+                $idInscripcionEspecial = $estadoInscripcionEspecialArray['Inscripcion']['id'];
+                $estadoInscripcionEspecial = $estadoInscripcionEspecialArray['Inscripcion']['estado_inscripcion'];
+            }                      
+		    //Obtención del centro de esa inscripción.
+		    $this->loadModel('Centro');
+		    $this->Centro->recursive = 0;
+		    $this->Centro->Behaviors->load('Containable');
+            if($existeInscripcionOrdinaria) {  
+                $idCentroInscripcionOrdinariaArray = $this->Inscripcion->findByLegajoNro($codigoOrdinarioActual,'centro_id');
+                $idCentroInscripcion = $idCentroInscripcionOrdinariaArray['Inscripcion']['centro_id'];
+                $centroInscripcionOrdinariaArray = $this->Centro->findById($idCentroInscripcion,'nombre');
+                $centroInscripcionOrdinaria = $centroInscripcionOrdinariaArray['Centro']['nombre'];
+			}
+			if($existeInscripcionMaternal) {  
+                $idCentroInscripcionMaternalArray = $this->Inscripcion->findByLegajoNro($codigoMaternalActual,'centro_id');
+                $idCentroInscripcionMaternal = $idCentroInscripcionMaternalArray['Inscripcion']['centro_id'];
+                $centroInscripcionMaternalArray = $this->Centro->findById($idCentroInscripcionMaternal,'nombre');
+                $centroInscripcionMaternal = $centroInscripcionMaternalArray['Centro']['nombre'];
+			}
+			if($existeInscripcionEspecial) {  
+                $idCentroInscripcionEspecialArray = $this->Inscripcion->findByLegajoNro($codigoEspecialActual,'centro_id');
+                $idCentroInscripcionEspecial = $idCentroInscripcionEspecialArray['Inscripcion']['centro_id'];
+                $centroInscripcionEspecialArray = $this->Centro->findById($idCentroInscripcionEspecial,'nombre');
+                $centroInscripcionEspecial = $centroInscripcionEspecialArray['Centro']['nombre'];
+            }                       
+		    //Obtención de los datos de la sección de esa inscripción.
+		    $this->loadModel('CursosInscripcions');
+		    $this->CursosInscripcions->recursive = 0;
+		    $this->CursosInscripcions->Behaviors->load('Containable');
+            if($existeInscripcionOrdinaria) {
+                $idSeccionInscripcionOrdinariaArray = $this->CursosInscripcions->findByInscripcionId($idInscripcionOrdinaria,'curso_id');
+                $idSeccionInscripcionOrdinaria = $idSeccionInscripcionOrdinariaArray['CursosInscripcions']['curso_id'];
+			}
+			if($existeInscripcionMaternal) {
+                $idSeccionInscripcionMaternalArray = $this->CursosInscripcions->findByInscripcionId($idInscripcionMaternal,'curso_id');
+                $idSeccionInscripcionMaternal = $idSeccionInscripcionMaternalArray['CursosInscripcions']['curso_id'];
+			}
+			if($existeInscripcionEspecial) {
+                $idSeccionInscripcionEspecialArray = $this->CursosInscripcions->findByInscripcionId($idInscripcionEspecial,'curso_id');
+                $idSeccionInscripcionEspecial = $idSeccionInscripcionEspecialArray['CursosInscripcions']['curso_id'];
+            }    
+			$this->loadModel('Curso');
+		    $this->Curso->recursive = 0;
+		    $this->Curso->Behaviors->load('Containable');
+            if($existeInscripcionOrdinaria) {
+                $seccionInscripcionOrdinariaArray = $this->Curso->findById($idSeccionInscripcionOrdinaria,'nombre_completo_curso');
+		        $seccionInscripcionOrdinaria = $seccionInscripcionOrdinariaArray['Curso']['nombre_completo_curso'];
+			}
+			if($existeInscripcionMaternal) {
+                $seccionInscripcionMaternalArray = $this->Curso->findById($idSeccionInscripcionMaternal,'nombre_completo_curso');
+		        $seccionInscripcionMaternal = $seccionInscripcionMaternalArray['Curso']['nombre_completo_curso'];
+			}
+			if($existeInscripcionEspecial) {
+                $seccionInscripcionEspecialArray = $this->Curso->findById($idSeccionInscripcionEspecial,'nombre_completo_curso');
+		        $seccionInscripcionEspecial = $seccionInscripcionEspecialArray['Curso']['nombre_completo_curso'];
+            }                
+		    //Visualización del mensaje al usuario de los datos de inscripción en el ciclo actual.
+			if($existeInscripcionOrdinaria) {
+				$this->Session->setFlash("En el ciclo actual registra inscripción en: ".
+                '<ul>'.'<li>'.$centroInscripcionOrdinaria.' '.' en '.$seccionInscripcionOrdinaria.' con estado: '.' '.$estadoInscripcionOrdinaria.'</li>'
+				.'</ul>', 'default', array('class' => 'alert alert-info'));
+			}
+			if($existeInscripcionMaternal) {
+				$this->Session->setFlash("En el ciclo actual registra inscripción en: ".
+                '<ul>'.'<li>'.$centroInscripcionMaternal.' '.' en '.$seccionInscripcionMaternal.' con estado: '.' '.$estadoInscripcionMaternal.'</li>'
+				.'</ul>', 'default', array('class' => 'alert alert-info'));
+			}
+			if($existeInscripcionEspecial) {
+				$this->Session->setFlash("En el ciclo actual registra inscripción en: ".
+                '<ul>'.'<li>'.$centroInscripcionEspecial.' '.' en '.$seccionInscripcionEspecial.' con estado: '.' '.$estadoInscripcionEspecial.'</li>'
+				.'</ul>', 'default', array('class' => 'alert alert-info'));
+			}                
+	    }
+	    /*FIN*/
+        //Obtención del nombre de la ciudad del domicilio actual.
     	$personaCiudadIdArray = $this->Persona->findById($id,'ciudad_id');
-		if($personaCiudadIdArray) :
-			$personaCiudadId = $personaCiudadIdArray['Persona']['ciudad_id'];
+		if($personaCiudadIdArray) : $personaCiudadId = $personaCiudadIdArray['Persona']['ciudad_id'];
     	endif;
 		$this->loadModel('Ciudad');
 		$this->Ciudad->recursive = 0;
 		$this->Ciudad->Behaviors->load('Containable');
 		$personaCiudadNombreArray = $this->Ciudad->findById($personaCiudadId,'nombre');
-		if($personaCiudadNombreArray) :
-			$personaCiudadNombre = $personaCiudadNombreArray['Ciudad']['nombre'];
+		if($personaCiudadNombreArray) : $personaCiudadNombre = $personaCiudadNombreArray['Ciudad']['nombre'];
 		endif;
 		//Obtención del nombre del barrio del domicilio actual.
     	$personaBarrioIdArray = $this->Persona->findById($id,'barrio_id');
-		if($personaBarrioIdArray) :
-			$personaBarrioId = $personaBarrioIdArray['Persona']['barrio_id'];
+		if($personaBarrioIdArray) : $personaBarrioId = $personaBarrioIdArray['Persona']['barrio_id'];
     	endif;
     	$this->loadModel('Barrio');
 		$this->Barrio->recursive = 0;
 		$this->Barrio->Behaviors->load('Containable');
 		$personaBarrioNombreArray = $this->Barrio->findById($personaBarrioId,'nombre');
-		if($personaBarrioNombreArray) :
-			$personaBarrioNombre = $personaBarrioNombreArray['Barrio']['nombre'];
+		if($personaBarrioNombreArray) : $personaBarrioNombre = $personaBarrioNombreArray['Barrio']['nombre'];
 		endif;
 		//Obtención del nombre del asentamiento del domicilio actual.
     	$personaAsentamientoIdArray = $this->Persona->findById($id,'asentamiento_id');
-		if($personaAsentamientoIdArray) :
-			$personaAsentamientoId = $personaAsentamientoIdArray['Persona']['asentamiento_id'];
+		if($personaAsentamientoIdArray) : $personaAsentamientoId = $personaAsentamientoIdArray['Persona']['asentamiento_id'];
     	endif;
     	$this->loadModel('Asentamiento');
 		$this->Asentamiento->recursive = 0;
 		$this->Asentamiento->Behaviors->load('Containable');
 		$personaAsentamientoNombreArray = $this->Asentamiento->findById($personaAsentamientoId,'nombre');
-		if($personaAsentamientoNombreArray) :
-			$personaAsentamientoNombre = $personaAsentamientoNombreArray['Asentamiento']['nombre'];
+		if($personaAsentamientoNombreArray) : $personaAsentamientoNombre = $personaAsentamientoNombreArray['Asentamiento']['nombre'];
 		endif;
 		//Envío de datos a la vista.
     	$this->set(compact('foto', 'personaCiudadNombre', 'personaBarrioNombre', 'personaAsentamientoNombre'));
@@ -467,13 +547,23 @@ class PersonasController extends AppController {
 		$this->autoRender = false;
 	}
 
-	private function __getCodigo($ciclo, $personaDocString){
+	private function __getCodigoOrdinario($ciclo, $personaDocString){
 		$legajo = $personaDocString."-".$ciclo;
 		return $legajo;
     }
 
     private function __getCodigoPase($ciclo, $personaDocString, $paseNro){
         $legajo = $personaDocString."-".$ciclo."-"."PASE"."_".$paseNro;
+        return $legajo;
+	}
+	
+	private function __getCodigoMaternal($ciclo, $personaDocString){
+        $legajo = $personaDocString."-".$ciclo."-"."MATERNAL";
+        return $legajo;
+	}
+	
+	private function __getCodigoEspecial($ciclo, $personaDocString){
+        $legajo = $personaDocString."-".$ciclo."-"."ESPECIAL";
         return $legajo;
     }
 }
