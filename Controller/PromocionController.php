@@ -45,7 +45,7 @@ class PromocionController extends AppController {
 		$this->loadModel('Ciclo');
 
 		$hoyArray = getdate();
-		$hoyAñoString = $hoyArray['year']; // Si se resta un año... se relizan las promociones en Marzo, con los alumnos del año anterior.
+		$hoyAñoString = $hoyArray['year'] - 1; // Si se resta un año... se relizan las promociones en Marzo, con los alumnos del año anterior.
 		$cicloaPromocionar = $this->Ciclo->find('first', array(
 			'recursive' => -1,
 			'conditions' => array('nombre' => $hoyAñoString)
@@ -197,7 +197,6 @@ class PromocionController extends AppController {
 
 			$hostApi = getenv('HOSTAPI');
 
-			//$response = $httpSocket->post("https://constancia.sieptdf.tk/api/promocion", $data, $request);
 			$response = $httpSocket->post("http://$hostApi/api/promocion", $data, $request);
 
 			$response = $response->body;
