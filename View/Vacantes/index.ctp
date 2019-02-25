@@ -57,11 +57,13 @@
 <?php endif; ?>
 <?php
      $ocultar = false;
+     /*
      if( $current_user['Centro']['nivel_servicio'] === 'Común - Inicial - Primario' ||
          $current_user['Centro']['nivel_servicio'] === 'Común - Inicial' ||
          $current_user['Centro']['nivel_servicio'] === 'Común - Primario' ) {
          $ocultar = true;
      }
+     */
 ?>
 <div class="TituloSec">Inscripciones 2019</div>
 <div id="ContenidoSec">
