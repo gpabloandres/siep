@@ -80,7 +80,7 @@
             <?php echo $content_for_layout; ?>
         </div>
         <div class="footer">
-            <p><?php echo '© Subsecretaría de Planeamiento Educativo, Informática y Evaluación - Ministerio Educación TDF A.I.A.S.'; ?> </p>
+            <p><?php echo '<strong>© Subsecretaría de Planeamiento Educativo, Informática y Evaluación - Ministerio Educación TDF A.I.A.S.</strong>'; ?> </p>
             <p><?php echo $this->Html->link('License  Creative Commons: by-nc-sa', 'http://creativecommons.org/licenses/by-nc-sa/3.0'); ?> </p>
         </div>
     </body>
