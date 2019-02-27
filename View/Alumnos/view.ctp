@@ -20,11 +20,18 @@
  	          </div>
          </div>
     </div>
+
+		 <?php
+		 	$SIEP_API_GW_INGRESS = env('SIEP_API_GW_INGRESS');
+			 if(!$SIEP_API_GW_INGRESS) {
+				 $SIEP_API_GW_INGRESS = 'http://api.sieptdf.org';
+			 }
+		 ?>
 <!-- star sidebar -->
 <div class="col-md-4">
  <div class="unit">
         <div class="subtitulo">Opciones</div>
-        <div class="opcion"><a href="<?php echo env('SIEP_API_GW_INGRESS')."/api/v1/persona/$personaId/ficha"?>">Ficha de Alumno</a></div>
+        <div class="opcion"><a href="<?php echo $SIEP_API_GW_INGRESS."/api/v1/personas/$personaId/ficha"?>" target="_blank">Ficha de Alumno</a></div>
         <div class="opcion"><?php echo $this->Html->link(__('Listar Alumnos'), array('action' => 'index')); ?></div>
        <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
         <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $alumno['Alumno']['id'])); ?></div>
