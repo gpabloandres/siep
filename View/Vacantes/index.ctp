@@ -73,8 +73,8 @@
         <tr>
           <th>Centro</th>
           <th>Año</th>
-          <th>Turno</th>
           <th>Division</th>
+          <th>Turno</th>
           <th>Tipo</th>
           <?php if(!$ocultar) : ?>
             <th>Titulación</th>
@@ -100,10 +100,10 @@
               <?php echo $seccion['anio']; ?>
             </td>
             <td>
-              <?php echo $seccion['turno']; ?>
+              <?php echo $seccion['division']; ?>
             </td>
             <td>
-              <?php echo $seccion['division']; ?>
+              <?php echo $seccion['turno']; ?>
             </td>
             <td>
               <?php echo $seccion['tipo']; ?>
