@@ -69,6 +69,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ver... <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
+            <li><?php echo $this->Html->link(__('Mapa Educativo'),'https://admin.sieptdf.org/#/instituciones', array('target' => '_blank')); ?></li>
             <li><?php echo $this->Html->link(__('Alumnos por Sección [nominal]'), '/cursos_inscripcions');?></li>
             <!--<li><?php echo $this->Html->link(__('Alumnos por Unidad Curricular'), '/inscripcions_materias');?></li>-->
             <!--<li><?php// echo $this->Html->link(__('Inscripciones 2018 [cuantitativo]'), '/matriculas');?></li>-->
