@@ -13,10 +13,10 @@
 		<div class="unit"><strong><h3>PASO 1: Datos del Perfil</h3></strong><hr />
 			<?php	
 				if ($current_user['role'] == 'superadmin') {
-						echo $this->Form->input('agente', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<i></i><br>Agente</label>'));
+						echo $this->Form->input('agente', array('between' => '<br>', 'class' => 'form-control', 'label' => "Agente", 'type' => 'checkbox', 'before' => '<label class="checkbox">'));
 					}
-					echo $this->Form->input('alumno', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<i></i><br>Alumno</label>'));
-					echo $this->Form->input('familiar', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<i></i><br>Familiar</label>'));
+					echo $this->Form->input('alumno', array('between' => '<br>', 'class' => 'form-control', 'label' => "Alumno", 'type' => 'checkbox', 'before' => '<label class="checkbox">'));
+					echo $this->Form->input('familiar', array('between' => '<br>', 'class' => 'form-control', 'label' => "Familiar", 'type' => 'checkbox', 'before' => '<label class="checkbox">'));
 			?>
 		</div>
 		<div class="unit"><strong><h3>PASO 2: Datos Generales</h3></strong><hr />
