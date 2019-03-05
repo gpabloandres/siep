@@ -89,7 +89,12 @@ class AlumnosController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 
-		$this->set(compact('alumno'));
+		//Hacer esta consulta con la API.
+		$this->loadModel('Centro');
+        $this->Centro->recursive = 0;
+        $this->Centro->Behaviors->load('Containable');
+		$siglaCentroId = $this->Centro->find('list', array('fields'=>array('nombre')));
+		$this->set(compact('alumno', 'siglaCentroId'));
     }
 
 	public function add() {
