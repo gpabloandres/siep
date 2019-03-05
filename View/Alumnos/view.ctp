@@ -1,5 +1,6 @@
 <?php echo $this->Html->script(array('acordeon', 'slider')); ?>
 <?php echo $this->Html->css('slider.css'); ?>
+
 <!-- start main -->
 <div class="TituloSec">Alumno</div>
   <div id="ContenidoSec">
@@ -9,13 +10,13 @@
  		      <div class="row perfil">
                  <div class="col-md-8 col-sm-6 col-xs-8">	
                     <b><?php echo __('Alumno: '); ?></b>
-                    <?php echo $this->Html->link($alumnoNombre, array('controller' => 'personas', 'action' => 'view', $alumno['Alumno']['persona_id'])); ?></p>
+                    <?php echo $this->Html->link($alumno['persona']['nombre_completo'], array('controller' => 'personas', 'action' => 'view', $alumno['persona']['id'])); ?></p>
                     <b><?php echo __('Documento: '); ?></b>
-                    <?php echo $alumnoDocumentoTipo.' '.$alumnoDocumentoNumero; ?></p>
+                    <?php echo $alumno['persona']['documento_tipo'].' '.$alumno['persona']['documento_nro']; ?></p>
                     <b><?php echo __('Edad: '); ?></b>
-                    <?php echo $alumnoEdad." ".'años'; ?></p>
+                    <?php echo $alumno['persona']['edad']." ".'años'; ?></p>
                     <b><?php echo __('Legajo Físico N°: '); ?></b>
-                    <?php echo $alumno['Alumno']['legajo_fisico_nro']; ?></p>                   
+                    <?php echo $alumno['legajo_fisico_nro']; ?></p>
                  </div>
  	          </div>
          </div>
@@ -31,13 +32,13 @@
 <div class="col-md-4">
  <div class="unit">
         <div class="subtitulo">Opciones</div>
-        <div class="opcion"><a href="<?php echo $SIEP_API_GW_INGRESS."/api/v1/personas/$personaId/ficha"?>" target="_blank">Ficha de Alumno</a></div>
+        <div class="opcion"><a href="<?php echo $SIEP_API_GW_INGRESS."/api/v1/personas/".$alumno['persona_id']."/ficha"?>" target="_blank">Ficha de Alumno</a></div>
         <div class="opcion"><?php echo $this->Html->link(__('Listar Alumnos'), array('action' => 'index')); ?></div>
        <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
-        <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $alumno['Alumno']['id'])); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $alumno['Alumno']['id']), null, sprintf(__('Esta seguro de borrar al alumno %s?'), $alumno['Alumno']['persona_id'])); ?></div>
+        <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $alumno['id'])); ?></div>
+        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $alumno['id']), null, sprintf(__('¿Está seguro de borrar este alumno?'))); ?></div>
         <?php /*
-        <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['Alumno']['id'], 'ext' => 'pdf')); ?></div>-->
+        <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['id'], 'ext' => 'pdf')); ?></div>-->
         <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add')); ?></div>-->
         <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Integracion'), array('controller' => 'integracions', 'action' => 'add')); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Servicio'), array('controller' => 'servicios', 'action' => 'add')); ?></div>
@@ -53,14 +54,14 @@
 <div id="click_01" class="titulo_acordeon">Familiares Relacionados <span class="caret"></span></div>
 <div id="acordeon_01">
 	<div class="row">			
-	<?php if (!empty($alumno['Familiar'])):?>
+	<?php if (!empty($alumno['familiares'])):?>
 		<div class="col-xs-12 col-sm-6 col-md-8">
-			<?php foreach ($alumno['Familiar'] as $familiar): ?>
+			<?php foreach ($alumno['familiares'] as $familiar): ?>
             <div class="col-md-4">
                 <div class="unit">
                     <?php echo '<b>Vinculo:</b> '.$familiar['vinculo'];?><br>
-                    <?php echo '<b>Nombre:</b> '.$familiarNombre[$familiar['persona_id']];?><br>
-                    <?php echo '<b>Telefono:</b> '.$familiarTelefono[$familiar['persona_id']];?>
+                    <?php echo '<b>Nombre:</b> '.$familiar['persona']['nombre_completo'];?><br>
+                    <?php echo '<b>Telefono:</b> '.$familiar['persona']['telefono_nro'];?>
                     <hr>
                     <div class="text-right">
 	                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'familiars', 'action' => 'view', $familiar['id']), array('class' => 'btn btn-success','escape' => false)); ?>
@@ -82,14 +83,14 @@
 	<div id="click_02" class="titulo_acordeon">Inscripciones Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_02">
 		<div class="row">
-			<?php if (!empty($alumno['Inscripcion'])):?>
+			<?php if (!empty($alumno['inscripciones'])):?>
   			<div class="col-xs-12 col-sm-6 col-md-8">
-				<?php foreach ($alumno['Inscripcion'] as $inscripcion):	?>
+				<?php foreach ($alumno['inscripciones'] as $inscripcion):	?>
 			<div class="col-md-4">
 				<div class="unit">
 					<!--<?php echo '<b>Ciclo id:</b> '.($this->Html->link($inscripcion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['ciclo_id'])));?><br>-->
 					<?php if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
-					<?php echo '<b>Centro:</b> '.($this->Html->link($centroNombre[$inscripcion['centro_id']], array('controller' => 'centros', 'action' => 'view', $inscripcion['centro_id'])));?><br>
+					<?php echo '<b>Centro:</b> '.($this->Html->link($siglaCentroId[$inscripcion['centro_id']], array('controller' => 'centros', 'action' => 'view', $inscripcion['centro_id'])));?><br>
 					<?php endif; ?>
 					<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>
 					<?php echo '<b>Tipo de alta:</b> '.$inscripcion['tipo_alta'];?><br>

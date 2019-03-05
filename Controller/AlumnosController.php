@@ -7,7 +7,10 @@ class AlumnosController extends AppController {
 	public $uses = array('Alumno', 'Familiar');
 	var $paginate = array('Alumno' => array('limit' => 4, 'order' => 'Alumno.created DESC'));
 
-    public function beforeFilter() {
+	// Permite agregar el Helper de Siep a las vistas
+	public $helpers = array('Siep');
+
+	public function beforeFilter() {
         parent::beforeFilter();
         /* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
         *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
@@ -27,6 +30,10 @@ class AlumnosController extends AppController {
 				$this->Auth->allow('index', 'add' , 'view', 'edit', 'autocompleteNombrePersona', 'autocompleteNombreAlumno');
 				break;
 		}
+
+		// Importa el Helper de Siep al controlador es accesible mediante $this->Siep
+		App::import('Helper', 'Siep');
+		$this->Siep= new SiepHelper(new View());
 		/* FIN */
     }
 
@@ -65,47 +72,29 @@ class AlumnosController extends AppController {
 	}
 
 	public function view($id = null) {
-		$this->Alumno->recursive = 1;
 		if (!$id) {
 			$this->Session->setFlash('Alumno no valido', 'default', array('class' => 'alert alert-danger'));
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->set('alumno', $this->Alumno->read(null, $id));
-        //Genera datos para el view.
-        //Obtención del id de persona del alumno.
-        $personaIdArray = $this->Alumno->findById($id, 'persona_id');
-        $personaId = $personaIdArray['Alumno']['persona_id'];
-        //Obtención de datos personales del alumno.
-        $this->loadModel('Persona');
-        $this->Persona->recursive = 0;
-        $this->Persona->Behaviors->load('Containable');
-        $personaNombreArray = $this->Persona->findById($personaId, 'nombre_completo_persona');
-        $alumnoNombre = $personaNombreArray['Persona']['nombre_completo_persona'];
-        $personaDocumentoTipoArray = $this->Persona->findById($personaId, 'documento_tipo');
-        $alumnoDocumentoTipo = $personaDocumentoTipoArray['Persona']['documento_tipo'];
-        $personaDocumentoNumeroArray = $this->Persona->findById($personaId, 'documento_nro');
-        $alumnoDocumentoNumero = $personaDocumentoNumeroArray['Persona']['documento_nro'];
-        $personaEdadNumeroArray = $this->Persona->findById($personaId, 'edad');
-        $alumnoEdad = $personaEdadNumeroArray['Persona']['edad'];
-    	// Datos relacionados.
-    	//Obtención de datos de los familiares.
-        $familiarNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'contain'=>false));
-        $familiarTelefono = $this->Persona->find('list', array('fields' => array('telefono_nro'), 'contain'=>false));
-        //Obtención del nombre del centro para las inscripciones relacionadas.
-    	$this->loadModel('Centro');
+
+		// Parametros para ejecutar API
+		$apiParams = [];
+		$apiParams['with'] = 'persona.ciudad,familiares.persona.ciudad,inscripciones';
+
+		// Consumo de API
+		$alumno = $this->Siep->consumeApi("api/v1/alumnos/$id",$apiParams);
+		if(isset($alumno['error']))
+		{
+			$this->Session->setFlash('ERROR API(Alumnos): '.$alumno['error'], 'default', array('class' => 'alert alert-danger'));
+			$this->redirect(array('action' => 'index'));
+		}
+
+		//Hacer esta consulta con la API.
+		$this->loadModel('Centro');
         $this->Centro->recursive = 0;
         $this->Centro->Behaviors->load('Containable');
-        $centroNombre = $this->Centro->find('list', array('fields' => array('sigla'), 'contain'=>false));
-        //Obtención del nivel del centro id del usuario.
-        $userCentroId = $this->getUserCentroId();
-        $nivelCentroArray = $this->Centro->findById($userCentroId, 'nivel_servicio');
-        $nivelCentro = $nivelCentroArray['Centro']['nivel_servicio'];
-        //Obtención del nombre del ciclo para los pases relacionados.
-    	$this->loadModel('Ciclo');
-        $this->Ciclo->recursive = 0;
-        $this->Ciclo->Behaviors->load('Containable');
-        $cicloNombre = $this->Ciclo->find('list', array('fields' => array('nombre'), 'contain'=>false));
-		$this->set(compact('alumnoNombre', 'alumnoDocumentoTipo', 'alumnoDocumentoNumero', 'alumnoEdad', 'centroNombre', 'cicloNombre', 'personaId', 'personaNombre', 'foto', 'materiaAlia', 'barrioNombre', 'familiarNombre', 'familiarVinculo', 'familiarTelefono', 'nivelCentro'));
+		$siglaCentroId = $this->Centro->find('list', array('fields'=>array('nombre')));
+		$this->set(compact('alumno', 'siglaCentroId'));
     }
 
 	public function add() {
