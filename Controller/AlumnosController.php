@@ -79,7 +79,7 @@ class AlumnosController extends AppController {
 
 		// Parametros para ejecutar API
 		$apiParams = [];
-		$apiParams['with'] = 'persona.ciudad,familiares.persona.ciudad,inscripciones';
+		$apiParams['with'] = 'persona.ciudad,familiares.persona.ciudad,inscripciones.centro';
 
 		// Consumo de API
 		$alumno = $this->Siep->consumeApi("api/v1/alumnos/$id",$apiParams);
@@ -89,12 +89,7 @@ class AlumnosController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 
-		//Hacer esta consulta con la API.
-		$this->loadModel('Centro');
-        $this->Centro->recursive = 0;
-        $this->Centro->Behaviors->load('Containable');
-		$siglaCentroId = $this->Centro->find('list', array('fields'=>array('nombre')));
-		$this->set(compact('alumno', 'siglaCentroId'));
+		$this->set(compact('alumno'));
     }
 
 	public function add() {

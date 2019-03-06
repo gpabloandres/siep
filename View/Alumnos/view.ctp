@@ -90,7 +90,7 @@
 				<div class="unit">
 					<!--<?php echo '<b>Ciclo id:</b> '.($this->Html->link($inscripcion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['ciclo_id'])));?><br>-->
 					<?php if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
-					<?php echo '<b>Centro:</b> '.($this->Html->link($siglaCentroId[$inscripcion['centro_id']], array('controller' => 'centros', 'action' => 'view', $inscripcion['centro_id'])));?><br>
+					<?php echo '<b>Centro:</b> '.($this->Html->link($inscripcion['centro']['nombre'], array('controller' => 'centros', 'action' => 'view', $inscripcion['centro_id'])));?><br>
 					<?php endif; ?>
 					<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>
 					<?php echo '<b>Tipo de alta:</b> '.$inscripcion['tipo_alta'];?><br>
