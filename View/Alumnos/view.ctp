@@ -36,7 +36,7 @@
         <div class="opcion"><?php echo $this->Html->link(__('Listar Alumnos'), array('action' => 'index')); ?></div>
        <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
         <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $alumno['id'])); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $alumno['id']), null, sprintf(__('Esta seguro de borrar al alumno %s?'), $alumno['persona']['persona_id'])); ?></div>
+        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $alumno['id']), null, sprintf(__('¿Está seguro de borrar este alumno?'))); ?></div>
         <?php /*
         <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['id'], 'ext' => 'pdf')); ?></div>-->
         <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add')); ?></div>-->
@@ -90,7 +90,7 @@
 				<div class="unit">
 					<!--<?php echo '<b>Ciclo id:</b> '.($this->Html->link($inscripcion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['ciclo_id'])));?><br>-->
 					<?php if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
-					<?php echo '<b>Centro:</b> '.($this->Html->link($centroNombre[$inscripcion['centro_id']], array('controller' => 'centros', 'action' => 'view', $inscripcion['centro_id'])));?><br>
+					<?php echo '<b>Centro:</b> '.($this->Html->link($siglaCentroId[$inscripcion['centro_id']], array('controller' => 'centros', 'action' => 'view', $inscripcion['centro_id'])));?><br>
 					<?php endif; ?>
 					<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>
 					<?php echo '<b>Tipo de alta:</b> '.$inscripcion['tipo_alta'];?><br>
