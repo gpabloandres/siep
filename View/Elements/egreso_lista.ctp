@@ -1,5 +1,4 @@
 <?php echo $this->Form->create('CursosInscripcion',array('type'=>'post','url'=>'confirmarAlumnos', 'novalidate' => true));?>
-
 <div id="app" class="col-sm-8 table-responsive">
     <table class="table table-bordered table-hover table-striped table-condensed">
         <thead>
@@ -18,17 +17,17 @@
                 <td>
                 <?php
                 if(
-                    $cursosInscripcion['Inscripcion']['fecha_egreso'] == NULL &&
-                    $cursosInscripcion['Inscripcion']['ciclo_id'] == $cicloaPromocionar['id']
+                    $cursosInscripcion['inscripcion']['fecha_egreso'] == NULL  &&
+                    $cursosInscripcion['inscripcion']['ciclo']['nombre'] == $cicloEgreso
                 ) :
                 ?>
-                    <input type="checkbox" class="toggle_checkbox" name="id[]" value="<?php echo $cursosInscripcion['Inscripcion']['id']; ?>">
+                    <input type="checkbox" class="toggle_checkbox" name="id[]" value="<?php echo $cursosInscripcion['inscripcion']['id']; ?>">
                 <?php  endif;  ?>
                 </td>
-                <td><?php echo $cursosInscripcion['Persona']['documento_nro']; ?> </td>
-                <td><?php echo $cursosInscripcion['Persona']['apellidos']." ".$cursosInscripcion['Persona']['nombres']; ?> </td>
+                <td><?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['documento_nro']; ?> </td>
+                <td><?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['nombre_completo']; ?> </td>
                 <td width="60px">
-                    <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Inscripcions', 'action'=> 'view', $cursosInscripcion['Inscripcion']['id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
+                    <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Inscripcions', 'action'=> 'view', $cursosInscripcion['inscripcion']['id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
                 </td>
             </tr>
             <?php endforeach ?>
@@ -40,7 +39,7 @@
     <div class="unit">
         <div class="subtitulo">Opciones de egreso</div>
 
-        Ciclo: <b><?php echo $cicloaPromocionar['nombre']; ?></b>
+        Ciclo: <b><?php echo $ciclo['nombre']; ?></b>
         Seccion: <b><?php echo $curso['anio']." ".$curso['division']." ".$curso['turno']; ?></b>
         <br>
         <br>
