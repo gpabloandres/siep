@@ -83,11 +83,16 @@ class EgresoController extends AppController {
 
 	public function confirmarAlumnos()
 	{
+		$userId = $this->Auth->user('id');
+		$request = $this->request->data;
+
+		if(!$request)
+		{
+			$this->Session->setFlash("ERROR Egresos::confirmarAlumnos(): No fue posible realizar el egreso, los datos estan incompletos, vuelva a intentarlo", 'default', array('class' => 'alert alert-danger'));
+			$this->redirect($this->referer());
+		}
+
 		try {
-			$userId = $this->Auth->user('id');
-
-			$request = $this->request->data;
-
 			// Parametros para ejecutar API
 			$apiParams = [];
 			$apiParams['user_id'] = $userId;
