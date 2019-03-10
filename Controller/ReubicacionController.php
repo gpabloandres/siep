@@ -144,6 +144,7 @@ class ReubicacionController extends AppController {
 			$this->request->data['centro_id'] = $centroId;
 			$this->request->data['curso_id'] = $cursoId;
 			$this->request->data['ciclo_id'] = $cicloId;
+			$this->request->data['estado_inscripcion'] = "CONFIRMADA";
 			$this->request->data['por_pagina'] = 'all';
 
 			$dataToSend = $this->request->data;
