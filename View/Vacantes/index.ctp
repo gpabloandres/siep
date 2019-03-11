@@ -54,6 +54,7 @@
     </div>
     <?php echo $this->Form->end(); ?>
 </div>
+        <br>
 <?php endif; ?>
 <?php
      $ocultar = false;
@@ -68,7 +69,17 @@
 <div class="TituloSec">Inscripciones 2019</div>
 <div id="ContenidoSec">
     <div class="table-responsive">
-      <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
+        <?php
+        if($showBtnExcel) :
+            ?>
+            <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?'.http_build_query($queryExportarExcel); ?>" class="btn btn-success pull-right">Exportar resultados a excel</a>
+            <br>
+            <br>
+            <?php
+        endif;
+        ?>
+
+        <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
       <thead>
         <tr>
           <th>Centro</th>
