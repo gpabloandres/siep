@@ -315,13 +315,16 @@ class InscripcionsController extends AppController {
                                     'conditions' => array('Inscripcion.legajo_nro' => $codigoPrueba)
                                     ));
                     } while ($cuentaInscripcionPase != 0);
-                    // Genera código actual de inscripción específico para PASE.
-                    $codigoActualPase = $this->__getCodigoPase($ciclo, $personaDni, $paseNro);
-                    // Comprobación de la unicidad del código de inscripción para PASE.
+                    // Genera código actual y anterior de inscripción específico para PASE.
+                    $codigoActualPase = $codigoPrueba;
+                    $codigoAnteriorPase = $this->__getCodigoPase($ciclo, $personaDni, $paseNro-1);
+                    // Generación del código de inscripción estándar. 
+                    $codigoActual = $this->__getCodigo($ciclo, $personaDni);
+                    // Comprobación de unicidad del código de inscripción estándar.
                     $existePersonaInscripta = $this->Inscripcion->find('first',array(
                         'contain' => false,
-                        'conditions' => array('Inscripcion.legajo_nro' => $codigoActualPase)
-                    ));
+                        'conditions' => array(
+                            'Inscripcion.legajo_nro' => $codigoActual)));
                     break;
                 case 'Común':
                 case 'Hermano de alumno regular':
@@ -359,8 +362,8 @@ class InscripcionsController extends AppController {
             // Validación para el registro del código de inscripción específicos generado.
             switch ($tipoInscripcionActual) {
                 case 'Pase':
-                    //Si existe una inscripción del actual ciclo relacionada continúa el proceso. Sino indica mensaje y detiene el proceso.                        
-                    if (isset($existePersonaInscripta['Inscripcion']['legajo_nro'])) {
+                    //Si existe una inscripción del actual ciclo continúa el proceso de PASE. Sino indica mensaje y detiene el proceso.                        
+                    if ($existePersonaInscripta) {
                         //Sí se trata del primer pase.
                         if ($paseNro-1 == 0) {
                             //Genera código de inscripción estandar actual. 
@@ -370,7 +373,7 @@ class InscripcionsController extends AppController {
                             $inscripcionEstadoActual = $inscripcionEstadoActualArray['Inscripcion']['estado_inscripcion'];
                         } else {
                             //Obtención del estado actual de la inscripción por PASE.
-                            $inscripcionEstadoActualArray = $this->Inscripcion->findByLegajoNro($codigoActualPase, 'estado_inscripcion');
+                            $inscripcionEstadoActualArray = $this->Inscripcion->findByLegajoNro($codigoAnteriorPase, 'estado_inscripcion');
                             $inscripcionEstadoActual = $inscripcionEstadoActualArray['Inscripcion']['estado_inscripcion'];
                         }
                         //Si el estado de inscripción actual es BAJA, continúa con la nueva inscripción por pase. Sino indica mensaje y detiene el proceso.
@@ -391,6 +394,7 @@ class InscripcionsController extends AppController {
                 case 'Situación social':
                     if (isset($existePersonaInscripta['Inscripcion']['legajo_nro'])) {
                         $this->Session->setFlash(sprintf("El alumno ya está inscripto para este ciclo en %s", $existePersonaInscripta['Centro']['nombre']), 'default', array('class' => 'alert alert-danger'));
+                        $this->redirect($this->referer());
                     } else {
                         $this->request->data['Inscripcion']['legajo_nro'] = $codigoActual;
                     }
