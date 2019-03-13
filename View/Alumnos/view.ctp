@@ -21,13 +21,6 @@
  	          </div>
          </div>
     </div>
-
-		 <?php
-		 	$SIEP_API_GW_INGRESS = env('SIEP_API_GW_INGRESS');
-			 if(!$SIEP_API_GW_INGRESS) {
-				 $SIEP_API_GW_INGRESS = 'http://api.sieptdf.org';
-			 }
-		 ?>
 <!-- star sidebar -->
 <div class="col-md-4">
  <div class="unit">
