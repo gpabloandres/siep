@@ -144,8 +144,15 @@ class VacantesController extends AppController
             $queryExportarExcel = array_merge($apiParams,$queryExportarExcel);
         }
 
+        // Consumo de API
+        $ubicaciones = $this->Siep->consumeApi("api/v1/ciudades");
+        if(isset($ubicaciones['error']))
+        {
+            // Manejar error de API
+        }
 
-        $this->set(compact('matriculas_por_seccion','cicloIdUltimo','cicloIdActual','comboCiclo','comboCiudad','comboSector', 'titulacionesNombres','queryExportarExcel','showBtnExcel'));
+
+        $this->set(compact('ubicaciones','matriculas_por_seccion','cicloIdUltimo','cicloIdActual','comboCiclo','comboCiudad','comboSector', 'titulacionesNombres','queryExportarExcel','showBtnExcel'));
     }
 
     public function recuento()
