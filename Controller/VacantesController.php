@@ -141,6 +141,7 @@ class VacantesController extends AppController
             $showBtnExcel = true;
             $queryExportarExcel = [];
             $queryExportarExcel['export'] = 'excel';
+            $queryExportarExcel['por_pagina'] = 'all';
             $queryExportarExcel = array_merge($apiParams,$queryExportarExcel);
         }
 
