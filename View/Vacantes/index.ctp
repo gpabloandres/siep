@@ -74,7 +74,7 @@
         <?php
         if($this->Siep->isAdmin()) :
         ?>
-            <a target="_blank" class="btn btn-success pull-right" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?por_pagina=all&'.http_build_query($queryExportarExcel); ?>">
+            <a target="_blank" class="btn btn-success pull-right" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?'.http_build_query($queryExportarExcel); ?>">
                 <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel
             </a>
         <?php else: ?>
