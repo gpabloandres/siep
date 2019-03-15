@@ -1,6 +1,9 @@
 <!-- start main -->
 <div class="TituloSec">Lista de alumnos</div>
 <div id="ContenidoSec">
+    <?php
+    if(isset($centro['nombre'])) :
+    ?>
     <div class="row">
         <div class="col-sm-12 table-responsive">
             <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/exportar/excel/ListaAlumnos?'.http_build_query($apiParams); ?>" class="btn btn-success pull-right">Exportar resultados a excel</a>
@@ -38,4 +41,12 @@
             </table>
         </div>
     </div>
+    <?php
+    else :
+    ?>
+        No hay alumnos registrados en la seccion solicitada en el ciclo <b><?php echo $cicloActual; ?></b>
+    <?php
+    endif
+    ?>
+
 </div>
