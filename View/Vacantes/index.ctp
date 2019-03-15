@@ -68,18 +68,48 @@
 ?>
 <div class="TituloSec">Inscripciones 2019</div>
 <div id="ContenidoSec">
-    <div class="table-responsive">
+    <?php
+    if($showBtnExcel) :
+    ?>
         <?php
-        if($showBtnExcel) :
-            ?>
-            <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?'.http_build_query($queryExportarExcel); ?>" class="btn btn-success pull-right">Exportar resultados a excel</a>
-            <br>
-            <br>
-            <?php
-        endif;
+        if($this->Siep->isAdmin()) :
         ?>
 
-        <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <?php
+                        foreach($ubicaciones as $ubicacion):
+                    ?>
+                    <li>
+                        <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?por_pagina=all&ciudad='.$ubicacion['nombre'].'&'.http_build_query($queryExportarExcel); ?>">
+                            <?php echo $ubicacion['nombre']; ?>
+                        </a>
+                    </li>
+                    <?php
+                        endforeach;
+                    ?>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                    <li>
+                        <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?por_pagina=all&'.http_build_query($queryExportarExcel); ?>">Toda la provincia</a>
+                    </li>
+                </ul>
+            </div>
+
+        <?php else: ?>
+            <a target="_blank" class="btn btn-success pull-right" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?por_pagina=all&'.http_build_query($queryExportarExcel); ?>">
+                <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel
+            </a>
+        <?php endif; ?>
+        <br>
+        <br>
+    <?php endif; ?>
+
+    <div class="table-responsive">
+    <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
       <thead>
         <tr>
           <th>Centro</th>
