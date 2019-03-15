@@ -74,22 +74,25 @@
         <?php
         if($this->Siep->isAdmin()) :
         ?>
-
-            <div class="btn-group pull-right">
+            <a target="_blank" class="btn btn-success pull-right" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?por_pagina=all&'.http_build_query($queryExportarExcel); ?>">
+                <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel
+            </a>
+        <?php else: ?>
+            <div class="btn-group pull-right">:
                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
                     <?php
-                        foreach($ubicaciones as $ubicacion):
-                    ?>
-                    <li>
-                        <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?por_pagina=all&ciudad='.$ubicacion['nombre'].'&'.http_build_query($queryExportarExcel); ?>">
-                            <?php echo $ubicacion['nombre']; ?>
-                        </a>
-                    </li>
-                    <?php
-                        endforeach;
+                    foreach($ubicaciones as $ubicacion):
+                        ?>
+                        <li>
+                            <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?por_pagina=all&ciudad='.$ubicacion['nombre'].'&'.http_build_query($queryExportarExcel); ?>">
+                                <?php echo $ubicacion['nombre']; ?>
+                            </a>
+                        </li>
+                        <?php
+                    endforeach;
                     ?>
                     <li role="separator" class="divider"></li>
                     <li>
@@ -98,11 +101,6 @@
                     </li>
                 </ul>
             </div>
-
-        <?php else: ?>
-            <a target="_blank" class="btn btn-success pull-right" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?por_pagina=all&'.http_build_query($queryExportarExcel); ?>">
-                <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel
-            </a>
         <?php endif; ?>
         <br>
         <br>
