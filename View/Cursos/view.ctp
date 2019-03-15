@@ -43,6 +43,11 @@
 		    <div class="unit">
 		 		<div class="subtitulo">Opciones</div>
 				<div class="opcion"><?php echo $this->Html->link(__('Listar Secciones'), array('action' => 'index')); ?></div>
+				<div class="opcion"><?php echo $this->Html->link(__('Datos de Alumnos'), array('action' => 'index','controller' => 'ListaAlumnos',
+						'centro_id'=>$curso['Centro']['id'],
+						'curso_id'=>$curso['Curso']['id']
+					)); ?>
+				</div>
 					<?php
 					// Por defecto no muestro la promocion
 					$showPromocion = false;
