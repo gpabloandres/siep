@@ -109,7 +109,6 @@
     <?php endif; ?>
 
     <div class="table-responsive">
-
     <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
       <thead>
         <tr>
@@ -166,9 +165,9 @@
               <?php echo $seccion['vacantes']; ?>
             </td>
             <?php endif ?>
-            <!--<td >
+            <td >
               <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
-            </td>-->
+            </td>
           </tr>
         <?php endforeach; ?>
         <?php endif; ?>

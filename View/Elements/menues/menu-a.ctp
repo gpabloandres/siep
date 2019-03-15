@@ -78,8 +78,15 @@
             <!--<li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>-->
             <!--<li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>-->
             <!--<li><?php echo $this->Html->link(__('Calendario'),'/full_calendar');?></li>--> 
-          </ul>
-        </li>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ayuda <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><?php echo $this->Html->link(__('Procesos PASO A PASO'),'/users/usuario'); ?></li>
+          <li><?php echo $this->Html->link(__('Tutoriales en línea'),'https://drive.google.com/drive/folders/1DUFLRiqZO9_AOK8I4w4f9yz2f9DMUfv9?usp=sharing', array('target' => '_blank')); ?></li>
+        </ul>
+      </li>
       <li>
       <?php echo $this->Html->link('CERRAR SESIÓN', '/logout', array('class' => 'btn btn-success navbar-btn btn-lg', 'escape' => false)); ?>
       </li>
