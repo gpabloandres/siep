@@ -44,6 +44,8 @@ class VacantesController extends AppController
 
 
     public function index() {
+        $showBtnExcel = false;
+
         $this->loadModel('Centro');
 
         $this->Centro->recursive = -1;
@@ -134,8 +136,16 @@ class VacantesController extends AppController
             'fields'=>array('nombre_abreviado'),
             'contain'=>false,
             'conditions'=>array('status'=>1)));
-        
-        $this->set(compact('matriculas_por_seccion','cicloIdUltimo','cicloIdActual','comboCiclo','comboCiudad','comboSector', 'titulacionesNombres'));
+
+        if(isset($matriculas_por_seccion['total']) &&  $matriculas_por_seccion>0) {
+            $showBtnExcel = true;
+            $queryExportarExcel = [];
+            $queryExportarExcel['export'] = 'excel';
+            $queryExportarExcel = array_merge($apiParams,$queryExportarExcel);
+        }
+
+
+        $this->set(compact('matriculas_por_seccion','cicloIdUltimo','cicloIdActual','comboCiclo','comboCiudad','comboSector', 'titulacionesNombres','queryExportarExcel','showBtnExcel'));
     }
 
     public function recuento()
