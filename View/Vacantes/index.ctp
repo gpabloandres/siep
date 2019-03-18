@@ -87,7 +87,7 @@
                     foreach($ubicaciones as $ubicacion):
                         ?>
                         <li>
-                            <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?por_pagina=all&ciudad='.$ubicacion['nombre'].'&'.http_build_query($queryExportarExcel); ?>">
+                            <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?ciudad='.$ubicacion['nombre'].'&'.http_build_query($queryExportarExcel); ?>">
                                 <?php echo $ubicacion['nombre']; ?>
                             </a>
                         </li>
@@ -97,7 +97,7 @@
                     <li role="separator" class="divider"></li>
                     <li>
                     <li>
-                        <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?por_pagina=all&'.http_build_query($queryExportarExcel); ?>">Toda la provincia</a>
+                        <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?'.http_build_query($queryExportarExcel); ?>">Toda la provincia</a>
                     </li>
                 </ul>
             </div>
