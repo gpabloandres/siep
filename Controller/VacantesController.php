@@ -141,7 +141,7 @@ class VacantesController extends AppController
             $showBtnExcel = true;
             $queryExportarExcel = [];
             $queryExportarExcel['export'] = 'excel';
-            $queryExportarExcel['por_pagina'] = 'all';
+            $queryExportarExcel['por_pagina'] = '1000000'; // Hardcode (hay un problema de paginacion en el API)
             $queryExportarExcel = array_merge($apiParams,$queryExportarExcel);
         }
 
