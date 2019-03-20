@@ -39,17 +39,20 @@
       */?>
   </div>-->
   <div class="col-xs-6 col-sm-3">
-        <?php if($cicloInscripcionIdString == '3') { ?>
+        <?php/* if($cicloInscripcionIdString == '3') { */?>
                 <div>
                   <p><strong>Ciclo lectivo*</strong></p>
                   <input class="form-control" label="Ciclo lectivo*" disabled="disabled" data-toggle="tooltip" data-placemente="bottom" value="<?php echo $cicloInscripcionNombreString; ?>">
+                  <?php $this->Form->input('ciclo_id', array('type' => 'hidden', 'default'=>$cicloInscripcionIdString)); ?> 
                 </div><br>
-        <?php echo $this->Form->input('ciclo_id', array('type' => 'hidden', 'default'=>$cicloInscripcionIdString));
+        <!--
+        <?php/* echo $this->Form->input('ciclo_id', array('type' => 'hidden', 'default'=>$cicloInscripcionIdString));
               } else { 
                   echo $this->Form->input('ciclo_id', array('default'=>$cicloInscripcionIdString, 'label'=>'Ciclo lectivo*', 'disabled'=>true, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
                   echo $this->Form->input('ciclo_id', array('type' => 'hidden', 'default'=>$cicloInscripcionIdString));
               }  
-        ?>
+        */?>
+        -->
   </div>
   <div class="col-xs-6 col-sm-3">
       <?php
