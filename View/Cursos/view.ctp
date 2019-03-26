@@ -72,12 +72,13 @@
 							$showPromocion = true;
 						}
 					} else {
-						// El resto de las secciones promocionan menos 5to inicial, 7mo secundario y 3ro CENS.
+						// El resto de las secciones promocionan menos Sala de 5 años (Inicial), 7mo (Secundario Común) y 3ro (Primario/Secundario Adultos).
 						if(
 							($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] != 'Sala de 5 años') ||
 							($curso['Centro']['nivel_servicio'] == 'Común - Primario') ||
 							($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] != '7mo') ||
-							($curso['Centro']['nivel_servicio'] == 'Adultos - Secundario' && $curso['Curso']['anio'] != '3ro')
+							($curso['Centro']['nivel_servicio'] == 'Adultos - Secundario' && $curso['Curso']['anio'] != '3ro') ||
+							($curso['Centro']['nivel_servicio'] == 'Adultos - Primario' && $curso['Curso']['anio'] != '3ro')
 						) {
 							$showPromocion = true;
 						}
