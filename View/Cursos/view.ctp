@@ -108,8 +108,11 @@
 								$showEgreso = true;
 							}
 						} else {
+							// Egresos de Sala de 5 años (Inicial) y 3ros (Primario/Secundario Adultos).
 							if(
-								($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] == 'Sala de 5 años') || ($curso['Curso']['tipo'] == 'Múltiple' && $curso['Curso']['anio'] == 'Sala de 4 años') || ($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] == '7mo')
+								($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] == 'Sala de 5 años') || ($curso['Curso']['tipo'] == 'Múltiple' && $curso['Curso']['anio'] == 'Sala de 4 años') || ($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] == '7mo') ||
+								($curso['Centro']['nivel_servicio'] == 'Adultos - Secundario' && $curso['Curso']['anio'] == '3ro') ||
+								($curso['Centro']['nivel_servicio'] == 'Adultos - Primario' && $curso['Curso']['anio'] == '3ro')
 							) {
 								$showEgreso = true;
 							}
