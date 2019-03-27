@@ -798,6 +798,7 @@ class InscripcionsController extends AppController {
 	    $this->loadModel('User');
         $this->User->recursive = 0;
         $this->User->Behaviors->load('Containable');
+        $userRol = $this->Auth->user('role');
         // Carga en el combobox el Ciclo actual y uno posterior sí lo hubiera.        
         $this->loadModel('Ciclo');
         $this->Ciclo->recursive = 0;
@@ -808,7 +809,14 @@ class InscripcionsController extends AppController {
         $cicloIdUltimo = $this->getLastCicloId();
         $cicloIdUltimoArray = $this->Ciclo->findById($cicloIdUltimo, 'id');
         $cicloIdUltimoString = $cicloIdUltimoArray['Ciclo']['id'];
-        $ciclos = $this->getTwoLastCicloNombres($cicloIdActualString, $cicloIdUltimoString);
+        /* Sí no es "superadmin" ve en combobox de ciclos, el actual y el posterior. 
+        *  Sino ve todos los ciclos.
+        */
+        if ($userRol != 'superadmin') {
+			$ciclos = $this->getTwoLastCicloNombres($cicloIdActualString, $cicloIdUltimoString);
+		} else {
+            $ciclos = $this->Ciclo->find('list', array('fields'=>array('id','nombre'), 'contain'=>false));
+        }        
         $this->Inscripcion->Centro->recursive = 0;
         $centros = $this->Inscripcion->Centro->find('list');
 		/* Sí es "superadmin" ve combobox con todos los cursos, 
@@ -818,8 +826,7 @@ class InscripcionsController extends AppController {
 		$userCentroId = $this->getUserCentroId();
         $userCentroNivel = $this->getUserCentroNivel($userCentroId);
         $nivelCentro = $this->Inscripcion->Centro->find('list', array('fields'=>array('nivel_servicio'), 'contain'=>false, 'conditions'=>array('id'=>$userCentroId)));
-        $userRol = $this->Auth->user('role');
-		$this->Inscripcion->Curso->recursive = 0;
+        $this->Inscripcion->Curso->recursive = 0;
         if ($userRol == 'superadmin') {
 			$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'contain'=>false));
 		} else if (($userRol === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
