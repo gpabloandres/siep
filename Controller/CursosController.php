@@ -53,6 +53,7 @@ class CursosController extends AppController {
 		*  Sino sí es "usuario" externo muestra los cursos activos del nivel.
 		*/ 
 		$userRole = $this->Auth->user('role');
+		$userPuesto = $this->Auth->user('puesto');
 		$userCentroId = $this->getUserCentroId();
 		$nivelCentroArray = $this->Curso->Centro->findById($userCentroId, 'nivel_servicio');
 		$this->loadModel('Centro');
@@ -61,14 +62,27 @@ class CursosController extends AppController {
 		$nivelCentro = $nivelCentroArray['Centro']['nivel_servicio'];
 		$this->Curso->Centro->recursive = 0;
 		$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'contain'=>false,'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-		if ($userRole === 'admin') {
-			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId, 'Curso.status' => 1);
-		} else if (($userRole === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
-			$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
-			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $nivelCentroId, 'Curso.status' => 1);
-		} else if ($userRole === 'usuario') {
-			$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
-			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $nivelCentroId, 'Curso.status' => 1);
+		switch ($userRole) {
+			case 'admin':
+				$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId, 'Curso.status' => 1);
+				break;
+			case 'usuario':
+				if ($nivelCentro === 'Común - Inicial - Primario') {
+					$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
+					$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $nivelCentroId, 'Curso.status' => 1);
+				} else {
+					$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
+					$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $nivelCentroId, 'Curso.status' => 1);
+				}
+				break;
+			case 'superadmin':
+				if ($userPuesto === 'Atei') {
+					$this->paginate['Curso']['conditions'] = array('Curso.status' => 1);
+				}
+				break;
+			default:
+				# code...
+				break;
 		}
 		/* FIN */
 		/* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
