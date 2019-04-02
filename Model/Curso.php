@@ -2,7 +2,7 @@
 class Curso extends AppModel {
 	var $name = 'Curso';
     //var $displayField = 'division';
-	public $virtualFields = array('nombre_completo_curso'=> 'CONCAT(Curso.anio, " ", Curso.division, " ", Curso.turno)');
+	public $virtualFields = array('nombre_completo_curso'=> 'CONCAT(Curso.anio, " ", Curso.division, " ", Curso.turno, " ", Curso.tipo)');
     public $actsAs = array('Containable');
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
