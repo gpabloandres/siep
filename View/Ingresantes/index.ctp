@@ -68,7 +68,7 @@
       <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
       <thead>
         <tr>
-          <th>Centro</th>
+          <th>Institución</th>
           <th>Año</th>
           <th>Turno</th>
             <?php if(!$ocultar) : ?>

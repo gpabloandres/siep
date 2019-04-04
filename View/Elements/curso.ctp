@@ -3,7 +3,8 @@
         <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
         <span class="name"><span class="glyphicon glyphicon-home"></span> <b>Centro: </b> <?php echo $this->Html->link($curso['Centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $curso['Centro']['id'])); ?></span><br/>
     <?php endif; ?>
-        <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Año: </b> <?php echo $curso['Curso']['anio']; ?></span><br/>
+        <?php $AñoNombre = ($curso['Curso']['centro_id']==73) ? 'Grupo' : 'Año'; ?>
+        <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b><?php echo $AñoNombre.':';?></b> <?php echo $curso['Curso']['anio']; ?></span><br/>
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>División: </b> <?php echo $curso['Curso']['division']; ?></span><br/>
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Turno: </b> <?php echo $curso['Curso']['turno']; ?></span></br>
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Tipo: </b> <?php echo $curso['Curso']['tipo']; ?></span></br>

@@ -110,9 +110,9 @@
     <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
       <thead>
         <tr>
-          <th>Centro</th>
-          <th>Año</th>
-          <th>Division</th>
+          <th>Institución</th>
+          <th>Año/Gpo</th>
+          <th>División</th>
           <th>Turno</th>
           <th>Tipo</th>
           <?php if(!$ocultar) : ?>

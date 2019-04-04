@@ -176,7 +176,7 @@
   			<div class="col-xs-12 col-sm-6 col-md-8">
                 <div class="col-md-4">
                     <div class="unit">
-                        <?php echo '<b>Año:</b> '.$curso['anio'];?><br>
+                        <?php echo '<b>Año/Gpo:</b> '.$curso['anio'];?><br>
                         <?php echo '<b>División:</b> '.$curso['division'];?><br>
                         <?php echo '<b>Turno:</b> '.$curso['turno'];?><br>
                         <?php echo '<b>Tipo:</b> '.$curso['tipo'];?><br>
