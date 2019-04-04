@@ -78,7 +78,8 @@
 							($curso['Centro']['nivel_servicio'] == 'Común - Primario') ||
 							($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] != '7mo') ||
 							($curso['Centro']['nivel_servicio'] == 'Adultos - Secundario' && $curso['Curso']['anio'] != '3ro') ||
-							($curso['Centro']['nivel_servicio'] == 'Adultos - Primario' && $curso['Curso']['anio'] != '3ro')
+							($curso['Centro']['nivel_servicio'] == 'Adultos - Primario' && $curso['Curso']['anio'] != '3ro') ||
+							($curso['Centro']['nivel_servicio'] == 'Especial - Primario')
 						) {
 							$showPromocion = true;
 						}
