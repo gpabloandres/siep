@@ -20,16 +20,19 @@ class CentrosController extends AppController {
 					$this->Auth->allow();				
 				} else {
 					// Sí se es un ATEI
-					$this->Auth->allow('index', 'view', 'autocompleteCentro', 'autocompleteSeccionDependiente');	
+					$this->Auth->allow('index', 'view', 'autocompleteCentro');
 				}
 				break;
 			case 'admin':
-				$this->Auth->allow('index', 'view', 'edit', 'autocompleteCentro', 'autocompleteSeccionDependiente');
+				$this->Auth->allow('index', 'view', 'edit', 'autocompleteCentro');
 			case 'usuario':
-				$this->Auth->allow('index', 'view', 'autocompleteCentro', 'autocompleteSeccionDependiente');
+				$this->Auth->allow('index', 'view', 'autocompleteCentro');
 				break;
 		}
 		/* FIN */
+		// Importa el Helper de Siep al controlador es accesible mediante $this->Siep
+		App::import('Helper', 'Siep');
+		$this->Siep= new SiepHelper(new View());
     }
 
  	function index() {
@@ -258,22 +261,6 @@ class CentrosController extends AppController {
 		$this->RequestHandler->respondAs('json'); // Responde con el header correspondiente a json
 		echo json_encode($centro);
 		$this->autoRender = false;
-	}
-
-	public function autocompleteSeccionDependiente() {
-		$id = $this->request->query('id');
-
-		$this->loadModel('Curso');
-		$secciones = $this->Curso->find('list', array(
-			'recursive'=>-1,
-			'fields'=>array('id','nombre_completo_curso'),
-			'conditions'=>array(
-				'centro_id'=>$id)
-		));
-
-		$this->RequestHandler->respondAs('json'); // Responde con el header correspondiente a json
-		$this->autoRender = false;
-		echo json_encode($secciones);
 	}
 }
 ?>
