@@ -16,15 +16,19 @@
             // Obtener secciones dependientes al centro
             $.ajax({
                 type:"GET",
-                url: "/centros/autocompleteSeccionDependiente?id=" + centro_id,
-                success: function(lista){
+                url: "<?php echo env('SIEP_API_GW_INGRESS')."/api/v1/cursos?por_pagina=all&centro_id="?>" + centro_id,
+                success: function(response){
                     $(".s2_centro").append('<option value="' +''+ '"> ' + 'Seleccione una sección'+ '</option>');
-                    for (var key  in lista) {
-                        if(key == <?php echo $cursoInscripcion['Curso']['id']; ?>)
-                        {
-                            $(".s2_seccion").append('<option value="' +key+ '" selected="selected"> ' + lista[key] + '</option>');
+
+                    // Valores retorandos por el api
+                    var data = response.data;
+                    for (var index in data) {
+                        var el = data[index];
+
+                        if(el.id == <?php echo $cursoInscripcion['Curso']['id']; ?>) {
+                            $(".s2_seccion").append('<option value="' +el.id+ '" selected="selected"> ' + el.nombre_completo + '</option>');
                         } else {
-                            $(".s2_seccion").append('<option value="' +key+ '"> ' + lista[key] + '</option>');
+                            $(".s2_seccion").append('<option value="' +el.id+ '"> ' + el.nombre_completo + '</option>');
                         }
                     }
                 }
