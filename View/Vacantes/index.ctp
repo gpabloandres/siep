@@ -105,18 +105,17 @@
         <br>
         <br>
     <?php endif; ?>
-
     <div class="table-responsive">
     <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
       <thead>
         <tr>
-          <th>Centro</th>
-          <th>Año</th>
-          <th>Division</th>
+          <th>Institución</th>
+          <th>Año/Gpo</th>
+          <th>División</th>
           <th>Turno</th>
           <th>Tipo</th>
+          <th>Titulación</th>
           <?php if(!$ocultar) : ?>
-            <th>Titulación</th>
             <th>Plaza</th>
           <?php endif ?>
           <th>Matricula</th>
@@ -147,22 +146,26 @@
             <td>
               <?php echo $seccion['tipo']; ?>
             </td>
-            <?php if(!$ocultar) : ?>
             <td>
               <?php echo $titulacionesNombres[$seccion['titulacion_id']]; ?>
             </td>
-            <td>
-              <?php echo $seccion['plazas']; ?>
-            </td>
-            <?php endif ?>
+            <?php 
+                if($seccion['cue']=='940001300' || $seccion['cue']=='940009200' || $seccion['cue']=='940011600' || $seccion['cue']=='940013400' || $seccion['cue']=='940014600' || $seccion['cue']=='940020900') { 
+                    echo'<td>'.'--'.'</td>';
+                } else { 
+                    echo'<td>'.$seccion['plazas'].'</td>';
+                }
+            ?>    
             <td>
               <?php echo $seccion['matriculas']; ?>
             </td>
-            <?php if(!$ocultar) : ?>
-            <td>
-              <?php echo $seccion['vacantes']; ?>
-            </td>
-            <?php endif ?>
+            <?php 
+                if($seccion['cue']=='940001300' || $seccion['cue']=='940009200' || $seccion['cue']=='940011600' || $seccion['cue']=='940013400' || $seccion['cue']=='940014600' || $seccion['cue']=='940020900') { 
+                    echo'<td>'.'--'.'</td>';
+                } else { 
+                    echo'<td>'.$seccion['vacantes'].'</td>';
+                }
+            ?>
             <td >
               <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
             </td>

@@ -14,8 +14,8 @@
             <tr>
                 <th></th>
                 <th><?php echo $this->Paginator->sort('ciclo_id', 'Ciclo');?></th>
-                <th><?php echo $this->Paginator->sort('centro_id', 'Centro');?></th>
-                <th><?php echo $this->Paginator->sort('curso_id', 'Curso');?></th>
+                <th><?php echo $this->Paginator->sort('centro_id', 'Institución');?></th>
+                <th><?php echo $this->Paginator->sort('curso_id', 'Sección');?></th>
                 <th><?php echo $this->Paginator->sort('turno', 'Turno');?></th>
                 <th><?php echo $this->Paginator->sort('documento_nro', 'DNI');?></th>
                 <th><?php echo $this->Paginator->sort('persona_id', 'Alumno');?></th>
