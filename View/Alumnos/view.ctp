@@ -49,18 +49,18 @@
 	<div class="row">			
 	<?php if (!empty($alumno['familiares'])):?>
 		<div class="col-xs-12 col-sm-6 col-md-8">
-			<?php foreach ($alumno['familiares'] as $familiar): ?>
+			<?php foreach ($alumno['familiares'] as $item): ?>
             <div class="col-md-4">
                 <div class="unit">
-                    <?php echo '<b>Vinculo:</b> '.$familiar['vinculo'];?><br>
-                    <?php echo '<b>Nombre:</b> '.$familiar['persona']['nombre_completo'];?><br>
-                    <?php echo '<b>Telefono:</b> '.$familiar['persona']['telefono_nro'];?>
+                    <?php echo '<b>Vinculo:</b> '.$item['familiar']['vinculo'];?><br>
+                    <?php echo '<b>Nombre:</b> '.$item['familiar']['persona']['nombre_completo'];?><br>
+                    <?php echo '<b>Telefono:</b> '.$item['familiar']['persona']['telefono_nro'];?>
                     <hr>
                     <div class="text-right">
-	                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'familiars', 'action' => 'view', $familiar['id']), array('class' => 'btn btn-success','escape' => false)); ?>
+	                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'familiars', 'action' => 'view', $item['familiar']['id']), array('class' => 'btn btn-success','escape' => false)); ?>
 	                    <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?> 
-	                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'familiars', 'action' => 'edit', $familiar['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
-	                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'familiars', 'action' => 'delete', $familiar['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
+	                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'familiars', 'action' => 'edit', $item['familiar']['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
+	                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'familiars', 'action' => 'delete', $item['familiar']['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
 	                   <?php endif; ?> 
 	                </div>
 		    	</div>
