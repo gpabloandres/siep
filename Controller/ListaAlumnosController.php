@@ -18,7 +18,7 @@ class ListaAlumnosController extends AppController {
                 break;
 			case 'usuario':
 			case 'admin':
-				$this->Auth->allow('index');
+				$this->Auth->allow('index','confirmarFamiliar');
 				break;
 		}
 
@@ -47,6 +47,7 @@ class ListaAlumnosController extends AppController {
 		$apiParams['centro_id'] = $this->params['named']['centro_id'];
 		$apiParams['curso_id'] = $this->params['named']['curso_id'];
 		$apiParams['estado_inscripcion'] = 'CONFIRMADA';
+		$apiParams['with'] = 'inscripcion.alumno.familiares.familiar.persona';
 		$apiParams['por_pagina'] = 'all';
 
 		$cursosInscripcions = $this->Siep->consumeApi("api/v1/inscripcion/lista",$apiParams);
@@ -67,5 +68,28 @@ class ListaAlumnosController extends AppController {
 		$ciclo = $first['inscripcion']['ciclo'];
 
 		$this->set(compact('cicloActual','cursosInscripcions','ciclo','centro','curso','apiParams'));
+	}
+
+	public function updateFamiliar()
+	{
+		$this->autoRender = false;
+
+		// Parametros para ejecutar API
+		$apiParams = [];
+		$apiParams['mode'] = $this->request->query['mode'];
+		$apiParams['id'] = $this->request->query['id'];
+
+		$apiResponse = $this->Siep->consumeApi("api/v1/alumnos_familiars/{$apiParams['id']}",$apiParams,'PUT');
+
+		if(isset($apiResponse['error']))
+		{
+			$this->Session->setFlash('ERROR API(RelacionFamiliares): '.$apiResponse['error'], 'default', array('class' => 'alert alert-danger'));
+			$this->redirect(array('action' => 'index'));
+		}
+
+		// Muestra el resultado de un Array como JSON
+		$this->response->type('json');
+		$json = json_encode($apiResponse);
+		$this->response->body($json);
 	}
 }

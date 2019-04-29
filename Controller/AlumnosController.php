@@ -79,7 +79,7 @@ class AlumnosController extends AppController {
 
 		// Parametros para ejecutar API
 		$apiParams = [];
-		$apiParams['with'] = 'persona.ciudad,familiares.persona.ciudad,inscripciones.centro';
+		$apiParams['with'] = 'persona.ciudad,familiares.familiar.persona.ciudad,inscripciones.centro';
 
 		// Consumo de API
 		$alumno = $this->Siep->consumeApi("api/v1/alumnos/$id",$apiParams);
