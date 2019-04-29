@@ -17,8 +17,10 @@ class ListaAlumnosController extends AppController {
                     $this->Auth->allow();
                 break;
 			case 'usuario':
+				$this->Auth->allow('index');
+				break;
 			case 'admin':
-				$this->Auth->allow('index','confirmarFamiliar');
+				$this->Auth->allow('index','updateFamiliar');
 				break;
 		}
 

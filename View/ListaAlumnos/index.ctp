@@ -36,6 +36,7 @@
                         <td>
                         <?php foreach($cursosInscripcion['inscripcion']['alumno']['familiares'] as $relacion) : ?>
 
+                            <?php if($this->Siep->isAdmin() || $this->Siep->isSuperAdmin()) { ?>
                             <div class="dropdown">
                             <?php if ($relacion['status']=='pendiente') : ?>
                                 <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -69,7 +70,10 @@
                                     <?php endif; ?>
                                 </ul>
                             </div>
-
+                            <?php } else { ?>
+                                <?php echo $relacion['familiar']['persona']['nombre_completo'];  ?>
+                                (<?php echo $relacion['familiar']['vinculo']; ?>)
+                            <?php } ?>
                         <?php endforeach ?>
                         </td>
                         <td width="60px">
@@ -92,11 +96,17 @@
 
 <script>
     function updateRelacion(id,mode) {
+        <?php
+            if($this->Siep->isAdmin() || $this->Siep->isSuperAdmin() ) {
+        ?>
         $.get("<?php echo $this->Html->url(array('controller' => 'ListaAlumnos','action' =>'updateFamiliar'),true);?>", { id: id, mode: mode} , function() {
             window.location.reload();
         })
             .fail(function() {
                 alert( "Ocurrio un error al realizar la operacion, por favor contactese con los administradores" );
-            })
+            });
+        <?php } else { ?>
+        alert('No tiene permisos para realizar esta operacion');
+        <?php } ?>
     }
 </script>
