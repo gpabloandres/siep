@@ -67,11 +67,11 @@ class ReubicacionController extends AppController {
 				** Sí son Instituciones Comunes (secciones del mismo año).
 				** Sí son Instituciones Experimentales o de la Modalidad Especial (secciones de todos los años).
 				*/
+				$this->loadModel('Curso');
 				if ($centro_id != 11 || $centro_id != 101 || $centro_id != 129 || $centro_id != 141 || $centro_id != 150 ||
 					$centro_id != 502 || $centro_id != 505 || $centro_id != 506 || $centro_id != 507 || $centro_id != 508 ||
 					$centro_id != 509 || $centro_id != 510 || $centro_id != 511 || $centro_id != 512 || $centro_id != 23 ||
 					$centro_id != 73 || $centro_id != 81 || $centro_id != 196) {
-					$this->loadModel('Curso');
 					$secciones = $this->Curso->find('list', array(
 						'recursive'=>-1,
 						'fields'=>array('id','nombre_completo_curso'),
@@ -79,8 +79,16 @@ class ReubicacionController extends AppController {
 						'centro_id'=>$centro_id,
 						'anio' => $curso['anio']
 						//'division !='=> ''
-					)
-				));
+					)));
+				} else {
+					$secciones = $this->Curso->find('list', array(
+						'recursive'=>-1,
+						'fields'=>array('id','nombre_completo_curso'),
+						'conditions'=>array(
+						'centro_id'=>$centro_id
+						//'anio' => $curso['anio']
+						//'division !='=> ''
+					)));	
 				}
 				$success = true;
 			} else {
