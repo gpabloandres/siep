@@ -99,7 +99,7 @@
         <?php
             if($this->Siep->isAdmin() || $this->Siep->isSuperAdmin() ) {
         ?>
-        $.get("<?php echo $this->Html->url(array('controller' => 'ListaAlumnos','action' =>'updateFamiliar'),true);?>", { id: id, mode: mode} , function() {
+        $.get("/ListaAlumnos/updateFamiliar", { id: id, mode: mode} , function() {
             window.location.reload();
         })
             .fail(function() {
