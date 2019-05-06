@@ -153,12 +153,12 @@
             </td>
             <td>
                 <?php if($seccion['pareja_pedagogica'] == 1): ?>
-                <span class="label label-info"><?php echo 'SI'; ?></span>
+                <span class="glyphicon glyphicon-ok"></span>
                 <?php endif; ?>
             </td>
             <td>
                 <?php if($seccion['maestra_apoyo_inclusion'] == 1): ?>
-                <span class="label label-warning"><?php echo 'SI'; ?></span>
+                <span class="glyphicon glyphicon-ok"></span>
                 <?php endif; ?>
             </td>
             <?php 
