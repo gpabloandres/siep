@@ -122,6 +122,7 @@
           <?php if(!$ocultar) : ?>
               <th>VACANTES</th>
           <?php endif ?>
+              <th>Varones</th>
           <!--<th>Acciones</th>-->
         </tr>
       </thead>
@@ -166,6 +167,9 @@
                     echo'<td>'.$seccion['vacantes'].'</td>';
                 }
             ?>
+	    <td>
+              <?php echo $seccion['varones']; ?>
+            </td>
             <td >
               <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
             </td>
