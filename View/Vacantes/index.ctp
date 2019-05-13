@@ -119,10 +119,10 @@
             <th>Plaza</th>
           <?php endif ?>
           <th>Matricula</th>
+          <th>Varones</th>
           <?php if(!$ocultar) : ?>
               <th>VACANTES</th>
           <?php endif ?>
-              <th>Varones</th>
           <!--<th>Acciones</th>-->
         </tr>
       </thead>
@@ -160,16 +160,16 @@
             <td>
               <?php echo $seccion['matriculas']; ?>
             </td>
-            <?php 
+            <td>
+                <?php echo $seccion['varones']; ?>
+            </td>
+            <?php
                 if($seccion['cue']=='940001300' || $seccion['cue']=='940009200' || $seccion['cue']=='940011600' || $seccion['cue']=='940013400' || $seccion['cue']=='940014600' || $seccion['cue']=='940020900') { 
                     echo'<td>'.'--'.'</td>';
                 } else { 
                     echo'<td>'.$seccion['vacantes'].'</td>';
                 }
             ?>
-	    <td>
-              <?php echo $seccion['varones']; ?>
-            </td>
             <td >
               <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
             </td>
