@@ -121,6 +121,7 @@
             <th>Plaza</th>
           <?php endif ?>
           <th>Matricula</th>
+          <th>Varones</th>
           <?php if(!$ocultar) : ?>
               <th>VACANTES</th>
           <?php endif ?>
@@ -171,7 +172,10 @@
             <td>
               <?php echo $seccion['matriculas']; ?>
             </td>
-            <?php 
+            <td>
+                <?php echo $seccion['varones']; ?>
+            </td>
+            <?php
                 if($seccion['cue']=='940001300' || $seccion['cue']=='940009200' || $seccion['cue']=='940011600' || $seccion['cue']=='940013400' || $seccion['cue']=='940014600' || $seccion['cue']=='940020900') { 
                     echo'<td>'.'--'.'</td>';
                 } else { 
