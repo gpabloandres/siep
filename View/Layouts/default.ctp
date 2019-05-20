@@ -15,9 +15,19 @@
     <?php echo $this->Html->css('custom', 'stylesheet', array("media"=>"all" )); ?>
     <?php echo $this->Html->css('animate', 'stylesheet', array("media"=>"all" )); ?> 
     <!-- ************************************** -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140467901-1"></script>
     <script type="text/javascript">
          $("#foto").fileinput();
     	 var basePath = "<?php echo Router::url('/'); ?>"
+
+        // ****** Google Analytics ******
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-140467901-1');
+        // **** End Google Analytics ****
     </script>
     		<title>SIEP</title>
     </head>
