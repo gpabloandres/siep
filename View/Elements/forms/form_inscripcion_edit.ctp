@@ -16,15 +16,19 @@
             // Obtener secciones dependientes al centro
             $.ajax({
                 type:"GET",
-                url: "/centros/autocompleteSeccionDependiente?id=" + centro_id,
-                success: function(lista){
+                url: "<?php echo env('SIEP_API_GW_INGRESS')."/api/v1/cursos?por_pagina=all&centro_id="?>" + centro_id,
+                success: function(response){
                     $(".s2_centro").append('<option value="' +''+ '"> ' + 'Seleccione una sección'+ '</option>');
-                    for (var key  in lista) {
-                        if(key == <?php echo $cursoInscripcion['Curso']['id']; ?>)
-                        {
-                            $(".s2_seccion").append('<option value="' +key+ '" selected="selected"> ' + lista[key] + '</option>');
+
+                    // Valores retorandos por el api
+                    var data = response.data;
+                    for (var index in data) {
+                        var el = data[index];
+
+                        if(el.id == <?php echo $cursoInscripcion['Curso']['id']; ?>) {
+                            $(".s2_seccion").append('<option value="' +el.id+ '" selected="selected"> ' + el.nombre_completo + '</option>');
                         } else {
-                            $(".s2_seccion").append('<option value="' +key+ '"> ' + lista[key] + '</option>');
+                            $(".s2_seccion").append('<option value="' +el.id+ '"> ' + el.nombre_completo + '</option>');
                         }
                     }
                 }
@@ -33,29 +37,46 @@
     });
 </script>
 <div class="row">
-  <div class="col-xs-6 col-sm-3">
-      <?php 
+  <!--<div class="col-xs-6 col-sm-3">
+      <?php/* 
           echo $this->Form->input('created', array('label' => 'Creado*', 'readonly' => true ,'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar'));
-      ?>
-  </div>
+      */?>
+  </div>-->
   <div class="col-xs-6 col-sm-3">
-        <?php
-          echo $this->Form->input('ciclo_id', array('label'=>'Ciclo lectivo*', 'readonly'=>true, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-        ?>
+        <?php/* if($cicloInscripcionIdString == '3') { */?>
+                <div>
+                  <p><strong>Ciclo lectivo*</strong></p>
+                  <input class="form-control" label="Ciclo lectivo*" disabled="disabled" data-toggle="tooltip" data-placemente="bottom" value="<?php echo $cicloInscripcionNombreString; ?>">
+                  <?php $this->Form->input('ciclo_id', array('type' => 'hidden', 'default'=>$cicloInscripcionIdString)); ?> 
+                </div><br>
+        <!--
+        <?php/* echo $this->Form->input('ciclo_id', array('type' => 'hidden', 'default'=>$cicloInscripcionIdString));
+              } else { 
+                  echo $this->Form->input('ciclo_id', array('default'=>$cicloInscripcionIdString, 'label'=>'Ciclo lectivo*', 'disabled'=>true, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                  echo $this->Form->input('ciclo_id', array('type' => 'hidden', 'default'=>$cicloInscripcionIdString));
+              }  
+        */?>
+        -->
   </div>
   <div class="col-xs-6 col-sm-3">
       <?php
           $estados_inscripcion = array('CONFIRMADA'=>'CONFIRMADA','NO CONFIRMADA'=>'NO CONFIRMADA','BAJA'=>'BAJA','EGRESO'=>'EGRESO');
-           echo $this->Form->input('estado_inscripcion', array('default'=>$estadoInscripcionAnteriorArray['Inscripcion']['estado_inscripcion'],'label'=>'Estado de la inscripción*', 'empty' => 'Ingrese un estado de inscripción...', 'options'=>$estados_inscripcion, 'class' => 's2_general form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+          //Si el número de legajo tiene la denominación "SINVACANTE", deshabilita la modificación del estado de inscripción.
+          if ($sinVacante === 'SINVACANTE') {
+            echo $this->Form->input('estado_inscripcion', array('default'=>$estadoInscripcionAnteriorArray['Inscripcion']['estado_inscripcion'],'label'=>'Estado de la inscripción*', 'disabled' =>true, 'empty' => 'Ingrese un estado de inscripción...', 'options'=>$estados_inscripcion, 'class' => 's2_general form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+            echo $this->Form->input('estado_inscripcion', array('type' => 'hidden', 'default'=>$estadoInscripcionAnteriorArray['Inscripcion']['estado_inscripcion']));
+          } else {
+            echo $this->Form->input('estado_inscripcion', array('default'=>$estadoInscripcionAnteriorArray['Inscripcion']['estado_inscripcion'],'label'=>'Estado de la inscripción*', 'empty' => 'Ingrese un estado de inscripción...', 'options'=>$estados_inscripcion, 'class' => 's2_general form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+          }  
       ?>
       <?php echo $this->Form->input('usuario_id', array('type' => 'hidden')); ?>
   </div>
 </div><hr />
-
 <div class="row">
   <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
       <div>
+            <p><strong>Nombre y apellidos del alumno*</strong></p>
             <input class="form-control" disabled="disabled" label= "Nombre y apellidos del alumno*" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo" value="<?php echo $alumno['Persona']['nombre_completo_persona'];?>">
       </div><br>
       <?php
@@ -63,8 +84,9 @@
       ?>
       <?php
           if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) {
-              echo $this->Form->input('centro_id', array('default'=>$alumno['Alumno']['centro_id'],'label'=>'Institución*', 'empty' => 'Ingrese una institución...', 'class' => 's2_centro form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+              echo $this->Form->input('centro_id', array('default'=>$alumno['Alumno']['centro_id'],'label'=>'Institución*',/* 'empty' => 'Ingrese una institución...',*/ 'disabled'=>true, 'class' => 's2_centro form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
               echo '<br>';
+              echo $this->Form->input('centro_id', array('type' => 'hidden', 'default'=>$alumno['Alumno']['centro_id']));
           }
       ?>
       <?php
@@ -167,19 +189,21 @@
       <br>
         <div class="input-group">
           <span class="input-group-addon">
-            <?php echo $this->Form->input('fotocopia_dni', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Fotocopia DNI</label>'));?>
+            <?php echo $this->Form->input('fotocopia_dni', array('default'=>$tildeDocumentoString, 'between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Fotocopia DNI</label>'));?>
+          </span>
+        </div>
+      <?php if ($userCentroNivel != 'Adultos - Secundario' && $userCentroNivel != 'Adultos - Primario') : ?>  
+        <div class="input-group">
+          <span class="input-group-addon">
+            <?php echo $this->Form->input('partida_nacimiento_alumno', array('default'=>$tildePartidaString, 'between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Alumno</label>'));?>
           </span>
         </div>
         <div class="input-group">
           <span class="input-group-addon">
-            <?php echo $this->Form->input('partida_nacimiento_alumno', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Alumno</label>'));?>
+            <?php echo $this->Form->input('certificado_vacunas', array('default'=>$tildeVacunasString, 'between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Vacunación</label>'));?>
           </span>
         </div>
-        <div class="input-group">
-          <span class="input-group-addon">
-            <?php echo $this->Form->input('certificado_vacunas', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Vacunación</label>'));?>
-          </span>
-        </div>
+      <?php endif; ?>  
         <!--
         <div class="input-group">
             <span class="input-group-addon">
@@ -188,11 +212,11 @@
         </div>
         -->
         <?php 
-          if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria')) {
+          if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria') || ($userCentroNivel == 'Adultos - Secundario') || ($userCentroNivel == 'Adultos - Primario')) {
         ?>  
         <div class="input-group">
             <span class="input-group-addon">
-             <?php echo $this->Form->input('certificado_septimo', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Primario Completo</label>'));?>
+             <?php echo $this->Form->input('certificado_septimo', array('default'=>$tildeSeptimoString, 'between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Primario Completo</label>'));?>
             </span>
         </div>
         <!--
@@ -231,27 +255,27 @@
       <?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>
       <div class="unit"><strong><h3>Datos de la BAJA</h3></strong><hr />
         <?php
-            echo $this->Form->input('fecha_baja', array('label' => 'Fecha de Baja', 'type' => 'text', 'between' => '<br>', 'empty' => ' ','class' => 'datepicker form-control', 'Placeholder' => 'Ingrese una fecha...'));
+            echo $this->Form->input('fecha_baja', array('default' => $fechaBaja, 'label' => 'Fecha de Baja', 'type' => 'text', 'between' => '<br>', 'empty' => ' ','class' => 'datepicker form-control', 'Placeholder' => 'Ingrese una fecha...'));
             $tipos_baja = array('Salido con pase' => 'Salido con pase', 'Salido sin pase' => 'Salido sin pase', 'Pérdida de regularidad' => 'Pérdida de regularidad',       'Fallecimiento' => 'Fallecimiento');
-            echo $this->Form->input('tipo_baja', array('label' => 'Baja tipo', 'empty' => 'Ingrese una opción...', 'options' => $tipos_baja, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+            echo $this->Form->input('tipo_baja', array('default' => $bajaTipo, 'label' => 'Baja tipo', 'empty' => 'Ingrese una opción...', 'options' => $tipos_baja, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
             if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria')) {
                 $motivos_baja = array('Pasó a educación especial' => 'Pasó a educación especial', 'Mudanza de la familia' => 'Mudanza de la familia', 'Problemas de adaptación' => 'Problemas de adaptación', 'Problemas disciplinarios' => 'Problemas disciplinarios', 'Decisión de la institución' => 'Decisión de la institución', 'Problemas de salud' => 'Problemas de salud', 'Dificultad de transporte' => 'Dificultad de transporte', 'Cambio en la situación económica' => 'Cambio en la situación económica', 'No especifica' => 'No especifica', 'Otro' => 'Otro', 'Tenía muchas materias previas' => 'Tenía muchas materias previas', 'Pasó a educación de jóvenes y adultos' => 'Pasó a educación de jóvenes y adultos', 'Comenzó a trabajar' => 'Comenzó a trabajar', 'Quedó embarazada' => 'Quedó embarazada', 'Debe colaborar en la casa' => 'Debe colaborar en la casa');
             } else {
                 $motivos_baja = array('Pasó a educación especial' => 'Pasó a educación especial', 'Mudanza de la familia' => 'Mudanza de la familia', 'Problemas de adaptación' => 'Problemas de adaptación', 'Problemas disciplinarios' => 'Problemas disciplinarios', 'Decisión de la institución' => 'Decisión de la institución', 'Problemas de salud' => 'Problemas de salud', 'Dificultad de transporte' => 'Dificultad de transporte', 'Cambio en la situación económica' => 'Cambio en la situación económica', 'No especifica' => 'No especifica', 'Otro' => 'Otro');
             }   
-            echo $this->Form->input('motivo_baja', array('label' => 'Motivo de baja', 'empty' => 'Ingrese una opción...', 'options' => $motivos_baja, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+            echo $this->Form->input('motivo_baja', array('default' => $bajaMotivo, 'label' => 'Motivo de baja', 'empty' => 'Ingrese una opción...', 'options' => $motivos_baja, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
           ?>
       </div>  
       <div class="unit"><strong><h3>Datos del EGRESO</h3></strong><hr />
         <?php
-            echo $this->Form->input('fecha_egreso', array('label' => 'Fecha de egreso', 'type' => 'text', 'between' => '<br>', 'empty' => ' ','class' => 'datepicker form-control', 'Placeholder' => 'Ingrese una fecha...'));
+            echo $this->Form->input('fecha_egreso', array('default' => $fechaEgreso, 'label' => 'Fecha de egreso', 'type' => 'text', 'between' => '<br>', 'empty' => ' ','class' => 'datepicker form-control', 'Placeholder' => 'Ingrese una fecha...'));
             if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria') || ($current_user['puesto'] == 'Dirección Instituto Superior') || ($current_user['puesto'] == 'Supervisión Secundaria')) {
-                echo $this->Form->input('fecha_emision_titulo', array('label' => 'Fecha de emisión del título', 'type' => 'text', 'between' => '<br>', 'empty' => ' ','class' => 'datepicker form-control', 'Placeholder' => 'Ingrese una fecha...'));
-                echo $this->Form->input('nota', array('label' => 'Nota Final', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese la nota final', 'Placeholder' => 'Ingrese una nota...'));
-                echo $this->Form->input('acta_nro', array('label' => 'Acta Nº', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un nº de acta', 'Placeholder' => 'Ingrese un nº de acta...'));
-                echo $this->Form->input('libro_nro', array('label' => 'Libro Nº', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un nº de libro', 'Placeholder' => 'Ingrese un nº de libro...'));
-                echo $this->Form->input('folio_nro', array('label' => 'Folio Nº', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un nº de folio', 'Placeholder' => 'Ingrese un nº de folio...'));
-                echo $this->Form->input('titulo_nro', array('label' => 'Título Nº', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un nº de título', 'Placeholder' => 'Ingrese un nº de título...'));
+                echo $this->Form->input('fecha_emision_titulo', array('default' => $fechaEmisionTitulo, 'label' => 'Fecha de emisión del título', 'type' => 'text', 'between' => '<br>', 'empty' => ' ','class' => 'datepicker form-control', 'Placeholder' => 'Ingrese una fecha...'));
+                echo $this->Form->input('nota', array('default' => $notaFinal, 'label' => 'Nota Final', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese la nota final', 'Placeholder' => 'Ingrese una nota...'));
+                echo $this->Form->input('acta_nro', array('default' => $actaNro, 'label' => 'Acta Nº', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un nº de acta', 'Placeholder' => 'Ingrese un nº de acta...'));
+                echo $this->Form->input('libro_nro', array('default' => $libroNro, 'label' => 'Libro Nº', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un nº de libro', 'Placeholder' => 'Ingrese un nº de libro...'));
+                echo $this->Form->input('folio_nro', array('default' => $folioNro, 'label' => 'Folio Nº', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un nº de folio', 'Placeholder' => 'Ingrese un nº de folio...'));
+                echo $this->Form->input('titulo_nro', array('default' => $tituloNro, 'label' => 'Título Nº', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un nº de título', 'Placeholder' => 'Ingrese un nº de título...'));
             }
           ?>
     </div>
@@ -260,7 +284,7 @@
   <div class="row">
     <div class="unit">
       <div class="col-md-12 col-sm-6 col-xs-12">
-        <?php echo $this->Form->input('observaciones', array('label'=>'Observaciones', 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control')); ?>
+        <?php echo $this->Form->input('observaciones', array('default' => $obs, 'label'=>'Observaciones', 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control')); ?>
       </div>
     </div>
   </div>

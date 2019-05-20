@@ -37,13 +37,14 @@ class VacantesController extends AppController
                 $this->Auth->allow();
             break;
             case 'usuario':
-                $this->Auth->allow('index', 'view', 'requestDatatable');
+                $this->Auth->allow('index', 'view');
             break;
         }
     }
 
 
     public function index() {
+        $showBtnExcel = false;
 
         $this->loadModel('Centro');
 
@@ -57,156 +58,125 @@ class VacantesController extends AppController
         }
 
         $this->loadModel('Ciudad');
-        $comboCiudad = $this->Ciudad->find('list', array('fields'=>array('id', 'nombre')));
+        $comboCiudad = $this->Ciudad->find('list', array('fields'=>array('nombre')));
 
         $this->loadModel('Ciclo');
         $comboCiclo = $this->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
         $cicloIdUltimo = $this->getLastCicloId();
         $cicloIdActual = $this->getActualCicloId();
 
-        $this->loadModel('Curso');
-        $conditions = array('AND'=>array(
-            'Curso.anio' => array('sala de 4 años', 'sala de 5 años', '1ro', '2do', '3ro', '4to', '5to', '6to'),
-            'Curso.division' =>'',
-            'Curso.status' => 1 
-        ));
-        // Es necesario hacer una columna virtual, para que despues se pueda ordenar en el datatable
-        $this->Curso->virtualFields['por_hermanos'] = '
-                        (
-                select count(ins.id) as hermanos
-                from  cursos_inscripcions as curi
-                
-                left join inscripcions as ins on ins.id = curi.inscripcion_id
-                
-                where
-                   ins.tipo_inscripcion = \'Hermano de alumno regular\' 
-                 and ins.centro_id = Centro.id 
-                
-                and   curi.curso_id = Curso.id
-                ) 
-        ';
-        $this->paginate = array(
-            'limit' => 10,
-            'conditions' => $conditions,
-            'order' => array('Curso.sigla' => 'asc' ),
-            'fields' => array(
-                'Centro.sigla',
-                'Centro.id',
-                'Centro.sector',
-                'Centro.ciudad_id',
-                'Curso.id',
-                'Curso.anio',
-                'Curso.turno',
-                'Curso.plazas',
-                'Curso.matricula',
-                'Curso.vacantes',
-                'por_hermanos',
-            ),
-            /*
-            'group' => array(
-                'Centro.sigla',
-                'Centro.id',
-                'Curso.anio'
-            ),
-            */
-            'contain' => [
-                'Centro'
-            ]
-        );
+        // Datos de usuario logueado
+        $userCentro = $this->Auth->user('Centro');
 
-        $this->redirectToNamed();
+        // Parametros de API por defecto
+        $apiParams = [];
+        $apiParams['por_pagina'] = 10;
+        $apiParams['ciclo'] = 2019;
+        $apiParams['estado_inscripcion'] = 'CONFIRMADA';
+        $apiParams['division'] = 'con';
+        $apiParams['order'] = 'anio';
+        $apiParams['order_dir'] = 'asc';
 
-        if(!empty($this->params['named']['centro_id']))
-        {
-            $conditions['Centro.id = '] = $this->params['named']['centro_id'];
+        // Filtros de formulario y paginacion
+        if(isset($this->request->query['ciclo'])){
+            $apiParams['ciclo'] = $this->request->query['ciclo'];
+        }
+        if(isset($this->request->query['anio'])){
+            $apiParams['anio'] = $this->request->query['anio'];
+        }
+        if(isset($this->request->query['centro_id'])){
+            $apiParams['centro_id'] = $this->request->query['centro_id'];
+        }
+        if(isset($this->request->query['page'])){
+            $apiParams['page'] = $this->request->query['page'];
         }
 
-        if(!empty($this->params['named']['anio']))
-        {
-            $conditions['Curso.anio = '] = $this->params['named']['anio'];
-        }
-
-        if(!empty($this->params['named']['ciudad_id']))
-        {
-            $conditions['Centro.ciudad_id = '] = $this->params['named']['ciudad_id'];
-        }
-
-        if(!empty($this->params['named']['sector']))
-        {
-            $conditions['Centro.sector = '] = $this->params['named']['sector'];
-        }
-
-        $userCentroId = $this->getUserCentroId();
-
+        // Filtros de roles
         if($this->Siep->isAdmin())
         {
-            $conditions['Curso.centro_id'] = $userCentroId;
-            $matriculas = $this->paginate('Curso',$conditions);
+            $apiParams['centro_id'] = $userCentro['id'];
         }
 
         if($this->Siep->isUsuario())
         {
-            $nivelCentroArray = $this->Curso->Centro->findById($userCentroId, 'nivel_servicio');
-            $nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
-
-            if ($nivelCentroString === 'Común - Inicial - Primario') {
-                $nivelCentroId = $this->Curso->Centro->find('list', array(
-                    'fields' => array('id'),
-                    'conditions' => array(
-                        'nivel_servicio' => array('Común - Inicial', 'Común - Primario', 'Común - Inicial - Primario')
-                    )
-                ));
-
-                $conditions['Curso.centro_id'] = $nivelCentroId;
-                $matriculas = $this->paginate('Curso', $conditions);
-
+            // Supervision Primaria ve Jardines y Escuelas
+            if($this->Siep->isSupervisionInicialPrimaria())
+            {
+                $apiParams['nivel_servicio'] = [
+                    'Común - Inicial',
+                    'Común - Primario',
+                    'Común - Inicial - Primario'
+                ];
+            } elseif ($this->Siep->isSupervisionSecundaria())
+            {
+                // Supervision Secundaria, solo ve colegios secundarios
+                $apiParams['nivel_servicio'] = [
+                    'Común - Secundario'
+                ];
             } else {
-                $nivelCentroId = $this->Curso->Centro->find('list', array(
-                    'fields' => array('id'),
-                    'conditions' => array('nivel_servicio' => $nivelCentroString)
-                ));
-
-                $conditions['Curso.centro_id'] = $nivelCentroId;
-                $matriculas = $this->paginate('Curso', $conditions);
+                // El resto de los usuarios, ven a los inscriptos de sus establecimientos, en su nivel de servicio
+                $userNivelServicio = $userCentro['nivel_servicio'];
+                $apiParams['centro_id'] = $userCentro['id'];
+                $apiParams['nivel_servicio'] = $userNivelServicio;
             }
         }
 
-        if($this->Siep->isSuperAdmin())
+        // Consumo de API
+        $matriculas_por_seccion = $this->Siep->consumeApi("api/matriculas/cuantitativa/por_seccion",$apiParams);
+        if(isset($matriculas_por_seccion['error']))
         {
-            $matriculas = $this->paginate('Curso',$conditions);
+            // Manejar error de API
         }
 
-        // Loguea a los siguientes usuarios.
-        switch($this->Auth->user('username'))
-        {
-            case 'radriana':
-            case 'oramiro':
-                $this->Siep->logQuerySave(json_encode(
-                    [
-                        'Rol' => AuthComponent::user(),
-                        'Log' => $this->Siep->logQuery($this->Curso),
-                        'Matricula' => $matriculas
-                    ]
-                ));
-            break;
+        //Obtención de los nombres de las titulaciones para mostrar en las secciones.
+        $this->loadModel('Titulacion');
+        $this->Titulacion->recursive = 0;
+        $this->Titulacion->Behaviors->load('Containable');
+        $titulacionesNombres = $this->Titulacion->find('list', array(
+            'fields'=>array('nombre_abreviado'),
+            'contain'=>false,
+            'conditions'=>array('status'=>1)));
+
+        if(isset($matriculas_por_seccion['total']) &&  $matriculas_por_seccion>0) {
+            $showBtnExcel = true;
+            $queryExportarExcel = [];
+            $queryExportarExcel['export'] = 'excel';
+            $queryExportarExcel['por_pagina'] = '1000000'; // Hardcode (hay un problema de paginacion en el API)
+            $queryExportarExcel = array_merge($apiParams,$queryExportarExcel);
         }
-        $userCentroId = $this->getUserCentroId();
-        $this->loadModel('Centro');
-        $nivelCentro = $this->Centro->find('list', array('fields'=>array('id','nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
-        $nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-        $nivelCentroArray = $this->Centro->findById($nivelCentroId, 'nivel_servicio');
-        $nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
-        $this->set(compact('matriculas','cicloIdUltimo','cicloIdActual','comboCiclo','comboCiudad','comboSector', 'nivelCentroString'));
+
+        // Consumo de API
+        $ubicaciones = $this->Siep->consumeApi("api/v1/ciudades");
+        if(isset($ubicaciones['error']))
+        {
+            // Manejar error de API
+        }
+
+
+        $this->set(compact('ubicaciones','matriculas_por_seccion','cicloIdUltimo','cicloIdActual','comboCiclo','comboCiudad','comboSector', 'titulacionesNombres','queryExportarExcel','showBtnExcel'));
     }
 
-    public function logView($fecha)
+    public function recuento()
     {
+        // Evita buscar el archivo VIEW
         $this->autoRender = false;
-        $log_dir_path = LOGS.'sql';
-        $archivo = $log_dir_path.'/'.$fecha.'.log';
-        $this->response->body(file_get_contents($archivo));
-    }
 
+        if(isset($this->params['named']['ciclo']))
+        {
+            $ciclo = $this->params['named']['ciclo'];
+            $response = $this->Siep->consumeApi("api/matriculas/recuento/vacantes/$ciclo");
+        } else {
+            $response = ['error'=>'Debe definir el parametro CICLO'];
+        }
+
+        // Muestra el resultado de un Array como JSON
+        $this->response->type('json');
+        $json = json_encode($response);
+        $this->response->body($json);
+
+        // Redireccionar a otra ruta
+        // $this->redirect(array('action' => 'index'));
+    }
     /*
     public function recuento()
     {

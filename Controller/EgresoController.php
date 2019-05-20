@@ -5,7 +5,10 @@ class EgresoController extends AppController {
 
 	public $paginate = array('CursosInscripcion' => array('limit' => 2, 'order' => 'CursosInscripcion.curso_id ASC'));
 
-    public function beforeFilter() {
+	// Permite agregar el Helper de Siep a las vistas
+	public $helpers = array('Siep');
+
+	public function beforeFilter() {
         parent::beforeFilter();
 		/* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
         *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
@@ -22,7 +25,11 @@ class EgresoController extends AppController {
 				$this->Auth->allow('index','confirmarAlumnos');
 				break;
 		}
-	    /* FIN */
+
+		// Importa el Helper de Siep al controlador es accesible mediante $this->Siep
+		App::import('Helper', 'Siep');
+		$this->Siep= new SiepHelper(new View());
+
 		App::uses('HttpSocket', 'Network/Http');
     } 
 
@@ -34,180 +41,89 @@ class EgresoController extends AppController {
 	public function index()
 	{
 		// Datos del usuario
-		$userCentroId = $this->getUserCentroId();
-		$userRole = $this->Auth->user('role');
+		//$userCentroId = $this->getUserCentroId();
+		//$userRole = $this->Auth->user('role');
+		//$hoyArray = getdate();
 
-		// Modelos a utilizar
-		$this->loadModel('CursosInscripcion');
-		$this->loadModel('Centro');
-		$this->loadModel('Curso');
+		if(!$this->params['named']['centro_id'] || !$this->params['named']['curso_id'] ) {
+			$this->Session->setFlash('ERROR: No fue posible determinar la seccion', 'default', array('class' => 'alert alert-danger'));
+			$this->redirect(array('controller'=>'cursos','action' => 'index'));
+		}
 
-		$this->loadModel('Ciclo');
+		$cicloActual = 2018;
+		$cicloEgreso = 2018;
 
-		$hoyArray = getdate();
-		$hoyAñoString = $hoyArray['year'] - 1; // Al restar un año... se relizan las promociones en Marzo, con los alumnos del año anterior.
-		$cicloaPromocionar = $this->Ciclo->find('first', array(
-			'recursive' => -1,
-			'conditions' => array('nombre' => $hoyAñoString)
-		));
+		// Parametros para ejecutar API
+		$apiParams = [];
+		$apiParams['ciclo'] = $cicloActual;
+		$apiParams['centro_id'] = $this->params['named']['centro_id'];
+		$apiParams['curso_id'] = $this->params['named']['curso_id'];
+		$apiParams['estado_inscripcion'] = 'CONFIRMADA';
+		$apiParams['por_pagina'] = 'all';
 
-		$cicloaPromocionar = array_pop($cicloaPromocionar);
-
-		// Habria que ver como cake gestiona estos joins de manera nativa en el ORM
-		$this->paginate['CursosInscripcion'] = array(
-			'fields' => array(
-				'CursosInscripcion.*',
-				'Inscripcion.*',
-				'Curso.*',
-				'Centro.*',
-				'Persona.*',
-				'Ciclo.nombre'
-			),
-			'limit' => 50,
-			'order' => array('Alumno.apellido' => 'ASC'),
-			'joins' => array(
-				array(
-					'alias' => 'Alumno',
-					'table' => 'alumnos',
-					'type' => 'LEFT',
-					'conditions' => '`Alumno`.`id` = `Inscripcion`.`alumno_id`'
-				),
-				array(
-					'alias' => 'Persona',
-					'table' => 'personas',
-					'type' => 'LEFT',
-					'conditions' => '`Persona`.`id` = `Alumno`.`persona_id`'
-				),
-				array(
-					'alias' => 'Ciclo',
-					'table' => 'ciclos',
-					'type' => 'LEFT',
-					'conditions' => '`Ciclo`.`id` = `Inscripcion`.`ciclo_id`'
-				),
-				array(
-					'alias' => 'Centro',
-					'table' => 'centros',
-					'type' => 'LEFT',
-					'conditions' => '`Centro`.`id` = `Inscripcion`.`centro_id`'
-				)
-			)
-		);
-		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
-		*Sí el usuario es "admin" muestra los cursos del establecimiento. Sino sí es "usuario" externo muestra los cursos del nivel.
-		*/
-
-		// Se busca el nivel del servicio segun el centro_id del usuario
-		$nivelCentroServicio = $this->Centro->find('first', array(
-				'recursive' => -1,
-				'fields'=>array('Centro.nivel_servicio'),
-				'conditions'=>array('Centro.id'=>$userCentroId))
-		);
-
-		$nivelServicio = $nivelCentroServicio['Centro']['nivel_servicio'];
-		switch($userRole)
+		// Consumo de API
+		$cursosInscripcions = $this->Siep->consumeApi("api/v1/inscripcion/lista",$apiParams);
+		if(isset($cursosInscripcions['error']))
 		{
-			case 'admin':
-				$this->paginate['CursosInscripcion']['conditions'] = array(
-					'Inscripcion.centro_id' => $userCentroId,
-					'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA')
-				);
-			break;
-			case 'usuario':
-				if($nivelServicio === 'Común - Inicial - Primario')
-				{
-					$nivelCentroId = $this->Centro->find('list', array(
-						'fields'=>array('id'),
-						'conditions'=>array(
-							'nivel_servicio'=>array('Común - Inicial', 'Común - Primario', 'Común - Inicial - Primario')
-						)
-					));
-
-					$this->paginate['CursosInscripcion']['conditions'] = array(
-						'Inscripcion.centro_id' => $nivelCentroId,
-						'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA')
-					);
-				} else
-				{
-					$nivelCentroId = $this->Centro->find('list', array(
-						'fields'=>array('id'),
-						'conditions'=>array('nivel_servicio'=>$nivelServicio))
-					);
-					$this->paginate['CursosInscripcion']['conditions'] = array(
-						'Inscripcion.centro_id' => $nivelCentroId,
-						'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA')
-					);
-				}
-				break;
-		}
-		/* FIN */
-
-		/* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
-        *Pagina según búsquedas simultáneas ya sea por CENTRO y/o CURSO y/o INSCRIPCIÓN.
-        */
-		$this->redirectToNamed();
-		$conditions = array();
-
-		$conditions['Inscripcion.ciclo_id ='] = $cicloaPromocionar['id'];
-
-		if(!empty($this->params['named']['centro_id'])) {
-			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
-		}
-		if(!empty($this->params['named']['curso_id'])) {
-			$conditions['CursosInscripcion.curso_id ='] = $this->params['named']['curso_id'];
+			$this->Session->setFlash('ERROR API(Inscripciones): '.$cursosInscripcions['error'], 'default', array('class' => 'alert alert-danger'));
+			$this->redirect(array('action' => 'index'));
 		}
 
-		// Inicializa la paginacion segun las condiciones
-		$cursosInscripcions = $this->paginate('CursosInscripcion', $conditions);
+		$cursosInscripcions = $cursosInscripcions['data'];
 
-		$centro = $this->Centro->find('first', array(
-				'recursive' => -1,
-				'conditions'=>array('Centro.id'=>$this->params['named']['centro_id']))
-		);
+		// Obtenemos Ciclo, Centro y Curso de la primera Inscripcion de la lista
+		// Todas las inscripciones comparten estas 3 variables
+		$first = reset($cursosInscripcions);
+		$curso = $first['curso'];
+		$centro = $first['inscripcion']['centro'];
+		$ciclo = $first['inscripcion']['ciclo'];
 
-		$curso = $this->Curso->find('first', array(
-				'recursive' => -1,
-				'conditions'=>array('Curso.id'=>$this->params['named']['curso_id']))
-		);
-
-		$centro = array_pop($centro);
-		$curso = array_pop($curso);
-
-		$this->set(compact('cicloaPromocionar','centro','curso','cursosInscripcions','cicloaPromocionar'));
+		$this->set(compact('cursosInscripcions','ciclo','cicloActual','cicloEgreso','centro','curso'));
 	}
 
 	public function confirmarAlumnos()
 	{
+		$userId = $this->Auth->user('id');
+		$request = $this->request->data;
+
+		if(!$request)
+		{
+			$this->Session->setFlash("ERROR Egresos::confirmarAlumnos(): No fue posible realizar el egreso, los datos estan incompletos, vuelva a intentarlo", 'default', array('class' => 'alert alert-danger'));
+			$this->redirect($this->referer());
+		}
+
 		try {
-			$userId = $this->Auth->user('id');
+			// Parametros para ejecutar API
+			$apiParams = [];
+			$apiParams['user_id'] = $userId;
+			$apiParams['centro_id'] = $request['centro_id'];
+			$apiParams['curso_id'] = $request['curso_id'];
+			$apiParams['id'] = $request['id'];
 
-			$httpSocket = new HttpSocket();
-			$this->request->data['user_id'] = $userId;
-			$data = $this->request->data;
+			// Consumo de API
+			$apiResponse = $this->Siep->consumeApi("api/inscripcion/egreso",$apiParams,"POST");
 
-			$hostApi = getenv('HOSTAPI');
-			$response = $httpSocket->post("http://$hostApi/api/inscripcion/egreso", $data);
-			$apiResponse = json_decode($response->body,true);
-
-			if( isset($apiResponse['error']) && count($apiResponse['error'])>0 ) {
+			if(isset($apiResponse ['error']))
+			{
 				// El api puede devolver mas de 1 error, hay que mostrarlos a todos
 				$err = $apiResponse['error'];
 				$msgError = "";
 				foreach ($err as $errParam) {
 					$msgError .= $errParam."<br>";
 				}
-				$this->Session->setFlash("API($hostApi) Error: ".$msgError, 'default', array('class' => 'alert alert-danger'));
+				$this->Session->setFlash("Error API(Egreso) Error: ".$msgError, 'default', array('class' => 'alert alert-danger'));
 				$this->redirect($this->referer());
 			} else {
 				if( isset($apiResponse['success']) && count($apiResponse['success'])>0 ) {
 					$this->Session->setFlash("Egreso realizado con exito", 'default', array('class' => 'alert alert-success'));
 					$this->redirect($this->referer());
 				} else {
-					$this->Session->setFlash("API($hostApi) !done: No se determinó si la operación se efectuo con exito", 'default', array('class' => 'alert alert-warning'));
+					$this->Session->setFlash("Error API(Egreso) !done: No se determinó si la operación se efectuo con exito", 'default', array('class' => 'alert alert-warning'));
 					$this->redirect($this->referer());
 				}
 			}
 		} catch(\Exception $ex){
-			$this->Session->setFlash("API($hostApi) TryError: ".$ex->getMessage(), 'default', array('class' => 'alert alert-danger'));
+			$this->Session->setFlash("Error API(Egreso) TryError: ".$ex->getMessage(), 'default', array('class' => 'alert alert-danger'));
 			$this->redirect($this->referer());
 		}
 	}

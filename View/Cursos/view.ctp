@@ -16,15 +16,22 @@
 							<?php echo ($curso['Curso']['turno']); ?></p>
 						<b><?php echo __('Tipo: '); ?></b>
 							<?php echo ($curso['Curso']['tipo']); ?></p>	
-						<b><?php echo __('Aula: '); ?></b>
-							<?php echo ($curso['Curso']['aula_nro']); ?></p>
-			            <b><?php echo __('Plazas: '); ?></b> 
-			            	<span class="badge"><?php echo ($cursoPlazasString); ?></span></button></b>
-						<b><?php echo __(' | Matriculados: '); ?></b>
-							<span class="badge"><?php echo ($cursoMatriculaString); ?></span></button></b><br/><br/>
-						<button class="btn btn-primary" type="button">Vacantes: 
-							<span class="badge"><?php echo ($vacantes); ?></span></button>
-                    </div>
+						<!--<b><?php// echo __('Aula: '); ?></b>
+							<?php// echo ($curso['Curso']['aula_nro']); ?></p>-->
+						<?php $ParejaPedagogica = ($curso['Curso']['pareja_pedagogica'] == '1') ? 'SI' : 'NO' ; ?>
+						<b><?php echo 'Pareja Pedagógica: ';?></b><?php echo $ParejaPedagogica; ?></p>
+						<?php $MaestraIntregradora = ($curso['Curso']['maestra_apoyo_inclusion'] == '1') ? 'SI' : 'NO' ; ?>
+						<b><?php echo 'Maestra Integradora: ';?></b><?php echo $MaestraIntregradora; ?></p>
+						<!--<b><?php// echo __('Plazas: '); ?></b>--> 
+			            	<!--<span class="badge"><?php// echo ($cursoPlazasString); ?></span></button></b><br/><br/>-->
+						<!--<strong>CICLO 2018</strong><br/>-->
+						<!--<b><?php// echo __('| Matriculados: '); ?></b>-->
+							<!--<span class="badge"><?php// echo ($cursoMatriculaString); ?></span></button></b><br/>-->
+						<!--<b><?php// echo __('| Vacantes: '); ?></b>-->
+							<!--<span class="badge"><?php// echo ($vacantes); ?></span></button></b>-->	
+						<!--<button class="btn btn-primary" type="button">Vacantes: 
+							<span class="badge"><?php// echo ($vacantes); ?></span></button>-->
+					</div>
                     <!--<div class="col-md-4 col-sm-6 col-xs-8">	
 			            <b><?php echo __('Organización de cursada: '); ?></b>
 			            <?php echo ($curso['Curso']['organizacion_cursada']); ?></p>
@@ -38,6 +45,11 @@
 		    <div class="unit">
 		 		<div class="subtitulo">Opciones</div>
 				<div class="opcion"><?php echo $this->Html->link(__('Listar Secciones'), array('action' => 'index')); ?></div>
+				<div class="opcion"><?php echo $this->Html->link(__('Datos de Alumnos'), array('action' => 'index','controller' => 'ListaAlumnos',
+						'centro_id'=>$curso['Centro']['id'],
+						'curso_id'=>$curso['Curso']['id']
+					)); ?>
+				</div>
 					<?php
 					// Por defecto no muestro la promocion
 					$showPromocion = false;
@@ -62,11 +74,14 @@
 							$showPromocion = true;
 						}
 					} else {
-						// El resto de las secciones promocionan menos 5to inicial y 7mo secundario
+						// El resto de las secciones promocionan menos Sala de 5 años (Inicial), 7mo (Secundario Común) y 3ro (Primario/Secundario Adultos).
 						if(
 							($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] != 'Sala de 5 años') ||
 							($curso['Centro']['nivel_servicio'] == 'Común - Primario') ||
-							($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] != '7mo')
+							($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] != '7mo') ||
+							($curso['Centro']['nivel_servicio'] == 'Adultos - Secundario' && $curso['Curso']['anio'] != '3ro') ||
+							($curso['Centro']['nivel_servicio'] == 'Adultos - Primario' && $curso['Curso']['anio'] != '3ro') ||
+							($curso['Centro']['nivel_servicio'] == 'Especial - Primario')
 						) {
 							$showPromocion = true;
 						}
@@ -84,20 +99,23 @@
 					<?php
 						if($curso['Curso']['anio'] == '6to')
 						{
+							/*Deben mostrar la opción "EGRESAR" los 7mos de las secciones con orientación técnica y los 6tos de las secciones con orientación bachiller*/
 							if(
 								($curso['Centro']['cue'] == '940007700') ||
-								($curso['Centro']['cue'] == '940008300') ||
+								($curso['Centro']['cue'] == '940008300')/* ||
 								($curso['Centro']['cue'] == '940015900') ||
-								($curso['Centro']['cue'] == '940015700')
+								($curso['Centro']['cue'] == '940015700')*/
 							) {
 								$showEgreso = false;
 							} else {
 								$showEgreso = true;
 							}
 						} else {
+							// Egresos de Sala de 5 años (Inicial) y 3ros (Primario/Secundario Adultos).
 							if(
-								($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] == 'Sala de 5 años') ||
-								($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] == '7mo')
+								($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] == 'Sala de 5 años') || ($curso['Curso']['tipo'] == 'Múltiple' && $curso['Curso']['anio'] == 'Sala de 4 años') || ($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] == '7mo') ||
+								($curso['Centro']['nivel_servicio'] == 'Adultos - Secundario' && $curso['Curso']['anio'] == '3ro') ||
+								($curso['Centro']['nivel_servicio'] == 'Adultos - Primario' && $curso['Curso']['anio'] == '3ro')
 							) {
 								$showEgreso = true;
 							}
@@ -119,8 +137,10 @@
 					</div>
 
 
-				<?php if($current_user['role'] == 'superadmin'): ?>
+			  <?php if(($current_user['role'] == 'superadmin' && ($current_user['puesto'] == 'Sistemas' || $current_user['puesto'] == 'Atei')) || ($current_user['role'] == 'usuario' && ($current_user['puesto'] == 'Supervisión Secundaria'))): ?>
 				<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $curso['Curso']['id'])); ?></div>
+              <?php endif; ?>
+              <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
 				<div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $curso['Curso']['id']), null, sprintf(__('Esta seguro de borrar el curso %s?'), $curso['Curso']['division'])); ?></div>
 			  <?php endif; ?>	
 		 	</div>

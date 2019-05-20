@@ -1,6 +1,8 @@
 <?php
 class Integracion extends AppModel {
+	
 	var $name = 'Integracion';
+	public $actsAs = array('Containable');
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(
@@ -42,7 +44,7 @@ class Integracion extends AppModel {
                            'allowEmpty' => false,       
                            'message' => 'Indicar la fecha de inicio de la integración.'
                            )
-                   )
-         );              
+                	)
+         		);              
 }
 ?>

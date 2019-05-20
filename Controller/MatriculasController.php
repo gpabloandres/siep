@@ -48,7 +48,7 @@ class MatriculasController extends AppController
         $this->paginate = array(
             'contain' => array('Centro'),
             'limit' => 10,
-            'conditions' => array('Curso.division !=' => '', 'Curso.status =' => 1),
+            'conditions' => array('Curso.division !=' => '', 'Curso.status =' => 1, 'Curso.matricula !=' => 0),
             'order' => array('Curso.centro_id' => 'asc' )
         );
         $this->redirectToNamed();
@@ -144,8 +144,15 @@ class MatriculasController extends AppController
                 'fields'=> array('Curso.division','Curso.division')
             ));
         }
-
-        $this->set(compact('matriculas','comboAnio','comboDivision','comboCiclo','cicloIdUltimo','cicloIdActual'));
+        //Obtención de los nombres de las titulaciones para mostrar en las secciones.
+        $this->loadModel('Titulacion');
+        $this->Titulacion->recursive = 0;
+        $this->Titulacion->Behaviors->load('Containable');
+        $titulacionesNombres = $this->Titulacion->find('list', array(
+            'fields'=>array('nombre_abreviado'),
+            'contain'=>false,
+            'conditions'=>array('status'=>1)));
+        $this->set(compact('matriculas','comboAnio','comboDivision','comboCiclo','cicloIdUltimo','cicloIdActual', 'titulacionesNombres'));
   	}
 
     /*
@@ -160,158 +167,23 @@ class MatriculasController extends AppController
      */
     public function recuento()
     {
-        // Antes que nada devuelvo a cero todas las matriculas, y las vacantes son el total de plazas
-        $this->loadModel('Cursos');
-        $this->Cursos->updateAll(
-            array(
-                'Cursos.matricula' => 0,
-                'Cursos.vacantes' => 'Cursos.plazas'
-            )
-        );
-
-        // Mande la query de pecho, la verdad no me quise complicar con el ORM de cake.
-        $this->loadModel('Inscripcions');
-        $lista = $this->Inscripcions->query("
-            select 
-            
-            ins.ciclo_id,
-            ins.centro_id,            
-            curso.id,
-            curso.anio,
-            curso.division,
-            curso.tipo,
-            curso.turno,
-            curso.plazas,
-            COUNT(ins.id) as matriculas,
-            (
-              curso.plazas - COUNT(ins.id)
-            ) as vacantes
-            
-            
-            FROM inscripcions ins
-            
-            inner join ciclos ci on ci.id = ins.ciclo_id
-            inner join centros ce on ce.id = ins.centro_id
-            inner join cursos_inscripcions cui on cui.inscripcion_id = ins.id
-            inner join cursos curso on curso.id = cui.curso_id
-            
-            where
-            
-            ci.nombre = 2018 and
-            ins.estado_inscripcion = 'CONFIRMADA' 
-            
-            group by 
-
-            ins.ciclo_id,            
-            ins.centro_id,            
-            curso.id,
-            curso.anio,
-            curso.division,
-            curso.turno,
-            curso.plazas
-        ");
-
-        foreach($lista as $item)
-        {
-            $matriculas = $item[0]['matriculas'];
-            $vacantes = $item[0]['vacantes'];
-
-            $update = array(
-                'vacantes' => $vacantes,
-                'matricula' => $matriculas
-            );
-
-            $this->Cursos->id = $item['curso']['id'];
-            $this->Cursos->save($update);
-        }
-
+        // Evita buscar el archivo VIEW
         $this->autoRender = false;
-        $this->redirect(array('action' => 'index'));
 
-//        $this->response->type('json');
-
-//        $json = json_encode($lista);
-//        $this->response->body($lista);
-
-    }
-
-/*    public function requestDatatable()
-    {
-        $conditions = [];
-
-
-        $query = $this->request->data;
-
-        $columns = $query['columns'];
-        $order = $query['order'][0];
-
-        $orderColumn = $columns[$order['column']]['data'];
-        $orderColumnDir = $order['dir'];
-
-        $start = $query['start'];
-        if($start<=0) { $start = 1; }
-        $limite = $query['length'];
-        $search = $query['search'];
-
-        $this->paginate = array(
-            'contain' => array('Centro'),
-            'limit' => $limite,
-            'order' => array($orderColumn => $orderColumnDir )
-        );
-
-        foreach ($columns as $index => $item)
+        if(isset($this->params['named']['ciclo']))
         {
-            $columna = $item['data'];
-            $busqueda = $item['search']['value'];
-            if(!empty($busqueda))
-            {
-                switch($columna) {
-                    case 'Centro.sigla':
-                        $conditions[$columna.' LIKE'] = '%'.$busqueda.'%';
-                    break;
-                    default:
-                        $conditions[$columna] = $busqueda;
-                    break;
-                }
-            }
+            $ciclo = $this->params['named']['ciclo'];
+            $response = $this->Siep->consumeApi("api/matriculas/recuento/$ciclo");
+        } else {
+            $response = ['error'=>'Debe definir el parametro CICLO'];
         }
 
-        $this->loadModel('Curso');
-        $userCentroId = $this->getUserCentroId();
-        $userRole = $this->Auth->user('role');
-        // Modifique las rutas de ROLES al formato SWITCH que es mas llevadero que los IF
-        switch ($userRole) {
-            case 'admin':
-                $conditions['Curso.centro_id'] = $userCentroId;
-                $result = $this->paginate('Curso',$conditions);
-            break;
-            case 'usuario':
-                $userCentroId = $this->getUserCentroId();
-                $this->loadModel('Curso');
-                $nivelCentroArray = $this->Curso->Centro->findById($userCentroId, 'nivel_servicio');
-                $nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
-                if ($nivelCentroString === 'Común - Inicial - Primario') {
-                    $nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));
-
-                    $conditions['Curso.centro_id'] = $nivelCentroId;
-                    $result = $this->paginate('Curso',$conditions);
-                } else  {
-                    $nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-
-                    $conditions['Curso.centro_id'] = $nivelCentroId;
-                    $result = $this->paginate('Curso',$conditions);
-                }
-          break;
-            case 'superadmin':
-                $result = $this->paginate('Curso',$conditions);
-            break;
-        }
-        $result = [
-        	"data" => $result
-        ];
-        $this->autoRender = false;
+        // Muestra el resultado de un Array como JSON
         $this->response->type('json');
-        $json = json_encode($result);
+        $json = json_encode($response);
         $this->response->body($json);
-    }*/
+
+        // Redireccionar a otra ruta
+        // $this->redirect(array('action' => 'index'));
+    }
 }

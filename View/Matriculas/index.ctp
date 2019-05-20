@@ -1,25 +1,22 @@
+<?php
+    // Si la persona que navega no es Admin, muestra el Filtro.
+    if(!$this->Siep->isAdmin()) :
+?>
 <div class="TituloSec">Filtro</div>
 <div id="ContenidoSec">
     <?php echo $this->Form->create('Curso',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
-
     <div class="row">
-        <div class="col-xs-2">
-
+        <!--<div class="col-xs-2">
             <div class="input select">
-
                 <?php
                 echo $this->Form->input('ciclo_id', array('options'=>$comboCiclo /*'empty' => 'Ingrese un ciclo lectivo...'*/ , 'default'=>$cicloIdActual, 'disabled' => true, 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
                 ?>
             </div>
-
-        </div>
-        <?php
-        // Si la persona que navega no es Admin, muestro autocomplete de todas las secciones
-        if(!$this->Siep->isAdmin()) :
-            ?>
-            <div class="col-xs-2">
+        </div>-->
+            <div class="col-xs-4">
                 <!-- Autocomplete -->
-                <input id="AutocompleteForm" class="form-control" placeholder="Buscar institucion por nombre" type="text">
+                <strong>Nombre de la Institución</strong>
+                <input id="AutocompleteForm" class="form-control" placeholder="Indicar el nombre de la institución" type="text">
                 <script>
                     $( function() {
                         $( "#AutocompleteForm" ).autocomplete({
@@ -40,12 +37,7 @@
                 </script>
                 <!-- End Autocomplete -->
             </div>
-
-            <?php
-        endif;
-        ?>
-
-        <div class="col-xs-2">
+        <!--<div class="col-xs-2">
             <div class="input select">
                 <select name="anio" class="form-control" data-toggle="tooltip" data-placement="bottom">
                     <option value="">Seleccione un año...</option>
@@ -58,8 +50,8 @@
                     ?>
                 </select>
             </div>
-        </div>
-        <div class="col-xs-2">
+        </div>-->
+        <!--<div class="col-xs-2">
             <div class="input select">
                 <select name="division" class="form-control" data-toggle="tooltip" data-placement="bottom">
                     <option value="">Seleccione una division...</option>
@@ -72,23 +64,28 @@
                     ?>
                 </select>
             </div>
-        </div>
+        </div>-->
 
-        <div class="col-xs-2">
+        <!--<div class="col-xs-2">
             <div class="text-center">
                 <span class="link">
                     <?php echo $this->Form->button('<span class="glyphicon glyphicon-search"></span> Aplicar filtro', array('class' => 'submit', 'class' => 'btn btn-primary')); ?>
                 </span>
-            </div>
+            </div>-->
     </div>
-
         <?php echo $this->Form->end(); ?>
     </div>
-</div>
-
-<br>
-
-<div class="TituloSec">Alumnos por sección [Cuantitativo]</div>
+</div><br>
+<?php endif; ?>
+<?php
+     $ocultar = false;
+     if( $current_user['Centro']['nivel_servicio'] === 'Común - Inicial - Primario' ||
+         $current_user['Centro']['nivel_servicio'] === 'Común - Inicial' ||
+         $current_user['Centro']['nivel_servicio'] === 'Común - Primario' ) {
+         $ocultar = true;
+     }
+?>
+<div class="TituloSec">Inscripciones 2018</div>
 <div id="ContenidoSec">
 
     <div class="table-responsive">
@@ -100,6 +97,9 @@
           <th><?php echo $this->Paginator->sort('division', 'Division');?></th>
           <th><?php echo $this->Paginator->sort('tipo', 'Tipo');?></th>
           <th><?php echo $this->Paginator->sort('turno', 'Turno');?></th>
+        <?php if(!$ocultar) : ?>
+          <th><?php echo $this->Paginator->sort('titulacion', 'Titulación');?></th>
+        <?php endif; ?>  
           <th><?php echo $this->Paginator->sort('plazas', 'Plazas');?></th>
           <th><?php echo $this->Paginator->sort('matricula', 'Matriculas');?></th>
           <th><?php echo $this->Paginator->sort('vacantes', 'Vacantes');?></th>
@@ -124,6 +124,11 @@
             <td>
               <?php echo $matricula['Curso']['turno']; ?>
             </td>
+          <?php if(!$ocultar) : ?>  
+            <td>
+              <?php echo $titulacionesNombres[$matricula['Curso']['titulacion_id']]; ?>
+            </td>
+          <?php endif; ?>  
             <td>
               <?php echo $matricula['Curso']['plazas']; ?>
             </td>

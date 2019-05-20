@@ -10,56 +10,85 @@ class CentrosController extends AppController {
 
  	public function beforeFilter() {
         parent::beforeFilter();
-        //Si el usuario tiene un rol de superadmin le damos acceso a todo.
-        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
-        if($this->Auth->user('role') === 'superadmin') {
-	        $this->Auth->allow();
-	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) {
-	        $this->Auth->allow('index', 'view', 'autocompleteCentro', 'autocompleteSeccionDependiente');
-	    }
+        /* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
+        *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        */
+        switch($this->Auth->user('role'))
+		{
+			case 'superadmin':
+				if ($this->Auth->user('puesto') === 'Sistemas') {
+					$this->Auth->allow();				
+				} else {
+					// Sí se es un ATEI
+					$this->Auth->allow('index', 'view', 'autocompleteCentro');
+				}
+				break;
+			case 'admin':
+				$this->Auth->allow('index', 'view', 'edit', 'autocompleteCentro');
+			case 'usuario':
+				$this->Auth->allow('index', 'view', 'autocompleteCentro');
+				break;
+		}
+		/* FIN */
+		// Importa el Helper de Siep al controlador es accesible mediante $this->Siep
+		App::import('Helper', 'Siep');
+		$this->Siep= new SiepHelper(new View());
     }
 
  	function index() {
-		$this->Centro->recursive = -1;
-
+		$this->Centro->recursive = 0;
 		$this->paginate['Centro']['limit'] = 4;
 		$this->paginate['Centro']['order'] = array('Centro.nivel' => 'ASC');
 		$this->redirectToNamed();
 		$conditions = array();
-
-		if(!empty($this->params['named']['cue']))
-		{
+		if(!empty($this->params['named']['cue'])) {
 			$conditions['Centro.cue ='] = $this->params['named']['cue'];
 		}
-
 		$centros = $this->paginate('Centro', $conditions);
 		$this->set(compact('centros'));
-
 		$this->loadModel('Ciudad');
-		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
+		$this->Ciudad->recursive = 0;
+        $this->Ciudad->Behaviors->load('Containable');
+		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre'), 'contain'=>false));
 		$this->set('ciudades', $ciudades);
 	}
 
 	function view($id = null) {
+		$this->Centro->recursive = 1;
 		if (!$id) {
 			$this->Session->setFlash('Centro no valido', 'default', array('class' => 'alert alert-danger'));
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('centro', $this->Centro->read(null, $id));
+		//Obtención del barrio.		
+		$barrioIdArray = $this->Centro->findById($id, 'barrio_id');
+		$barrioId = $barrioIdArray['Centro']['barrio_id'];
 		$this->loadModel('Barrio');
-		$barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
-		$this->set('barrios', $barrios);
-
+		$this->Barrio->recursive = 0;
+        $this->Barrio->Behaviors->load('Containable');
+		$barrioNombreArray = $this->Barrio->findById($barrioId, 'nombre');
+		$barrioNombre = $barrioNombreArray['Barrio']['nombre'];
+		//Obtención de la ciudad.
+		$ciudadIdArray = $this->Centro->findById($id, 'ciudad_id');
+		$ciudadId = $ciudadIdArray['Centro']['ciudad_id'];
 		$this->loadModel('Ciudad');
-		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
-		$this->set('ciudades', $ciudades);
-
+		$this->Ciudad->recursive = 0;
+        $this->Ciudad->Behaviors->load('Containable');
+		$ciudadNombreArray = $this->Ciudad->findById($ciudadId, 'nombre');
+		$ciudadNombre = $ciudadNombreArray['Ciudad']['nombre'];
+		//Obtención del departamento.
+		$departamentoIdArray = $this->Centro->findById($id, 'departamento_id');
+		$departamentoId = $departamentoIdArray['Centro']['departamento_id'];
 		$this->loadModel('Departamento');
-		$departamentos = $this->Departamento->find('list', array('fields' => array('nombre')));
-		$this->set('departamentos', $departamentos);
+		$this->Departamento->recursive = 0;
+        $this->Departamento->Behaviors->load('Containable');
+		$departamentoNombreArray = $this->Departamento->findById($departamentoId, 'nombre');
+		$departamentoNombre = $departamentoNombreArray['Departamento']['nombre'];
+		$this->set(compact('barrioNombre', 'ciudadNombre', 'departamentoNombre', 'id'));
 	}
 
 	function add() {
+		$this->Centro->recursive = 1;
 		//abort if cancel button was pressed
         if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
@@ -77,23 +106,27 @@ class CentrosController extends AppController {
 			  }
 		}
 		$empleados = $this->Centro->Empleado->find('list', array('fields'=>array('id', 'nombre_completo_empleado')));
-		$this->set(compact('empleados'));
-
+		//Obtención de barrios.
 		$this->loadModel('Barrio');
-		$barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
-		$this->set('barrios', $barrios);
-
+		$this->Barrio->recursive = 0;
+        $this->Barrio->Behaviors->load('Containable');
+		$barrios = $this->Barrio->find('list', array('fields' => array('nombre'), 'contain'=>false));
+		//Obtención de ciudades.
 		$this->loadModel('Ciudad');
-		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
-		$this->set('ciudades', $ciudades);
-
+		$this->Ciudad->recursive = 0;
+        $this->Ciudad->Behaviors->load('Containable');
+		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre'), 'contain'=>false));
+		//Obtención de departamentos.
 		$this->loadModel('Departamento');
-		$departamentos = $this->Departamento->find('list', array('fields' => array('nombre')));
-		$this->set('departamentos', $departamentos);
+		$this->Departamento->recursive = 0;
+        $this->Departamento->Behaviors->load('Containable');
+		$departamentos = $this->Departamento->find('list', array('fields' => array('nombre'), 'contain'=>false));
+		$this->set(compact('empleados', 'barrios', 'departamentos', 'ciudades'));
 	}
 
 
 	function edit($id = null) {
+		$this->Centro->recursive = 0;
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash('Centro no valido', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
@@ -117,21 +150,22 @@ class CentrosController extends AppController {
 			$this->data = $this->Centro->read(null, $id);
 		}
 		$empleados = $this->Centro->Empleado->find('list', array('fields'=>array('id', 'nombre_completo_empleado')));
-		$titulacions = $this->Titulacion->find('list');
-		$this->set(compact('titulacions', $titulacions));
-		$this->set(compact('empleados'));
-
+		//Obtención de barrios.
 		$this->loadModel('Barrio');
-		$barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
-		$this->set('barrios', $barrios);
-
+		$this->Barrio->recursive = 0;
+        $this->Barrio->Behaviors->load('Containable');
+		$barrios = $this->Barrio->find('list', array('fields' => array('nombre'), 'contain'=>false));
+		//Obtención de ciudades.
 		$this->loadModel('Ciudad');
-		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
-		$this->set('ciudades', $ciudades);
-
+		$this->Ciudad->recursive = 0;
+        $this->Ciudad->Behaviors->load('Containable');
+		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre'), 'contain'=>false));
+		//Obtención de departamentos.
 		$this->loadModel('Departamento');
-		$departamentos = $this->Departamento->find('list', array('fields' => array('nombre')));
-		$this->set('departamentos', $departamentos);
+		$this->Departamento->recursive = 0;
+        $this->Departamento->Behaviors->load('Containable');
+		$departamentos = $this->Departamento->find('list', array('fields' => array('nombre'), 'contain'=>false));
+		$this->set(compact('empleados', 'barrios', 'departamentos', 'ciudades'));
 	}
 
 	function delete($id = null) {
@@ -219,7 +253,7 @@ class CentrosController extends AppController {
 
 		$centro = $this->Centro->find('all', array(
 			'recursive'	=> -1,
-			'conditions' => $conditions,
+			'conditions' => array($conditions, 'status'=>1),
 			'fields' 	=> array('id', 'sigla'))
 			);
 
@@ -227,22 +261,6 @@ class CentrosController extends AppController {
 		$this->RequestHandler->respondAs('json'); // Responde con el header correspondiente a json
 		echo json_encode($centro);
 		$this->autoRender = false;
-	}
-
-	public function autocompleteSeccionDependiente() {
-		$id = $this->request->query('id');
-
-		$this->loadModel('Curso');
-		$secciones = $this->Curso->find('list', array(
-			'recursive'=>-1,
-			'fields'=>array('id','nombre_completo_curso'),
-			'conditions'=>array(
-				'centro_id'=>$id)
-		));
-
-		$this->RequestHandler->respondAs('json'); // Responde con el header correspondiente a json
-		$this->autoRender = false;
-		echo json_encode($secciones);
 	}
 }
 ?>

@@ -2,7 +2,7 @@
 class Curso extends AppModel {
 	var $name = 'Curso';
     //var $displayField = 'division';
-	public $virtualFields = array('nombre_completo_curso'=> 'CONCAT(Curso.anio, " ", Curso.division, " ", Curso.turno)');
+	public $virtualFields = array('nombre_completo_curso'=> 'CONCAT(Curso.anio, " ", Curso.division, " ", Curso.turno, " ", Curso.tipo)');
     public $actsAs = array('Containable');
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -76,81 +76,100 @@ class Curso extends AppModel {
     //Validaciones
 
         var $validate = array(
-				   'tipo' => array(
-                        'valid' => array(
-							'rule' => array('inList', array('Independiente','Independiente de recuperación','Independiente semipresencial','Independiente presencial y semipresencial','Múltiple','Múltiple de recuperación','Múltiple semipresencial','Múltiple presencial y semipresencial','No Corresponde','Independiente presencial y semipresencial (violeta)','Mixta / Bimodal','Múltiple presencial y semipresencial (violeta)','Multinivel','Multiplan')),
-							'message' => 'Ingrese un tipo válido',
-							'allowEmpty' => false
-						)	
-                    ),
-				   'anio' => array(
-                        'valid' => array(
-							'rule' => array('inList', array('Sala de menos de 1 año','Sala de 1 año','Sala de 2 años','Sala de 3 años','Sala de 4 años','Sala de 5 años','1ro','2do','3ro','4to','5to','6to','7mo')),
-							'message' => 'Ingrese un año válido',
-							'allowEmpty' => false
-						)	
-                    ),
-                   'division' => array(
-                        'required' => array(
-						   	'rule' => 'notBlank',
-						   	'required' => 'create',
-                           	'message' => 'Ingrese una división válida',
-						)	
-                    ),
-                   'turno' => array(
-                        'valid' => array(
-							'rule' => array('inList', array('Mañana','Tarde','Mañana Extendida','Tarde Extendida','Doble','Vespertino','Noche','Otro','Bachiller','Tecnico')),
-							'message' => 'Ingrese un turno válido',
-							'allowEmpty' => false
-						)	
-                    ),
-                   'plazas' => array(
-                   		'required' => array(
-						   	'rule' => 'notBlank',
-						   	'required' => 'create',
-                           	'message' => 'Indicar la cantidad de plazas.'
-                       	),
-						'numeric' => array(
-							'rule' => 'naturalNumber',
-							'message' => 'Indicar número sin puntos ni comas ni espacios.'
-						)
-                   ),
-                   'matricula' => array(
-			            'numeric' => array(
-			                'rule' => 'naturalNumber',
-			                'allowEmpty' => true,
-			                'message' => 'Indicar número sin puntos ni comas ni espacios.'
-		                )
-		            ),
-                   	'vacantes' => array(
-		                'required' => array(
-						   	'rule' => 'notBlank',
-						   	'required' => 'create',
-                           	'message' => 'Indicar la cantidad de vacantes.'
-                       	),
-		                'numeric' => array(
-			                'rule' => 'naturalNumber',
-			                'message' => 'Indicar número sin puntos ni comas ni espacios.'
-		                )
-		            ),
-				   'aula_nro' => array(
-                        'numeric' => array(
-							'rule' => 'naturalNumber',
-							'allowEmpty' => true,
-							'message' => 'Indicar número sin puntos ni comas ni espacios.'
-						)
-                   ),
-                   'titulacion_id' => array(
-                        'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',
-                           'message' => 'Indicar una titulación.'
-					  	),
-						'numeric' => array(
-							'rule' => 'naturalNumber',
-						 	'message' => 'Indicar número sin puntos ni comas ni espacios.'
-						)
-	                )
-     		);
+			'tipo' => array(
+				'valid' => array(
+					'rule' => array('inList', array('Independiente','Independiente de recuperación','Independiente semipresencial','Independiente presencial y semipresencial','Múltiple','Múltiple de recuperación','Múltiple semipresencial','Múltiple presencial y semipresencial','No Corresponde','Independiente presencial y semipresencial (violeta)','Mixta / Bimodal','Múltiple presencial y semipresencial (violeta)','Multinivel','Multiplan')),
+					'message' => 'Ingrese un tipo válido',
+					'allowEmpty' => false
+				)	
+			),
+			'anio' => array(
+				'valid' => array(
+					'rule' => array('inList', array('Sala de menos de 1 año','Sala de 1 año','Sala de 2 años','Sala de 3 años','Sala de 4 años','Sala de 5 años','1ro','2do','3ro','4to','5to','6to','7mo')),
+					'message' => 'Ingrese un año válido',
+					'allowEmpty' => false
+				)	
+			),
+			'division' => array(
+				'required' => array(
+					'rule' => 'notBlank',
+					/*
+					'required' => 'create',
+					*/
+					'allowEmpty' => true,
+					'message' => 'Ingrese una división válida',
+				)	
+			),
+			'turno' => array(
+				'valid' => array(
+					'rule' => array('inList', array('Mañana','Tarde','Mañana Extendida','Tarde Extendida','Doble','Vespertino','Noche','Otro','Bachiller','Tecnico')),
+					'message' => 'Ingrese un turno válido',
+					'allowEmpty' => false
+				)	
+			),
+			'plazas' => array(
+				'required' => array(
+					'rule' => 'notBlank',
+					'required' => 'create',
+					'message' => 'Indicar la cantidad de plazas.'
+				),
+				'numeric' => array(
+					'rule' => 'naturalNumber',
+					'message' => 'Indicar número sin puntos ni comas ni espacios.'
+				)
+			),
+			'matricula' => array(
+				'numeric' => array(
+					'rule' => 'naturalNumber',
+					'allowEmpty' => true,
+					'message' => 'Indicar número sin puntos ni comas ni espacios.'
+				)
+			),
+			'vacantes' => array(
+				'required' => array(
+					'rule' => 'notBlank',
+					'required' => 'create',
+					'message' => 'Indicar la cantidad de vacantes.'
+				),
+				'numeric' => array(
+					'rule' => 'naturalNumber',
+					'message' => 'Indicar número sin puntos ni comas ni espacios.'
+				)
+			),
+			/*
+			'aula_nro' => array(
+				'numeric' => array(
+					'rule' => 'naturalNumber',
+					'allowEmpty' => true,
+					'message' => 'Indicar número sin puntos ni comas ni espacios.'
+				)
+			),
+			*/
+			'titulacion_id' => array(
+				'required' => array(
+					'rule' => 'notBlank',
+					'required' => 'create',
+					'message' => 'Indicar una titulación.'
+				),
+				'numeric' => array(
+					'rule' => 'naturalNumber',
+					'message' => 'Indicar número sin puntos ni comas ni espacios.'
+				)
+			),
+			'pareja_pedagogica' => array(
+				'boolean' => array(
+				'rule' => array('boolean'),
+				'allowEmpty' => true,
+				'message' => 'Indicar una opción'
+				)
+			),
+			'maestra_apoyo_inclusion' => array(
+				'boolean' => array(
+				'rule' => array('boolean'),
+				'allowEmpty' => true,
+				'message' => 'Indicar una opción'
+				)
+			),
+		);
 }
 ?>

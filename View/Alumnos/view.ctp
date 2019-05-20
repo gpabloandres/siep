@@ -1,5 +1,6 @@
 <?php echo $this->Html->script(array('acordeon', 'slider')); ?>
 <?php echo $this->Html->css('slider.css'); ?>
+
 <!-- start main -->
 <div class="TituloSec">Alumno</div>
   <div id="ContenidoSec">
@@ -9,13 +10,13 @@
  		      <div class="row perfil">
                  <div class="col-md-8 col-sm-6 col-xs-8">	
                     <b><?php echo __('Alumno: '); ?></b>
-                    <?php echo $this->Html->link(($alumnoNombre[$alumno['Alumno']['persona_id']]), array('controller' => 'personas', 'action' => 'view', $alumno['Alumno']['persona_id'])); ?></p>
+                    <?php echo $this->Html->link($alumno['persona']['nombre_completo'], array('controller' => 'personas', 'action' => 'view', $alumno['persona']['id'])); ?></p>
                     <b><?php echo __('Documento: '); ?></b>
-                    <?php echo ($alumnoDocumentoTipo[$alumno['Alumno']['persona_id']]).' '.($alumnoDocumentoNumero[$alumno['Alumno']['persona_id']]); ?></p>
+                    <?php echo $alumno['persona']['documento_tipo'].' '.$alumno['persona']['documento_nro']; ?></p>
                     <b><?php echo __('Edad: '); ?></b>
-                    <?php echo ($alumnoEdad[$alumno['Alumno']['persona_id']])." ".'años'; ?></p>
+                    <?php echo $alumno['persona']['edad']." ".'años'; ?></p>
                     <b><?php echo __('Legajo Físico N°: '); ?></b>
-                    <?php echo $alumno['Alumno']['legajo_fisico_nro']; ?></p>                   
+                    <?php echo $alumno['legajo_fisico_nro']; ?></p>
                  </div>
  	          </div>
          </div>
@@ -24,12 +25,13 @@
 <div class="col-md-4">
  <div class="unit">
         <div class="subtitulo">Opciones</div>
+        <div class="opcion"><a href="<?php echo env('SIEP_API_GW_INGRESS')."/api/v1/personas/".$alumno['persona_id']."/ficha"?>" target="_blank">Ficha de Alumno</a></div>
         <div class="opcion"><?php echo $this->Html->link(__('Listar Alumnos'), array('action' => 'index')); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $alumno['Alumno']['id'])); ?></div>
-       <?php if($current_user['role'] == 'superadmin'): ?>
-        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $alumno['Alumno']['id']), null, sprintf(__('Esta seguro de borrar al alumno %s?'), $alumno['Alumno']['persona_id'])); ?></div>
+       <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
+        <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $alumno['id'])); ?></div>
+        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $alumno['id']), null, sprintf(__('¿Está seguro de borrar este alumno?'))); ?></div>
         <?php /*
-        <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['Alumno']['id'], 'ext' => 'pdf')); ?></div>-->
+        <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['id'], 'ext' => 'pdf')); ?></div>-->
         <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add')); ?></div>-->
         <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Integracion'), array('controller' => 'integracions', 'action' => 'add')); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Servicio'), array('controller' => 'servicios', 'action' => 'add')); ?></div>
@@ -45,27 +47,24 @@
 <div id="click_01" class="titulo_acordeon">Familiares Relacionados <span class="caret"></span></div>
 <div id="acordeon_01">
 	<div class="row">			
-	<?php if (!empty($alumno['Familiar'])):?>
+	<?php if (!empty($alumno['familiares'])):?>
 		<div class="col-xs-12 col-sm-6 col-md-8">
-			<?php foreach ($alumno['Familiar'] as $familiar): ?>
-            <div class="col-md-6">
+			<?php foreach ($alumno['familiares'] as $item): ?>
+            <div class="col-md-4">
                 <div class="unit">
-                    <?php echo '<b>Vinculo:</b> '.$familiar['vinculo'];?><br>
-                    <?php echo '<b>Nombre:</b> '.$personaNombre[$familiar['persona_id']];?><br>
-                    <!--
-                    <?php //echo '<b>Cuil/Cuit:</b> '.$familiarCuilCuit[$familiar['persona_id']];?><br>
-                    <?php //echo '<b>Telefono:</b> '.$familiarTelefono[$familiar['persona_id']];?><br>
-                    <?php //echo '<b>Email:</b> '.$familiarEmail[$familiar['persona_id']];?><br>
-                    -->
-                <div class="text-right">
-                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'familiars', 'action' => 'view', $familiar['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'familiars', 'action' => 'edit', $familiar['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
-                   <?php if($current_user['role'] == 'superadmin'): ?> 
-                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'familiars', 'action' => 'delete', $familiar['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
-                   <?php endif; ?> 
-                </div>
-		    </div>
-	    </div>
+                    <?php echo '<b>Vinculo:</b> '.$item['familiar']['vinculo'];?><br>
+                    <?php echo '<b>Nombre:</b> '.$item['familiar']['persona']['nombre_completo'];?><br>
+                    <?php echo '<b>Telefono:</b> '.$item['familiar']['persona']['telefono_nro'];?>
+                    <hr>
+                    <div class="text-right">
+	                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'familiars', 'action' => 'view', $item['familiar']['id']), array('class' => 'btn btn-success','escape' => false)); ?>
+	                    <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?> 
+	                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'familiars', 'action' => 'edit', $item['familiar']['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
+	                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'familiars', 'action' => 'delete', $item['familiar']['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
+	                   <?php endif; ?> 
+	                </div>
+		    	</div>
+	    	</div>
 	    <?php endforeach; ?>
     </div>
 	<?php else: echo '<div class="col-md-12"><div class="unit text-center">No se encuentran relaciones.</div></div>'; ?>
@@ -77,13 +76,15 @@
 	<div id="click_02" class="titulo_acordeon">Inscripciones Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_02">
 		<div class="row">
-			<?php if (!empty($alumno['Inscripcion'])):?>
+			<?php if (!empty($alumno['inscripciones'])):?>
   			<div class="col-xs-12 col-sm-6 col-md-8">
-				<?php foreach ($alumno['Inscripcion'] as $inscripcion):	?>
+				<?php foreach ($alumno['inscripciones'] as $inscripcion):	?>
 			<div class="col-md-4">
 				<div class="unit">
 					<!--<?php echo '<b>Ciclo id:</b> '.($this->Html->link($inscripcion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['ciclo_id'])));?><br>-->
-					<?php echo '<b>Centro:</b> '.($this->Html->link($centroNombre[$inscripcion['centro_id']], array('controller' => 'centros', 'action' => 'view', $inscripcion['centro_id'])));?><br>
+					<?php if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
+					<?php echo '<b>Centro:</b> '.($this->Html->link($inscripcion['centro']['nombre'], array('controller' => 'centros', 'action' => 'view', $inscripcion['centro_id'])));?><br>
+					<?php endif; ?>
 					<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>
 					<?php echo '<b>Tipo de alta:</b> '.$inscripcion['tipo_alta'];?><br>
 					<?php echo '<b>Estado de la Inscripción:</b> '.$inscripcion['estado_inscripcion'];?><br>
@@ -95,14 +96,12 @@
 		            <?php echo '<b>Fecha de egreso:</b> '.$this->Html->formatTime($inscripcion['fecha_egreso']);?><br>
 		            <!--<?php echo '<b>Nota:</b> '.$inscripcion['nota'];?><br>-->
 		            */ ?>
-		            <b>Documentación presentada:</b> <?php if($inscripcion['estado_documentacion'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $inscripcion['estado_documentacion']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $inscripcion['estado_documentacion']; ?></span><?php } ?></br>
+		            <b>Documentación:</b> <?php if($inscripcion['estado_documentacion'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $inscripcion['estado_documentacion']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $inscripcion['estado_documentacion']; ?></span><?php } ?></br>
 		            <hr>
 		            <div class="text-right">
 			            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-			          <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
-			            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'inscripcions', 'action' => 'edit', $inscripcion['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
-					  <?php endif; ?>
-					  <?php if($current_user['role'] == 'superadmin'): ?>	
+			          <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>	
+					    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'inscripcions', 'action' => 'edit', $inscripcion['id']), array('class' => 'btn btn-warning','escape' => false)); ?>	
 						<?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'inscripcions', 'action' => 'delete', $inscripcion['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
 					  <?php endif; ?>
 					</div>
@@ -115,6 +114,8 @@
 	</div>
 </div>
 <!-- end Inscripciones Relacionadas -->
+<?php /*
+<?php if ((($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) || (($nivelCentro === 'Común - Secundario'))): ?>
 <!-- Pases Relacionados -->
 	<div id="click_03" class="titulo_acordeon">Pases Relacionados <span class="caret"></span></div>
 	<div id="acordeon_03">
@@ -125,19 +126,23 @@
 			<div class="col-md-4">
 				<div class="unit">
 					<?php echo '<b>Ciclo:</b> '.($this->Html->link($cicloNombre[$pase['ciclo_id']], array('controller' => 'ciclos', 'action' => 'view', $pase['ciclo_id'])));?><br>
-					<?php echo '<b>Centro de Destino:</b> '.($this->Html->link($centroNombre[$pase['centro_id_origen']], array('controller' => 'centros', 'action' => 'view', $pase['centro_id_origen'])));?><br>
-					<!--<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>-->
-					<?php echo '<b>Alumno:</b> '.($this->Html->link($personaNombre[$personaId[$pase['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['alumno_id'])));?><br>
+					<?php if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) { ?>
+						<?php echo '<b>Centro de Origen:</b> '.($this->Html->link($centroNombre[$pase['centro_id_origen']], array('controller' => 'centros', 'action' => 'view', $pase['centro_id_origen'])));?><br>
+						<?php echo '<b>Centro de Destino:</b> '.($this->Html->link($centroNombre[$pase['centro_id_destino']], array('controller' => 'centros', 'action' => 'view', $pase['centro_id_destino'])));?><br>
+					<?php } ?>	
+					<?php if ($current_user['role'] == 'admin') { ?>
+						<?php echo '<b>Centro de Destino:</b> '.($this->Html->link($centroNombre[$pase['centro_id_destino']], array('controller' => 'centros', 'action' => 'view', $pase['centro_id_destino'])));?><br>
+					<?php } ?>
+					<!--<?php// echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>-->
+					<!--<?php// echo '<b>Alumno:</b> '.($this->Html->link($personaNombre[$personaId[$pase['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['alumno_id'])));?><br>-->
 		            <b>Documentación:</b> <?php if($pase['estado_documentacion'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $pase['estado_documentacion']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $pase['estado_documentacion']; ?></span><?php } ?></br>
 		            <?php echo '<b>Estado:</b> '.$pase['estado_pase'];?><br>
 		            <hr>
 		            <div class="text-right">
 			            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'pases', 'action' => 'view', $pase['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-			          <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
+			          <?php if(($current_user['role'] == 'superadmin')): ?>
 			            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'pases', 'action' => 'edit', $pase['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
-					  <?php endif; ?>
-					  <?php if($current_user['role'] == 'superadmin'): ?>	
-						<?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'pases', 'action' => 'delete', $pase['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
+					  	<?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'pases', 'action' => 'delete', $pase['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
 					  <?php endif; ?>
 					</div>
 				</div>
@@ -149,6 +154,7 @@
 	</div>
 </div>
 <!-- end Pases Relacionados -->
+<?php endif; ?>
 <?php /*
 <!-- Integraciones Relacionadas 
 	<div id="click_03" class="titulo_acordeon">Integraciones Relacionadas <span class="caret"></span></div>

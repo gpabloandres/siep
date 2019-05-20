@@ -2,16 +2,6 @@
 <?php echo $this->Html->script(array('tooltip', 'datepicker', 'moment', 'bootstrap-datetimepicker','select2/select2.min')); ?>
 <script>
     $(function(){
-/*
-        $('.s2_centro').select2({
-            ajax: {
-                delay: 250,
-                url: "<?php echo $this->Html->url(array('controller'=>'centros', 'action'=>'autocompleteCentro'));?>",
-                dataType: 'json'
-                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-            }
-        });
-*/
         $('.s2_centro').select2();
         $('.s2_seccion').select2();
 
@@ -21,13 +11,14 @@
             // Obtener secciones dependientes al centro
             $.ajax({
                 type:"GET",
-                url: "/centros/autocompleteSeccionDependiente?id=" + $(this).val(),
-                success: function(lista){
-
+                url: "<?php echo env('SIEP_API_GW_INGRESS')."/api/v1/cursos?por_pagina=all&centro_id="?>" + $(this).val(),
+                success: function(response){
+                    var data = response.data;
                     $(".s2_centro").append('<option value="' +''+ '"> ' + 'Seleccione una sección'+ '</option>');
-
-                    for (var key  in lista) {
-                        $(".s2_seccion").append('<option value="' +key+ '"> ' + lista[key] + '</option>');
+                    // Valores retorandos por el api
+                    for (var index in data) {
+                        var el = data[index];
+                        $(".s2_seccion").append('<option value="' +el.id+ '"> ' + el.nombre_completo + '</option>');
                     }
                 }
             });
@@ -126,7 +117,7 @@
         <hr />
       <?php
             $tipos_inscripcion = array('Común'=>'Común','Hermano de alumno regular'=>'Hermano de alumno regular','Pase'=>'Pase','Situación social'=>'Situación social', 'Integración'=>'Integración');
-            echo $this->Form->input('tipo_inscripcion', array('id'=>'tipoInscripcion', 'default'=>'Común', 'label'=>'Tipo de inscripción*', 'empty' => 'Ingrese un tipo de inscripción...', 'options'=>$tipos_inscripcion, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+            echo $this->Form->input('tipo_inscripcion', array('id'=>'tipoInscripcion',/* 'default'=>'Común',*/'label'=>'Tipo de inscripción*', 'empty' => 'Ingrese un tipo de inscripción...', 'options'=>$tipos_inscripcion, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
     <hr>
     <!-- Autocomplete -->
@@ -242,6 +233,7 @@
               <?php echo $this->Form->input('fotocopia_dni', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Fotocopia DNI</label>'));?>
             </span>
           </div>
+        <?php if ($userCentroNivel != 'Adultos - Secundario' && $userCentroNivel != 'Adultos - Primario') : ?>  
           <div class="input-group">
           <span class="input-group-addon">
             <?php echo $this->Form->input('partida_nacimiento_alumno', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Alumno</label>'));?>
@@ -252,6 +244,7 @@
             <?php echo $this->Form->input('certificado_vacunas', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Vacunación</label>'));?>
           </span>
           </div>
+        <?php endif; ?>  
           <!--
           <div class="input-group">
             <span class="input-group-addon">

@@ -27,8 +27,13 @@
     	<?php 
             if($this->Html->loggedIn()) { 
                 $userRole = $current_user['role'];
+                $userPuesto = $current_user['puesto'];
                 if ($userRole == 'superadmin') {
-                    echo $this->element('menues/menu-sa');
+                    if ($userPuesto == 'Sistemas') {
+                        echo $this->element('menues/menu-sa');
+                    } else {
+                        echo $this->element('menues/menu-u');
+                    }                    
                 } elseif ($userRole == 'admin') {
                     $userPuesto = $current_user['puesto'];
                     switch ($userPuesto) {
@@ -74,8 +79,8 @@
     		<?php echo $this->Session->flash(); ?>
             <?php echo $content_for_layout; ?>
         </div>
-        <br>
         <div class="footer">
+            <p><?php echo '<strong>© Subsecretaría de Planeamiento Educativo, Informática y Evaluación - Ministerio Educación TDF A.I.A.S.</strong>'; ?> </p>
             <p><?php echo $this->Html->link('License  Creative Commons: by-nc-sa', 'http://creativecommons.org/licenses/by-nc-sa/3.0'); ?> </p>
         </div>
     </body>

@@ -56,21 +56,29 @@
                         <div id="acordeon_04">
                             <div class="unit">
                                 <b><?php echo __('Fecha:'); ?></b>
-                                <?php echo $this->Html->formatTime($inscripcion['fecha_alta']);
-                                 ?></p>
+                                <?php echo $this->Html->formatTime($inscripcion['fecha_alta']);?></p>
                                 <?php  if($inscripcion['hermano_id']): ?>
                                     <b><?php echo __('Hermano de:'); ?></b></p>
-                                    <b><?php echo ($this->Html->link($personaNombre[$personaId[$inscripcion['hermano_id']]], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['hermano_id']))); ?><?php //endif; ?></b>
+                                    <b><?php echo ($this->Html->link($hermanoNombre, array('controller' => 'alumnos', 'action' => 'view', $inscripcion['hermano_id']))); ?></b>
+                                <?php endif; ?></p>
+                                <?php  if($inscripcion['tipo_inscripcion'] === 'Pase'): ?>
+                                    <b><?php echo __('Centro de Origen:'); ?></b></p>
+                                    <b><?php echo $centroOrigenNombre; ?></b>
                                 <?php endif; ?></p>
                                 <b><?php echo __('Documentación:'); ?></b>
                                   <ul>
-                                    <?php if(!$inscripcion['fotocopia_dni'] == 1): ?>
-                                    <li><span class="label label-danger"><?php echo 'Falta Fotocopia DNI'; ?></span></li><?php endif; ?>
+                                   <?php if(!$inscripcion['fotocopia_dni'] == 1): ?>
+                                    <li><span class="label label-danger"><?php echo 'Falta Fotocopia DNI'; ?></span></li>
+                                   <?php endif; ?>
+                                   <?php if($userCentroNivel != 'Adultos - Secundario' && $userCentroNivel != 'Adultos - Primario') : ?>
                                     <?php if(!$inscripcion['partida_nacimiento_alumno'] == 1): ?>
-                                    <li><span class="label label-danger"><?php echo 'Falta Partida Alumno'; ?></span></li><?php endif; ?>
+                                        <li><span class="label label-danger"><?php echo 'Falta Partida Alumno'; ?></span></li>
+                                    <?php endif; ?>
                                     <?php if(!$inscripcion['certificado_vacunas'] == 1): ?>
-                                    <li><span class="label label-danger"><?php echo 'Certificado vacunación'; ?></span></li><?php endif; ?>
-                                    <?php if(($current_user['puesto'] == 'Dirección Colegio Secundario' || $current_user['puesto'] == 'Supervisión Secundaria') && (!$inscripcion['certificado_septimo'] == 1)): ?>
+                                        <li><span class="label label-danger"><?php echo 'Certificado vacunación'; ?></span></li>
+                                    <?php endif; ?>
+                                   <?php endif; ?> 
+                                    <?php if(($current_user['role'] == 'superadmin' || $current_user['puesto'] == 'Dirección Colegio Secundario' || $current_user['puesto'] == 'Supervisión Secundaria' || $userCentroNivel == 'Adultos - Secundario' || $userCentroNivel == 'Adultos - Primario') && ($inscripcion['certificado_septimo'] == 0)): ?>
                                     <li><span class="label label-danger"><?php echo 'Falta Certificado Primaria'; ?></span></li><?php endif; ?>
                                   </ul>
                             </div>
@@ -142,16 +150,19 @@
           <div class="col-md-4">
               <div class="unit">
  			      <div class="subtitulo">Opciones</div>
-                  <?php if($current_user['role'] == 'usuario' || $current_user['role'] == 'superadmin'): ?>
-                  <div class="opcion"><a href="http://constancia.sieptdf.tk/api/constancia/<?php echo $inscripcion['id'];?>">Constancia de Inscripción</a></div>
-                  <?php endif; ?>
-                  <?php if($current_user['role'] == 'admin' || $current_user['role'] == 'superadmin') : ?>
-                  <div class="opcion"><a href="http://constancia.sieptdf.tk/api/constancia_regular/<?php echo $inscripcion['id'];?>">Constancia de Alumno Regular</a></div>
-                  <?php endif; ?>
                   <div class="opcion"><?php echo $this->Html->link(__('Listar Inscripciones'), array('action' => 'index')); ?></div>
-                  <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $inscripcion['id'])); ?> </div>
-                <?php if($current_user['role'] == 'superadmin'): ?> 
-                  <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $inscripcion['id']), null, sprintf(__('Esta seguro de borrar la inscripción %s?'), $inscripcion['id'])); ?></div>
+                <?php 
+                //Se visualiza solo sí se trata de un "superusuario", "usuario" o "admin" del mismo centro que la inscripción. 
+                  if($current_user['role'] == 'superadmin' || $current_user['role'] == 'usuario' || $userCentroId == $centroInscripcion):
+                    // y sí la inscripción del alumno tiene estado CONFIRMADA y es del ciclo actual. 
+                    if(($estadoInscripcion === 'CONFIRMADA' || $estadoInscripcion === 'EGRESO') && ($cicloInscripcion == $cicloIdActual) || ($cicloInscripcion == $cicloIdPosterior)): ?>
+                        <div class="opcion"><a href="http://api.sieptdf.org/api/constancia/<?php echo $inscripcion['id'];?>">Constancia de Inscripción</a></div>
+                        <div class="opcion"><a href="http://api.sieptdf.org/api/constancia_regular/<?php echo $inscripcion['id'];?>">Constancia de Alumno Regular</a></div>
+                    <?php endif; ?>
+                    <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $inscripcion['id'])); ?> </div>
+                <?php endif; ?>  
+                <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?> 
+                    <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $inscripcion['id']), null, sprintf(__('Esta seguro de borrar la inscripción %s?'), $inscripcion['id'])); ?></div>
                 <?php endif; ?>  
               </div>
           </div>
@@ -165,7 +176,7 @@
   			<div class="col-xs-12 col-sm-6 col-md-8">
                 <div class="col-md-4">
                     <div class="unit">
-                        <?php echo '<b>Año:</b> '.$curso['anio'];?><br>
+                        <?php echo '<b>Año/Gpo:</b> '.$curso['anio'];?><br>
                         <?php echo '<b>División:</b> '.$curso['division'];?><br>
                         <?php echo '<b>Turno:</b> '.$curso['turno'];?><br>
                         <?php echo '<b>Tipo:</b> '.$curso['tipo'];?><br>
@@ -174,7 +185,7 @@
                         <hr>
                         <div class="text-right">
                             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'cursos', 'action' => 'view', $curso['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-                          <?php if($current_user['role'] == 'superadmin'): ?>
+                          <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
                             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'cursos', 'action' => 'edit', $curso['id']), array('class' => 'btn btn-warning','escape'  => false)); ?>
                             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'cursos', 'action' => 'delete', $curso['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
                           <?php endif; ?>  

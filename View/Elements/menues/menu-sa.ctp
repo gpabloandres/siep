@@ -18,9 +18,9 @@
       </ul>
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">CUEs <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">USUARIOS <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
+            <!--<li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Establecimientos'),'/'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Infraestructura'),'/'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Inventario'),'/'); ?></li>-->
@@ -39,7 +39,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ofertas <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Ciclos'),'/ciclos'); ?></li>
-            <!--<li><?php echo $this->Html->link(__('Titulaciones'),'/titulacions'); ?></li>-->
+            <li><?php echo $this->Html->link(__('Titulaciones'),'/titulacions'); ?></li>
             <!--<li><?php echo $this->Html->link(__('Diseños Curriculares'), '/disenocurriculars'); ?></li>-->
             <li><?php echo $this->Html->link(__('Secciones'), '/cursos'); ?></li>
             <!--<li><?php echo $this->Html->link(__('Unidades Curriculares'),'/materias'); ?></li>-->
@@ -50,7 +50,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alumnado <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Inscripciones'), '/inscripcions'); ?></li>
-            <li><?php echo $this->Html->link(__('Familiares'), array('controller'=>'familiars', 'action'=>'add')); ?></li>
+            <!--<li><?php echo $this->Html->link(__('Familiares'), array('controller'=>'familiars', 'action'=>'add')); ?></li>-->
             <li><?php echo $this->Html->link(__('Alumnos'),'/alumnos'); ?></li>
             <li><?php echo $this->Html->link(__('Pases'), '/pases'); ?></li>
             <!--<li><?php echo $this->Html->link(__('Inasistencias'), '/inasistencias'); ?></li>-->
@@ -71,19 +71,25 @@
         </li>
       <li>-->
       <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ver... <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
-            <li><?php echo $this->Html->link(__('Alumnos por Sección [nominal]'), '/cursos_inscripcions');?></li>
-            <!--<li><?php echo $this->Html->link(__('Alumnos por Unidad Curricular'), '/inscripcions_materias');?></li>-->
-            <li><?php echo $this->Html->link(__('Alumnos por Sección [cuantitativo]'), '/matriculas');?></li>
-            <li><?php echo $this->Html->link(__('Inscriptos por año [cuantitativo]'), '/vacantes');?></li>
-            <!--<li><?php echo $this->Html->link(__('Gráficos Estadísticos'), '/graficos'); ?></li>-->
-            <!--<li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>
-            <!--<li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>-->
-            <!--<li><?php echo $this->Html->link(__('Calendario'),'/full_calendar');?></li>-->
-          </ul>
-        </li>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ver... <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
+          <li><?php echo $this->Html->link(__('Mapa Educativo'),'https://admin.sieptdf.org/#/instituciones', array('target' => '_blank')); ?></li>
+          <li><?php echo $this->Html->link(__('Alumnos por Sección [nominal]'), '/cursos_inscripcions');?></li>
+          <!--<li><?php echo $this->Html->link(__('Alumnos por Unidad Curricular'), '/inscripcions_materias');?></li>-->
+          <!--<li><?php// echo $this->Html->link(__('Inscripciones 2018 [cuantitativo]'), '/matriculas');?></li>-->
+          <li><?php echo $this->Html->link(__('Ingresantes 2019 [cuantitativo]'), '/ingresantes');?></li>
+          <li><?php echo $this->Html->link(__('Inscripciones 2019 [cuantitativo]'), '/vacantes');?></li>
+          <!--<li><?php echo $this->Html->link(__('Gráficos Estadísticos'), '/graficos'); ?></li>-->
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ayuda <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><?php echo $this->Html->link(__('Procesos PASO A PASO'),'/users/usuario'); ?></li>
+          <li><?php echo $this->Html->link(__('Tutoriales en línea'),'https://drive.google.com/drive/folders/1DUFLRiqZO9_AOK8I4w4f9yz2f9DMUfv9?usp=sharing', array('target' => '_blank')); ?></li>
+        </ul>
+      </li>
       <li>
       <?php echo $this->Html->link('CERRAR SESIÓN', '/logout', array('class' => 'btn btn-success navbar-btn btn-lg', 'escape' => false)); ?>
       </li>

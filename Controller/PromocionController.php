@@ -13,12 +13,15 @@ class PromocionController extends AppController {
 		switch($this->Auth->user('role'))
 		{
 			case 'superadmin':
-				$this->Auth->allow();
-				break;
-			case 'admin':
-				$this->Auth->allow('index','confirmarAlumnos');
-				break;
+				if ($this->Auth->user('puesto') === 'Sistemas') {
+                    $this->Auth->allow();               
+                } else {
+                    //En caso de ser ATEI
+                    $this->Auth->allow('index','confirmarAlumnos');    
+                }
+                break;
 			case 'usuario':
+			case 'admin':
 				$this->Auth->allow('index','confirmarAlumnos');
 				break;
 		}
@@ -45,7 +48,7 @@ class PromocionController extends AppController {
 		$this->loadModel('Ciclo');
 
 		$hoyArray = getdate();
-		$hoyAñoString = $hoyArray['year'] - 1; // Al restar un año... se relizan las promociones en Marzo, con los alumnos del año anterior.
+		$hoyAñoString = $hoyArray['year'] - 1; // Si se resta un año... se relizan las promociones en Marzo, con los alumnos del año anterior.
 		$cicloaPromocionar = $this->Ciclo->find('first', array(
 			'recursive' => -1,
 			'conditions' => array('nombre' => $hoyAñoString)
@@ -171,16 +174,23 @@ class PromocionController extends AppController {
 
 		$centro = array_pop($centro);
 		$curso = array_pop($curso);
-
-		$secciones = $this->Curso->find('list', array(
+		//Sí el usuario es del nivel Secundario, visualiza en las opciones las secciones ficticias. 
+		if($nivelServicio == 'Común - Secundario') {
+			$secciones = $this->Curso->find('list', array(
+			'recursive'=>-1,
+			'fields'=>array('id','nombre_completo_curso'),
+			'conditions'=>array(
+				'centro_id'=>$this->params['named']['centro_id']))
+			);	
+		} else {
+			$secciones = $this->Curso->find('list', array(
 			'recursive'=>-1,
 			'fields'=>array('id','nombre_completo_curso'),
 			'conditions'=>array(
 				'centro_id'=>$this->params['named']['centro_id'],
-				'division !='=> ''
-			)
-		));
-
+				'division !='=> ''))
+			);
+		}	
 		$this->set(compact('cicloaPromocionar','centro','curso','cursosInscripcions','cicloaPromocionar','cicloSiguienteNombre','secciones'));
 	}
 
@@ -197,7 +207,6 @@ class PromocionController extends AppController {
 
 			$hostApi = getenv('HOSTAPI');
 
-			//$response = $httpSocket->post("https://constancia.sieptdf.tk/api/promocion", $data, $request);
 			$response = $httpSocket->post("http://$hostApi/api/promocion", $data, $request);
 
 			$response = $response->body;

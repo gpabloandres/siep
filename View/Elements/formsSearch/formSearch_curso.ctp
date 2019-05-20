@@ -40,17 +40,19 @@
 <div class="form-group">
    <?php
         if ($current_user['role'] == 'superadmin') {
-            $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años', '1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+                $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años', '1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo', '8vo' => '8vo', '9no' => '9no', '10mo' => '10mo', '11ro' => '11ro', '12do' => '12do', '13ro' => '13ro', '14to' => '14to', '15to' => '15to', '16to' => '16to', '17mo' => '17mo', '18vo' => '18vo', '19no' => '19no', '20mo' => '20mo', '21ro' => '21ro', '22do' => '22do', '23ro' => '23ro', '24to' => '24to', '25to' => '25to', '26to' => '26to', '27mo' => '27mo', '28vo' => '28vo', '29no' => '29no', '30mo' => '30mo', '31ro' => '31ro', '32do' => '32do', '33ro' => '33ro', '34to' => '34to');
           } else if ($current_user['puesto'] == 'Dirección Jardín') {
-              $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años');
+                $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años');
           } else if ($current_user['puesto'] == 'Dirección Escuela Primaria') {
-              $anios = array('1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+                $anios = array('1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
           } else if ($current_user['puesto'] == 'Supervisión Inicial/Primaria') {
-              $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años', '1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+                $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años', '1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo', '8vo' => '8vo', '9no' => '9no', '10mo' => '10mo', '11ro' => '11ro', '12do' => '12do', '13ro' => '13ro', '14to' => '14to', '15to' => '15to', '16to' => '16to', '17mo' => '17mo', '18vo' => '18vo', '19no' => '19no', '20mo' => '20mo', '21ro' => '21ro', '22do' => '22do', '23ro' => '23ro', '24to' => '24to', '25to' => '25to', '26to' => '26to', '27mo' => '27mo', '28vo' => '28vo', '29no' => '29no', '30mo' => '30mo', '31ro' => '31ro', '32do' => '32do', '33ro' => '33ro', '34to' => '34to');
           } else {
-              $anios = array('1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');  
+                $anios = array('1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');  
           }
-        echo $this->Form->input('anio', array('label' =>false, 'empty' => 'Ingrese un año...', 'options' => $anios, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Selecciones una opción de la lista'));
+        // Modalidad Especial no visualiza opciones de años.
+        if($current_user['centro_id'] != 73):echo $this->Form->input('anio', array('label' =>false, 'empty' => 'Ingrese un año...', 'options' => $anios, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Selecciones una opción de la lista'));
+        endif;
     ?>
 </div>
 <!-- COMBO DIVISION-->
@@ -68,9 +70,12 @@
 ?>
 <!-- COMBO TIPO -->
 <div class="form-group">
-   <?php
-      $tipos = array('Independiente' => 'Independiente', 'Independiente de recuperación' => 'Independiente de recuperación', 'Independiente semipresencial' => 'Independiente semipresencial', 'Independiente presencial y semipresencial' => 'Independiente presencial y semipresencial', 'Múltiple' => 'Múltiple', 'Múltiple de recuperación' => 'Múltiple de recuperación', 'Múltiple semipresencial' => 'Múltiple semipresencial', 'Múltiple presencial y semipresencial' => 'Múltiple presencial y semipresencial', 'No Corresponde' => 'No Corresponde', 'Independiente presencial y semipresencial (violeta)' => 'Independiente presencial y semipresencial (violeta)','Mixta / Bimodal' => 'Mixta / Bimodal', 'Múltiple presencial y semipresencial (violeta)' => 'Múltiple presencial y semipresencial (violeta)', 'Multinivel' => 'Multinivel', 'Multiplan' => 'Multiplan'); 
-      echo $this->Form->input('Curso.tipo', array('label' => false, 'empty'=>'Ingrese un tipo...', 'options'=>$tipos, 'class' => 'form-control')); ?>
+    <?php
+        $tipos = array('Independiente' => 'Independiente', 'Independiente de recuperación' => 'Independiente de recuperación', 'Independiente semipresencial' => 'Independiente semipresencial', 'Independiente presencial y semipresencial' => 'Independiente presencial y semipresencial', 'Múltiple' => 'Múltiple', 'Múltiple de recuperación' => 'Múltiple de recuperación', 'Múltiple semipresencial' => 'Múltiple semipresencial', 'Múltiple presencial y semipresencial' => 'Múltiple presencial y semipresencial', 'No Corresponde' => 'No Corresponde', 'Independiente presencial y semipresencial (violeta)' => 'Independiente presencial y semipresencial (violeta)','Mixta / Bimodal' => 'Mixta / Bimodal', 'Múltiple presencial y semipresencial (violeta)' => 'Múltiple presencial y semipresencial (violeta)', 'Multinivel' => 'Multinivel', 'Multiplan' => 'Multiplan'); 
+        // Modalidad Especial no visualiza opciones de tipos.
+        if($current_user['centro_id'] != 73):echo $this->Form->input('Curso.tipo', array('label' => false, 'empty'=>'Ingrese un tipo...', 'options'=>$tipos, 'class' => 'form-control'));
+        endif;
+    ?>        
 </div>
 <hr />
 <div class="text-center">

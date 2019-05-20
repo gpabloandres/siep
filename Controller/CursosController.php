@@ -15,12 +15,33 @@ class CursosController extends AppController {
         /* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
         *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
         */
-        if ($this->Auth->user('role') === 'superadmin') {
-	        $this->Auth->allow();
-	    } elseif (($this->Auth->user('role') === 'usuario') || ($this->Auth->user('role') === 'admin')) { 
-	        $this->Auth->allow('index', 'view');
-	    }
-	    /* FIN */ 
+        switch($this->Auth->user('role'))
+		{
+			case 'superadmin':
+				if ($this->Auth->user('puesto') === 'Sistemas') {
+					$this->Auth->allow();				
+				} else {
+					// Sí es un ATEI.
+					$this->Auth->allow('index', 'view', 'edit');	
+				}
+				break;
+			case 'admin':
+			case 'usuario':
+				if($this->Auth->user('puesto') === 'Supervisión Secundaria') {
+					$this->Auth->allow('index', 'view', 'edit');	
+				} else {
+					$this->Auth->allow('index', 'view');
+				}
+				break;
+		}
+	    /* FIN */
+		/* FUNCIÓN PRIVADA "LISTS" (INICIO).
+        *Si se ejecutan las acciones add/edit activa la función privada "lists".
+		*/
+		if ($this->ifActionIs(array('add', 'edit'))) {
+			$this->__lists();
+		}
+		/* FIN */ 
     } 
 
 	function index() {
@@ -32,6 +53,7 @@ class CursosController extends AppController {
 		*  Sino sí es "usuario" externo muestra los cursos activos del nivel.
 		*/ 
 		$userRole = $this->Auth->user('role');
+		$userPuesto = $this->Auth->user('puesto');
 		$userCentroId = $this->getUserCentroId();
 		$nivelCentroArray = $this->Curso->Centro->findById($userCentroId, 'nivel_servicio');
 		$this->loadModel('Centro');
@@ -40,14 +62,27 @@ class CursosController extends AppController {
 		$nivelCentro = $nivelCentroArray['Centro']['nivel_servicio'];
 		$this->Curso->Centro->recursive = 0;
 		$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'contain'=>false,'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-		if ($userRole === 'admin') {
-			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId, 'Curso.status' => 1);
-		} else if (($userRole === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
-			$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
-			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $nivelCentroId, 'Curso.status' => 1);
-		} else if ($userRole === 'usuario') {
-			$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
-			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $nivelCentroId, 'Curso.status' => 1);
+		switch ($userRole) {
+			case 'admin':
+				$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId, 'Curso.status' => 1);
+				break;
+			case 'usuario':
+				if ($nivelCentro === 'Común - Inicial - Primario') {
+					$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
+					$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $nivelCentroId, 'Curso.status' => 1);
+				} else {
+					$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
+					$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $nivelCentroId, 'Curso.status' => 1);
+				}
+				break;
+			case 'superadmin':
+				if ($userPuesto === 'Atei') {
+					$this->paginate['Curso']['conditions'] = array('Curso.status' => 1);
+				}
+				break;
+			default:
+				# code...
+				break;
 		}
 		/* FIN */
 		/* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
@@ -103,7 +138,25 @@ class CursosController extends AppController {
 			$centros = $this->Curso->Centro->find('list', array('fields'=>array('sigla'), 'contain'=>false, 'conditions'=>array('id'=>$userCentroId)));
 		}
 		/* FIN */
-		$this->set(compact('cursos', 'centros', 'comboAnio','comboDivision','comboSecciones'));
+		//Obtención de los nombres de las titulaciones para mostrar en las secciones.
+		$this->loadModel('Titulacion');
+		$this->Titulacion->recursive = 0;
+        $this->Titulacion->Behaviors->load('Containable');
+		$titulacionesNombres = $this->Titulacion->find('list', array(
+			'fields'=>array('nombre_abreviado'),
+			'contain'=>false,
+			'conditions'=>array('status'=>1)));
+		//Obtención de los niveles para filtrar mostrar titulaciones.
+		$centrosIds = $this->Centro->find('list', array(
+			'fields'=>array('id'),
+			'contain'=>false,
+			'conditions'=>array(
+				'status'=>1,
+				'OR'=>(array(
+					array('nivel_servicio'=>'Común - Secundario'),
+					array('nivel_servicio'=>'Adultos - Secundario'))))
+			));
+		$this->set(compact('cursos', 'centros', 'comboAnio','comboDivision','comboSecciones', 'titulacionesNombres', 'centrosIds'));
 	}
 
 	function view($id = null) {
@@ -134,16 +187,22 @@ class CursosController extends AppController {
 			'fields'=>array('nombre_completo_persona'),
 			'contain'=>false));*/
 		/* FIN */
-		/* OBTIENE NÚMERO DE MATRICULADOS. (INICIO) */
+		/* OBTIENE LOS VALORES DE PLAZAS, MATRÍCULA Y VACANTES. (INICIO) */
 		$cursoId = $this->Curso->id;
-        // Obtiene el valor de plazas
-        $cursoPlazasArray = $this->Curso->findById($cursoId, 'plazas');
-		$cursoPlazasString = $cursoPlazasArray['Curso']['plazas'];
-        // Obtiene el valor de matrícula
-        $cursoMatriculaArray = $this->Curso->findById($cursoId, 'matricula');
-		$cursoMatriculaString = $cursoMatriculaArray['Curso']['matricula'];
-		$vacantes = $cursoPlazasString - $cursoMatriculaString;
-		/* FIN */
+		// Obtiene el valor la división.
+        $cursoDivisionArray = $this->Curso->findById($cursoId, 'division');
+		$cursoDivisionString = $cursoDivisionArray['Curso']['division'];
+		// Sí se trata de una división real, obtiene los valores de Plazas, Matrícula y Vacantes.
+		if ($cursoDivisionString) {
+			// Obtiene el valor de plazas
+	        $cursoPlazasArray = $this->Curso->findById($cursoId, 'plazas');
+			$cursoPlazasString = $cursoPlazasArray['Curso']['plazas'];
+	        // Obtiene el valor de matrícula
+	        $cursoMatriculaArray = $this->Curso->findById($cursoId, 'matricula');
+			$cursoMatriculaString = $cursoMatriculaArray['Curso']['matricula'];
+			$vacantes = $cursoPlazasString - $cursoMatriculaString;
+			/* FIN */
+		}
 		/* MUESTRA UNIDADES CURRICULARES RELACIONADAS DEPENDIENDO EL NIVEL (INICIO). 
 		* Sólo muestra materias para los niveles secundario y superior.
 		*/		
@@ -189,15 +248,13 @@ class CursosController extends AppController {
 				$this->Session->setFlash('La sección no fué grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-		$this->Curso->Titulacion->recursive = 0;
-		$titulacions = $this->Curso->Titulacion->find('list');
-		$this->Curso->Materia->recursive = 0;
-		$materias = $this->Curso->Materia->find('list');
+		//$this->Curso->Materia->recursive = 0;
+		//$materias = $this->Curso->Materia->find('list');
 		$this->Curso->Centro->recursive = 0;
 		$centros = $this->Curso->Centro->find('list');
 		$this->Inscripcion->recursive = 0;
 		$inscripcions = $this->Inscripcion->find('list');
-		$this->set(compact('titulacions', 'materias', 'ciclos', 'inscripcions', $inscripcions, 'centros'));
+		$this->set(compact(/*'materias', */'ciclos', 'inscripcions', $inscripcions, 'centros'));
 	}
 
 	function edit($id = null) {
@@ -245,15 +302,14 @@ class CursosController extends AppController {
 		}
 		$this->Curso->Centro->recursive = 0;
 		$centros = $this->Curso->Centro->find('list');
-		$this->Curso->Titulacion->recursive = 0;
-		$titulacions = $this->Curso->Titulacion->find('list');
+		//Obtención del ciclo.
 		$this->loadModel('Ciclo');
 		$this->Ciclo->recursive = 0;
         $this->Ciclo->Behaviors->load('Containable');
 		$ciclos = $this->Ciclo->find('list');
 		$this->Inscripcion->recursive = 0;
 		$inscripcions = $this->Inscripcion->find('list');
-		$this->set(compact('centros', 'titulacions', 'modalidads', 'ciclos', 'inscripcions', $inscripcions));
+		$this->set(compact('centros', 'modalidads', 'ciclos', 'inscripcions', $inscripcions, 'titulaciones'));
 	}
 
 	function delete($id = null) {
@@ -291,5 +347,18 @@ class CursosController extends AppController {
 		$this->Session->setFlash('El curso no pudo ser reactivado', 'default', array('class' => 'alert alert-danger'));
         $this->redirect(array('action' => 'index'));
     }
+
+    //Métodos privados
+	private function __lists(){
+		//Obtención de las titulaciones.
+		$this->loadModel('Titulacion');
+		$this->Titulacion->recursive = 0;
+        $this->Titulacion->Behaviors->load('Containable');
+		$titulaciones = $this->Titulacion->find('list', array(
+			'fields'=>array('nombre'),
+			'contain'=>false,
+			'conditions'=>array('status'=>1)));
+		$this->set(compact('titulaciones'));
+	}	
 }
 ?>

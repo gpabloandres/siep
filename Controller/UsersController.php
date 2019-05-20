@@ -17,15 +17,31 @@ class UsersController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
         $this->Auth->allow('login','add');
-
-        //Si el usuario tiene un rol de superadmin entonces le dejamos paso a todo.
-        //Si no es así se trata de un usuario común y le permitimos solo la acción
-        //logout y la correspondiente a usuario (página solo para ellos)
-	    if($this->Auth->user('role') === 'superadmin') {
-	        $this->Auth->allow();
-	    } elseif ($this->Auth->user('role') === 'admin' || ($this->Auth->user('role') === 'usuario')) { 
-	        $this->Auth->allow('logout', 'usuario');
-	    } 
+        /* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
+        *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        */
+        switch($this->Auth->user('role'))
+		{
+			case 'superadmin':
+				if ($this->Auth->user('puesto') === 'Sistemas') {
+					$this->Auth->allow();				
+				} else {
+					$this->Auth->allow('logout', 'usuario');			
+				}
+				break;
+			case 'usuario':
+			case 'admin':
+				$this->Auth->allow('logout', 'usuario');
+				break;
+		}
+		/* FIN */
+		/* FUNCIÓN PRIVADA "LISTS" (INICIO).
+        *Si se ejecutan las acciones add/edit activa la función privada "lists".
+		
+		if ($this->ifActionIs(array('add', 'edit'))) {
+			$this->__lists();
+		}
+		/* FIN */
     }     
      
 	//Acción para redirigir a los usuarios con rol usuario común
@@ -35,7 +51,20 @@ class UsersController extends AppController {
 			'order' => array('User.username' => 'asc' )
 		);
     	$users = $this->paginate('User');
-		$this->set(compact('users'));
+    	//Obtención del nombre del centro.
+     	$userCentroId = $this->getUserCentroId();
+        $this->loadModel('Centro');
+        $this->Centro->recursive = 0;
+        $this->Centro->Behaviors->load('Containable');
+        $nombreCentroArray = $this->Centro->findById($userCentroId, 'nombre');
+        $nombreCentro = $nombreCentroArray['Centro']['nombre'];
+		$userCentroNivel = $this->getUserCentroNivel($userCentroId);
+		//Obtención del puesto del usuario.
+		$userPuesto = $this->Auth->user('puesto');
+		//Obtención del nivel del centro del usuario.
+		$userCentroId = $this->getUserCentroId();
+        $userCentroNivel = $this->getUserCentroNivel($userCentroId);
+		$this->set(compact('users', 'nombreCentro', 'userCentroNivel', 'userPuesto', 'userCentroNivel'));
     	$this->render('/Users/usuario');
     }
 	
@@ -47,7 +76,7 @@ class UsersController extends AppController {
 		// if we get the post information, try to authenticate
 		if ($this->request->is('post')) {
 			if ($this->Auth->login()) {
-				$this->Session->setFlash('Bienvenido, '. $this->Auth->user('username'), 'default', array('class' => 'alert alert-success'));
+				$this->Session->setFlash('¡ Bienvenido usuario'.' '.$this->Auth->user('username').' !', 'default', array('class' => 'alert alert-success'));
 				$this->redirect($this->Auth->redirect());
 			} else {
 				$this->Session->setFlash(__('Nombre de usuario o contraseña incorrectos.'));
@@ -68,14 +97,11 @@ class UsersController extends AppController {
         );
 		$this->redirectToNamed();
 		$conditions = array();
-		
-		if(!empty($this->params['named']['username']))
-		{
+		if(!empty($this->params['named']['username'])) {
 			$conditions['User.username ='] = $this->params['named']['username'];
 		}
-		
-        $users = $this->paginate('User', $conditions);
-        $this->set(compact('users'));
+		$users = $this->paginate('User', $conditions);
+		$this->set(compact('users'));
     }
 
 	public function view($id = null) {
@@ -177,6 +203,11 @@ class UsersController extends AppController {
 		$this->Session->setFlash('El usuario no pudo ser reactivado', 'default', array('class' => 'alert alert-danger'));
         $this->redirect(array('action' => 'index'));
     }
-	
+
+    //Métodos privados
+	/*
+	private function __lists(){
+	}
+	*/
 }
 ?>

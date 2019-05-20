@@ -14,6 +14,8 @@
                       <div id="click_01" class="titulo_acordeon_datos">Datos Generales <span class="caret"></span></div>
                       <div id="acordeon_01">
                         <div class="unit">
+							<b><?php echo __('CUE: '); ?></b>
+							<?php echo ($centro['Centro']['cue']); ?></p>
 							<b><?php echo __('Nombre: '); ?></b>
 							<?php echo ($centro['Centro']['nombre']); ?></p>
 							<b><?php echo __('Fecha de Fundación: '); ?></b>
@@ -22,7 +24,7 @@
 							<?php echo ($centro['Centro']['sector']); ?></p>
 							<b><?php echo __('Nivel - Servicio: '); ?></b>
 							<?php echo ($centro['Centro']['nivel_servicio']); ?></p>
-							<b><?php echo __('Director: '); ?></b>
+							<b><?php echo __('Equipo Directivo: '); ?></b>
 				    			<?php echo $centro['Centro']['equipoDirectivo']; ?></p>
 							<b><?php echo __('Ámbito: '); ?></b>
 								<?php echo $centro['Centro']['ambito']; ?></p>
@@ -36,16 +38,16 @@
 	                        	<b><?php echo __('Domicilio: '); ?></b>
 								<?php echo $centro['Centro']['direccion']; ?></p>
 								<b><?php echo __('Barrio: '); ?></b>
-									<?php echo $barrios[$centro['Centro']['barrio_id']]; ?></p>
+									<?php echo $barrioNombre; ?></p>
 								<b><?php echo __('Código Postal: '); ?></b>
 									<?php echo $centro['Centro']['cp']; ?></p>
 								<b><?php echo __('Código de Localidad: '); ?></b>
 									<?php echo $centro['Centro']['codigo_localidad']; ?></p>
 								<b><?php echo __('Ciudad: '); ?></b>
-									<?php echo $ciudades[$centro['Centro']['ciudad_id']]; ?></p>
+									<?php echo $ciudadNombre; ?></p>
 								<b><?php echo __('Departamento: '); ?></b>
-								<?php echo $departamentos[$centro['Centro']['departamento_id']]; ?></p>
-							    <b><?php echo __('Telefono: '); ?></b>
+								<?php echo $departamentoNombre; ?></p>
+							    <b><?php echo __('Telefono fijo: '); ?></b>
 									<?php echo $centro['Centro']['telefono']; ?></p>
 		                        <b><?php echo __('Email: '); ?></b>
 									<?php echo ($this->Html->link($centro['Centro']['email'],'mailto:'.$centro['Centro']['email'])); ?></p>
@@ -71,7 +73,10 @@
                 <!--<div class="opcion"><?php echo $this->Html->link(__('Listar Inasistencias'), array('controller' => 'inasistencias', 'action' => 'index')); ?></div>-->
 			  	<!--<div class="opcion"><?php echo $this->Html->link(__('Exportar a PDF'), array('action' => 'view', $centro['Centro']['id'], 'ext' => 'pdf')); ?></div>-->
 				*/ ?>
-			  <?php if($current_user['role'] == 'superadmin'): ?>
+			  <?php if($current_user['role'] == 'admin' && $current_user['centro_id'] == $id): ?>
+				<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $centro['Centro']['id'])); ?></div>
+		      <?php endif; ?>
+			  <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
 				<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $centro['Centro']['id'])); ?></div>
 		        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $centro['Centro']['id']), null, sprintf(__('Esta seguro de borrar el centro %s?'), $centro['Centro']['sigla'])); ?></div>
 		      <?php endif; ?>
@@ -149,7 +154,6 @@
 	</div>
 </div>-->
 */ ?>
-<?php /*
 <!-- Titulaciones Relacionadas -->
 <div id="click_03" class="titulo_acordeon">Titulaciones Relacionadas <span class="caret"></span></div>
 <div id="acordeon_03">
@@ -161,14 +165,14 @@
                 <div class="unit">
 					<?php echo '<b>Nombre:</b> '.$titulacion['nombre'];?><br>
 					<?php echo '<b>Orientación:</b> '.$titulacion['orientacion'];?><br>
-		            <?php echo '<b>Organización del plan:</b> '.$titulacion['organizacion_plan'];?><br>
+		            <?php echo '<b>Organización del plan:</b> '.$titulacion['organizacion_plan'];?>
 					<!--<?php echo '<b>Plan de estudio:</b> '.$titulacion['plan_estudio'];?><br>-->
 					<!--<?php echo '<b>Organización de la cursada:</b> '.$titulacion['organizacion_cursada'];?><br>-->
-		            <?php echo '<b>Forma del dictado:</b> '.$titulacion['forma_dictado'];?><br>
+		            <!--<?php echo '<b>Forma del dictado:</b> '.$titulacion['forma_dictado'];?><br>-->
 			        <hr>
                     <div class="text-right">
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'titulacions', 'action' => 'view', $titulacion['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-                        <?php if($current_user['role'] == 'superadmin'): ?>
+                        <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'titulacions', 'action' => 'edit', $titulacion['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'titulacions', 'action' => 'delete', $titulacion['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
                         <?php endif; ?>
@@ -182,8 +186,8 @@
     </div>
 </div>
 <!-- end Titulaciones Relacionadas -->
-*/ ?>
-<?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
+<?php /*
+<?php if(($current_user['puesto'] == 'Sistemas') || ($current_user['puesto'] == 'Atei')): ?>
 <!-- Cursos Relacionados -->
 <div id="click_04" class="titulo_acordeon">Secciones Relacionadas <span class="caret"></span></div>
 <div id="acordeon_04">
@@ -217,6 +221,7 @@
 </div>
 <?php endif ?>
 <!-- end Cursos Relacionados -->
+*/ ?>
 <?php /*
 <!-- Inscripciones Relacionadas
 	<div id="click_02" class="titulo_acordeon">Inscripciones Relacionadas <span class="caret"></span></div>
@@ -255,7 +260,7 @@
 </div>
 <!-- end Inscripciones Relacionadas -->
 */ ?>
-<?php if($current_user['role'] == 'superadmin'): ?>
+<?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
 <!-- Empleados Relacionados -->
 <div id="click_05" class="titulo_acordeon">Usuarios Relacionados <span class="caret"></span></div>
 <div id="acordeon_05">

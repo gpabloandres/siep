@@ -95,7 +95,7 @@ class User extends AppModel {
 	),
 	'puesto' => array(
 		'valid' => array(
-			'rule' => array('inList', array('Sistemas', 'Subsecretaría Provincial', 'Dirección Provincial de Modalidades', 'Dirección Provincial de Superior', 'Supervisión Inicial/Primaria', 'Supervisión Secundaria', 'Dirección Jardín', 'Dirección Escuela Primaria', 'Dirección Colegio Secundario', 'Dirección Instituto Superior')),
+			'rule' => array('inList', array('Sistemas', 'Atei', 'Supervisión Inicial/Primaria', 'Supervisión Secundaria', 'Dirección Jardín', 'Dirección Escuela Primaria', 'Dirección Colegio Secundario', 'Dirección Instituto Superior')),
 			'message' => 'Ingrese un puesto válido',
 			'allowEmpty' => false
 		)

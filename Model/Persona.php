@@ -46,7 +46,7 @@ class Persona extends AppModel {
                 'message' => 'Indicar los nombres.'
                 ),
                 'alphaBet' => array(
-                'rule' => '/^[ áÁéÉíÍóÓúÚ a-zA-ZñÑ]{3,}$/i',
+                'rule' => '/^[ áÁéÉíÍóÓúÚüÜ a-zA-ZñÑ´]{3,}$/i',
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 ),
             ),
@@ -57,7 +57,7 @@ class Persona extends AppModel {
                 'message' => 'Indicar los apellidos.'
                 ),
                 'alphaBet' => array(
-                'rule' => '/^[ áÁéÉíÍóÓúÚ a-zA-ZñÑ]{3,}$/i',
+                'rule' => '/^[ áÁéÉíÍóÓúÚüÜ a-zA-ZñÑ´]{3,}$/i',
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 ),
             ),
@@ -81,9 +81,9 @@ class Persona extends AppModel {
                 'required' => true,
                 'message' => 'Indicar un nº de documento.'
                 ),
-                'numeric' => array(
-                  'rule' => 'naturalNumber',
-                  'message' => 'Indicar número sin puntos ni comas ni espacios.'
+                'alphaBet' => array(
+                'rule' => '/^[a-zA-Z0-9]{5,}$/i',
+                'message' => 'Sólo letras y números, mínimo cinco caracteres, sin puntos, guiones ni espacios.'
                 ),
                 'isUnique' => array(
                   'rule' => 'isUnique',
@@ -158,7 +158,7 @@ class Persona extends AppModel {
             'ocupacion' => array(
                 'alphaBet' => array(
                 'rule' => '/^[ a-zA-ZñÑ]{0,}$/i',
-								'required' => false,
+				'required' => false,
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 )
             ),
@@ -201,6 +201,13 @@ class Persona extends AppModel {
                 'message' => 'Indicar un número de teléfono (mínimo 6 números, sólo números, sin puntos, ni comas, ni guiones, ni espacios).'
                 )
             ),
+            'telefono_nro_alt' => array(
+                'numeric' => array(
+                'rule' => '/^[ 0-9]{6,}$/i',
+                'allowEmpty' => true,
+                'message' => 'Indicar un número de teléfono alternativo (mínimo 6 números, sólo números, sin puntos, ni comas, ni guiones, ni espacios).'
+                )
+            ),
             'email' => array(
                 'rule' => 'email',
                 'allowEmpty' => true,
@@ -208,22 +215,22 @@ class Persona extends AppModel {
             ),
             'calle_nombre' => array(
                 'alphaBet' => array(
-                    'allowEmpty' => true,
-                'rule' => '/^[áÁéÉíÍóÓúÚa-zA-ZñÑ 0-9]{3,}$/i',
-                'message' => 'Sólo letras, mínimo tres caracteres'
+                'allowEmpty' => true,
+                'rule' => '/^[ áÁéÉíÍóÓúÚ a-zA-ZñÑ 0-9]{3,}$/i',
+                'message' => 'Sólo letras y números, sin puntos, ni comas, ni guiones, ni espacios.'
                 )
             ),
             'calle_nro' => array(
                 'numeric' => array(
-                    'allowEmpty' => true,
+                'allowEmpty' => true,
                 'rule' => 'naturalNumber',
                 'message' => 'Indicar un número de calle (sólo números, sin puntos, ni comas, ni guiones, ni espacios).'
                 )
             ),
             'ciudad_id' => array(
                 'numeric' => array(
+                    'allowEmpty' => true,
                     'rule' => 'naturalNumber',
-                    'required' => true,
                     'message' => 'Indicar ciudad.'
                 )
             ),
@@ -231,14 +238,14 @@ class Persona extends AppModel {
                 'alphaBet' => array(
                     'allowEmpty' => true,
                 'rule' => '/^[áÁéÉíÍóÓúÚa-zA-ZñÑ 0-9]{1,}$/i',
-                'message' => 'Sólo letras, mínimo un caracter'
+                'message' => 'Sólo letras y números, mínimo un caracter'
                 )
             ),
             'tira_edificio' => array(
                 'alphaBet' => array(
                     'allowEmpty' => true,
                 'rule' => '/^[áÁéÉíÍóÓúÚa-zA-ZñÑ 0-9]{1,}$/i',
-                'message' => 'Sólo letras, mínimo un caracter'
+                'message' => 'Sólo letras y números, mínimo un caracter'
                 )
             ),
         );

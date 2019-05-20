@@ -7,32 +7,39 @@ class AlumnosController extends AppController {
 	public $uses = array('Alumno', 'Familiar');
 	var $paginate = array('Alumno' => array('limit' => 4, 'order' => 'Alumno.created DESC'));
 
-    public function beforeFilter() {
+	// Permite agregar el Helper de Siep a las vistas
+	public $helpers = array('Siep');
+
+	public function beforeFilter() {
         parent::beforeFilter();
         /* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
         *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
         */
-        if ($this->Auth->user('role') === 'superadmin') {
-	        $this->Auth->allow();
-	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) {
-	        $this->Auth->allow('index', 'add' , 'view', 'edit', 'autocompleteNombrePersona', 'autocompleteNombreAlumno');
-	    }
+        switch($this->Auth->user('role'))
+		{
+			case 'superadmin':
+				if ($this->Auth->user('puesto') === 'Sistemas') {
+					$this->Auth->allow();				
+				} else {
+					//En caso de ser ATEI
+					$this->Auth->allow('index', 'add' , 'view', 'edit', 'autocompleteNombrePersona', 'autocompleteNombreAlumno');	
+				}
+				break;
+			case 'usuario':
+			case 'admin':
+				$this->Auth->allow('index', 'add' , 'view', 'edit', 'autocompleteNombrePersona', 'autocompleteNombreAlumno');
+				break;
+		}
+
+		// Importa el Helper de Siep al controlador es accesible mediante $this->Siep
+		App::import('Helper', 'Siep');
+		$this->Siep= new SiepHelper(new View());
+		/* FIN */
     }
 
     public function index() {
     	$this->paginate['Alumno']['limit'] = 6;
 		$this->paginate['Alumno']['order'] = array('Alumno.id' => 'ASC');
-		// Esta paginacion incluye al modelo Persona relacionado al Alumno Id
-		/*
-		$this->paginate = array(
-			'limit' => 10,
-			'order' => array('Alumno.id' => 'ASC' ),
-			'recursive' => 1,
-			'contain' => [
-				'Persona'
-			]
-		);
-
 		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
 		*Sí el usuario es "admin" muestra los cursos del establecimiento. Sino sí es "usuario" externo muestra los cursos del nivel.
 		*/
@@ -60,11 +67,6 @@ class AlumnosController extends AppController {
         if (!empty($this->params['named']['legajo_fisico_nro'])) {
 			$conditions['Alumno.legajo_fisico_nro ='] = $this->params['named']['legajo_fisico_nro'];
 		}
-		/*
-		if (!empty($this->params['named']['persona_id'])) {
-			$conditions['Alumno.persona_id ='] = $this->params['named']['persona_id'];
-		}
-		*/
 		$alumnos = $this->paginate('Alumno', $conditions);
 	    $this->set(compact('alumnos'));
 	}
@@ -74,44 +76,20 @@ class AlumnosController extends AppController {
 			$this->Session->setFlash('Alumno no valido', 'default', array('class' => 'alert alert-danger'));
 			$this->redirect(array('action' => 'index'));
 		}
-		//$options = array('conditions' => array('Alumno.' . $this->Alumno->primaryKey => $id));
-		/*
-		$this->pdfConfig = array(
-			'download' => true,
-			'filename' => 'alumno_' . $id .'.pdf'
-		);
-		*/
-		$this->set('alumno', $this->Alumno->read(null, $id));
-        //Genera nombres en el view.
-		$this->loadModel('Ciclo');
-		$cicloNombre = $this->Ciclo->find('list', array('fields'=>array('nombre')));
-        //Datos personales del Alumno
-		$personaId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
-        $alumnoNombre = $this->Alumno->Persona->find('list', array('fields'=>array('nombre_completo_persona'), array('conditions' => array('id' => $personaId, 'recursive' => -1))));
-        $alumnoDocumentoTipo = $this->Alumno->Persona->find('list', array('fields'=>array('documento_tipo'), array('conditions' => array('id' => $personaId, 'recursive' => -1))));
-        $alumnoDocumentoNumero = $this->Alumno->Persona->find('list', array('fields'=>array('documento_nro'), array('conditions' => array('id' => $personaId, 'recursive' => -1))));
-        $alumnoEdad = $this->Alumno->Persona->find('list', array('fields'=>array('edad'), array('conditions' => array('id' => $personaId, 'recursive' => -1))));
-    	// Datos relacionados.
-    	$centroId = $this->Alumno->find('list', array('fields'=>array('centro_id'), 'conditions'=>array('id'=>$id)));
-		$this->loadModel('Centro');
-		$centroNombre = $this->Centro->find('list', array('fields'=>array('nombre')));
-		$this->loadModel('Persona');
-		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
-        /*
-		$notaMateriaId = $this->Alumno->Nota->find('list', array('fields'=>array('materia_id')));
-		$this->loadModel('Materia');
-		$materiaAlia = $this->Materia->find('list', array('fields'=>array('alia'), 'conditions'=>array('id'=>$notaMateriaId)));
-		*/
-		//Familiares relacionados.
-        //$familiarNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
-        $alumnoId = $this->Alumno->primaryKey = $id;
-        $familiarVinculo = $this->Persona->Familiar->find('list', array('fields' => array('vinculo'), 'conditions' => array('id' => $alumnoId)));
-        /*
-        $familiarCuilCuit = $this->Persona->find('list', array('fields' => array('cuil_cuit')));
-        $familiarTelefono = $this->Persona->find('list', array('fields' => array('telefono_nro')));
-        $familiarEmail = $this->Persona->find('list', array('fields' => array('email')));
-		*/
-		$this->set(compact('alumnoNombre', 'alumnoDocumentoTipo', 'alumnoDocumentoNumero', 'alumnoEdad', 'centroNombre', 'cicloNombre', 'personaId', 'personaNombre', 'foto', 'materiaAlia', 'barrioNombre', 'familiarNombre', 'familiarVinculo'));
+
+		// Parametros para ejecutar API
+		$apiParams = [];
+		$apiParams['with'] = 'persona.ciudad,familiares.familiar.persona.ciudad,inscripciones.centro';
+
+		// Consumo de API
+		$alumno = $this->Siep->consumeApi("api/v1/alumnos/$id",$apiParams);
+		if(isset($alumno['error']))
+		{
+			$this->Session->setFlash('ERROR API(Alumnos): '.$alumno['error'], 'default', array('class' => 'alert alert-danger'));
+			$this->redirect(array('action' => 'index'));
+		}
+
+		$this->set(compact('alumno'));
     }
 
 	public function add() {
