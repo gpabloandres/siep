@@ -201,6 +201,7 @@ class PromocionController extends AppController {
 
 			$httpSocket = new HttpSocket();
 			$request = array('header' => array('Content-Type' => 'application/json'));
+			$request['header'][getenv('XHOSTCAKE')] = 'do';
 			$this->request->data['user_id'] = $userId;
 			$data = $this->request->data;
 			$data = json_encode($data);
