@@ -79,10 +79,12 @@ class SiepHelper extends AppHelper
                 'header' => array(
                     'Connection' => 'close',
                     'User-Agent' => 'CakePHP',
-                    'Content-Type' => 'application/json'
+                    'Content-Type' => 'application/json',
                 ),
                 'redirect' => false
             );
+
+            $request['header'][getenv('XHOSTCAKE')] = 'do';
 
             $httpSocket = new HttpSocket();
             $response = $httpSocket->request($request);
@@ -114,6 +116,7 @@ class SiepHelper extends AppHelper
             if($item['current_page']>1) {
                 echo '<a href="'.$this->paginationLink($item['current_page']-1).'">&laquo; anterior</a> | ';
             }
+
             for($i;$i<=$item['last_page'];$i++)
             {
                 if($i == $item['current_page']) {
