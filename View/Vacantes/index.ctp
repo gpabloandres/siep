@@ -115,6 +115,8 @@
           <th>Turno</th>
           <th>Tipo</th>
           <th>Titulación</th>
+          <th>P.P.</th>
+          <th>M.I.</th>
           <?php if(!$ocultar) : ?>
             <th>Plaza</th>
           <?php endif ?>
@@ -149,6 +151,16 @@
             </td>
             <td>
               <?php echo $titulacionesNombres[$seccion['titulacion_id']]; ?>
+            </td>
+            <td>
+                <?php if($seccion['pareja_pedagogica'] == 1): ?>
+                <span class="glyphicon glyphicon-ok"></span>
+                <?php endif; ?>
+            </td>
+            <td>
+                <?php if($seccion['maestra_apoyo_inclusion'] == 1): ?>
+                <span class="glyphicon glyphicon-ok"></span>
+                <?php endif; ?>
             </td>
             <?php 
                 if($seccion['cue']=='940001300' || $seccion['cue']=='940009200' || $seccion['cue']=='940011600' || $seccion['cue']=='940013400' || $seccion['cue']=='940014600' || $seccion['cue']=='940020900') { 
