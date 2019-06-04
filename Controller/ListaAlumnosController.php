@@ -62,12 +62,15 @@ class ListaAlumnosController extends AppController {
 		// Todas las inscripciones se encuentran en DATA
 		$cursosInscripcions = $cursosInscripcions['data'];
 
-		// Obtenemos Ciclo, Centro y Curso de la primera Inscripcion de la lista
-		// Todas las inscripciones comparten estas 3 variables
-		$first = reset($cursosInscripcions);
-		$curso = $first['curso'];
-		$centro = $first['inscripcion']['centro'];
-		$ciclo = $first['inscripcion']['ciclo'];
+		if(count($cursosInscripcions))
+		{
+			// Obtenemos Ciclo, Centro y Curso de la primera Inscripcion de la lista
+			// Todas las inscripciones comparten estas 3 variables
+			$first = reset($cursosInscripcions);
+			$curso = $first['curso'];
+			$centro = $first['inscripcion']['centro'];
+			$ciclo = $first['inscripcion']['ciclo'];
+		}
 
 		$this->set(compact('cicloActual','cursosInscripcions','ciclo','centro','curso','apiParams'));
 	}

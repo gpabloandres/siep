@@ -893,6 +893,8 @@ class InscripcionsController extends AppController {
             $hostApi = getenv('HOSTAPI');
             $httpSocket = new HttpSocket();
             $request = array('header' => array('Content-Type' => 'application/json'));
+            $request['header'][getenv('XHOSTCAKE')] = 'do';
+
             // Datos de la ultima inscripcion de la persona
             $data = [];
             $response = $httpSocket->get("http://$hostApi/api/inscripcion/find/id/$inscripcioId", $data, $request);

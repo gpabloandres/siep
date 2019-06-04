@@ -524,6 +524,7 @@ class PersonasController extends AppController {
 			$hostApi = getenv('HOSTAPI');
 			$httpSocket = new HttpSocket();
 			$request = array('header' => array('Content-Type' => 'application/json'));
+			$request['header'][getenv('XHOSTCAKE')] = 'do';
 			// Datos de la ultima inscripcion de la persona
 			$data['ver'] = 'ultima';
 			$response = $httpSocket->get("http://$hostApi/api/inscripcion/find/persona/$personaId", $data, $request);

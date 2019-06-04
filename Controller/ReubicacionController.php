@@ -140,6 +140,7 @@ class ReubicacionController extends AppController {
 
 			$httpSocket = new HttpSocket();
 			$request = array('header' => array('Content-Type' => 'application/json'));
+			$request['header'][getenv('XHOSTCAKE')] = 'do';
 			$this->request->data['user_id'] = $userId;
 			$this->request->data['centro_id'] = $centroId;
 			$this->request->data['curso_id'] = $cursoId;
