@@ -231,6 +231,7 @@ class InscripcionsController extends AppController {
                 case 'Común - Secundario':
                 case 'Adultos - Primario':
                 case 'Adultos - Secundario':
+                case 'Especial - Integración':
                 //  PERMITIDOS AGREGAR
                     break;
                 default:
