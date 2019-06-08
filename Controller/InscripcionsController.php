@@ -411,21 +411,24 @@ class InscripcionsController extends AppController {
             $this->Alumno->Behaviors->load('Containable');
             $this->Alumno->recursive = 0;
             $alumno = $this->Alumno->findByPersonaId($personaId);
-            //Obtención del código anterior de inscripción.
-            $codigoAnterior = $this->__getCodigo(($ciclo - 1), $personaDni);
-            //Verficación de existencia de inscripción con ese código anterior.
-            $existeInscripcionAnterior = $this->Inscripcion->find('first', array(
-                'contain' => false,   
-                'conditions' => array('Inscripcion.legajo_nro' => $codigoAnterior)));
-            //Si existe inscripción anterior, obtiene el centro de esa inscripción.
-            if (isset($existeInscripcionAnterior['Inscripcion']['legajo_nro'])) {
-                $inscripcionAnterior = $this->Inscripcion->findByLegajoNro($codigoAnterior, 'centro_id');
-                $inscripcionAnteriorCentro = $inscripcionAnterior['Inscripcion']['centro_id'];
-            } else {
-                $inscripcionAnteriorCentro = 0;
+            //Obtención de centros, de las inscripciones relacionadas al DNI del alumno.
+            $inscripcionesCentrosRelacionados = $this->Inscripcion->find('list',array(
+                'fields' => 'centro_id',
+                'contain' => false,
+                'conditions' => array(
+                    'Inscripcion.legajo_nro LIKE' => '%'.$personaDni.'%')
+                )
+            );            
+            //Si cuenta 1 o más inscripcion/es relacionadas, comprueba exista el centro de la 
+            //inscripción a registrar.
+            if (count($inscripcionesCentrosRelacionados) >= 1) {
+                $centroIdActual = $this->request->data['Inscripcion']['centro_id'];
+                //Sí es true, sobreescribe la variable que por default está en false.
+                $inscripcionAnteriorCentro = in_array($centroIdActual, $inscripcionesCentrosRelacionados); 
             }
-            // Si el alumno no fue creado, o si el id del centro a inscribir es diferente al centro en el que se encontraba el alumno en el ciclo anterior, crea el alumno y le asigna el id del centro actual. 
-            if (count($alumno) == 0 || $userCentroId != $inscripcionAnteriorCentro) {
+            // Si el alumno no fue creado o no registra inscripción en el centro a registrar,
+            // crea el alumno y le asigna el id del centro actual. 
+            if (count($alumno) == 0 || $inscripcionAnteriorCentro == false) {
                 // Crear alumno
                 $this->Alumno->create();
                 $insert = array(
@@ -439,6 +442,7 @@ class InscripcionsController extends AppController {
                     die;
                 }
             }
+            // Asigna alumno_id ya creado.
             $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
             /* FIN */
             /* INICIO:  Definición del estado de la documentación según el nivel del centro.*/
