@@ -86,7 +86,7 @@
           </ul>
         </li>
         <li>
-          <?php echo $this->Html->link('CERRAR SESIÓN', '/logout', array('class' => 'btn btn-success navbar-btn btn-lg', 'escape' => false)); ?>
+          <?php echo $this->Html->link('CERRAR SESIÓN', '/logout', array('class' => "btn btn-primary navbar-btn", 'escape' => false)); ?>
         </li>
     </div> <!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
