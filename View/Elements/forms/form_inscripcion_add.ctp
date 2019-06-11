@@ -11,7 +11,7 @@
             // Obtener secciones dependientes al centro
             $.ajax({
                 type:"GET",
-                url: "<?php echo env('SIEP_API_GW_INGRESS')."/api/v1/cursos?por_pagina=all&centro_id="?>" + $(this).val(),
+                url: "<?php echo "/gateway/cursos/por_pagina:all/centro_id:"?>" + $(this).val(),
                 success: function(response){
                     var data = response.data;
                     $(".s2_centro").append('<option value="' +''+ '"> ' + 'Seleccione una sección'+ '</option>');
