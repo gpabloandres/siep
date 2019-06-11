@@ -2,7 +2,7 @@
     <?php
         if($showExportBtn>=2) :
     ?>
-    <a target="_blank" href="https://api.sieptdf.org/api/inscripcion/export/excel?<?php echo http_build_query($queryExportacionExcel); ?>" class="btn btn-success pull-right">Exportar resultados a excel</a>
+    <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS'); ?>api/inscripcion/export/excel?<?php echo http_build_query($queryExportacionExcel); ?>" class="btn btn-success pull-right">Exportar resultados a excel</a>
     <br>
     <br>
     <?php

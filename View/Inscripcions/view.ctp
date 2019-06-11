@@ -156,8 +156,8 @@
                   if($current_user['role'] == 'superadmin' || $current_user['role'] == 'usuario' || $userCentroId == $centroInscripcion):
                     // y sí la inscripción del alumno tiene estado CONFIRMADA y es del ciclo actual. 
                     if(($estadoInscripcion === 'CONFIRMADA' || $estadoInscripcion === 'EGRESO') && ($cicloInscripcion == $cicloIdActual) || ($cicloInscripcion == $cicloIdPosterior)): ?>
-                        <div class="opcion"><a href="http://api.sieptdf.org/api/constancia/<?php echo $inscripcion['id'];?>">Constancia de Inscripción</a></div>
-                        <div class="opcion"><a href="http://api.sieptdf.org/api/constancia_regular/<?php echo $inscripcion['id'];?>">Constancia de Alumno Regular</a></div>
+                        <div class="opcion"><a href="<?php echo env('SIEP_API_GW_INGRESS'); ?>/api/constancia/<?php echo $inscripcion['id'];?>">Constancia de Inscripción</a></div>
+                        <div class="opcion"><a href="<?php echo env('SIEP_API_GW_INGRESS'); ?>/api/constancia_regular/<?php echo $inscripcion['id'];?>">Constancia de Alumno Regular</a></div>
                     <?php endif; ?>
                     <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $inscripcion['id'])); ?> </div>
                 <?php endif; ?>  
