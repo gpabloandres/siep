@@ -61,6 +61,7 @@
 						940008300 EPET
 						940015900 SABATO
 						940015700 GUEVARA
+
 					 */
 
 					if($curso['Curso']['anio'] == '6to')
@@ -69,7 +70,9 @@
 							($curso['Centro']['cue'] == '940007700') ||
 							($curso['Centro']['cue'] == '940008300') ||
 							($curso['Centro']['cue'] == '940015900') ||
-							($curso['Centro']['cue'] == '940015700')
+							($curso['Centro']['cue'] == '940015700') ||
+							($curso['Centro']['nivel_servicio'] == 'Especial - Primario') ||
+							($curso['Centro']['nivel_servicio'] != 'Especial - Integración')
 						) {
 							$showPromocion = true;
 						}
