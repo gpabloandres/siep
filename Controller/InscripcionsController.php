@@ -688,15 +688,19 @@ class InscripcionsController extends AppController {
                 $this->Curso->saveField("vacantes", $vacantesActual);
             }
             /* FIN: PASE INTERNO (ENTRE CURSOS DE UNA MISMA INSTITUCIÓN) */
+            
             /* INICIO: COMPROBACIÓN DE DATOS DE BAJA INGRESADOS */
-            // Si se ingresaron datos de baja, el estado de inscripción debe ser BAJA.
-            if (isset($this->request->data['Inscripcion']['fecha_baja']) || isset($this->request->data['Inscripcion']['tipo_baja']) || isset($this->request->data['Inscripcion']['motivo_baja'])) {
-                if ($this->request->data['Inscripcion']['estado_inscripcion'] != 'BAJA') {
-                    $this->Session->setFlash('Registra datos en el "PASO 2: Datos de la BAJA". En ese caso, en el campo del PASO 1: "Estado de la inscripción" debe indicar BAJA.', 'default', array('class' => 'alert alert-danger'));
+            // Si el estado de inscripción es BAJA debe ingresar al menos FECHA DE BAJA.
+            if (($this->request->data['Inscripcion']['estado_inscripcion'] == 'BAJA') && ($this->request->data['Inscripcion']['fecha_baja'] == '')) {
+                $this->Session->setFlash('Ingresó BAJA en el campo "Estado de la inscripción" del PASO 1. En ese caso debe ingresar la "Fecha de Baja" en el PASO 2.', 'default', array('class' => 'alert alert-danger'));
                 $this->redirect($this->referer());
-                }
             }
-            /* FIN: COMPROBACIÓN DE DATOS DE BAJA INGRESADOS */
+            // Si se ingresaron datos de baja, el estado de inscripción debe ser BAJA.
+            if (($this->request->data['Inscripcion']['fecha_baja'] != '') && ($this->request->data['Inscripcion']['estado_inscripcion'] != 'BAJA')) {
+                $this->Session->setFlash('Ingresó FECHA DE BAJA en el PASO 2. En ese caso debe indicar BAJA en el campo "Estado de la inscripción" del PASO 1.', 'default', array('class' => 'alert alert-danger'));
+                $this->redirect($this->referer());
+            }
+            /* FIN: COMPROBACIÓN DE DATOS DE BAJA INGRESADOS */           
             /* INICIO: BAJA DE UN ALUMNO (DE UN CURSO DE UNA INSTITUCIÓN)
             *  Sí cambia el estado de inscripción a BAJA.
             *  Actualiza valores de matrícula y vacantes del curso origen.
