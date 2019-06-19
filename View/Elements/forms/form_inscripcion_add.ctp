@@ -104,7 +104,7 @@
     <!-- Datos de alta -->
    <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit">
-        <strong><h3>PASO 2: Datos del Alta</h3></strong>
+        <h3>PASO 2: Datos del Alta</h3>
         <hr />
         <?php
             $estados_inscripcion = array('CONFIRMADA'=>'CONFIRMADA','NO CONFIRMADA'=>'NO CONFIRMADA');
