@@ -688,6 +688,15 @@ class InscripcionsController extends AppController {
                 $this->Curso->saveField("vacantes", $vacantesActual);
             }
             /* FIN: PASE INTERNO (ENTRE CURSOS DE UNA MISMA INSTITUCIÓN) */
+            /* INICIO: COMPROBACIÓN DE DATOS DE BAJA INGRESADOS */
+            // Si se ingresaron datos de baja, el estado de inscripción debe ser BAJA.
+            if (isset($this->request->data['Inscripcion']['fecha_baja']) || isset($this->request->data['Inscripcion']['tipo_baja']) || isset($this->request->data['Inscripcion']['motivo_baja'])) {
+                if ($this->request->data['Inscripcion']['estado_inscripcion'] != 'BAJA') {
+                    $this->Session->setFlash('Registra datos en el "PASO 2: Datos de la BAJA". En ese caso, en el campo del PASO 1: "Estado de la inscripción" debe indicar BAJA.', 'default', array('class' => 'alert alert-danger'));
+                $this->redirect($this->referer());
+                }
+            }
+            /* FIN: COMPROBACIÓN DE DATOS DE BAJA INGRESADOS */
             /* INICIO: BAJA DE UN ALUMNO (DE UN CURSO DE UNA INSTITUCIÓN)
             *  Sí cambia el estado de inscripción a BAJA.
             *  Actualiza valores de matrícula y vacantes del curso origen.
@@ -731,8 +740,8 @@ class InscripcionsController extends AppController {
                 //debug( $this->Inscripcion->invalidFields() );
                 //die;
 				$this->Session->setFlash('La inscripcion no fue grabada. Intente nuevamente.', 'default', array('class' => 'alert alert-danger'));
-			}
-		}
+            }
+    	}
         //End submit de formulario
         //Genera variables para forzar tildes en la vista.
         $tildeDocumento = $this->Inscripcion->findById($id, 'fotocopia_dni');
