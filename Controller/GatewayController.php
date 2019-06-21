@@ -43,27 +43,11 @@ class GatewayController extends AppController
 
     public function ficha()
     {
-        $this->autoRender = false; // Tell CakePHP that we don't need any view rendering in this case
+        $this->autoRender = false;
         $hostApi = getenv('HOSTAPI');
         $id = $this->params['named']['id'];
 
         $url = "http://{$hostApi}/api/v1/personas/{$id}/ficha";
-
-/*
-        // Descarga usando CURL
-        $CurlConnect = curl_init();
-        curl_setopt($CurlConnect, CURLOPT_URL, $url);
-        curl_setopt($CurlConnect, CURLOPT_RETURNTRANSFER, 1 );
-        curl_setopt($CurlConnect, CURLOPT_HTTPHEADER, array(
-            getenv('XHOSTCAKE').': do'
-        ));
-        $result = curl_exec($CurlConnect);
-
-        header('Cache-Control: public');
-        header('Content-type: application/pdf');
-        header('Content-Disposition: attachment; filename="new.pdf"');
-        header('Content-Length: '.strlen($result));
-*/
 
         $opts = array(
             'http' => array(
@@ -74,9 +58,55 @@ class GatewayController extends AppController
         );
         $context = stream_context_create($opts);
 
-        $result= file_get_contents("http://{$hostApi}/api/v1/personas/{$id}/ficha",false, $context);
+        $result= file_get_contents($url,false, $context);
 
         $this->response->body($result);
         $this->response->type('pdf');
     }
+
+    public function constancia()
+    {
+        $this->autoRender = false;
+        $hostApi = getenv('HOSTAPI');
+        $id = $this->params['named']['id'];
+
+        $url = "http://{$hostApi}/api/v1/constancia/{$id}";
+
+        $opts = array(
+            'http' => array(
+                'method' => 'GET',
+                'agent'  => "CakePHP",
+                'header' => getenv('XHOSTCAKE').": do"
+            )
+        );
+        $context = stream_context_create($opts);
+
+        $result= file_get_contents($url,false, $context);
+
+        $this->response->body($result);
+        $this->response->type('pdf');
+    }
+    public function constancia_regular()
+    {
+        $this->autoRender = false;
+        $hostApi = getenv('HOSTAPI');
+        $id = $this->params['named']['id'];
+
+        $url = "http://{$hostApi}/api/v1/constancia_regular/{$id}";
+
+        $opts = array(
+            'http' => array(
+                'method' => 'GET',
+                'agent'  => "CakePHP",
+                'header' => getenv('XHOSTCAKE').": do"
+            )
+        );
+        $context = stream_context_create($opts);
+
+        $result= file_get_contents($url,false, $context);
+
+        $this->response->body($result);
+        $this->response->type('pdf');
+    }
+
 }
