@@ -109,4 +109,60 @@ class GatewayController extends AppController
         $this->response->type('pdf');
     }
 
+    public function excel_inscripcion()
+    {
+        $this->autoRender = false;
+        $hostApi = getenv('HOSTAPI');
+        $query = $this->request->data['query'];
+
+        $url = "http://{$hostApi}/api/v1/inscripcion/lista/excel?$query";
+
+        $opts = array(
+            'http' => array(
+                'method' => 'GET',
+                'agent'  => "CakePHP",
+                'header' => getenv('XHOSTCAKE').": do"
+            )
+        );
+        $context = stream_context_create($opts);
+
+        $result= file_get_contents($url,false, $context);
+
+        header('Cache-Control: public');
+        header('Content-type: application/xls');
+        header('Content-Disposition: attachment; filename="Exportacion_Inscripciones.xls"');
+        header('Content-Length: '.strlen($result));
+
+        $this->response->body($result);
+        $this->response->type('xls');
+    }
+
+    public function excel_alumnos()
+    {
+        $this->autoRender = false;
+        $hostApi = getenv('HOSTAPI');
+        $query = $this->request->data['query'];
+
+        $url = "http://{$hostApi}/api/v1/exportar/excel/ListaAlumnos?$query";
+
+        $opts = array(
+            'http' => array(
+                'method' => 'GET',
+                'agent'  => "CakePHP",
+                'header' => getenv('XHOSTCAKE').": do"
+            )
+        );
+        $context = stream_context_create($opts);
+
+        $result= file_get_contents($url,false, $context);
+
+        header('Cache-Control: public');
+        header('Content-type: application/xls');
+        header('Content-Disposition: attachment; filename="Exportacion_Alumnos.xls"');
+        header('Content-Length: '.strlen($result));
+
+        $this->response->body($result);
+        $this->response->type('xls');
+    }
+
 }

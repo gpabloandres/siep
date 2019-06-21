@@ -6,7 +6,10 @@
     ?>
     <div class="row">
         <div class="col-sm-12 table-responsive">
-            <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/exportar/excel/ListaAlumnos?'.http_build_query($apiParams); ?>" class="btn btn-success pull-right">Exportar resultados a excel</a>
+            <form method="POST" action="/gateway/excel_alumnos">
+                <input type="hidden" name="query" value="<?php echo http_build_query($apiParams); ?>">
+                <input  type="submit" class="btn btn-success pull-right" value="Exportar resultados a excel" />
+            </form>
             <h4>
                 <?php echo $centro['nombre']; ?>
                 <?php echo "(".$curso['anio']." ".$curso['division']." ".$curso['turno'].")" ?> | <?php echo "Ciclo ".$ciclo['nombre']; ?>
