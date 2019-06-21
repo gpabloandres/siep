@@ -60,8 +60,14 @@ class GatewayController extends AppController
 
         $result= file_get_contents($url,false, $context);
 
-        $this->response->body($result);
-        $this->response->type('pdf');
+        $json = json_decode($result, TRUE);
+        if($json['error'])
+        {
+            debug($json);
+        } else {
+            $this->response->body($result);
+            $this->response->type('pdf');
+        }
     }
 
     public function constancia()
