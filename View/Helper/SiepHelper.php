@@ -100,6 +100,31 @@ class SiepHelper extends AppHelper
         }
     }
 
+    public function apiHasError($apiResponse) {
+        if(isset($apiResponse['error'])) {
+            if(is_array($apiResponse['error']) && count($apiResponse['error'])>0) {
+                $msgError = "";
+                foreach ($apiResponse['error'] as $errParam) {
+                    if(is_array($errParam))
+                    {
+                        foreach ($errParam as $subErr) {
+                            $msgError .= $subErr."<br>";
+                        }
+                    } else {
+                        $msgError .= $errParam."<br>";
+                    }
+                }
+            } else {
+                $msgError = $apiResponse['error'];
+            }
+
+            return $msgError;
+        } else {
+            return false;
+        }
+    }
+
+
     public function pagination($item) {
         if(isset($item['total']))
         {
