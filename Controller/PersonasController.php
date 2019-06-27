@@ -142,38 +142,42 @@ class PersonasController extends AppController {
 			}
 			echo ('</div>');
 		}	
-        //Obtención del nombre de la ciudad del domicilio actual.
-    	$personaCiudadIdArray = $this->Persona->findById($id,'ciudad_id');
-		if($personaCiudadIdArray) {
+		//Obtención del nombre de la ciudad del domicilio actual.
+		$idPersona = $this->Persona->id;
+		$personaCiudadIdArray = $this->Persona->findById($idPersona,'ciudad_id');
+		if(isset($personaCiudadIdArray['Persona']['ciudad_id'])) {
 			$personaCiudadId = $personaCiudadIdArray['Persona']['ciudad_id'];
 			$this->loadModel('Ciudad');
 			$this->Ciudad->recursive = 0;
 			$this->Ciudad->Behaviors->load('Containable');
 			$personaCiudadNombreArray = $this->Ciudad->findById($personaCiudadId,'nombre');
 			$personaCiudadNombre = $personaCiudadNombreArray['Ciudad']['nombre'];
+			$this->set(compact('personaCiudadNombre'));
 		}
 		//Obtención del nombre del barrio del domicilio actual.
-    	$personaBarrioIdArray = $this->Persona->findById($id,'barrio_id');
-		if($personaBarrioIdArray) {
+    	$personaBarrioIdArray = $this->Persona->findById($idPersona,'barrio_id');
+		if(isset($personaBarrioIdArray['Persona']['barrio_id'])) {
 			$personaBarrioId = $personaBarrioIdArray['Persona']['barrio_id'];
 			$this->loadModel('Barrio');
 			$this->Barrio->recursive = 0;
 			$this->Barrio->Behaviors->load('Containable');
 			$personaBarrioNombreArray = $this->Barrio->findById($personaBarrioId,'nombre');
 			$personaBarrioNombre = $personaBarrioNombreArray['Barrio']['nombre'];
+			$this->set(compact('personaBarrioNombre'));
 		}	
 		//Obtención del nombre del asentamiento del domicilio actual.
-    	$personaAsentamientoIdArray = $this->Persona->findById($id,'asentamiento_id');
-		if($personaAsentamientoIdArray) {
+    	$personaAsentamientoIdArray = $this->Persona->findById($idPersona,'asentamiento_id');
+		if(isset($personaAsentamientoIdArray['Persona']['asentamiento_id'])) {
 			$personaAsentamientoId = $personaAsentamientoIdArray['Persona']['asentamiento_id'];
 			$this->loadModel('Asentamiento');
 			$this->Asentamiento->recursive = 0;
 			$this->Asentamiento->Behaviors->load('Containable');
 			$personaAsentamientoNombreArray = $this->Asentamiento->findById($personaAsentamientoId,'nombre');
 			$personaAsentamientoNombre = $personaAsentamientoNombreArray['Asentamiento']['nombre'];
+			$this->set(compact('personaAsentamientoNombre'));	
 		}
 		//Envío de datos a la vista.
-    	$this->set(compact('foto', 'personaCiudadNombre', 'personaBarrioNombre', 'personaAsentamientoNombre'));
+		$this->set(compact('foto'));
      }
 
 	public function add() {
@@ -276,8 +280,17 @@ class PersonasController extends AppController {
 			list($año,$mes,$dia) = explode('-',$this->request->data['Persona']['fecha_nac']);
 			$fechaNacimiento =  "$dia/$mes/$año";
 		}
+		// Fuerza guardar datos.
+		$idPersona = $this->Persona->id;
+		$barrioIdArray = $this->Persona->findById($idPersona, 'barrio_id');
+		$barrioId = $barrioIdArray['Persona']['barrio_id'];
+		$this->loadModel('Barrio');
+        $this->Barrio->recursive = 0;
+        $this->Barrio->Behaviors->load('Containable');    
+        $barrioNombreArray = $this->Barrio->findById($barrioId, 'nombre');
+		$barrioNombre = $barrioNombreArray['Barrio']['nombre'];
 		// Esta fecha tiene el formato dia/mes/año
-		$this->set(compact('fechaNacimiento'));
+		$this->set(compact('fechaNacimiento', 'barrioNombre'));
 	}
 
 	public function delete($id = null) {
