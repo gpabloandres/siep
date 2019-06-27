@@ -42,7 +42,11 @@ class CursosInscripcionsController extends AppController {
 		$this->loadModel('Ciclo');
 
 		// Api exportacion a Excel
-		$showExportBtn = 0;
+		if ($userRole == 'superadmin' || $userRole == 'usuario') {
+			$showExportBtn = 1;
+		} else {
+			$showExportBtn = 0;
+		}
 		$queryExportacionExcel = [];
 		// Por defecto definimos el centro_id como el centro del usuario
 		$queryExportacionExcel['por_pagina'] = 'all';
