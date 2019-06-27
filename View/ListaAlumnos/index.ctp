@@ -20,6 +20,7 @@
                     <tr>
                         <th>DNI</th>
                         <th>Alumno</th>
+                        <th>Fecha de Nac.</th>
                         <th>Telefono</th>
                         <th>Direccion</th>
                         <th>Familiares</th>
@@ -31,6 +32,10 @@
                     <tr>
                         <td><?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['documento_nro']; ?> </td>
                         <td><?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['nombre_completo']; ?> </td>
+                        <td><?php
+                            list($nacY,$nacM,$nacD) = explode('-',$cursosInscripcion['inscripcion']['alumno']['persona']['fecha_nac']);
+                            echo "$nacD/$nacM/$nacY";
+                            ?> </td>
                         <td><?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['telefono_nro']; ?> </td>
                         <td>
                             <?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['calle_nombre']; ?>
