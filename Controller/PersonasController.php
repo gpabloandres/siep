@@ -280,17 +280,8 @@ class PersonasController extends AppController {
 			list($año,$mes,$dia) = explode('-',$this->request->data['Persona']['fecha_nac']);
 			$fechaNacimiento =  "$dia/$mes/$año";
 		}
-		// Fuerza guardar datos.
-		$idPersona = $this->Persona->id;
-		$barrioIdArray = $this->Persona->findById($idPersona, 'barrio_id');
-		$barrioId = $barrioIdArray['Persona']['barrio_id'];
-		$this->loadModel('Barrio');
-        $this->Barrio->recursive = 0;
-        $this->Barrio->Behaviors->load('Containable');    
-        $barrioNombreArray = $this->Barrio->findById($barrioId, 'nombre');
-		$barrioNombre = $barrioNombreArray['Barrio']['nombre'];
 		// Esta fecha tiene el formato dia/mes/año
-		$this->set(compact('fechaNacimiento', 'barrioNombre'));
+		$this->set(compact('fechaNacimiento'));
 	}
 
 	public function delete($id = null) {
