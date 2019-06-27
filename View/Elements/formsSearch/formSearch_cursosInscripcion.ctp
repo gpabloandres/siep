@@ -11,6 +11,14 @@
     </div>
 </div>-->
 
+<!-- COMBO CICLOS -->
+<div class="form-group">
+    <div class="input select">
+        <?php
+        echo $this->Form->input('ciclo_id', array('label' => '* Debe indicar un CICLO para imprimir listado.', 'empty'=>'Seleccione un ciclo ( * Obligatorio )', 'options'=>$comboCiclo, 'default'=>$defaultForm['ciclo_id'], 'class' => 'form-control'));	?>
+    </div>
+</div>
+
 <!-- COMBO CENTROS -->
 <div class="form-group">
     <?php
@@ -18,7 +26,7 @@
     if(!$this->Siep->isAdmin()) :
         ?>
             <!-- Autocomplete -->
-            <input id="Autocomplete" class="form-control" placeholder="Buscar institucion por nombre" type="text">
+            <input id="Autocomplete" class="form-control" placeholder="Ingrese el nombre de la institución..." type="text">
             <input id="AutocompleteId" type="hidden" name="centro_id">
             <script>
                 $( function() {
@@ -41,14 +49,6 @@
         <?php
     endif;
     ?>
-</div>
-
-<!-- COMBO CICLOS -->
-<div class="form-group">
-    <div class="input select">
-        <?php
-        echo $this->Form->input('ciclo_id', array('label' => '* Debe indicar un CICLO para imprimir listado.', 'empty'=>'Seleccione un ciclo ( * Obligatorio )', 'options'=>$comboCiclo, 'default'=>$defaultForm['ciclo_id'], 'class' => 'form-control'));	?>
-    </div>
 </div>
 
 <!-- COMBO TURNOS -->
