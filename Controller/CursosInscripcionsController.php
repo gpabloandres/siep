@@ -155,21 +155,21 @@ class CursosInscripcionsController extends AppController {
 		if(empty($this->params['named']['estado_inscripcion'])) {
 			$conditions['Inscripcion.estado_inscripcion ='] = 'CONFIRMADA';
 			$queryExportacionExcel['estado_inscripcion'] = $conditions['Inscripcion.estado_inscripcion ='];
-			$showExportBtn++;
+			//$showExportBtn++;
 
 			$defaultForm['estado_inscripcion'] = $conditions['Inscripcion.estado_inscripcion ='];
 
 		} else {
 			$conditions['Inscripcion.estado_inscripcion ='] = $this->params['named']['estado_inscripcion'];
 			$queryExportacionExcel['estado_inscripcion'] = $this->params['named']['estado_inscripcion'];
-			$showExportBtn++;
+			//$showExportBtn++;
 
 			$defaultForm['estado_inscripcion'] = $this->params['named']['estado_inscripcion'];
 		}
 		if(!empty($this->params['named']['centro_id'])) {
 			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
 			$queryExportacionExcel['centro_id'] = $this->params['named']['centro_id'];
-			$showExportBtn++;
+			//$showExportBtn++;
 
 			$defaultForm['centro_id'] = $this->params['named']['centro_id'];
 		}
