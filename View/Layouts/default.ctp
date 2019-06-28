@@ -58,7 +58,7 @@
                             break;                    
                         default:
                             //Dirección Instituto Superior.
-                            echo $this->element('menues/menu-a');
+                            echo $this->element('menues/menu-admin');
                             break;
                     }
                 } elseif ($userRole == 'usuario') {
@@ -72,7 +72,7 @@
                             break;                    
                         default:
                             //Dirección Provincial de Superior.
-                            echo $this->element('menues/menu-a');
+                            echo $this->element('menues/menu-admin');
                             break;
                     }
                 }
