@@ -82,9 +82,9 @@
           	echo $this->Form->input('email', array('label' => 'Email','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un email de contacto', 'placeholder' => 'Ingrese un email...'));
           	echo $this->Form->input('calle_nombre', array('label' => 'Nombre de la calle','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el nombre de la calle del domicilio real', 'placeholder' => 'Ingrese el nombre de la calle...'));
 			echo $this->Form->input('calle_nro', array('label' => 'Número de la calle','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el número de la calle del domicilio real', 'placeholder' => 'Ingrese el número de la calle...'));
-			echo $this->Form->input('depto_casa', array('label' => 'Dto/Casa','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el número o letra del Dto/Casa', 'placeholder' => 'Ingrese referencia de Dto/Casa...'));
-			echo $this->Form->input('tira_edificio', array('label' => 'Tira/Edificio','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el número o letra de Tira/Edificio', 'placeholder' => 'Ingrese referencia de la Tira/Edificio...'));
-			echo $this->Form->input('ciudad_id', array('label' => 'Ciudad', 'empty' => 'Ingrese una ciudad...', 'options' => $ciudades,'id'=>'comboCiudad', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione la ciudad del domicilio real', 'placeholder' => 'Ingrese una ciudad...'));
+			echo $this->Form->input('depto_casa', array('label' => 'Dto / Casa','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el número o letra del Dto/Casa', 'placeholder' => 'Ingrese referencia de Dto/Casa...'));
+			echo $this->Form->input('tira_edificio', array('label' => 'Tira / Edificio','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el número o letra de Tira/Edificio', 'placeholder' => 'Ingrese referencia de la Tira/Edificio...'));
+			echo $this->Form->input('ciudad_id', array('label' => 'Ciudad / Localidad', 'empty' => 'Ingrese una ciudad...', 'options' => $ciudades,'id'=>'comboCiudad', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione la ciudad del domicilio real', 'placeholder' => 'Ingrese una ciudad...'));
 			echo $this->Form->input('barrio_id', array('label' => 'Barrio','id'=>'comboBarrio','options'=>$barrios ,'empty' => 'Ingrese un barrio...','between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));
 			echo $this->Form->input('asentamiento_id', array('label' => 'Barrio informal','id'=>'comboAsentamiento', 'empty' => 'Ingrese un barrio informal...',  'options' => $asentamientos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));
 			$pendientes = array('SI' => 'SI', 'NO' => 'NO');
@@ -94,39 +94,59 @@
 <div class="col-md-12 col-sm-6 col-xs-12">
     <?php echo $this->Form->input('observaciones', array('label'=>'Observaciones', 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control')); ?>
 </div>
+
 <script>
-	$(document).ready(function(){
-		var el = $("#comboCiudad")
-		$("#comboBarrio").empty();
-		$("#comboAsentamiento").empty();
-		console.log(el)
-		el.on("change", function(){
-			console.log($(this).val());
-			$("#comboBarrio").empty();
-			$("#comboAsentamiento").empty();
-			$.ajax({
-				type:"GET",
-				url:basePath+"personas/listarBarrios/" + $(this).val(),
-				success: function(respuesta){
-					var lista = JSON.parse(respuesta);
-					$("#comboBarrio").append('<option value="' +''+ '"> ' + 'seleccione un barrio'+ '</option>');
-					for (var key in lista) {
-						$("#comboBarrio").append('<option value="' +key+ '"> ' + lista[key] + '</option>');
-					}
+	var barrioActual = '<?php echo $this->data['Persona']['barrio_id']; ?>';
+	var asentamientoActual = '<?php echo $this->data['Persona']['asentamiento_id']; ?>';
+
+	function getBarrios(idCiudad) {
+		var elBarrio = $("#comboBarrio");
+		elBarrio.empty();
+		$.ajax({
+			type: "GET",
+			url: basePath + "personas/listarBarrios/" + idCiudad,
+			success: function (respuesta) {
+				var lista = JSON.parse(respuesta);
+				elBarrio.append('<option value="">' + 'seleccione un barrio' + '</option>');
+				for (var key in lista) {
+					elBarrio.append('<option value="' + key + '">' + lista[key] + '</option>');
 				}
-		})
+				elBarrio.val(barrioActual);
+			}
+		});
+	}
+
+	function getAsentamientos(idCiudad) {
+		var elAsentamiento = $("#comboAsentamiento");
+		elAsentamiento.empty();
 		$.ajax({
 			type:"GET",
-			url:basePath+"personas/listarAsentamientos/" + $(this).val(),
+			url:basePath+"personas/listarAsentamientos/" + idCiudad,
 			success: function(respAsentamiento){
 				var listaA = JSON.parse(respAsentamiento);
-				$("#comboAsentamiento").append('<option value="' +''+ '"> ' + 'seleccione un asentamiento'+ '</option>');
+				elAsentamiento.append('<option value=""> ' + 'seleccione un asentamiento'+ '</option>');
 				for (var keyA in listaA) {
-					$("#comboAsentamiento").append('<option value="' +keyA+ '"> ' + listaA[keyA] + '</option>');
+					elAsentamiento.append('<option value="' +keyA+ '"> ' + listaA[keyA] + '</option>');
 				}
+				elAsentamiento.val(asentamientoActual);
 			}
-		})
-	});
+		});
+	}
+
+	$(document).ready(function(){
+		var elCiudad = $("#comboCiudad");
+		$("#comboBarrio").empty();
+		$("#comboAsentamiento").empty();
+
+		getBarrios(elCiudad.val());
+		getAsentamientos(elCiudad.val());
+
+		elCiudad.on("change", function(){
+			var idCiudad = $(this).val();
+			getBarrios(idCiudad);
+			getAsentamientos(idCiudad);
+		});
+
 	});
 </script>
 
