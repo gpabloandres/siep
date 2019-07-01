@@ -178,7 +178,7 @@ class PersonasController extends AppController {
 		}
 		//Envío de datos a la vista.
 		$this->set(compact('foto'));
-     }
+	}
 
 	public function add() {
 		$this->Persona->recursive = 0;
@@ -229,15 +229,41 @@ class PersonasController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		//Consulta sí es familiar y/o alumno para definir permiso de edición.
-		$personaEsFamiliarAlumnoArray = $this->Persona->findById($id,'familiar, alumno');
+		$personaEsFamiliarAlumnoArray = $this->Persona->findById($id,'familiar, alumno, documento_nro');
 	    $personaEsFamiliar = $personaEsFamiliarAlumnoArray['Persona']['familiar'];
 		$personaEsAlumno = $personaEsFamiliarAlumnoArray['Persona']['alumno'];
-		//Sí no es familiar no limita la edición a los "admin" del centro.
+		/*Sí la persona sólo tiene perfil alumno, limita la edición a los "admin" del mismo centro. */
 		if ($personaEsFamiliar == 0 || $personaEsAlumno == 1) :
-			if(!$this->adminCanEdit($id)) {
+			//Obtención de la última inscripción con CAKE.
+			$personaDni = $personaEsFamiliarAlumnoArray['Persona']['documento_nro'];
+			$this->loadModel('Inscripcion');
+			$this->Inscripcion->recursive = 0;
+			$this->Inscripcion->Behaviors->load('Containable');
+			$ultimaInscripcionCentroIdArray = $this->Inscripcion->find('first',array(
+				'field' => 'centro_id',
+				'contain' => false,
+				'conditions' => array(
+					'Inscripcion.legajo_nro LIKE' => '%'.$personaDni.'%'),
+				'order' => array('Inscripcion.fecha_alta' => 'DESC')	
+				)
+			);
+			$ultimaInscripcionCentroId = $ultimaInscripcionCentroIdArray ['Inscripcion']['centro_id'];
+			//Obtención del rol y el centro del usuario.
+			$userRole = $this->Auth->user('role');
+			$userCentroId = $this->Auth->user('centro_id');
+			//Si el rol es ADMIN edita a la persona solo si ésta pertenece a su institucion como alumno.
+			if($userRole == 'admin') {
+				if($userCentroId != $ultimaInscripcionCentroId) {
+					$this->Session->setFlash('No tiene permisos para editar a esta persona, no pertenece a su establecimiento', 'default', array('class' => 'alert alert-warning'));
+					$this->redirect(array('action' => 'index'));
+				}	
+			}
+			/*
+			if(!$this->adminCanEdit($id, $ultimaInscripcionCentroId)) {
 				$this->Session->setFlash('No tiene permisos para editar a esta persona, no pertenece a su establecimiento', 'default', array('class' => 'alert alert-warning'));
 				$this->redirect(array('action' => 'index'));
 			}
+			*/
 		endif;
 		if (!empty($this->data)) {
 		  //abort if cancel button was pressed
@@ -348,7 +374,7 @@ class PersonasController extends AppController {
 		return $from->diff($to)->y;
     }
 	
-	private function adminCanEdit($personaId) {
+	private function adminCanEdit($personaId, $ultimaInscripcionCentroId) {
 		//Se obtiene el rol del usuario
 		$userRole = $this->Auth->user('role');
 		$userData = $this->Auth->user();
