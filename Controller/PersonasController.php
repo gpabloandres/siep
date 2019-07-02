@@ -24,7 +24,12 @@ class PersonasController extends AppController {
             case 'usuario':
             case 'admin':
                 $this->Auth->allow('index', 'add' , 'view', 'edit', 'autocompletePersonas','listarBarrios','listarAsentamientos');
-                break;
+				break;
+				
+			default:
+				$this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+				$this->redirect($this->referer());
+				break;
         }
         /* FIN */
 		/* FUNCIÓN PRIVADA "LISTS" (INICIO).

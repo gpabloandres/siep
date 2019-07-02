@@ -33,6 +33,11 @@ class UsersController extends AppController {
 			case 'admin':
 				$this->Auth->allow('logout', 'usuario');
 				break;
+
+			default:
+				$this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+				$this->redirect($this->referer());
+				break;
 		}
 		/* FIN */
 		/* FUNCIÓN PRIVADA "LISTS" (INICIO).

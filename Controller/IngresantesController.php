@@ -22,6 +22,11 @@ class IngresantesController extends AppController
             case 'usuario':
                 $this->Auth->allow('index', 'view');
             break;
+
+			default:
+                $this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+                $this->redirect($this->referer());
+                break;
         }
     }
 

@@ -29,6 +29,11 @@ class AlumnosController extends AppController {
 			case 'admin':
 				$this->Auth->allow('index', 'add' , 'view', 'edit', 'autocompleteNombrePersona', 'autocompleteNombreAlumno');
 				break;
+
+			default:
+				$this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+				$this->redirect($this->referer());
+				break;
 		}
 
 		// Importa el Helper de Siep al controlador es accesible mediante $this->Siep

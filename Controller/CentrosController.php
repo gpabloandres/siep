@@ -28,6 +28,11 @@ class CentrosController extends AppController {
 			case 'usuario':
 				$this->Auth->allow('index', 'view', 'autocompleteCentro');
 				break;
+
+			default:
+				$this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+				$this->redirect($this->referer());
+				break;
 		}
 		/* FIN */
 		// Importa el Helper de Siep al controlador es accesible mediante $this->Siep
