@@ -74,7 +74,7 @@
         <?php
         if($this->Siep->isAdmin()) :
         ?>
-            <a target="_blank" class="btn btn-success pull-right" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?'.http_build_query($queryExportarExcel); ?>">
+            <a target="_blank" class="btn btn-success pull-right" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">
                 <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel
             </a>
         <?php else: ?>
@@ -87,7 +87,7 @@
                     foreach($ubicaciones as $ubicacion):
                         ?>
                         <li>
-                            <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?ciudad='.$ubicacion['nombre'].'&'.http_build_query($queryExportarExcel); ?>">
+                            <a target="_blank" href="<?php echo '/gateway/excel_vacantes/ciudad:'.$ubicacion['nombre'].'/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">
                                 <?php echo $ubicacion['nombre']; ?>
                             </a>
                         </li>
@@ -97,7 +97,7 @@
                     <li role="separator" class="divider"></li>
                     <li>
                     <li>
-                        <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/matriculas/cuantitativa/por_seccion?'.http_build_query($queryExportarExcel); ?>">Toda la provincia</a>
+                        <a target="_blank" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">Toda la provincia</a>
                     </li>
                 </ul>
             </div>

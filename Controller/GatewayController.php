@@ -171,4 +171,52 @@ class GatewayController extends AppController
         $this->response->type('xls');
     }
 
+    public function excel_vacantes()
+    {
+        $this->autoRender = false;
+        $hostApi = getenv('HOSTAPI');
+
+        $apiParams = [];
+        $apiParams['por_pagina'] = 10000;
+        $apiParams['ciclo'] = 2019;
+        $apiParams['estado_inscripcion'] = 'CONFIRMADA';
+        $apiParams['division'] = 'con';
+        $apiParams['order'] = 'anio';
+        $apiParams['order_dir'] = 'asc';
+        $apiParams['export'] = 'excel';
+
+        // Filtros de formulario y paginacion
+        if(isset($this->params['named']['ciclo'])){
+            $apiParams['ciclo'] = $this->params['named']['ciclo'];
+        }
+        if(isset($this->params['named']['centro_id']) && $this->params['named']['centro_id'] != ''){
+            $apiParams['centro_id'] = $this->params['named']['centro_id'];
+        }
+        if(isset($this->params['named']['ciudad'])){
+            $apiParams['ciudad'] = $this->params['named']['ciudad'];
+        }
+
+        $query = http_build_query($apiParams);
+
+        $url = "http://{$hostApi}/api/v1/matriculas/cuantitativa/por_seccion?$query";
+
+        $opts = array(
+            'http' => array(
+                'method' => 'GET',
+                'agent'  => "CakePHP",
+                'header' => getenv('XHOSTCAKE').": do"
+            )
+        );
+        $context = stream_context_create($opts);
+
+        $result= file_get_contents($url,false, $context);
+
+        header('Cache-Control: public');
+        header('Content-type: application/xls');
+        header('Content-Disposition: attachment; filename="Exportacion_Vacantes.xls"');
+        header('Content-Length: '.strlen($result));
+
+        $this->response->body($result);
+        $this->response->type('xls');
+    }
 }
