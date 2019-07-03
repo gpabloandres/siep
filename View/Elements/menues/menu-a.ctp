@@ -74,6 +74,7 @@
             <!--<li><?php// echo $this->Html->link(__('Inscripciones 2018 [cuantitativo]'), '/matriculas');?></li>-->
             <li><?php echo $this->Html->link(__('Ingresantes 2019 [cuantitativo]'), '/ingresantes');?></li>
             <li><?php echo $this->Html->link(__('Inscripciones 2019 [cuantitativo]'), '/vacantes');?></li>
+            <li><?php echo $this->Html->link(__('Repitentes'), '/repitentes/view');?></li>
             <!--<li><?php echo $this->Html->link(__('Gráficos Estadísticos'), '/graficos'); ?></li>-->
             <!--<li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>-->
             <!--<li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>-->
