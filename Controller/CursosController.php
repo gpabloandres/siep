@@ -33,6 +33,11 @@ class CursosController extends AppController {
 					$this->Auth->allow('index', 'view');
 				}
 				break;
+
+			default:
+				$this->Session->setFlash('No tiene permisos para ver CURSOS.', 'default', array('class' => 'alert alert-warning'));
+				$this->redirect($this->referer());
+				break;
 		}
 	    /* FIN */
 		/* FUNCIÓN PRIVADA "LISTS" (INICIO).

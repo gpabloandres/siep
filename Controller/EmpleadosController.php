@@ -11,7 +11,10 @@ class EmpleadosController extends AppController {
         //Si el usuario tiene un rol de superadmin le damos acceso a todo.
         if($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
-	    }  
+	    } else {
+			$this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+			$this->redirect($this->referer());
+		} 
     }
 
     function index() {

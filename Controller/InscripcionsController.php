@@ -28,6 +28,11 @@ class InscripcionsController extends AppController {
             case 'admin':
                 $this->Auth->allow('index', 'add', 'view', 'edit');
                 break;
+
+			default:
+                $this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+                $this->redirect($this->referer());
+                break;
         }
         /* FIN */
         /* FUNCIÓN PRIVADA "LISTS" (INICIO).
