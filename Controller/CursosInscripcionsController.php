@@ -19,7 +19,12 @@ class CursosInscripcionsController extends AppController {
 			case 'usuario':
 			case 'admin':
 				$this->Auth->allow('index','confirmarAlumnos');
-				break;			
+				break;
+			
+			default:
+				$this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+				$this->redirect($this->referer());
+				break;				
 		}
 	    /* FIN */
     } 
