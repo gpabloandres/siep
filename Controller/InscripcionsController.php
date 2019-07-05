@@ -28,6 +28,11 @@ class InscripcionsController extends AppController {
             case 'admin':
                 $this->Auth->allow('index', 'add', 'view', 'edit');
                 break;
+
+			default:
+                $this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+                $this->redirect($this->referer());
+                break;
         }
         /* FIN */
         /* FUNCIÓN PRIVADA "LISTS" (INICIO).
@@ -231,6 +236,7 @@ class InscripcionsController extends AppController {
                 case 'Común - Secundario':
                 case 'Adultos - Primario':
                 case 'Adultos - Secundario':
+                case 'Especial - Integración':
                 //  PERMITIDOS AGREGAR
                     break;
                 default:
@@ -410,21 +416,24 @@ class InscripcionsController extends AppController {
             $this->Alumno->Behaviors->load('Containable');
             $this->Alumno->recursive = 0;
             $alumno = $this->Alumno->findByPersonaId($personaId);
-            //Obtención del código anterior de inscripción.
-            $codigoAnterior = $this->__getCodigo(($ciclo - 1), $personaDni);
-            //Verficación de existencia de inscripción con ese código anterior.
-            $existeInscripcionAnterior = $this->Inscripcion->find('first', array(
-                'contain' => false,   
-                'conditions' => array('Inscripcion.legajo_nro' => $codigoAnterior)));
-            //Si existe inscripción anterior, obtiene el centro de esa inscripción.
-            if (isset($existeInscripcionAnterior['Inscripcion']['legajo_nro'])) {
-                $inscripcionAnterior = $this->Inscripcion->findByLegajoNro($codigoAnterior, 'centro_id');
-                $inscripcionAnteriorCentro = $inscripcionAnterior['Inscripcion']['centro_id'];
-            } else {
-                $inscripcionAnteriorCentro = 0;
+            //Obtención de centros, de las inscripciones relacionadas al DNI del alumno.
+            $inscripcionesCentrosRelacionados = $this->Inscripcion->find('list',array(
+                'fields' => 'centro_id',
+                'contain' => false,
+                'conditions' => array(
+                    'Inscripcion.legajo_nro LIKE' => '%'.$personaDni.'%')
+                )
+            );            
+            //Si cuenta 1 o más inscripcion/es relacionadas, comprueba exista el centro de la 
+            //inscripción a registrar.
+            if (count($inscripcionesCentrosRelacionados) >= 1) {
+                $centroIdActual = $this->request->data['Inscripcion']['centro_id'];
+                //Sí es true, sobreescribe la variable que por default está en false.
+                $inscripcionAnteriorCentro = in_array($centroIdActual, $inscripcionesCentrosRelacionados); 
             }
-            // Si el alumno no fue creado, o si el id del centro a inscribir es diferente al centro en el que se encontraba el alumno en el ciclo anterior, crea el alumno y le asigna el id del centro actual. 
-            if (count($alumno) == 0 || $userCentroId != $inscripcionAnteriorCentro) {
+            // Si el alumno no fue creado o no registra inscripción en el centro a registrar,
+            // crea el alumno y le asigna el id del centro actual. 
+            if (count($alumno) == 0 || $inscripcionAnteriorCentro == false) {
                 // Crear alumno
                 $this->Alumno->create();
                 $insert = array(
@@ -438,6 +447,7 @@ class InscripcionsController extends AppController {
                     die;
                 }
             }
+            // Asigna alumno_id ya creado.
             $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
             /* FIN */
             /* INICIO:  Definición del estado de la documentación según el nivel del centro.*/
@@ -683,6 +693,19 @@ class InscripcionsController extends AppController {
                 $this->Curso->saveField("vacantes", $vacantesActual);
             }
             /* FIN: PASE INTERNO (ENTRE CURSOS DE UNA MISMA INSTITUCIÓN) */
+            
+            /* INICIO: COMPROBACIÓN DE DATOS DE BAJA INGRESADOS */
+            // Si el estado de inscripción es BAJA debe ingresar al menos FECHA DE BAJA.
+            if (($this->request->data['Inscripcion']['estado_inscripcion'] == 'BAJA') && ($this->request->data['Inscripcion']['fecha_baja'] == '')) {
+                $this->Session->setFlash('Ingresó BAJA en el campo "Estado de la inscripción" del PASO 1. En ese caso debe ingresar la "Fecha de Baja" en el PASO 2.', 'default', array('class' => 'alert alert-danger'));
+                $this->redirect($this->referer());
+            }
+            // Si se ingresaron datos de baja, el estado de inscripción debe ser BAJA.
+            if (($this->request->data['Inscripcion']['fecha_baja'] != '') && ($this->request->data['Inscripcion']['estado_inscripcion'] != 'BAJA')) {
+                $this->Session->setFlash('Ingresó FECHA DE BAJA en el PASO 2. En ese caso debe indicar BAJA en el campo "Estado de la inscripción" del PASO 1.', 'default', array('class' => 'alert alert-danger'));
+                $this->redirect($this->referer());
+            }
+            /* FIN: COMPROBACIÓN DE DATOS DE BAJA INGRESADOS */           
             /* INICIO: BAJA DE UN ALUMNO (DE UN CURSO DE UNA INSTITUCIÓN)
             *  Sí cambia el estado de inscripción a BAJA.
             *  Actualiza valores de matrícula y vacantes del curso origen.
@@ -726,8 +749,8 @@ class InscripcionsController extends AppController {
                 //debug( $this->Inscripcion->invalidFields() );
                 //die;
 				$this->Session->setFlash('La inscripcion no fue grabada. Intente nuevamente.', 'default', array('class' => 'alert alert-danger'));
-			}
-		}
+            }
+    	}
         //End submit de formulario
         //Genera variables para forzar tildes en la vista.
         $tildeDocumento = $this->Inscripcion->findById($id, 'fotocopia_dni');

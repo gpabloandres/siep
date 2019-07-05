@@ -24,6 +24,11 @@ class EgresoController extends AppController {
 			case 'usuario':
 				$this->Auth->allow('index','confirmarAlumnos');
 				break;
+
+			default:
+			$this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+			$this->redirect($this->referer());
+			break;
 		}
 
 		// Importa el Helper de Siep al controlador es accesible mediante $this->Siep

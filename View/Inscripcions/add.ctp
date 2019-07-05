@@ -1,4 +1,4 @@
-<div class="TituloSec"><?php echo __('Agregar Inscripcion'); ?></div>
+<div class="TituloSec"><?php echo __('Agregar Inscripción'); ?></div>
     <div id="ContenidoSec">
         <?php echo $this->Form->create('Inscripcion', array('novalidate' => true,'class'=>'form-horizontal'));?>
         <div class="unit">
