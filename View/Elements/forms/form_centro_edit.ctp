@@ -2,28 +2,28 @@
 <div class="row"></div>
 <div class="row">
 	<div class="col-md-4 col-sm-6 col-xs-12">
-  		<div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
+  		<div class="unit"><strong><h3>PASO 1: Datos Generales</h3></strong><hr />
   	  	<?php
 			if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
-				echo $this->Form->input('cue', array('id'=>'cue', 'label'=>'CUE*', ' between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un CUE')); 
+				echo $this->Form->input('cue', array('id'=>'cue', 'label'=>'CUEANEXO (*Obligatorio)', ' between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un CUE')); 
 			} else {
-				echo $this->Form->input('cue', array('id'=>'cue', 'label'=>'CUE*', 'readonly' => true, ' between' => '<br>', 'class' => 'form-control'));
+				echo $this->Form->input('cue', array('id'=>'cue', 'label'=>'CUEANEXO (*Obligatorio)', 'readonly' => true, ' between' => '<br>', 'class' => 'form-control'));
 			}
 			if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
-				echo $this->Form->input('nombre', array('id'=>'nombre', 'label'=>'Nombre*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un nombre'));	 
+				echo $this->Form->input('nombre', array('id'=>'nombre', 'label'=>'Nombre (*Obligatorio)', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un nombre'));	 
 			} else {
-				echo $this->Form->input('nombre', array('id'=>'nombre', 'label'=>'Nombre*', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
+				echo $this->Form->input('nombre', array('id'=>'nombre', 'label'=>'Nombre (*Obligatorio)', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
 			}
 			if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
-				echo $this->Form->input('sigla', array('id'=>'sigla', 'label'=>'Sigla*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese una sigla'));
+				echo $this->Form->input('sigla', array('id'=>'sigla', 'label'=>'Sigla (*Obligatorio)', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese una sigla'));
 			} else {
-				echo $this->Form->input('sigla', array('id'=>'sigla', 'label'=>'Sigla*', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
+				echo $this->Form->input('sigla', array('id'=>'sigla', 'label'=>'Sigla (*Obligatorio)', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
 			}	
 			$sectores = array('ESTATAL' => 'ESTATAL', 'PRIVADO' => 'PRIVADO');
 	        if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
-	        	echo $this->Form->input('sector', array('label' => 'Sector*', 'empty' => 'Ingrese un sector...', 'options' => $sectores, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
+	        	echo $this->Form->input('sector', array('label' => 'Sector (*Obligatorio)', 'empty' => 'Ingrese un sector...', 'options' => $sectores, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
 	        } else {
-	        	echo $this->Form->input('sector', array('label' => 'Sector*', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
+	        	echo $this->Form->input('sector', array('label' => 'Sector (*Obligatorio)', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
 	        }	
 	        $nivelServicios = array('Común - Inicial' => 'Común - Inicial', 'Común - Primario' => 'Común - Primario', 'Común - Inicial - Primario' => 'Común - Inicial - Primario', 'Común - Secundario' => 'Común - Secundario', 'Común - Superior' => 'Común - Superior', 'Común - Cursos de Capacitación de Superior' => 'Común - Cursos de Capacitación de Superior', 'Común - Trayecto Artístico Profesional' => 'Común - Trayecto Artístico Profesional', 'Común - Cursos y Talleres de Artística
 				' => 'Común - Cursos y Talleres de Artística', 'Común - Ciclos de Enseñanza Artística' => 'Común - Ciclos de Enseñanza Artística', 'Común - Servicios Alternativos/Complementarios' => 'Común - Servicios Alternativos/Complementarios', 'Común - Domiciliaria-hospitalaria. Inicial' => 'Común - Domiciliaria-hospitalaria. Inicial', 'Común - Domiciliaria-hospitalaria. Primario' => 'Común - Domiciliaria-hospitalaria. Primario', 'Común - Domiciliaria-hospitalaria. Secundario
@@ -31,26 +31,26 @@
 				' => 'Especial - Secundario', 'Especial - Taller de nivel Primario' => 'Especial - Taller de nivel Primario', 'Especial - Taller de nivel Secundario' => 'Especial - Taller de nivel Secundario', 'Especial - Talleres de educacion integral' => 'Especial - Talleres de educacion integral', 'Especial - Integración' => 'Especial - Integración', 'Especial - Domiciliaria-hospitalaria. Inicial' => 'Especial - Domiciliaria-hospitalaria. Inicial', 'Especial - Domiciliaria-hospitalaria. Primario' => 'Especial - Domiciliaria-hospitalaria. Primario', 'Especial - Domiciliaria-hospitalaria. Secundario' => 'Especial - Domiciliaria-hospitalaria. Secundario', 'Adultos - Primario' => 'Adultos - Primario', 'Adultos - Secundario' => 'Adultos - Secundario', 'Adultos - Alfabetización' => 'Adultos - Alfabetización', 'Adultos - Formación Profesional/Capacitación Laboral' => 'Adultos - Formación Profesional/Capacitación Laboral', 'Adultos - Domiciliaria-hospitalaria. Primario
 				' => 'Adultos - Domiciliaria-hospitalaria. Primario', 'Adultos - Domiciliaria-hospitalaria. Secundario' => 'Adultos - Domiciliaria-hospitalaria. Secundario');
 	        if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
-	        	echo $this->Form->input('nivel_servicio', array('label' => 'Nivel - Servicio*', 'empty' => 'Ingrese un nivel y servicio...', 'options' => $nivelServicios, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
+	        	echo $this->Form->input('nivel_servicio', array('label' => 'Nivel - Servicio (*Obligatorio)', 'empty' => 'Ingrese un nivel y servicio...', 'options' => $nivelServicios, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
 	        } else {
-	        	echo $this->Form->input('nivel_servicio', array('label' => 'Nivel - Servicio*', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
+	        	echo $this->Form->input('nivel_servicio', array('label' => 'Nivel - Servicio (*Obligatorio)', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
 	        }	
 			echo $this->Form->input('fechaFundacion', array('label' => 'Fecha de fundación*', 'id' => 'datetimepicker2', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar'));
 			?>
 		</div>
 	<?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>
-    <div class="unit"><strong><h3>Datos de Ubicación</h3></strong><hr />
+    <div class="unit"><strong><h3>PASO 2: Datos de Ubicación</h3></strong><hr />
 	  	<?php
 			$ambitos = array('URBANO' => 'URBANO', 'RURAL' => 'RURAL');
 			if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
-	        	echo $this->Form->input('ambito', array('label' => 'Ambito*', 'empty' => 'Ingrese un ámbito...', 'options' => $ambitos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
+	        	echo $this->Form->input('ambito', array('label' => 'Ambito (*Obligatorio)', 'empty' => 'Ingrese un ámbito...', 'options' => $ambitos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
 			} else {
-				echo $this->Form->input('ambito', array('label' => 'Ambito*', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
+				echo $this->Form->input('ambito', array('label' => 'Ambito (*Obligatorio)', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
 			}
 			if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
-				echo $this->Form->input('direccion', array('id'=>'direccion', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese una dirección', 'placeholder' => 'Ingrese la dirección...'));
+				echo $this->Form->input('direccion', array('id'=>'direccion', 'label' => 'Dirección (*Obligatorio)', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese una dirección', 'placeholder' => 'Ingrese la dirección...'));
 			} else {
-				echo $this->Form->input('direccion', array('id'=>'direccion', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
+				echo $this->Form->input('direccion', array('id'=>'direccion', 'label' => 'Dirección (*Obligatorio)', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
 			}
 			if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
 				echo $this->Form->input('cp', array('label' => 'Código Postal', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un código postal', 'placeholder' => 'Ingrese el código postal...'));
@@ -59,34 +59,65 @@
 			}
 			//echo $this->Form->input('codigo_localidad', array('between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un código de localidad', 'placeholder' => 'Ingrese el código de localidad...'));
 			if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
-				echo $this->Form->input('departamento_id', array('label' => '*Departamento', 'id'=> 'comboDepto', 'options' => $departamentos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom','empty' => 'Ingrese un departamento...', 'title' => 'Seleccione una opción...'));
+				echo $this->Form->input('departamento_id', array('label' => 'Departamento (*Obligatorio)', 'id'=> 'comboDepto', 'options' => $departamentos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom','empty' => 'Ingrese un departamento...', 'title' => 'Seleccione una opción...'));
 			} else {
-				echo $this->Form->input('departamento_id', array('label' => '*Departamento', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
+				echo $this->Form->input('departamento_id', array('label' => 'Departamento (*Obligatorio)', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
 			}
 			if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {	
-		  		echo $this->Form->input('ciudad_id', array('label' => '*ciudad' , 'id'=> 'comboCiudad', 'options' => $ciudades, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
+		  		echo $this->Form->input('ciudad_id', array('label' => 'Ciudad / Localidad (*Obligatorio)' , 'id'=> 'comboCiudad', 'options' => $ciudades, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
 		  	} else {
-		  		echo $this->Form->input('ciudad_id', array('label' => '*ciudad', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
+		  		echo $this->Form->input('ciudad_id', array('label' => 'Ciudad / Localidad (*Obligatorio)', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
 		  	}	
 		  	if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
-				echo $this->Form->input('barrio_id', array('label' => 'barrio', 'id'=> 'comboBarrio', 'options' => $barrios, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
+				echo $this->Form->input('barrio_id', array('label' => 'Barrio', 'id'=> 'comboBarrio', 'options' => $barrios, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
 			} else {
-				echo $this->Form->input('barrio_id', array('label' => 'barrio', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
+				echo $this->Form->input('barrio_id', array('label' => 'Barrio', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
 			}	
 		?>
 	</div>
 	<?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>
-    <div class="unit"><strong><h3>Datos de Contacto</h3></strong><hr />
+    <div class="unit"><strong><h3>PASO 3: Datos de Contacto</h3></strong><hr />
 	  	<?php
-			echo $this->Form->input('email', array('id'=>'email', 'label' => 'Email*', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca un email de contacto válido', 'Placeholder' => 'Ingrese un email de contacto.'));
+			echo $this->Form->input('email', array('id'=>'email', 'label' => 'Email (*Obligatorio)', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca un email de contacto válido', 'Placeholder' => 'Ingrese un email de contacto.'));
 			echo $this->Form->input('url', array('id'=>'url', 'label' => 'URL', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca un sitio web válido', 'Placeholder' => 'Ingrese un sitio web.'));
-			echo $this->Form->input('telefono', array('label' => 'Teléfono fijo*', 'id'=>'telefono', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un teléfono fijo', 'placeholder' => 'Ingrese un número de teléfono fijo...'));
-			?>
+			echo $this->Form->input('telefono', array('label' => 'Teléfono fijo (*Obligatorio)', 'id'=>'telefono', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un teléfono fijo', 'placeholder' => 'Ingrese un número de teléfono fijo...'));
+			echo $this->Form->input('equipoDirectivo', array('label'=>'Equipo directivo', 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control'));
+		?>
 	</div>
 </div>
-<div class="col-md-12 col-sm-6 col-xs-12">
-    <?php echo $this->Form->input('equipoDirectivo', array('label'=>'Equipo directivo', 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control')); ?>
-</div>
+<script>
+	var barrioActual = '<?php echo $this->data['Centro']['barrio_id']; ?>';
+	
+	function getBarrios(idCiudad) {
+		var elBarrio = $("#comboBarrio");
+		elBarrio.empty();
+		$.ajax({
+			type: "GET",
+			url: basePath + "personas/listarBarrios/" + idCiudad,
+			success: function (respuesta) {
+				var lista = JSON.parse(respuesta);
+				elBarrio.append('<option value="">' + 'seleccione un barrio' + '</option>');
+				for (var key in lista) {
+					elBarrio.append('<option value="' + key + '">' + lista[key] + '</option>');
+				}
+				elBarrio.val(barrioActual);
+			}
+		});
+	}
+
+	$(document).ready(function(){
+		var elCiudad = $("#comboCiudad");
+		$("#comboBarrio").empty();
+
+		getBarrios(elCiudad.val());
+
+		elCiudad.on("change", function(){
+			var idCiudad = $(this).val();
+			getBarrios(idCiudad);
+		});
+
+	});
+</script>
 <script type="text/javascript">
             $('#datetimepicker1').datetimepicker({
 			useCurrent: true, //this is important as the functions sets the default date value to the current value
@@ -113,43 +144,4 @@
 				  }
                });
 </script>
-<script>
-	 	$(document).ready(function(){
-	 		var el = $("#comboDepto")
-			var elCiudad = $("#comboCiudad")
-			$("#comboBarrio").empty(); //si se produce un cambio en #comboDepto-> se vacia el #comboBarrio
-			$("#comboCiudad").empty(); //si se produce un cambio en #comboDepto-> se vacia el #comboBarrio
-	 		el.on("change", function(){
-	 			console.log($(this).val());
-				$("#comboCiudad").empty();
-				$("#comboBarrio").empty();
-	 			$.ajax({
-	 				type:"GET",
-	 				url:basePath+"centros/listarCiudad/" + $(this).val(),
-	 				success: function(respuesta){
-						var lista = JSON.parse(respuesta);
-						$("#comboCiudad").append('<option value="' +''+ '"> ' + 'seleccione una ciudad'+ '</option>');
-						for (var key in lista) {
-							$("#comboCiudad").append('<option value="' +key+ '"> ' + lista[key] + '</option>');
-						}
-					}
-	 		})
-	 	});
-		elCiudad.on("change", function(){
-			console.log($(this).val());
-			$("#comboBarrio").empty();
-			$.ajax({
-				type:"GET",
-				url:basePath+"centros/listarBarrios/" + $(this).val(),
-				success: function(respuesta){
-					var lista = JSON.parse(respuesta);
-					$("#comboBarrio").append('<option value="' +''+ '"> ' + 'seleccione un barrio'+ '</option>');
-					for (var key in lista) {
-						$("#comboBarrio").append('<option value="' +key+ '"> ' + lista[key] + '</option>');
-					}
-				}
-		})
-	});
-	});
-	 	</script>
 </div>

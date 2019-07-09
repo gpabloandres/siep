@@ -1,6 +1,6 @@
 <div class="col-md-6">
 	<div class="unit">
-	    <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>CUE:</b> <?php echo ($centro['Centro']['cue']); ?></span><br/>
+	    <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>CUEANEXO:</b> <?php echo ($centro['Centro']['cue']); ?></span><br/>
 
 	   	<span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Nombre:</b> <?php echo ($centro['Centro']['sigla']); ?></span><br/>
 
