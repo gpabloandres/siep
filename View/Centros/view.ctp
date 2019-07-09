@@ -14,7 +14,7 @@
                       <div id="click_01" class="titulo_acordeon_datos">Datos Generales <span class="caret"></span></div>
                       <div id="acordeon_01">
                         <div class="unit">
-							<b><?php echo __('CUE: '); ?></b>
+							<b><?php echo __('CUEANEXO: '); ?></b>
 							<?php echo ($centro['Centro']['cue']); ?></p>
 							<b><?php echo __('Nombre: '); ?></b>
 							<?php echo ($centro['Centro']['nombre']); ?></p>
