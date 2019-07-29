@@ -80,6 +80,7 @@
           <!--<li><?php// echo $this->Html->link(__('Inscripciones 2018 [cuantitativo]'), '/matriculas');?></li>-->
           <li><?php echo $this->Html->link(__('Ingresantes 2019'), '/ingresantes');?></li>
           <li><?php echo $this->Html->link(__('Inscripciones 2019'), '/vacantes');?></li>
+          <li><?php echo $this->Html->link(__('Promocionados'), '/promocion/view');?></li>
           <li><?php echo $this->Html->link(__('Repitentes'), '/repitentes/view');?></li>
           <!--<li><?php echo $this->Html->link(__('Tablero 2019'), '/graficos'); ?></li>-->
         </ul>
