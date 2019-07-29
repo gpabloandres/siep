@@ -1,7 +1,7 @@
 <!-- start filtro -->
 <div class="TituloSec">Filtro</div>
 <div id="ContenidoSec">
-    <?php echo $this->Form->create('Repitentes',array('type'=>'get','url'=>'view', 'novalidate' => true));?>
+    <?php echo $this->Form->create('Promocionados',array('type'=>'get','url'=>'view', 'novalidate' => true));?>
     <div class="row">
 
         <!-- COMBO CENTROS -->
@@ -63,7 +63,7 @@
 <br>
 
 <!-- start main -->
-<div class="TituloSec">Repitentes [Nominal]</div>
+<div class="TituloSec">Promocionados [Nominal]</div>
 <div id="ContenidoSec">
     <div id="main">
     <!-- start second nav -->
@@ -82,16 +82,16 @@
                       </tr>
                       </thead>
                       <tbody>
-                      <?php foreach($repitencia['data'] as $repitente) : ?>
+                      <?php foreach($promociones['data'] as $promocionado) : ?>
                           <tr>
-                              <td><?php echo $repitente['inscripcion']['persona']['nombre_completo']; ?></td>
-                              <td><?php echo "<b>{$repitente['actual']['centro']['sigla']}</b> {$repitente['actual']['curso']['anio']} {$repitente['actual']['curso']['division']} {$repitente['actual']['curso']['turno']}"; ?></td>
+                              <td><?php echo $promocionado['inscripcion']['persona']['nombre_completo']; ?></td>
+                              <td><?php echo "<b>{$promocionado['actual']['centro']['sigla']}</b> {$promocionado['actual']['curso']['anio']} {$promocionado['actual']['curso']['division']} {$promocionado['actual']['curso']['turno']}"; ?></td>
                               <td>
-                                  <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Inscripcions', 'action'=> 'view', $repitente['inscripcion']['id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
+                                  <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Inscripcions', 'action'=> 'view', $promocionado['inscripcion']['id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
                               </td>
-                              <td><?php echo "<b>{$repitente['anterior']['centro']['sigla']}</b> {$repitente['anterior']['curso']['anio']} {$repitente['anterior']['curso']['division']} {$repitente['anterior']['curso']['turno']}"; ?></td>
+                              <td><?php echo "<b>{$promocionado['anterior']['centro']['sigla']}</b> {$promocionado['anterior']['curso']['anio']} {$promocionado['anterior']['curso']['division']} {$promocionado['anterior']['curso']['turno']}"; ?></td>
                               <td>
-                                  <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Inscripcions', 'action'=> 'view', $repitente['inscripcion']['repitencia_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
+                                  <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Inscripcions', 'action'=> 'view', $promocionado['inscripcion']['promocion_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
                               </td>
                           </tr>
                       <?php endforeach ?>
@@ -104,7 +104,7 @@
     </div>
 
         <?php
-        echo $this->Siep->pagination($repitencia['meta']);
+        echo $this->Siep->pagination($promociones['meta']);
         ?>
 </div>
 <!-- end main -->
