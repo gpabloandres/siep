@@ -76,9 +76,9 @@
                       <thead>
                       <tr>
                           <th>Nombre completo</th>
-                          <th>Desde</th>
+                          <th>2018</th>
                           <th></th>
-                          <th>Hacia</th>
+                          <th>2019</th>
                       </tr>
                       </thead>
                       <tbody>
