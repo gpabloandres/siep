@@ -59,11 +59,11 @@
                                 <?php echo $this->Html->formatTime($inscripcion['fecha_alta']);?></p>
                                 <?php  if($inscripcion['hermano_id']): ?>
                                     <b><?php echo __('Hermano de:'); ?></b></p>
-                                    <b><?php echo ($this->Html->link($hermanoNombre, array('controller' => 'alumnos', 'action' => 'view', $inscripcion['hermano_id']))); ?></b>
+                                    <b><?php echo ($this->Html->link($inscripcion['hermano']['persona']['nombre_completo'], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['hermano_id']))); ?></b>
                                 <?php endif; ?></p>
                                 <?php  if($inscripcion['tipo_inscripcion'] === 'Pase'): ?>
                                     <b><?php echo __('Centro de Origen:'); ?></b></p>
-                                    <b><?php echo $centroOrigenNombre; ?></b>
+                                    <b><?php echo $inscripcion['pase']['sigla']; ?></b>
                                 <?php endif; ?></p>
                                 <b><?php echo __('Documentación:'); ?></b>
                                   <ul>
@@ -151,11 +151,11 @@
               <div class="unit">
  			      <div class="subtitulo">Opciones</div>
                   <div class="opcion"><?php echo $this->Html->link(__('Listar Inscripciones'), array('action' => 'index')); ?></div>
-                <?php 
+                <?php
                 //Se visualiza solo sí se trata de un "superusuario", "usuario" o "admin" del mismo centro que la inscripción. 
-                  if($current_user['role'] == 'superadmin' || $current_user['role'] == 'usuario' || $userCentroId == $centroInscripcion):
+                  if($current_user['role'] == 'superadmin' || $current_user['role'] == 'usuario' || $userCentroId == $inscripcion['centro_id']):
                     // y sí la inscripción del alumno tiene estado CONFIRMADA y es del ciclo actual. 
-                    if(($estadoInscripcion === 'CONFIRMADA' || $estadoInscripcion === 'EGRESO') && ($cicloInscripcion == $cicloIdActual) || ($cicloInscripcion == $cicloIdPosterior)): ?>
+                    if(($inscripcion['estado_inscripcion'] === 'CONFIRMADA' || $inscripcion['estado_inscripcion'] === 'EGRESO') && ($inscripcion['ciclo_id'] == $cicloIdActual) || ($inscripcion['ciclo_id'] == $cicloIdPosterior)): ?>
                         <div class="opcion"><a href="<?php echo "/gateway/constancia/id:".$inscripcion['id'];?>">Constancia de Inscripción</a></div>
                         <div class="opcion"><a href="<?php echo "/gateway/constancia_regular/id:".$inscripcion['id'];?>">Constancia de Alumno Regular</a></div>
                     <?php endif; ?>
@@ -172,9 +172,9 @@
 <div id="click_01" class="titulo_acordeon">Secciones Relacionadas <span class="caret"</span></div>
 <div id="acordeon_01">
 		<div class="row">
-	        <?php if (!empty($curso)):?>
-  			<div class="col-xs-12 col-sm-6 col-md-8">
-                <div class="col-md-4">
+	        <?php if (count($cursos)):?>
+                <?php foreach($cursos as $curso) : ?>
+  			<div class="col-xs-12 col-sm-6 col-md-3">
                     <div class="unit">
                         <?php echo '<b>Año/Gpo:</b> '.$curso['anio'];?><br>
                         <?php echo '<b>División:</b> '.$curso['division'];?><br>
@@ -191,8 +191,8 @@
                           <?php endif; ?>  
                         </div>
                     </div>
-                </div>
 			</div>
+                <?php endforeach; ?>
 			<?php else: echo '<div class="col-md-12"><div class="unit text-center">No se encuentran relaciones.</div></div>'; ?>
             <?php endif; ?>
 	  </div>

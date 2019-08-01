@@ -8,8 +8,10 @@ class InscripcionsController extends AppController {
         'contain' => array('Centro', 'Ciclo', 'Alumno'),
         'limit' => 4,
         'order' => 'Inscripcion.fecha_alta DESC'));
+    // Permite agregar el Helper de Siep a las vistas
+    public $helpers = array('Siep');
 
-	function beforeFilter(){
+    function beforeFilter(){
 	    parent::beforeFilter();
 		/* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
         *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
@@ -43,6 +45,10 @@ class InscripcionsController extends AppController {
 		}
 		/* FIN */
         App::uses('HttpSocket', 'Network/Http');
+
+        // Importa el Helper de Siep al controlador es accesible mediante $this->Siep
+        App::import('Helper', 'Siep');
+        $this->Siep= new SiepHelper(new View());
     }
 
 	public function index() {
@@ -132,85 +138,45 @@ class InscripcionsController extends AppController {
             $this->Session->setFlash('Inscripcion no valida.', 'default', array('class' => 'alert alert-warning'));
             $this->redirect(array('action' => 'index'));
         }
-        //Obtenemos datos de la inscripcion desde el API
-        $apiInscripcion = $this->consumeApiFindInscripcion($id);
+        
+        $inscripcion = null;
+        $cursos = null;
+
+        $apiParams = [];
+        $apiParams['with'] = 'inscripcion.hermano.persona,inscripcion.pase';
+        // La V2 obtiene los cursos en forma de array
+        // Debido a que existe la posibilidad de que el alumno se encuentre en varias secciones
+        $apiInscripcion = $this->Siep->consumeApi("api/v2/inscripcion/id/$id",$apiParams);
+
         // Si no existe error al consumir el api
         if(!isset($apiInscripcion['error']))
         {
-            $curso = $apiInscripcion['curso'];
+            $cursos = $apiInscripcion['cursos'];
             $inscripcion = $apiInscripcion['inscripcion'];
 
-            $this->set(compact('inscripcion','curso'));
+            $this->set(compact('inscripcion','cursos'));
         } else {
             // Error al consumir el API
             $this->Session->setFlash($apiInscripcion['error'], 'default', array('class' => 'alert alert-danger'));
             $this->redirect(array('action' => 'index'));
         }
-        //Sí se trata de una inscripción por hermano, obtiene el nombre completo del hermano.  
-        $tipoInscripcionArray = $this->Inscripcion->findById($id, 'tipo_inscripcion');
-        $tipoInscripcion = $tipoInscripcionArray['Inscripcion']['tipo_inscripcion'];
-        if ($tipoInscripcion == 'Hermano de alumno regular') {
-            //Obtención del id de alumno del hermano.
-            $hermanoIdArray = $this->Inscripcion->findById($id, 'hermano_id');
-            $hermanoId = $hermanoIdArray['Inscripcion']['hermano_id'];
-            //Obtención del id de persona del hermano.
-            $this->loadModel('Alumno');
-            $this->Alumno->recursive = 0;
-            $this->Alumno->Behaviors->load('Containable');
-            $personaIdArray = $this->Alumno->findById($hermanoId, 'persona_id');
-            $personaId = $personaIdArray['Alumno']['persona_id'];
-            //Obtención del nombre completo del hermano.
-            $this->loadModel('Persona');
-            $this->Persona->recursive = 0;
-            $this->Persona->Behaviors->load('Containable');
-            $hermanoNombreArray = $this->Persona->findById($personaId, 'nombre_completo_persona');
-            $hermanoNombre = $hermanoNombreArray['Persona']['nombre_completo_persona'];
-            //Envío de dato a la vista.
-            $this->set(compact('hermanoNombre'));
-        }
-        //Sí se trata de una inscripción por pase, obtiene el nombre de la institución origen.
-        if ($tipoInscripcion == 'Pase') {
-            //Obtención del id del centro de origen.
-            $centroOrigenIdArray = $this->Inscripcion->findById($id, 'centro_origen_id');
-            $centroOrigenId = $centroOrigenIdArray['Inscripcion']['centro_origen_id'];
-            //Obtención del nombre de ese centro de origen.
-            $this->loadModel('Centro');
-            $this->Centro->recursive = 0;
-            $this->Centro->Behaviors->load('Containable');
-            $centroOrigenNombreArray = $this->Centro->findById($centroOrigenId, 'sigla');
-            $centroOrigenNombre = $centroOrigenNombreArray['Centro']['sigla'];
-            //Envío de dato a la vista.
-            $this->set(compact('centroOrigenNombre'));
-        }
-        //Obtención del estado de inscripción para habilitar acceso a impresión de constancia de alumno regular.
-        $estadoInscripcionArray = $this->Inscripcion->findById($id, 'estado_inscripcion');
-        $estadoInscripcion = $estadoInscripcionArray['Inscripcion']['estado_inscripcion'];
+
         //Obtención del nivel del centro del usuario.
         $userCentroId = $this->getUserCentroId();
         $userCentroNivel = $this->getUserCentroNivel($userCentroId);
-        //Obtención del id del centro para permitir editar sólo a los usuarios "admin" del mismo centro de la inscripción o a los "superadmin" o "usuarios".
-        $centroInscripcionArray = $this->Inscripcion->findById($id, 'centro_id');
-        $centroInscripcion = $centroInscripcionArray['Inscripcion']['centro_id'];
-        //Obtención del id del ciclo para permitir descargar CONSTANCIA DE ALUMNO REGULAR sólo sí coincide con el ciclo actual.
-        $cicloInscripcionArray = $this->Inscripcion->findById($id, 'ciclo_id');
-        $cicloInscripcion = $cicloInscripcionArray['Inscripcion']['ciclo_id'];
+
         // Obtención del ciclo actual.
         $hoyArray = getdate();
         $nombreCicloActual = $hoyArray['year'];
         $this->loadModel('Ciclo');
         $this->Ciclo->recursive = 0;
         $this->Ciclo->Behaviors->load('Containable');
-        /*
-        $cicloActual = $this->Ciclo->find('first', array(
-            'contain' => false,
-            'conditions' => array('nombre' => $hoyArray['year'])
-        ));
-        */
         $cicloIdActualArray = $this->Ciclo->findByNombre($nombreCicloActual, 'id');
         $cicloIdActual = $cicloIdActualArray['Ciclo']['id']; 
         $cicloIdPosterior = $cicloIdActual + 2;
         //Envío de dato a la vista.
-        $this->set(compact('estadoInscripcion', 'userCentroNivel', 'userCentroId', 'centroInscripcion', 'cicloInscripcion', 'cicloIdActual', 'cicloIdPosterior'));
+
+        $this->set(compact('userCentroNivel', 'userCentroId', 'cicloIdActual', 'cicloIdPosterior'));
     }
 
 	public function add() {
@@ -909,25 +875,5 @@ class InscripcionsController extends AppController {
     }
     
     /* FIN */
-    
-    private function consumeApiFindInscripcion($inscripcioId) {
-        try
-        {
-            $hostApi = getenv('HOSTAPI');
-            $httpSocket = new HttpSocket();
-            $request = array('header' => array('Content-Type' => 'application/json'));
-            $request['header'][getenv('XHOSTCAKE')] = 'do';
-
-            // Datos de la ultima inscripcion de la persona
-            $data = [];
-            $response = $httpSocket->get("http://$hostApi/api/inscripcion/find/id/$inscripcioId", $data, $request);
-            $response = $response->body;
-            $apiResponse = json_decode($response,true);
-            return $apiResponse;
-        } catch(Exception $ex)
-        {
-            return ['error'=>$ex->getMessage()];
-        }
-    }
 }
 ?>
