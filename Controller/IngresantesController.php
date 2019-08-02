@@ -113,6 +113,6 @@ class IngresantesController extends AppController
             // Manejar error de API
         }
 
-        $this->set(compact('matriculas_por_seccion','cicloIdUltimo','cicloIdActual','comboCiclo','comboCiudad','comboSector'));
+        $this->set(compact('matriculas_por_seccion','cicloIdUltimo','cicloIdActual','comboCiclo','comboCiudad','comboSector','apiParams'));
     }
 }

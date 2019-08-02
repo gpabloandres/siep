@@ -81,6 +81,8 @@
           <li><?php echo $this->Html->link(__('Inscripciones 2019 [cuantitativo]'), '/vacantes');?></li>
           <li><?php echo $this->Html->link(__('Promocionados'), '/promocion/view');?></li>
           <li><?php echo $this->Html->link(__('Repitentes'), '/repitentes/view');?></li>
+
+          <li><?php echo $this->Html->link(__('Ingresantes 2020'), '/ingresantes?ciclo=2020');?></li>
           <!--<li><?php echo $this->Html->link(__('Tablero 2019'), '/graficos'); ?></li>-->
         </ul>
       </li>
