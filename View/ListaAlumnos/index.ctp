@@ -96,7 +96,7 @@
     <?php
     else :
     ?>
-        No hay alumnos registrados en la seccion solicitada en el ciclo <b><?php echo $cicloActual; ?></b>
+        No hay alumnos registrados en la seccion solicitada en el ciclo <b><?php echo $cicloDatoAlumno; ?></b>
     <?php
     endif
     ?>
