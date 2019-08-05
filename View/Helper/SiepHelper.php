@@ -131,7 +131,7 @@ class SiepHelper extends AppHelper
             echo '<div class="unit text-center"><p>Página 
             '.$item['current_page'].' de
             '.$item['last_page'].', mostrando
-            '.$item['per_page'].' resultados de un total de
+            '.$item['per_page'].' resultados de un <strong>TOTAL DE</strong>
             '.$item['total'].', desde
             '.$item['from'].' hasta
             '.$item['to'].'</p>';
