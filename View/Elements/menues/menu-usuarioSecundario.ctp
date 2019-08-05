@@ -73,6 +73,7 @@
             <li><?php echo $this->Html->link(__('Alumnos por Sección'), '/cursos_inscripcions');?></li>
             <!--<li><?php// echo $this->Html->link(__('Inscripciones 2018 [cuantitativo]'), '/matriculas');?></li>-->
             <li><?php echo $this->Html->link(__('Ingresantes 2019'), '/ingresantes');?></li>
+            <li><?php echo $this->Html->link(__('Ingresantes 2020'), '/ingresantes?ciclo=2020');?></li>
             <li><?php echo $this->Html->link(__('Inscripciones 2019'), '/vacantes');?></li>
             <li><?php echo $this->Html->link(__('Promocionados'), '/promocion/view');?></li>
             <li><?php echo $this->Html->link(__('Repitentes'), '/repitentes/view');?></li>

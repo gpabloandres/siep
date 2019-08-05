@@ -17,7 +17,7 @@
                   select: function( event, ui ) {
                     $("#AutocompleteForm").val( ui.item.Centro.sigla );
 
-                    window.location.href = "<?php echo $this->Html->url(array('controller'=>'ingresantes'));?>/index?centro_id="+ui.item.Centro.id;
+                    window.location.href = "<?php echo $this->Html->url(array('controller'=>'ingresantes'));?>/index?ciclo=<?php echo $apiParams['ciclo']; ?>&centro_id="+ui.item.Centro.id;
                     return false;
                   }
                 }).autocomplete( "instance" )._renderItem = function( ul, item ) {
@@ -28,7 +28,7 @@
               });
             </script>
           <!-- End Autocomplete -->
-        </div>  
+        </div>
          <!--<div class="col-xs-2">
             <div class="input select">
                 <?php
@@ -62,7 +62,7 @@
          $ocultar = true;
      }
 ?>
-<div class="TituloSec">Ingresantes 2019</div>
+<div class="TituloSec">Ingresantes <?php echo $apiParams['ciclo'];?></div>
 <div id="ContenidoSec">
     <div class="table-responsive">
       <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
