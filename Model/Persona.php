@@ -196,16 +196,16 @@ class Persona extends AppModel {
             ),
             'telefono_nro' => array(
                 'numeric' => array(
-                'rule' => '/^[ 0-9]{6,}$/i',
+                'rule' => '/^[ 0-9() -]{6,}$/i',
                 'required' => true,
-                'message' => 'Indicar un número de teléfono (mínimo 6 números, sólo números, sin puntos, ni comas, ni guiones, ni espacios).'
+                'message' => 'Sólo números, guiones y espacios (mínimo 6 números).'
                 )
             ),
             'telefono_nro_alt' => array(
                 'numeric' => array(
-                'rule' => '/^[ 0-9]{6,}$/i',
+                'rule' => '/^[ 0-9() -]{6,}$/i',
                 'allowEmpty' => true,
-                'message' => 'Indicar un número de teléfono alternativo (mínimo 6 números, sólo números, sin puntos, ni comas, ni guiones, ni espacios).'
+                'message' => 'Sólo números, guiones y espacios (mínimo 6 números).'
                 )
             ),
             'email' => array(
@@ -216,15 +216,15 @@ class Persona extends AppModel {
             'calle_nombre' => array(
                 'alphaBet' => array(
                 'allowEmpty' => true,
-                'rule' => '/^[ áÁéÉíÍóÓúÚ a-zA-ZñÑ 0-9]{3,}$/i',
-                'message' => 'Sólo letras y números, sin puntos, ni comas, ni guiones, ni espacios.'
+                'rule' => '/^[ áÁéÉíÍóÓúÚ a-zA-ZñÑº 0-9]{3,}$/i',
+                'message' => 'Sólo letras, números y el caracter especial º.'
                 )
             ),
             'calle_nro' => array(
                 'numeric' => array(
+                'rule' => '/^[ 0-9]{1,}$/i',
                 'allowEmpty' => true,
-                'rule' => 'naturalNumber',
-                'message' => 'Indicar un número de calle (sólo números, sin puntos, ni comas, ni guiones, ni espacios).'
+                'message' => 'Sólo números.'
                 )
             ),
             'ciudad_id' => array(
@@ -237,15 +237,15 @@ class Persona extends AppModel {
             'depto_casa' => array(
                 'alphaBet' => array(
                     'allowEmpty' => true,
-                'rule' => '/^[áÁéÉíÍóÓúÚa-zA-ZñÑ 0-9]{1,}$/i',
-                'message' => 'Sólo letras y números, mínimo un caracter'
+                'rule' => '/^[áÁéÉíÍóÓúÚa-zA-ZñÑº 0-9]{1,}$/i',
+                'message' => 'Sólo letras, números y el caracter especial º.'
                 )
             ),
             'tira_edificio' => array(
                 'alphaBet' => array(
-                    'allowEmpty' => true,
-                'rule' => '/^[áÁéÉíÍóÓúÚa-zA-ZñÑ 0-9]{1,}$/i',
-                'message' => 'Sólo letras y números, mínimo un caracter'
+                'allowEmpty' => true,
+                'rule' => '/^[áÁéÉíÍóÓúÚa-zA-ZñÑº 0-9]{1,}$/i',
+                'message' => 'Sólo letras, números y el caracter especial º.'
                 )
             ),
         );
