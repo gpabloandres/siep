@@ -98,6 +98,9 @@ class InscripcionsController extends AppController {
         if(!empty($this->params['named']['estado_inscripcion'])) {
             $conditions['Inscripcion.estado_inscripcion ='] = $this->params['named']['estado_inscripcion'];
         }
+        if(!empty($this->params['named']['tipo_baja'])) {
+            $conditions['Inscripcion.tipo_baja ='] = $this->params['named']['tipo_baja'];
+        }
 		$inscripcions = $this->paginate('Inscripcion',$conditions);
 		/* FIN */
 		/* SETS DE DATOS PARA COMBOBOX (INICIO). */

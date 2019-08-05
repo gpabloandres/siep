@@ -63,7 +63,7 @@
 <br>
 
 <!-- start main -->
-<div class="TituloSec">Repitentes [Nominal]</div>
+<div class="TituloSec">Repitentes</div>
 <div id="ContenidoSec">
     <div id="main">
     <!-- start second nav -->

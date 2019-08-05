@@ -63,7 +63,7 @@
 <br>
 
 <!-- start main -->
-<div class="TituloSec">Promocionados [Nominal]</div>
+<div class="TituloSec">Promocionados</div>
 <div id="ContenidoSec">
     <div id="main">
     <!-- start second nav -->
