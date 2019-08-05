@@ -2,7 +2,7 @@
 	<?php
 	    if(isset($urlArgs)) $this->Paginator->options($urlArgs);
 	    echo $this->Paginator->counter(array(
-	    'format' => __('Página {:page} de {:pages}, mostrando {:current} resultados de un total de {:count}, desde {:start} hasta {:end}', true)
+	    'format' => __('Página {:page} de {:pages}, mostrando {:current} resultados de un <strong>TOTAL DE {:count}</strong>, desde {:start} hasta {:end}', true)
 		));
 	?>
 </p>
