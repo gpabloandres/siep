@@ -43,11 +43,21 @@
         </div>
 		<div class="col-md-4">
 		    <div class="unit">
+				<?php
+
+				$cicloDatoAlumno = $cicloActual['Ciclo']['nombre'];
+				if(empty($cursoDivisionString))
+				{
+					$cicloDatoAlumno = $cicloPosterior['Ciclo']['nombre'];
+				}
+
+				?>
 		 		<div class="subtitulo">Opciones</div>
 				<div class="opcion"><?php echo $this->Html->link(__('Listar Secciones'), array('action' => 'index')); ?></div>
 				<div class="opcion"><?php echo $this->Html->link(__('Datos de Alumnos'), array('action' => 'index','controller' => 'ListaAlumnos',
 						'centro_id'=>$curso['Centro']['id'],
-						'curso_id'=>$curso['Curso']['id']
+						'curso_id'=>$curso['Curso']['id'],
+						'ciclo'=>$cicloDatoAlumno
 					)); ?>
 				</div>
 					<?php

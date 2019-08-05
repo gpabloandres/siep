@@ -179,6 +179,10 @@ class CursosController extends AppController {
         $cicloIdActualArray = $this->Ciclo->findById($cicloIdActual, 'id');
         $cicloIdActualString = $cicloIdActualArray['Ciclo']['id'];
 
+		// Ciclo Actua y Posterior
+		$cicloActual = $this->Ciclo->findById($cicloIdActual);
+		$cicloPosterior = $this->Ciclo->findByNombre(($cicloActual['Ciclo']['nombre'] + 1));
+
 		/* FIN */
 		/* GENERA NOMBRES PARA DATOS RELACIONADOS. (INICIO) */
 /*		$this->loadModel('Persona');
@@ -214,7 +218,7 @@ class CursosController extends AppController {
 		$userCentroId = $this->getUserCentroId();
         $userCentroNivel = $this->getUserCentroNivel($userCentroId);
 		/* FIN */
-		$this->set(compact('inscripciones','cicloNombre', 'userCentroNivel', 'vacantes', 'cursoPlazasString', 'cursoMatriculaString', 'cicloIdActualString'));
+		$this->set(compact('inscripciones','cicloNombre', 'userCentroNivel', 'vacantes', 'cursoPlazasString', 'cursoMatriculaString', 'cicloIdActualString','cicloActual','cicloPosterior','cursoDivisionString'));
 	}
 
 	function add() {
