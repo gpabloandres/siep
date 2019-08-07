@@ -108,9 +108,12 @@
               <?php echo $seccion['vacantes']; ?>
             </td>
             <?php endif ?>
+            <!-- Sólo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
+            <?php if ($apiParams['ciclo'] == $cicloNombreUltimo) : ?>
             <td >
               <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
             </td>
+            <?php endif ?>
           </tr>
         <?php endforeach; ?>
         <?php endif; ?>
