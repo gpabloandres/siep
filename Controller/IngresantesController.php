@@ -48,6 +48,8 @@ class IngresantesController extends AppController
         $this->loadModel('Ciclo');
         $comboCiclo = $this->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
         $cicloIdUltimo = $this->getLastCicloId();
+        $cicloNombreUltimo = $comboCiclo[$cicloIdUltimo];
+
         $cicloIdActual = $this->getActualCicloId();
 
         // Datos de usuario logueado
@@ -113,6 +115,6 @@ class IngresantesController extends AppController
             // Manejar error de API
         }
 
-        $this->set(compact('matriculas_por_seccion','cicloIdUltimo','cicloIdActual','comboCiclo','comboCiudad','comboSector','apiParams'));
+        $this->set(compact('matriculas_por_seccion', 'cicloIdUltimo', 'cicloNombreUltimo', 'cicloIdActual','comboCiclo','comboCiudad','comboSector','apiParams'));
     }
 }
