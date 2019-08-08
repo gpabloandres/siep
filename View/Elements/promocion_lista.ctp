@@ -47,6 +47,7 @@
 
         <input type="hidden" name="centro_id" value="<?php echo $centro['id'];?>">
         <input type="hidden" name="curso_id" value="<?php echo $curso['id'];?>">
+        <input type="hidden" name="ciclo" value="<?php echo $cicloaPromocionar['nombre']; ?>">
 
         <div class="showConfirmar" style="display:none;margin-top:2px;border-top:1px solid #636363;">
             <h5>Hacia</h5>
