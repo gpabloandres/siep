@@ -59,11 +59,17 @@ class PromocionController extends AppController {
 
 		$this->loadModel('Ciclo');
 
-		$hoyArray = getdate();
-		$hoyAñoString = $hoyArray['year']; // Si se resta un año... se relizan las promociones en Marzo, con los alumnos del año anterior.
+		$serverDate = getdate();
+		$cicloActual = $serverDate['year'];
+
+		if(isset($this->params['named']['ciclo'])) {
+			$cicloActual = $this->params['named']['ciclo'];
+		}
+
+		// Obtenemos cilo a promocionar desde DB
 		$cicloaPromocionar = $this->Ciclo->find('first', array(
 			'recursive' => -1,
-			'conditions' => array('nombre' => $hoyAñoString)
+			'conditions' => array('nombre' => $cicloActual)
 		));
 
 		$cicloaPromocionar = array_pop($cicloaPromocionar);
@@ -315,48 +321,37 @@ class PromocionController extends AppController {
 
 	public function confirmarAlumnos()
 	{
-		try {
-			$userId = $this->Auth->user('id');
+		$userId = $this->Auth->user('id');
 
-			$httpSocket = new HttpSocket();
-			$request = array('header' => array('Content-Type' => 'application/json'));
-			$request['header'][getenv('XHOSTCAKE')] = 'do';
-			$this->request->data['user_id'] = $userId;
-			$data = $this->request->data;
-			$data = json_encode($data);
+		$apiParams = [];
+		$apiParams['user_id'] = $userId;
 
-			$hostApi = getenv('HOSTAPI');
+		// Se unen los parametros de apiParams con los del formulario
+		$apiParams = array_merge($apiParams,$this->request->data);
 
-			$response = $httpSocket->post("http://$hostApi/api/promocion", $data, $request);
+		$api = $this->Siep->consumeApi("api/promocion",$apiParams,'POST');
 
-			$response = $response->body;
-			$apiResponse = json_decode($response,true);
+		print_r($api);
 
-			if( isset($apiResponse['error'])) {
-				// El api puede devolver mas de 1 error, hay que mostrarlos a todos
-				$err = $apiResponse['error'];
-				if(is_array($err)) {
-					$msgError = "";
-					foreach ($err as $errParam) {
-						$msgError .= $errParam[0]."<br>";
-					}
-				} else {
-					$msgError = $err;
-				}
-				$this->Session->setFlash("API($hostApi) Error: ".$msgError, 'default', array('class' => 'alert alert-danger'));
-				$this->redirect($this->referer());
+		$response = [];
+		foreach ($api['response'] as $id => $item)
+		{
+			if(isset($item['error']))
+			{
+				$response[] = $item['legajo_nro']." ".$item['error'];
 			} else {
-				if( isset($apiResponse['done'])) {
-					$this->Session->setFlash("Promocion realizada con exito", 'default', array('class' => 'alert alert-success'));
-					$this->redirect($this->referer());
-				} else {
-					$this->Session->setFlash("API($hostApi) !done: No se determinó si la operación se efectuo con exito", 'default', array('class' => 'alert alert-warning'));
-					$this->redirect($this->referer());
-				}
+				$response[] = $item['legajo_nro']." Promocionado con exito";
 			}
-		} catch(\Exception $ex){
-			$this->Session->setFlash("API($hostApi) TryError: ".$ex->getMessage(), 'default', array('class' => 'alert alert-danger'));
-			$this->redirect($this->referer());
 		}
+
+		$msg = join('<br>',$response);
+
+		$this->Session->setFlash("Promocion ejecutada <br>".$msg, 'default', array('class' => 'alert alert-success'));
+		$this->redirect([
+			'action' => 'index',
+			'centro_id' => $apiParams['centro_id'],
+			'curso_id' => $apiParams['curso_id'],
+			'ciclo' => $apiParams['ciclo']
+		]);
 	}
 }

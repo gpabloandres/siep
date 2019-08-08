@@ -100,10 +100,24 @@
 					}	
 				?>
 
+				<?php
+
+					// Hardcode
+					// Los centros con las siguientes ID
+					$promocionCustomCentroId =[11,509,510];
+					$promocionCustomCicloId = $cicloActual['Ciclo']['nombre'];
+					if(in_array($curso['Centro']['id'],$promocionCustomCentroId))
+					{
+						$promocionCustomCicloId= 2018;
+					}
+
+					?>
+
 					<?php  if($showPromocion) : ?>
 						<div class="opcion"><?php echo $this->Html->link(__('Promocionar'), array('action' => 'index','controller' => 'Promocion',
 								'centro_id'=>$curso['Centro']['id'],
-								'curso_id'=>$curso['Curso']['id']
+								'curso_id'=>$curso['Curso']['id'],
+								'ciclo' => $promocionCustomCicloId
 							)); ?>
 						</div>
 					<?php endif; ?>
