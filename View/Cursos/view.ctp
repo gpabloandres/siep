@@ -60,47 +60,45 @@
 						'ciclo'=>$cicloDatoAlumno
 					)); ?>
 				</div>
-					<?php
-					// Por defecto no muestro la promocion
+				<?php
+					// Por defecto no muestro la promocion ni el egreso
 					$showPromocion = false;
 					$showEgreso = false;
 
-					/*
-						Los unicos 6to que promocionan
-						940007700 CEPET
-						940008300 EPET
-						940015900 SABATO
-						940015700 GUEVARA
-
-					 */
-
-					if($curso['Curso']['anio'] == '6to')
-					{
-						if(
-							($curso['Centro']['cue'] == '940007700') ||
-							($curso['Centro']['cue'] == '940008300') ||
-							($curso['Centro']['cue'] == '940015900') ||
-							($curso['Centro']['cue'] == '940015700') ||
-							($curso['Centro']['nivel_servicio'] == 'Especial - Primario') ||
-							($curso['Centro']['nivel_servicio'] != 'Especial - Integración')
-						) {
-							$showPromocion = true;
+					if ($curso['Curso']['division'] != '') {
+						/*  Los unicos 6to que promocionan
+							940007700 CEPET
+							940008300 EPET
+							940015900 SABATO
+							940015700 GUEVARA
+						*/
+						if($curso['Curso']['anio'] == '6to') {
+							if(
+								($curso['Centro']['cue'] == '940007700') ||
+								($curso['Centro']['cue'] == '940008300') ||
+								($curso['Centro']['cue'] == '940015900') ||
+								($curso['Centro']['cue'] == '940015700') ||
+								($curso['Centro']['nivel_servicio'] == 'Especial - Primario') ||
+								($curso['Centro']['nivel_servicio'] != 'Especial - Integración')
+							) {
+								$showPromocion = true;
+							}
+						} else {
+							// El resto de las secciones promocionan menos Sala de 5 años (Inicial), 7mo (Secundario Común) y 3ro (Primario/Secundario Adultos).
+							if(
+								($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] != 'Sala de 5 años') ||
+								($curso['Centro']['nivel_servicio'] == 'Común - Primario') ||
+								($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] != '7mo') ||
+								($curso['Centro']['nivel_servicio'] == 'Adultos - Secundario' && $curso['Curso']['anio'] != '3ro') ||
+								($curso['Centro']['nivel_servicio'] == 'Adultos - Primario' && $curso['Curso']['anio'] != '3ro') ||
+								($curso['Centro']['nivel_servicio'] == 'Especial - Primario') ||
+								($curso['Centro']['nivel_servicio'] == 'Especial - Integración')
+							) {
+								$showPromocion = true;
+							}
 						}
-					} else {
-						// El resto de las secciones promocionan menos Sala de 5 años (Inicial), 7mo (Secundario Común) y 3ro (Primario/Secundario Adultos).
-						if(
-							($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] != 'Sala de 5 años') ||
-							($curso['Centro']['nivel_servicio'] == 'Común - Primario') ||
-							($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] != '7mo') ||
-							($curso['Centro']['nivel_servicio'] == 'Adultos - Secundario' && $curso['Curso']['anio'] != '3ro') ||
-							($curso['Centro']['nivel_servicio'] == 'Adultos - Primario' && $curso['Curso']['anio'] != '3ro') ||
-							($curso['Centro']['nivel_servicio'] == 'Especial - Primario') ||
-							($curso['Centro']['nivel_servicio'] == 'Especial - Integración')
-						) {
-							$showPromocion = true;
-						}
-					}
-					?>
+					}	
+				?>
 
 				<?php
 

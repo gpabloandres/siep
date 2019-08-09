@@ -175,6 +175,16 @@ class CursosInscripcionsController extends AppController {
 
 			$defaultForm['estado_inscripcion'] = $this->params['named']['estado_inscripcion'];
 		}
+		if(!empty($this->params['named']['tipo_inscripcion'])) {
+            $conditions['Inscripcion.tipo_inscripcion ='] = $this->params['named']['tipo_inscripcion'];
+			$queryExportacionExcel['estado_inscripcion'] = $this->params['named']['estado_inscripcion'];
+			//$showExportBtn++;
+		}
+		if(!empty($this->params['named']['tipo_baja'])) {
+            $conditions['Inscripcion.tipo_baja ='] = $this->params['named']['tipo_baja'];
+			$queryExportacionExcel['estado_inscripcion'] = $this->params['named']['estado_inscripcion'];
+			//$showExportBtn++;
+		}
 		if(!empty($this->params['named']['centro_id'])) {
 			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
 			$queryExportacionExcel['centro_id'] = $this->params['named']['centro_id'];
