@@ -110,6 +110,9 @@ class CursosController extends AppController {
 		if (!empty($this->params['named']['turno'])) {
 			$conditions['Curso.turno ='] = $this->params['named']['turno'];
 		}
+		if (!empty($this->params['named']['turno'])) {
+			$conditions['Curso.status ='] = $this->params['named']['status'];
+		}
 		$cursos = $this->paginate('Curso',$conditions);
 	    /* FIN */
 	    /*
