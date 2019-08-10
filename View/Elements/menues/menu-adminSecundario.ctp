@@ -15,6 +15,9 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <ul class="nav navbar-nav">
+          <li class="active"><?php echo $this->Html->link(__('TABLERO 2019'),'/graficos'); ?></li>
+        </ul>
+        <ul class="nav navbar-nav">
           <li><?php echo $this->Html->link(__('Alta de Personas'),'/personas'); ?></li>
         </ul>
         <!--<li class="dropdown">
@@ -78,7 +81,6 @@
             <li><?php echo $this->Html->link(__('Repitentes'), '/repitentes/view');?></li>
 
             <li><?php echo $this->Html->link(__('Ingresantes 2020'), '/ingresantes?ciclo=2020');?></li>
-            <!--<li><?php echo $this->Html->link(__('Tablero 2019'), '/graficos'); ?></li>-->
             <!--<li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>-->
             <!--<li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>-->
             <!--<li><?php echo $this->Html->link(__('Calendario'),'/full_calendar');?></li>--> 

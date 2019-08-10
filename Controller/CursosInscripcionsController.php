@@ -218,6 +218,11 @@ class CursosInscripcionsController extends AppController {
 
 			$defaultForm['division'] = $this->params['named']['division'];
 		}
+		if(!empty($this->params['named']['legajo_nro'])) {
+            $conditions['Inscripcion.legajo_nro NOT LIKE'] = '%'.$this->params['named']['legajo_nro'].'%';
+			$queryExportacionExcel['legajo_nro'] = $this->params['named']['legajo_nro'];
+			//$showExportBtn++;
+		}
 
 		if(empty($this->params['named']['modo'])) {
 			$modo = '';
