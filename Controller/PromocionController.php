@@ -329,29 +329,39 @@ class PromocionController extends AppController {
 		// Se unen los parametros de apiParams con los del formulario
 		$apiParams = array_merge($apiParams,$this->request->data);
 
-		$api = $this->Siep->consumeApi("api/promocion",$apiParams,'POST');
+		$api = $this->Siep->consumeApi("api/v1/promocion",$apiParams,'POST');
 
-		print_r($api);
-
-		$response = [];
-		foreach ($api['response'] as $id => $item)
+		if(isset($api['error']))
 		{
-			if(isset($item['error']))
+			$apiMsg = $this->Siep->apiHasError($api);
+			$this->Session->setFlash("Error al promocionar<br>".$apiMsg, 'default', array('class' => 'alert alert-danger'));
+			$this->redirect([
+				'action' => 'index',
+				'centro_id' => $apiParams['centro_id'],
+				'curso_id' => $apiParams['curso_id'],
+				'ciclo' => $apiParams['ciclo']
+			]);
+		} else {
+			$response = [];
+			foreach ($api['response'] as $id => $item)
 			{
-				$response[] = $item['legajo_nro']." ".$item['error'];
-			} else {
-				$response[] = $item['legajo_nro']." Promocionado con exito";
+				if(isset($item['error']))
+				{
+					$response[] = $item['legajo_nro']." ".$item['error'];
+				} else {
+					$response[] = $item['legajo_nro']." Promocionado con exito";
+				}
 			}
+
+			$msg = join('<br>',$response);
+
+			$this->Session->setFlash("Promocion ejecutada <br>".$msg, 'default', array('class' => 'alert alert-success'));
+			$this->redirect([
+				'action' => 'index',
+				'centro_id' => $apiParams['centro_id'],
+				'curso_id' => $apiParams['curso_id'],
+				'ciclo' => $apiParams['ciclo']
+			]);
 		}
-
-		$msg = join('<br>',$response);
-
-		$this->Session->setFlash("Promocion ejecutada <br>".$msg, 'default', array('class' => 'alert alert-success'));
-		$this->redirect([
-			'action' => 'index',
-			'centro_id' => $apiParams['centro_id'],
-			'curso_id' => $apiParams['curso_id'],
-			'ciclo' => $apiParams['ciclo']
-		]);
 	}
 }
