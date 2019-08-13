@@ -20,6 +20,7 @@
                 if(
                     $cursosInscripcion['Inscripcion']['estado_inscripcion']=='CONFIRMADA' &&
                     $cursosInscripcion['Inscripcion']['promocion_id'] == null &&
+                    $cursosInscripcion['Inscripcion']['repitencia_id'] == null &&
                     $cursosInscripcion['Inscripcion']['ciclo_id'] == $cicloaPromocionar['id']
                 ) :
                 ?>

@@ -61,11 +61,12 @@
 					)); ?>
 				</div>
 				<?php
-					// Por defecto no muestro la promocion ni el egreso
+					// Por defecto se ocultan las siguientes opciones
 					$showPromocion = false;
 					$showEgreso = false;
+					$showRepetir = true;
 
-					if ($curso['Curso']['division'] != '') {
+				if ($curso['Curso']['division'] != '') {
 						/*  Los unicos 6to que promocionan
 							940007700 CEPET
 							940008300 EPET
@@ -155,6 +156,15 @@
 							)); ?>
 						</div>
 					<?php endif; ?>
+
+				<?php  if($showRepetir) : ?>
+					<div class="opcion"><?php echo $this->Html->link(__('Repitencia'), array('action' => 'index','controller' => 'Repitentes',
+							'centro_id'=>$curso['Centro']['id'],
+							'curso_id'=>$curso['Curso']['id'],
+							'ciclo' =>$cicloActual['Ciclo']['nombre']
+						)); ?>
+					</div>
+				<?php endif; ?>
 
 					<div class="opcion"><?php echo $this->Html->link(__('Reubicar'), array('action' => 'index','controller' => 'Reubicacion',
 							'centro_id'=>$curso['Centro']['id'],
