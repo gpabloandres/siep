@@ -14,8 +14,11 @@
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
+        <li class="active"><?php echo $this->Html->link(__('TABLERO 2019'),'/graficos'); ?></li>
+      </ul>
+      <ul class="nav navbar-nav">
         <li><?php echo $this->Html->link(__('Alta de Personas'),'/personas'); ?></li>
-      </ul>  
+      </ul>
       <ul class="nav navbar-nav">
         <!--<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">CUEs <span class="caret"></span></a>
@@ -79,7 +82,6 @@
             <li><?php echo $this->Html->link(__('Repitentes'), '/repitentes/view');?></li>
 
             <li><?php echo $this->Html->link(__('Ingresantes 2020'), '/ingresantes?ciclo=2020');?></li>
-            <!--<li><?php echo $this->Html->link(__('Tablero 2019'), '/graficos'); ?></li>-->
           </ul>
         </li>
         <li class="dropdown">

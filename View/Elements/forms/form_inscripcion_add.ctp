@@ -112,7 +112,19 @@
         ?>
         <br>
         <?php
-            $tipos_inscripcion = array('Común'=>'Común','Hermano de alumno regular'=>'Hermano de alumno regular','Pase'=>'Pase','Situación social'=>'Situación social', 'Integración'=>'Integración');
+            // Reestricción provisoria de inscripciones por hermanos.
+            switch ($current_user['puesto']) {
+                case 'Dirección Colegio Secundario':
+                    if ($current_user['centro_id'] == 92) {
+                        $tipos_inscripcion = array('Común'=>'Común','Hermano de alumno regular'=>'Hermano de alumno regular','Pase'=>'Pase','Situación social'=>'Situación social', 'Integración'=>'Integración');
+                    } else {
+                        $tipos_inscripcion = array('Común'=>'Común', 'Pase'=>'Pase', 'Situación social'=>'Situación social', 'Integración'=>'Integración');
+                    }
+                    break;
+                default:
+                    $tipos_inscripcion = array('Común'=>'Común','Hermano de alumno regular'=>'Hermano de alumno regular','Pase'=>'Pase','Situación social'=>'Situación social', 'Integración'=>'Integración');
+                    break;
+            }
             echo $this->Form->input('tipo_inscripcion', array('id'=>'tipoInscripcion',/* 'default'=>'Común',*/'label'=>'Tipo de inscripción (*Obligatorio)', 'empty' => 'Ingrese un tipo de inscripción...', 'options'=>$tipos_inscripcion, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
         ?>
     <hr>
