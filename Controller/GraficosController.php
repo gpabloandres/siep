@@ -53,10 +53,25 @@ class GraficosController extends AppController {
 		/* INICIO: conteos generales */
 		// Conteo de los usuarios.
 		$this->loadModel('User');
+		/*
 		$this->User->recursive = 0;
 		$this->User->Behaviors->load('Containable');
-		$usuarios = $this->User->find('count', array(
-			'conditions' => array('User.centro_id' => $userCentroId)));
+		*/
+		// Obtención y conteo de datos de ids de empleados de los usuarios activos relacionados al centro. 
+		$empleadosId = $this->User->find('list', array(
+			'fields' => 'empleado_id',
+			'conditions' => array(
+				'User.centro_id' => $userCentroId,
+				'User.status' => 1)
+			)
+		);
+		// Conteo de usuarios activos del centro.
+		$usuarios = count($empleadosId); 
+		// Obtención de los nombres completos de los empleados.
+		$empleados = $this->User->Empleado->find('list', array(
+			'fields' => 'nombre_completo_empleado',
+			'conditions' => array('id' => $empleadosId)
+		));
 		// Conteo de las titulaciones activas en Secundarios (Modalidades: Común y Adultos).
 		if ($nivelCentro == 'Común - Secundario' || $nivelCentro == 'Adultos - Secundario') {
 			$this->loadModel('Titulacion');
@@ -414,10 +429,9 @@ class GraficosController extends AppController {
 			// Manejar error de API
 		}
 		$matriculaPromociones1ro = $matriculaPromociones['total'];
-
 		
 		// Envío de valores a la vista.
-		$this->set(compact('centroNombre', 'usuarios', 'cursos', 'matricula', 'ingresantes',
+		$this->set(compact('centroNombre', 'usuarios', 'empleados', 'cursos', 'matricula', 'ingresantes',
 		 'matriculaBaja', 'matriculaPromocionesTotal', 'matriculaPromociones1ro', 'matriculaEgresos', 'matriculaPases', 
 		 'cursosTresAnios', 'cursosTresAniosMultiple', 'cursosCuatroAnios', 'cursosCuatroAniosMultiple',
 		 'cursosCincoAnios', 'cursosPrimerosAnios', 'cursosSegundosAnios', 'cursosTercerosAnios', 'cursosCuartosAnios',
