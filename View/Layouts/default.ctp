@@ -55,9 +55,11 @@
                             break;
                         case 'Dirección Colegio Secundario':
                             echo $this->element('menues/menu-adminSecundario');
-                            break;                    
+                            break;
+                        case 'Dirección Instituto Superior':
+                            echo $this->element('menues/menu-adminSuperior');
+                            break;                        
                         default:
-                            //Dirección Instituto Superior.
                             echo $this->element('menues/menu-admin');
                             break;
                     }
