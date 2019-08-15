@@ -107,6 +107,9 @@ class InscripcionsController extends AppController {
         if(!empty($this->params['named']['tipo_baja'])) {
             $conditions['Inscripcion.tipo_baja ='] = $this->params['named']['tipo_baja'];
         }
+        if(!empty($this->params['named']['cud_estado'])) {
+            $conditions['Inscripcion.cud_estado ='] = $this->params['named']['cud_estado'];
+        }
 		$inscripcions = $this->paginate('Inscripcion',$conditions);
 		/* FIN */
 		/* SETS DE DATOS PARA COMBOBOX (INICIO). */
@@ -768,8 +771,11 @@ class InscripcionsController extends AppController {
         //Fuerza guardar observaciones.
         $obsArray = $this->Inscripcion->findById($id, 'observaciones');    
         $obs = $obsArray['Inscripcion']['observaciones'];
+        //Fuerza guardar el estado del CUD (sólo para modalidad ESPECIAL).
+        $cudEstadoArray = $this->Inscripcion->findById($id, 'cud_estado');    
+        $cudEstado = $cudEstadoArray['Inscripcion']['cud_estado'];
         //Envia datos a la vista.
-        $this->set(compact('cursoInscripcion','alumno', 'personaId', 'estadoInscripcionAnteriorArray', 'tildeDocumentoString', 'tildePartidaString', 'tildeVacunasString', 'tildeSeptimoString', 'cicloInscripcionIdString', 'cicloInscripcionNombreString', 'sinVacante', 'fechaBaja', 'bajaTipo', 'bajaMotivo', 'fechaEgreso', 'fechaEmisionTitulo', 'notaFinal', 'actaNro', 'libroNro', 'folioNro', 'tituloNro', 'obs'));
+        $this->set(compact('cursoInscripcion','alumno', 'personaId', 'estadoInscripcionAnteriorArray', 'tildeDocumentoString', 'tildePartidaString', 'tildeVacunasString', 'tildeSeptimoString', 'cicloInscripcionIdString', 'cicloInscripcionNombreString', 'sinVacante', 'fechaBaja', 'bajaTipo', 'bajaMotivo', 'fechaEgreso', 'fechaEmisionTitulo', 'notaFinal', 'actaNro', 'libroNro', 'folioNro', 'tituloNro', 'obs', 'cudEstado'));
     }
 
     public function delete($id = null) {
