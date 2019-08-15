@@ -29,10 +29,15 @@
       <div class="panel panel-primary">
         <div class="panel-heading">
           <div class="text-left">
-            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-user"></i> <strong> USUARIOS</strong>', array('controller' => 'graficos', 'action' => 'index'), array('class' => 'btn btn-primary', 'escape' => false)); ?><span class="badge"> | <?php echo $usuarios?></span></span>
+            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-user"></i> <strong> USUARIOS | ACTIVOS</strong>', array('controller' => 'graficos', 'action' => 'index'), array('class' => 'btn btn-primary', 'escape' => false)); ?><span class="badge"> | <?php echo $usuarios?></span></span>
           </div>
         </div>
         <div class="panel-body">
+          <?php
+            foreach($empleados as $empleado => $nombres) {
+              echo '<i class= "glyphicon glyphicon-user"></i>'.' '.$nombres."<br>";
+            }
+          ?>
         </div>  
       </div>
     </div>
