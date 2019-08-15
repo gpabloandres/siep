@@ -51,7 +51,13 @@
                     switch ($userPuesto) {
                         case 'Dirección Jardín':
                         case 'Dirección Escuela Primaria':
-                            echo $this->element('menues/menu-adminInicialPrimario');
+                            if ($current_user['centro_id'] == 23 || $current_user['centro_id'] == 73
+                             || $current_user['centro_id'] == 81 || $current_user['centro_id'] == 180
+                             || $current_user['centro_id'] == 181 || $current_user['centro_id'] == 513) {
+                                echo $this->element('menues/menu-adminInicialPrimarioEspecial');
+                            } else {
+                                echo $this->element('menues/menu-adminInicialPrimario');
+                            }                           
                             break;
                         case 'Dirección Colegio Secundario':
                             echo $this->element('menues/menu-adminSecundario');
