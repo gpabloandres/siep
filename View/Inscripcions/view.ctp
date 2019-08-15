@@ -65,8 +65,11 @@
                                     <b><?php echo __('Centro de Origen:'); ?></b></p>
                                     <b><?php echo $inscripcion['pase']['sigla']; ?></b>
                                 <?php endif; ?></p>
-                                <b><?php echo __('Documentación:'); ?></b>
+                                <b><?php echo __('Documentación faltante:'); ?></b>
                                   <ul>
+                                  <?php if($inscripcion['cud_estado'] == 'No tiene'): ?>
+                                    <li><span class="label label-danger"><?php echo 'Falta CUD'; ?></span></li>
+                                   <?php endif; ?>
                                    <?php if(!$inscripcion['fotocopia_dni'] == 1): ?>
                                     <li><span class="label label-danger"><?php echo 'Falta Fotocopia DNI'; ?></span></li>
                                    <?php endif; ?>
