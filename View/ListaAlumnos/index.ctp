@@ -5,7 +5,7 @@
     if(isset($centro['nombre'])) :
     ?>
     <div class="row">
-        <div class="col-sm-12 table-responsive">
+        <div class="col-sm-12">
             <form method="POST" action="/gateway/excel_alumnos">
                 <input type="hidden" name="query" value="<?php echo http_build_query($apiParams); ?>">
                 <input  type="submit" class="btn btn-success pull-right" value="Exportar resultados a excel" />
@@ -86,6 +86,27 @@
                         </td>
                         <td width="60px">
                             <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Inscripcions', 'action'=> 'view', $cursosInscripcion['inscripcion']['id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
+                        </td>
+                        <td width="60px">
+
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    Imprimir
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right" aria-labelledby="dropdownMenu1">
+                                    <li>
+                                        <a target="_blank" href="<?php echo "/gateway/constancia_regular/id:".$cursosInscripcion['inscripcion']['id'];?>">
+                                            Constancia de alumno regular
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="<?php echo "/gateway/constancia/id:".$cursosInscripcion['inscripcion']['id'];?>">
+                                            Constancia de inscripcion
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach ?>
