@@ -192,7 +192,7 @@ class InscripcionsController extends AppController {
             $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
             $this->redirect( array( 'action' => 'index' ));
 		}
-	    /* FIN */
+        /* FIN */
         /* INICIO: PERMISO PARA AGREGAR SEGÚN EL NIVEL DEL CENTRO DEL USUARIO */
         //Se obtiene el rol del usuario
         $userRole = $this->Auth->user('role');
@@ -383,29 +383,19 @@ class InscripcionsController extends AppController {
             }
             /* FIN */
             /* INICIO: VERIFICACIONES PARA CREACIÓN DEL ALUMNO (cualquiera sea el tipo de inscripción) */
-            //Verifica si la persona se encuentra inscripta como alumno              
-            $this->loadModel('Alumno');
-            $this->Alumno->Behaviors->load('Containable');
-            $this->Alumno->recursive = 0;
-            $alumno = $this->Alumno->findByPersonaId($personaId);
-            //Obtención de centros, de las inscripciones relacionadas al DNI del alumno.
-            $inscripcionesCentrosRelacionados = $this->Inscripcion->find('list',array(
-                'fields' => 'centro_id',
+            //Verifica si la persona se registró como alumno en el centro a inscribir.              
+            // Obtención de ID del alumno del centro a inscribir.
+            $inscripcionAlumnoId = $this->Inscripcion->find('first',array(
+                'fields' => 'alumno_id',
                 'contain' => false,
                 'conditions' => array(
-                    'Inscripcion.legajo_nro LIKE' => '%'.$personaDni.'%')
+                    'Inscripcion.legajo_nro LIKE' => '%'.$personaDni.'%',
+                    'Inscripcion.centro_id' => $userCentroId)
                 )
             );            
-            //Si cuenta 1 o más inscripcion/es relacionadas, comprueba exista el centro de la 
-            //inscripción a registrar.
-            if (count($inscripcionesCentrosRelacionados) >= 1) {
-                $centroIdActual = $this->request->data['Inscripcion']['centro_id'];
-                //Sí es true, sobreescribe la variable que por default está en false.
-                $inscripcionAnteriorCentro = in_array($centroIdActual, $inscripcionesCentrosRelacionados); 
-            }
-            // Si el alumno no fue creado o no registra inscripción en el centro a registrar,
-            // crea el alumno y le asigna el id del centro actual. 
-            if (count($alumno) == 0 || $inscripcionAnteriorCentro == false) {
+            // Si el alumno no fue creado o no registra inscripción en el centro a inscribir,
+            // crea el alumno y le asigna el id del centro a inscribir. 
+            if (empty($inscripcionAlumnoId)) {
                 // Crear alumno
                 $this->Alumno->create();
                 $insert = array(
@@ -418,9 +408,11 @@ class InscripcionsController extends AppController {
                     print_r("Error al registrar a la persona como alumno");
                     die;
                 }
+                $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
+            } else {
+                // Asigna alumno_id ya creado.
+                $this->request->data['Inscripcion']['alumno_id'] = $inscripcionAlumnoId['Inscripcion']['alumno_id'];
             }
-            // Asigna alumno_id ya creado.
-            $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
             /* FIN */
             /* INICIO:  Definición del estado de la documentación según el nivel del centro.*/
             $userCentroNivel = $this->getUserCentroNivel($userCentroId);
