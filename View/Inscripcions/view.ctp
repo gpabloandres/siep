@@ -158,10 +158,10 @@
                 //Se visualiza solo sí se trata de un "superusuario", "usuario" o "admin" del mismo centro que la inscripción. 
                   if($current_user['role'] == 'superadmin' || $current_user['role'] == 'usuario' || $userCentroId == $inscripcion['centro_id']):
                     // y sí la inscripción del alumno tiene estado CONFIRMADA y es del ciclo actual. 
-                    if(($inscripcion['estado_inscripcion'] === 'CONFIRMADA' || $inscripcion['estado_inscripcion'] === 'EGRESO') ): ?>
+                    //if(($inscripcion['estado_inscripcion'] === 'CONFIRMADA' || $inscripcion['estado_inscripcion'] === 'EGRESO') ): ?>
                         <div class="opcion"><a href="<?php echo "/gateway/constancia/id:".$inscripcion['id'];?>">Constancia de Inscripción</a></div>
                         <div class="opcion"><a href="<?php echo "/gateway/constancia_regular/id:".$inscripcion['id'];?>">Constancia de Alumno Regular</a></div>
-                    <?php endif; ?>
+                    <?php //endif; ?>
                     <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $inscripcion['id'])); ?> </div>
                 <?php endif; ?>  
                 <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?> 
