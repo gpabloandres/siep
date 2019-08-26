@@ -9,14 +9,16 @@
 </div><hr />
 <div class="row">
 	<div class="col-md-4 col-sm-6 col-xs-12">
-  	  <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
-				<!-- Autocomplete para nombre de Personas -->
+  	  	<div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
+			<div>
+				<input value="<?php echo $personaNombre; ?>" class="form-control" readonly=true data-placemente="bottom">			
+				<?php echo $this->Form->input('persona_id', array('type' => 'hidden'));?>		
+			</div>
+			<!-- Autocomplete para nombre de Personas -->
+			<?php /*
 				<div>
-						<label for="AlumnoNombreCompleto">Nombres y Apellidos*: </label>
-						<br>
 						<input id="AlumnoNombreCompleto" value="<?php echo $this->data["Persona"]["nombre_completo_persona"]; ?>" class="form-control" readonly=true data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo">
 						<input id="AlumnoPersonaId" value="<?php echo $this->data["Persona"]["id"]; ?>" name="data[Alumno][persona_id]" type="text" style="display:none;">
-
 						<div class="alert alert-danger" role="alert" id="AutocompleteError" style="display:none;">
 							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" ></span>
 							<span class="sr-only">Error:</span>
@@ -24,7 +26,6 @@
 							<?php echo $this->Html->link("Crear persona",array('controller'=>'personas','action'=>'add'));?>
 						</div>
 				</div>
-
 				<script>
 						$( function() {
 								$( "#AlumnoNombreCompleto" ).autocomplete({
@@ -62,9 +63,10 @@
 						});
 				</script>
 				<!-- End Autocomplete -->
-      </div>
-    </div>
-    <div class="col-md-4 col-sm-6 col-xs-12">
+				*/?>		
+		</div>
+	</div>
+	<div class="col-md-4 col-sm-6 col-xs-12">
       <div class="unit"><strong><h3>Datos Específicos</h3></strong><hr />
       <?php
             echo $this->Form->input('legajo_fisico_nro', array('label'=>'Número de Legajo Físico*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Indique el número sin puntos, ni guiones, ni espacios', 'placeholder' => 'Ingrese un nº de legajo físico...'));

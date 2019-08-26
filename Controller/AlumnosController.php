@@ -152,8 +152,16 @@ class AlumnosController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Alumno->read(null, $id);
 		}
-		$personas = $this->Alumno->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
-		$this->set(compact('alumnos', 'personas'));
+		// Obtención del nombre de la persona.
+		$this->loadModel('Persona');
+		$this->Persona->recursive = 0;
+		$this->Persona->Behaviors->load('Containable');
+		$personaIdArray = $this->Alumno->findById($id, 'persona_id');
+		$personaId = $personaIdArray['Alumno']['persona_id'];
+		$personaNombreArray = $this->Persona->findById($personaId, 'nombre_completo_persona');
+		$personaNombre = $personaNombreArray['Persona']['nombre_completo_persona'];
+		
+		$this->set(compact('alumnos', 'personaNombre'));
 	}
 
 	public function delete($id = null) {
