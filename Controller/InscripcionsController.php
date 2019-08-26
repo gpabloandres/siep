@@ -201,11 +201,16 @@ class InscripcionsController extends AppController {
         $userData = $this->Auth->user();
         if($userRole == 'admin') {
             switch($userData['Centro']['nivel_servicio']) {
+                case 'Común - Secundario':
+                    if ($userData['Centro']['sector'] == 'ESTATAL') {
+                        $this->Session->setFlash('No tiene permisos para agregar inscripciones.', 'default', array('class' => 'alert alert-warning'));
+                        $this->redirect( array( 'action' => 'index' ));
+                    }
+                    break;
                 case 'Maternal - Inicial':
                 case 'Especial - Primario':
                 case 'Común - Inicial':
                 case 'Común - Primario':
-                case 'Común - Secundario':
                 case 'Adultos - Primario':
                 case 'Adultos - Secundario':
                 case 'Especial - Integración':
