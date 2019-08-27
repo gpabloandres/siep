@@ -75,6 +75,7 @@
                 <th>Plaza</th>
             <?php endif ?>
           <th>Matricula</th>
+          <th>Por hermano</th>
             <?php if(!$ocultar) : ?>
                 <th>VACANTES</th>
             <?php endif ?>
@@ -102,6 +103,9 @@
             <?php endif ?>
             <td>
               <?php echo $seccion['matriculas']; ?>
+            </td>
+            <td>
+              <?php echo $seccion['por_hermano']; ?>
             </td>
             <?php if(!$ocultar) : ?>
             <td>
