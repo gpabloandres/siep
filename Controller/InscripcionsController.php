@@ -72,13 +72,13 @@ class InscripcionsController extends AppController {
             'conditions'=>array(
                 'nivel_servicio'=>$nivelCentro)));
 		if ($this->Auth->user('role') === 'admin') {
-        $this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $userCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA', 'NO CONFIRMADA', 'BAJA', 'EGRESO'));    
+        $this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $userCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA', 'NO CONFIRMADA', 'BAJA', 'EGRESO', 'ANULADA'));    
         } else if (($userRole === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));
-			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA', 'NO CONFIRMADA', 'BAJA', 'EGRESO'));
+			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA', 'NO CONFIRMADA', 'BAJA', 'EGRESO', 'ANULADA'));
 		} else if ($userRole === 'usuario') {
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'contain'=>false, 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA', 'NO CONFIRMADA', 'BAJA', 'EGRESO'));
+			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA', 'NO CONFIRMADA', 'BAJA', 'EGRESO', 'ANULADA'));
 		}
 		/* FIN */
     	/* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
@@ -201,16 +201,19 @@ class InscripcionsController extends AppController {
         $userData = $this->Auth->user();
         if($userRole == 'admin') {
             switch($userData['Centro']['nivel_servicio']) {
+                /*
                 case 'Común - Secundario':
                     if ($userData['Centro']['sector'] == 'ESTATAL') {
                         $this->Session->setFlash('No tiene permisos para agregar inscripciones.', 'default', array('class' => 'alert alert-warning'));
                         $this->redirect( array( 'action' => 'index' ));
                     }
                     break;
+                */
                 case 'Maternal - Inicial':
                 case 'Especial - Primario':
                 case 'Común - Inicial':
                 case 'Común - Primario':
+                case 'Común - Secundario':
                 case 'Adultos - Primario':
                 case 'Adultos - Secundario':
                 case 'Especial - Integración':
@@ -246,6 +249,14 @@ class InscripcionsController extends AppController {
             /* FIN */
             // Luego de seleccionar el ciclo, se deja en los datos que se intentarán guardar.
             $cicloId = $this->request->data['Inscripcion']['ciclo_id'];
+            /* No continua la inscripcion si: 
+            ** - Es un usuario del nivel "Común-Secundario",
+            ** - Del sector "ESTATAL",
+            ** - El ciclo seleccionado es 2020.*/
+            if (($userData['Centro']['nivel_servicio'] == 'Común - Secundario' && $userData['Centro']['sector'] == 'ESTATAL') && ($cicloId == 7)) {
+                $this->Session->setFlash('Momentáneamente no se permiten las inscripciones 2020.', 'default', array('class' => 'alert alert-danger'));
+                $this->redirect($this->referer());
+            }
             $this->Inscripcion->Ciclo->recursive = 0;
             $ciclos = $this->Inscripcion->Ciclo->findById($cicloId, 'nombre');
             $ciclo = substr($ciclos['Ciclo']['nombre'], -2);
@@ -775,17 +786,35 @@ class InscripcionsController extends AppController {
         $this->set(compact('cursoInscripcion','alumno', 'personaId', 'estadoInscripcionAnteriorArray', 'tildeDocumentoString', 'tildePartidaString', 'tildeVacunasString', 'tildeSeptimoString', 'cicloInscripcionIdString', 'cicloInscripcionNombreString', 'sinVacante', 'fechaBaja', 'bajaTipo', 'bajaMotivo', 'fechaEgreso', 'fechaEmisionTitulo', 'notaFinal', 'actaNro', 'libroNro', 'folioNro', 'tituloNro', 'obs', 'cudEstado'));
     }
 
-    public function delete($id = null) {
+    // Implementa la ANULACIÓN y no el BORRADO de las INSCRIPCIONES.
+    function delete($id = null) {
 		if (!$id) {
-			$this->Session->setFlash('Id no valida para inscripcion.', 'default', array('class' => 'alert alert-warning'));
+			$this->Session->setFlash('Id no valido para la inscripción', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action'=>'index'));
-		}
-		if ($this->Inscripcion->delete($id)) {
-			$this->Session->setFlash('La Inscripcion ha sido borrada.', 'default', array('class' => 'alert alert-success'));
-			$this->redirect(array('action'=>'index'));
-		}
-		$this->Session->setFlash('La Inscripcion no fue borrada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
-		$this->redirect(array('action' => 'index'));
+		} else {
+
+        }
+        $this->Inscripcion->id = $id;
+        if (!$this->Inscripcion->exists()) {
+            $this->Session->setFlash('ID inválido');
+            //$this->redirect(array('action'=>'index'));
+            $this->redirect($this->referer());
+        }
+        if ($this->Inscripcion->saveField('estado_inscripcion', 'ANULADA')) {
+            //Obtención del legajo de la inscripción a anular.
+            $inscripcionLegajoArray = $this->Inscripcion->findById($id, 'legajo_nro');
+            $inscripcionLegajo = $inscripcionLegajoArray['Inscripcion']['legajo_nro'];
+            //Agregación del prefijo "-ANULADA" al legajo.
+            $codigoActual = $this->__getCodigoAnulada($inscripcionLegajo);
+            //Actualización del legajo.
+            $this->Inscripcion->saveField('legajo_nro', $codigoActual);
+            $this->Session->setFlash('La inscripción ha sido ANULADA', 'default', array('class' => 'alert alert-success'));
+            //$this->redirect(array('action' => 'index'));
+            $this->redirect($this->referer());
+        }
+		$this->Session->setFlash('La inscripción no fue ANULADA', 'default', array('class' => 'alert alert-danger'));
+        //$this->redirect(array('action' => 'index'));
+        $this->redirect($this->referer());
 	}
 
 	//Métodos privados
@@ -877,6 +906,11 @@ class InscripcionsController extends AppController {
 
     private function __getCodigoEspecial($ciclo, $personaDocString){
         $legajo = $personaDocString."-".$ciclo."-"."ESPECIAL";
+        return $legajo;
+    }
+
+    private function __getCodigoAnulada($inscripcionLegajo){
+        $legajo = $inscripcionLegajo."-"."ANULADA";
         return $legajo;
     }
     
