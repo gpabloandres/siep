@@ -201,16 +201,19 @@ class InscripcionsController extends AppController {
         $userData = $this->Auth->user();
         if($userRole == 'admin') {
             switch($userData['Centro']['nivel_servicio']) {
+                /*
                 case 'Común - Secundario':
                     if ($userData['Centro']['sector'] == 'ESTATAL') {
                         $this->Session->setFlash('No tiene permisos para agregar inscripciones.', 'default', array('class' => 'alert alert-warning'));
                         $this->redirect( array( 'action' => 'index' ));
                     }
                     break;
+                */
                 case 'Maternal - Inicial':
                 case 'Especial - Primario':
                 case 'Común - Inicial':
                 case 'Común - Primario':
+                case 'Común - Secundario':
                 case 'Adultos - Primario':
                 case 'Adultos - Secundario':
                 case 'Especial - Integración':
@@ -246,6 +249,14 @@ class InscripcionsController extends AppController {
             /* FIN */
             // Luego de seleccionar el ciclo, se deja en los datos que se intentarán guardar.
             $cicloId = $this->request->data['Inscripcion']['ciclo_id'];
+            /* No continua la inscripcion si: 
+            ** - Es un usuario del nivel "Común-Secundario",
+            ** - Del sector "ESTATAL",
+            ** - El ciclo seleccionado es 2020.*/
+            if (($userData['Centro']['nivel_servicio'] == 'Común - Secundario' && $userData['Centro']['sector'] == 'ESTATAL') && ($cicloId == 7)) {
+                $this->Session->setFlash('Momentáneamente no se permiten las inscripciones 2020.', 'default', array('class' => 'alert alert-danger'));
+                $this->redirect($this->referer());
+            }
             $this->Inscripcion->Ciclo->recursive = 0;
             $ciclos = $this->Inscripcion->Ciclo->findById($cicloId, 'nombre');
             $ciclo = substr($ciclos['Ciclo']['nombre'], -2);
