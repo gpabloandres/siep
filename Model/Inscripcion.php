@@ -268,7 +268,7 @@ class Inscripcion extends AppModel {
 		),
 		'estado_inscripcion' => array(
 			'valid' => array(
-			'rule' => array('inList', array('CONFIRMADA','NO CONFIRMADA','BAJA','EGRESO')),
+			'rule' => array('inList', array('CONFIRMADA','NO CONFIRMADA','BAJA','EGRESO','ANULADA')),
 			'message' => 'Indicar una opción',
 			'allowEmpty' => false
 				)

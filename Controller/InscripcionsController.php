@@ -775,17 +775,35 @@ class InscripcionsController extends AppController {
         $this->set(compact('cursoInscripcion','alumno', 'personaId', 'estadoInscripcionAnteriorArray', 'tildeDocumentoString', 'tildePartidaString', 'tildeVacunasString', 'tildeSeptimoString', 'cicloInscripcionIdString', 'cicloInscripcionNombreString', 'sinVacante', 'fechaBaja', 'bajaTipo', 'bajaMotivo', 'fechaEgreso', 'fechaEmisionTitulo', 'notaFinal', 'actaNro', 'libroNro', 'folioNro', 'tituloNro', 'obs', 'cudEstado'));
     }
 
-    public function delete($id = null) {
+    // Implementa la ANULACIÓN y no el BORRADO de las INSCRIPCIONES.
+    function delete($id = null) {
 		if (!$id) {
-			$this->Session->setFlash('Id no valida para inscripcion.', 'default', array('class' => 'alert alert-warning'));
+			$this->Session->setFlash('Id no valido para la inscripción', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action'=>'index'));
-		}
-		if ($this->Inscripcion->delete($id)) {
-			$this->Session->setFlash('La Inscripcion ha sido borrada.', 'default', array('class' => 'alert alert-success'));
-			$this->redirect(array('action'=>'index'));
-		}
-		$this->Session->setFlash('La Inscripcion no fue borrada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
-		$this->redirect(array('action' => 'index'));
+		} else {
+
+        }
+        $this->Inscripcion->id = $id;
+        if (!$this->Inscripcion->exists()) {
+            $this->Session->setFlash('ID inválido');
+            //$this->redirect(array('action'=>'index'));
+            $this->redirect($this->referer());
+        }
+        if ($this->Inscripcion->saveField('estado_inscripcion', 'ANULADA')) {
+            //Obtención del legajo de la inscripción a anular.
+            $inscripcionLegajoArray = $this->Inscripcion->findById($id, 'legajo_nro');
+            $inscripcionLegajo = $inscripcionLegajoArray['Inscripcion']['legajo_nro'];
+            //Agregación del prefijo "-ANULADA" al legajo.
+            $codigoActual = $this->__getCodigoAnulada($inscripcionLegajo);
+            //Actualización del legajo.
+            $this->Inscripcion->saveField('legajo_nro', $codigoActual);
+            $this->Session->setFlash('La inscripción ha sido ANULADA', 'default', array('class' => 'alert alert-success'));
+            //$this->redirect(array('action' => 'index'));
+            $this->redirect($this->referer());
+        }
+		$this->Session->setFlash('La inscripción no fue ANULADA', 'default', array('class' => 'alert alert-danger'));
+        //$this->redirect(array('action' => 'index'));
+        $this->redirect($this->referer());
 	}
 
 	//Métodos privados
@@ -877,6 +895,11 @@ class InscripcionsController extends AppController {
 
     private function __getCodigoEspecial($ciclo, $personaDocString){
         $legajo = $personaDocString."-".$ciclo."-"."ESPECIAL";
+        return $legajo;
+    }
+
+    private function __getCodigoAnulada($inscripcionLegajo){
+        $legajo = $inscripcionLegajo."-"."ANULADA";
         return $legajo;
     }
     

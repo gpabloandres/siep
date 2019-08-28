@@ -19,9 +19,17 @@
 	    <hr />
         <div class="text-right">
             <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['Inscripcion']['id']), array('class' => 'btn btn-success','escape' => false)); ?></span>
+          <!-- No se editan inscripciones con estado ANULADA. -->  
+          <?php if ($inscripcion['Inscripcion']['estado_inscripcion'] != 'ANULADA') : ?>
             <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-edit"></i>', array('controller' => 'inscripcions', 'action' => 'edit', $inscripcion['Inscripcion']['id']), array('class' => 'btn btn-warning','escape' => false)); ?></span>
-          <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>  
-            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-trash"></i>', array('controller' => 'inscripcions', 'action' => 'delete', $inscripcion['Inscripcion']['id']), array('confirm' => 'Está seguro de borrar la inscripción nro.'.$inscripcion['Inscripcion']['id'], 'class' => 'btn btn-danger','escape' => false)); ?></span>
+          <?php endif; ?>
+          <!-- Sólo para inscripciones del 2020 y para ciertos usuarios. -->
+          <?php if(($inscripcion['Inscripcion']['ciclo_id'] == 7) && ($current_user['role'] == 'usuario' || $current_user['id'] == 1 || $current_user['id'] == 438 || $current_user['id'] == 326 || $current_user['id'] == 325 || $current_user['id'] == 338 || $current_user['id'] == 582)): ?>  
+            <?php if ($inscripcion['Inscripcion']['estado_inscripcion'] != 'ANULADA') { ?>
+              <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-trash"></i>', array('controller' => 'inscripcions', 'action' => 'delete', $inscripcion['Inscripcion']['id']), array('confirm' => 'Está seguro de ANULAR la inscripción con legajo nro: '.$inscripcion['Inscripcion']['legajo_nro'], 'class' => 'btn btn-danger','escape' => false)); ?></span>
+                <?php } else { ?>
+                <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-ban-circle"></i>', array(), array('class' => 'btn btn-danger', 'escape' => false)); ?></span>
+            <?php } ?>
           <?php endif; ?>   
 		</div>
 	</div>
