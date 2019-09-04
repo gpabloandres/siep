@@ -26,7 +26,7 @@
           <!-- Sólo para inscripciones del 2020 y para ciertos usuarios. -->
           <?php if(($inscripcion['Inscripcion']['ciclo_id'] == 7) && ($current_user['role'] == 'usuario' || $current_user['id'] == 1 || $current_user['id'] == 438 || $current_user['id'] == 326 || $current_user['id'] == 325 || $current_user['id'] == 338 || $current_user['id'] == 582)): ?>  
             <?php if ($inscripcion['Inscripcion']['estado_inscripcion'] != 'ANULADA') { ?>
-              <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-trash"></i>', array('controller' => 'inscripcions', 'action' => 'delete', $inscripcion['Inscripcion']['id']), array('confirm' => 'Está seguro de ANULAR la inscripción con legajo nro: '.$inscripcion['Inscripcion']['legajo_nro'], 'class' => 'btn btn-danger','escape' => false)); ?></span>
+              <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-trash"></i>', array('controller' => 'inscripcions', 'action' => 'delete', $inscripcion['Inscripcion']['id']), array('confirm' => 'Está seguro de ANULAR la inscripción con legajo Nº: '.$inscripcion['Inscripcion']['legajo_nro'], 'class' => 'btn btn-danger','escape' => false)); ?></span>
                 <?php } else { ?>
                 <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-ban-circle"></i>', array(), array('class' => 'btn btn-danger', 'escape' => false)); ?></span>
             <?php } ?>
