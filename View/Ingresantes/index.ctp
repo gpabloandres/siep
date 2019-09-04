@@ -78,6 +78,10 @@
           <th>Por hermano</th>
             <?php if(!$ocultar) : ?>
                 <th>VACANTES</th>
+                <!-- Sólo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
+                <?php if ($apiParams['ciclo'] == $cicloNombreUltimo) : ?>
+                    <td>CONFIRMADAS</td>
+                <?php endif ?>
             <?php endif ?>
         </tr>
       </thead>
@@ -114,6 +118,9 @@
             <?php endif ?>
             <!-- Sólo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
             <?php if ($apiParams['ciclo'] == $cicloNombreUltimo) : ?>
+            <td >
+                <?php echo $seccion['confirmadas']; ?>
+            </td>
             <td >
               <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
             </td>
