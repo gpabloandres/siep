@@ -72,7 +72,7 @@
           <th>Año</th>
           <th>Turno</th>
             <?php if(!$ocultar) : ?>
-                <th>Plaza</th>
+                <th>Plaza(*)</th>
             <?php endif ?>
           <th>Matricula</th>
           <th>Por hermano</th>
@@ -175,7 +175,7 @@
         </tr>
       </tfoot>
     </table>
-
+    <strong>(*) Valores de plazas con resguardo de vacantes e indicados por las Supervisiones de los niveles.</strong>         
       <script>
         $(function(){
 

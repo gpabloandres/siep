@@ -173,11 +173,11 @@ class Alumno extends AppModel {
 	            ),
             ),
             'legajo_fisico_nro' => array(
-								'numeric' => array(
-			            'rule' => 'naturalNumber',
-			            'message' => 'Indicar número sin puntos ni comas ni espacios.',
-									'allowEmpty' => true
-		            )
+				'alphaBet' => array(
+					'allowEmpty' => true,
+					'rule' => '/^[ áÁéÉíÍóÓúÚ a-zA-ZñÑ 0-9 -]{3,}$/i',
+					'message' => 'Sólo letras, números y el caracter especial -.'
+				)
             )
 	    );
 
