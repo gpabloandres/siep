@@ -19,14 +19,17 @@ class InscripcionsController extends AppController {
         switch($this->Auth->user('role'))
         {
             case 'superadmin':
+            case 'usuario':
+                $this->Auth->allow();
+                /*
                 if ($this->Auth->user('puesto') === 'Sistemas') {
                     $this->Auth->allow();               
                 } else {
                     //En caso de ser ATEI
                     $this->Auth->allow('index', 'add', 'view', 'edit');    
                 }
+                */
                 break;
-            case 'usuario':
             case 'admin':
                 $this->Auth->allow('index', 'add', 'view', 'edit');
                 break;
