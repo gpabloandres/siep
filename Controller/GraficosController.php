@@ -36,22 +36,22 @@ class GraficosController extends AppController {
 		$this->Ciclo->recursive = 0;
 		$this->Ciclo->Behaviors->load('Containable');
 		$cicloIdActual = $this->getActualCicloId();
-		$cicloIdActualArray = $this->Ciclo->findById($cicloIdActual, 'id');
+		$cicloIdActualArray = $this->Ciclo->findById($cicloIdActual, 'id, nombre');
 		$cicloIdActual = $cicloIdActualArray['Ciclo']['id'];
 		$ciclosVecinos = $this->Ciclo->find('neighbors', ['field' => 'id', 'value' => $cicloIdActual]);
 		$cicloIdAnterior = $ciclosVecinos ['prev']['Ciclo']['id'];
-		$cicloIdPosterior = $ciclosVecinos ['next']['Ciclo']['id'];		
+		$cicloIdPosterior = $ciclosVecinos ['next']['Ciclo']['id'];
+		$cicloIdAnteriorNombre = $ciclosVecinos ['prev']['Ciclo']['nombre'];
 		// Obtención del nombre y el nivel del centro del usuario.
 		$userCentroId = $this->getUserCentroId();
 		$this->loadModel('Centro');
 		$this->Centro->recursive = 0;
 		$this->Centro->Behaviors->load('Containable');
-		$centroNombreArray = $this->Centro->findById($userCentroId,'nombre');
-		$centroNombre = $centroNombreArray['Centro']['nombre'];
-		$nivelCentroArray = $this->Centro->findById($userCentroId, 'nivel_servicio');
-        $nivelCentro = $nivelCentroArray['Centro']['nivel_servicio'];
-		/* INICIO: conteos generales */
-		// Conteo de los usuarios.
+		$centroArray = $this->Centro->findById($userCentroId,'nombre, nivel_servicio');
+		$centroNombre = $centroArray['Centro']['nombre'];
+		$nivelCentro = $centroArray['Centro']['nivel_servicio'];
+		/* INICIO DE CONTEOS GENERALES Y ESPECÍFICOS. */
+		/* INICIO: CONTEO GENERAL DE LOS USUARIOS.*/
 		$this->loadModel('User');
 		/*
 		$this->User->recursive = 0;
@@ -72,7 +72,8 @@ class GraficosController extends AppController {
 			'fields' => 'nombre_completo_empleado',
 			'conditions' => array('id' => $empleadosId)
 		));
-		// Conteo de las titulaciones activas en Secundarios (Modalidades: Común y Adultos).
+		/* FIN: CONTEO GENERAL DE LOS USUARIOS.*/
+		/* INICIO: CONTEO GENERAL DE LAS TITULACIONES ACTIVAS DE SECUNDARIOS(Modalidades: Común y Adultos).*/
 		if ($nivelCentro == 'Común - Secundario' || $nivelCentro == 'Adultos - Secundario') {
 			$this->loadModel('Titulacion');
 			$this->Titulacion->recursive = 0;
@@ -90,7 +91,9 @@ class GraficosController extends AppController {
 				)
 			));
 		}
-		// Conteo de las secciones.
+		/* FIN: CONTEO GENERAL DE LAS TITULACIONES ACTIVAS DE SECUNDARIOS(Modalidades: Común y Adultos).*/
+		/* INICIO: CONTEOS GENERAL Y ESPECÍFICO DE LAS SECCIONES REALES y ACTIVAS.*/
+		// Conteo general.
 		$this->loadModel('Curso');
 		$this->Curso->recursive = 0;
 		$this->Curso->Behaviors->load('Containable');
@@ -102,54 +105,7 @@ class GraficosController extends AppController {
 				'Curso.status' => 1
 			)
 		));
-		// Conteo de matrícula actual.
-		$this->loadModel('Inscripcion');
-		$this->Inscripcion->recursive = 0;
-		$this->Inscripcion->Behaviors->load('Containable');
-		$matricula = $this->Inscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.centro_id' => $userCentroId,
-				'Inscripcion.estado_inscripcion' => 'CONFIRMADA',
-				'Inscripcion.ciclo_id' => $cicloIdActual
-			))
-		);
-		// Conteo de baja de matrícula.
-		$legajoTipo = 'SINVACANTE';
-		$matriculaBaja = $this->Inscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.centro_id' => $userCentroId,
-				'Inscripcion.estado_inscripcion' => 'BAJA',
-				'Inscripcion.ciclo_id' => $cicloIdActual,
-				'Inscripcion.legajo_nro NOT LIKE' => '%'.$legajoTipo.'%'
-			))
-		);
-		// Conteo de promociones Totales.		
-		// Parametros de API por defecto
-		$apiParamsTotal = [];
-		$apiParamsTotal['ciclo'] = '2018';
-		$apiParamsTotal['promocion'] = 'con';
-		$apiParamsTotal['centro_id'] = $userCentroId;
-		
-		$matriculaPromociones = $this->Siep->consumeApi("api/v1/matriculas/cuantitativa/por_seccion",$apiParamsTotal);
-		if(isset($promociones['error'])) {
-			// Manejar error de API
-		}
-		$matriculaPromocionesTotal = $matriculaPromociones['total'];
-		
-		// Conteo de repitentes. (PENDIENTE CON el campo repitencia_id) 
-		
-		
-		// Conteo de egresos.
-		$matriculaEgresos = $this->Inscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.centro_id' => $userCentroId,
-				'Inscripcion.estado_inscripcion' => 'EGRESO',
-				'Inscripcion.ciclo_id' => $cicloIdAnterior
-			))
-		);
-		/* FIN: conteos generales */
-		/* INICIO: conteos específicos */
-		/* CONTEO de secciones por año para usuarios con role "admin". 
+		/* Conteo específico por año para usuarios con role "admin". 
 		** Según el nivel_servicio, realiza el conteo de Salas (Inicial) o Grados (Primario) o Cursos (Secundario).
 		*/
         switch ($nivelCentro) {
@@ -315,7 +271,20 @@ class GraficosController extends AppController {
 				# code...
 				break;
 		}
-		
+		/* FIN: CONTEOS GENERAL Y ESPECÍFICO DE LAS SECCIONES REALES y ACTIVAS.*/
+		/* INICIO: CONTEOS GENERAL Y ESPECÍFICO DE MATRÍCULA ALTAS.*/
+		// Conteo general.
+		$this->loadModel('Inscripcion');
+		$this->Inscripcion->recursive = 0;
+		$this->Inscripcion->Behaviors->load('Containable');
+		$matricula = $this->Inscripcion->find('count', array(
+			'conditions' => array(
+				'Inscripcion.centro_id' => $userCentroId,
+				'Inscripcion.estado_inscripcion' => 'CONFIRMADA',
+				'Inscripcion.ciclo_id' => $cicloIdActual
+			))
+		);
+		// Conteos específicos.
 		// Conteo de inscripciones por hermanos.
 		$inscripcionesPorHermano = $this->Inscripcion->find('count', array(
 			'conditions' => array(
@@ -352,6 +321,19 @@ class GraficosController extends AppController {
 				'Inscripcion.estado_inscripcion' => 'CONFIRMADA',
 			))
 		);
+		/* FIN: CONTEO GENERAL Y ESPECÍFICOS DE MATRÍCULA ALTAS.*/
+		/* INICIO: CONTEO GENERAL Y ESPECÍFICOS DE MATRÍCULA BAJAS.*/
+		//Conteo general.
+		$legajoTipo = 'SINVACANTE';
+		$matriculaBaja = $this->Inscripcion->find('count', array(
+			'conditions' => array(
+				'Inscripcion.centro_id' => $userCentroId,
+				'Inscripcion.estado_inscripcion' => 'BAJA',
+				'Inscripcion.ciclo_id' => $cicloIdActual,
+				'Inscripcion.legajo_nro NOT LIKE' => '%'.$legajoTipo.'%'
+			))
+		);
+		// Conteos específicos.
 		// Conteo de bajas por salidos con pase.
 		$bajasSalidosConPase = $this->Inscripcion->find('count', array(
 			'conditions' => array(
@@ -402,34 +384,217 @@ class GraficosController extends AppController {
 				'Inscripcion.legajo_nro NOT LIKE' => '%'.$legajoTipo.'%'
 			))
 		);
+		/* FIN: CONTEOS GENERAL Y ESPECÍFICOS DE MATRÍCULA BAJAS.*/
+		/* INICIO: CONTEO GENERAL DE EGRESOS.*/
+		// Conteo general.
+		$matriculaEgresos = $this->Inscripcion->find('count', array(
+			'conditions' => array(
+				'Inscripcion.centro_id' => $userCentroId,
+				'Inscripcion.estado_inscripcion' => 'EGRESO',
+				'Inscripcion.ciclo_id' => $cicloIdAnterior
+			))
+		);
+		/* FIN: CONTEO GENERAL DE EGRESOS.*/
+		/* INICIO: CONTEOS GENERAL Y ESPECÍFICOS DE PASES.*/
 		// Conteo de pases: Entradas + Salidas
-		$matriculaPases = $inscripcionesPorPase + $bajasSalidosConPase;
-		/* Conteo de promociones según años. */
-		// Primer año.
+		$matriculaPases = $inscripcionesPorPase + $bajasSalidosConPase; //Falta implementar con API.
+		/* FIN: CONTEOS GENERAL Y ESPECÍFICOS DE PASES.*/
+		/* INICIO: CONTEO GENERAL Y ESPECÍFICOS DE PROMOCIONES.*/
+		// Conteo general.		
 		// Parametros de API por defecto
-		$apiParams1ro = [];
-		$apiParams1ro['ciclo'] = '2018';
-		$apiParams1ro['promocion'] = 'con';
-		$apiParams1ro['centro_id'] = $userCentroId;
-		$apiParams1ro['anio'] = '1ro';
-		$matriculaPromociones = $this->Siep->consumeApi("api/v1/matriculas/cuantitativa/por_seccion",$apiParams1ro);
+		$apiParamsTotal = [];
+		$apiParamsTotal['ciclo'] = $cicloIdAnteriorNombre;
+		$apiParamsTotal['promocion'] = 'con';
+		$apiParamsTotal['centro_id'] = $userCentroId;
+		$matriculaPromociones = $this->Siep->consumeApi("api/v1/matriculas/cuantitativa/por_seccion",$apiParamsTotal);
 		if(isset($promociones['error'])) {
 			// Manejar error de API
 		}
-		$matriculaPromociones1ro = $matriculaPromociones['total'];
-		// Primer año.
+		$matriculaPromocionesTotal = $matriculaPromociones['total'];
+		$matriculaPromociones = $this->Inscripcion->find('count', array(
+			'conditions' => array(
+				'Inscripcion.centro_id' => $userCentroId,
+				'Inscripcion.ciclo_id' => $cicloIdAnterior,
+				'Inscripcion.promocion_id !=' => ''
+			))
+		);
+		// Conteos específicos por año.
+		//Salas de 3 años.
 		// Parametros de API por defecto
-		$apiParams1ro = [];
-		$apiParams1ro['ciclo'] = '2018';
-		$apiParams1ro['promocion'] = 'con';
-		$apiParams1ro['centro_id'] = $userCentroId;
-		$apiParams1ro['anio'] = '1ro';
-		$matriculaPromociones = $this->Siep->consumeApi("api/v1/matriculas/cuantitativa/por_seccion",$apiParams1ro);
-		if(isset($promociones['error'])) {
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', 'Sala de 3 años', '', $userCentroId);
+		// Consumo de API		
+		$promocionTresAniosArray = $this->Siep->consumeApi("api/v1/promocion",$apiParams);
+		if(isset($promocionTresAniosArray['error'])) {
 			// Manejar error de API
 		}
-		$matriculaPromociones1ro = $matriculaPromociones['total'];
-		
+		$promocionTresAnios = $promocionTresAniosArray['meta']['total'];
+		//Salas de 4 años.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', 'Sala de 4 años', '', $userCentroId);
+		// Consumo de API		
+		$promocionCuatroAniosArray = $this->Siep->consumeApi("api/v1/promocion",$apiParams);
+		if(isset($promocionCuatroAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$promocionCuatroAnios = $promocionCuatroAniosArray['meta']['total'];
+		//1eros año.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', '1ro', '', $userCentroId);
+		// Consumo de API		
+		$promocionPrimerosAniosArray = $this->Siep->consumeApi("api/v1/promocion",$apiParams);
+		if(isset($promocionPrimerosAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$promocionPrimerosAnios = $promocionPrimerosAniosArray['meta']['total'];
+		//2dos año.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', '2do', '', $userCentroId);
+		// Consumo de API		
+		$promocionSegundosAniosArray = $this->Siep->consumeApi("api/v1/promocion",$apiParams);
+		if(isset($promocionSegundosAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$promocionSegundosAnios = $promocionSegundosAniosArray['meta']['total'];
+		//3ros año.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', '3ro', '', $userCentroId);
+		// Consumo de API		
+		$promocionTercerosAniosArray = $this->Siep->consumeApi("api/v1/promocion",$apiParams);
+		if(isset($promocionTercerosAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$promocionTercerosAnios = $promocionTercerosAniosArray['meta']['total'];
+		//4tos año.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', '4to', '', $userCentroId);
+		// Consumo de API		
+		$promocionCuartosAniosArray = $this->Siep->consumeApi("api/v1/promocion",$apiParams);
+		if(isset($promocionCuartosAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$promocionCuartosAnios = $promocionCuartosAniosArray['meta']['total'];
+		//5tos año.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', '5to', '', $userCentroId);
+		// Consumo de API		
+		$promocionQuintosAniosArray = $this->Siep->consumeApi("api/v1/promocion",$apiParams);
+		if(isset($promocionQuintosAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$promocionQuintosAnios = $promocionQuintosAniosArray['meta']['total'];
+		//6tos año.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', '6to', '', $userCentroId);
+		// Consumo de API		
+		$promocionSextosAniosArray = $this->Siep->consumeApi("api/v1/promocion",$apiParams);
+		if(isset($promocionSextosAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$promocionSextosAnios = $promocionSextosAniosArray['meta']['total'];
+		if ($nivelCentro == 'Común - Secundarios') :
+		//7mos año.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', '7mo', '', $userCentroId);
+		// Consumo de API		
+		$promocionSeptimosAniosArray = $this->Siep->consumeApi("api/v1/promocion",$apiParams);
+		if(isset($promocionSeptimosAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$promocionSeptimosAnios = $promocionSeptimosAniosArray['meta']['total'];
+		endif;
+		/* FIN: CONTEOS GENERAL Y ESPECÍFICOS DE PROMOCIONES.*/
+		/* INICIO: CONTEOS GENERAL Y ESPECÍFICOS DE REPITENTES.*/
+		// Conteo general. 
+		$matriculaRepitentes = $this->Inscripcion->find('count', array(
+			'conditions' => array(
+				'Inscripcion.centro_id' => $userCentroId,
+				'Inscripcion.ciclo_id' => $cicloIdAnterior,
+				'Inscripcion.repitencia_id !=' => ''
+			))
+		);
+		// Conteos específicos por año.
+		//Salas de 3 años.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', 'Sala de 3 años', '', $userCentroId);
+		// Consumo de API		
+		$repitenciaTresAniosArray = $this->Siep->consumeApi("api/v1/repitencia",$apiParams);
+		if(isset($repitenciaTresAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$repitenciaTresAnios = $repitenciaTresAniosArray['meta']['total'];
+		//Salas de 4 años.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', 'Sala de 4 años', '', $userCentroId);
+		// Consumo de API		
+		$repitenciaCuatroAniosArray = $this->Siep->consumeApi("api/v1/repitencia",$apiParams);
+		if(isset($repitenciaCuatroAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$repitenciaCuatroAnios = $repitenciaCuatroAniosArray['meta']['total'];
+		//1eros año.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', '1ro', '', $userCentroId);
+		// Consumo de API		
+		$repitenciaPrimerosAniosArray = $this->Siep->consumeApi("api/v1/repitencia",$apiParams);
+		if(isset($repitenciaPrimerosAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$repitenciaPrimerosAnios = $repitenciaPrimerosAniosArray['meta']['total'];
+		//2dos año.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', '2do', '', $userCentroId);
+		// Consumo de API		
+		$repitenciaSegundosAniosArray = $this->Siep->consumeApi("api/v1/repitencia",$apiParams);
+		if(isset($repitenciaSegundosAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$repitenciaSegundosAnios = $repitenciaSegundosAniosArray['meta']['total'];
+		//3ros año.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', '3ro', '', $userCentroId);
+		// Consumo de API		
+		$repitenciaTercerosAniosArray = $this->Siep->consumeApi("api/v1/repitencia",$apiParams);
+		if(isset($repitenciaTercerosAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$repitenciaTercerosAnios = $repitenciaTercerosAniosArray['meta']['total'];
+		//4tos año.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', '4to', '', $userCentroId);
+		// Consumo de API		
+		$repitenciaCuartosAniosArray = $this->Siep->consumeApi("api/v1/repitencia",$apiParams);
+		if(isset($repitenciaCuartosAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$repitenciaCuartosAnios = $repitenciaCuartosAniosArray['meta']['total'];
+		//5tos año.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', '5to', '', $userCentroId);
+		// Consumo de API		
+		$repitenciaQuintosAniosArray = $this->Siep->consumeApi("api/v1/repitencia",$apiParams);
+		if(isset($repitenciaQuintosAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$repitenciaQuintosAnios = $repitenciaQuintosAniosArray['meta']['total'];
+		//6tos año.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', '6to', '', $userCentroId);
+		// Consumo de API		
+		$repitenciaSextosAniosArray = $this->Siep->consumeApi("api/v1/repitencia",$apiParams);
+		if(isset($repitenciaSextosAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$repitenciaSextosAnios = $repitenciaSextosAniosArray['meta']['total'];
+		//7mos año.
+		// Parametros de API por defecto
+		$apiParams = $this->parametrosApi('500', $cicloIdAnteriorNombre, 'CONFIRMADA', 'con', '7mo', '', $userCentroId);
+		// Consumo de API		
+		$repitenciaSeptimosAniosArray = $this->Siep->consumeApi("api/v1/repitencia",$apiParams);
+		if(isset($repitenciaSeptimosAniosArray['error'])) {
+			// Manejar error de API
+		}
+		$repitenciaSeptimosAnios = $repitenciaSeptimosAniosArray['meta']['total'];
+		/* FIN: CONTEOS GENERAL Y ESPECÍFICOS DE REPITENTES.*/
 		// Envío de valores a la vista.
 		$this->set(compact('centroNombre', 'usuarios', 'empleados', 'cursos', 'matricula', 'ingresantes',
 		 'matriculaBaja', 'matriculaPromocionesTotal', 'matriculaPromociones1ro', 'matriculaEgresos', 'matriculaPases', 
@@ -437,8 +602,23 @@ class GraficosController extends AppController {
 		 'cursosCincoAnios', 'cursosPrimerosAnios', 'cursosSegundosAnios', 'cursosTercerosAnios', 'cursosCuartosAnios',
 		 'cursosQuintosAnios', 'cursosSextosAnios', 'cursosSeptimosAnios', 'cursosAlfabetizacion', 'cursosCAP', 'inscripcionesPorHermano', 'inscripcionesComunes', 'inscripcionesPorSituacionSocial',
 		 'inscripcionesPorPase', 'bajasSalidosConPase', 'bajasSalidosSinPase', 'bajasPerdidaRegularidad', 
-		 'bajasFallecimiento', 'bajasSinEspecificar', 'titulacionesIdActivas', 'nivelCentro')); 
+		 'bajasFallecimiento', 'bajasSinEspecificar', 'titulacionesIdActivas', 'nivelCentro', 'matriculaPromociones', 'matriculaRepitentes',
+		 'promocionTresAnios', 'promocionCuatroAnios', 'promocionCincoAnios', 'promocionPrimerosAnios', 'promocionSegundosAnios', 'promocionTercerosAnios', 'promocionCuartosAnios', 'promocionQuintosAnios', 'promocionSextosAnios', 'promocionSeptimosAnios',
+		 'repitenciaTresAnios', 'repitenciaCuatroAnios', 'repitenciaCincoAnios', 'repitenciaPrimerosAnios', 'repitenciaSegundosAnios', 'repitenciaTercerosAnios', 'repitenciaCuartosAnios', 'repitenciaQuintosAnios', 'repitenciaSextosAnios', 'repitenciaSeptimosAnios')); 
 	} 
+	
+	public function parametrosApi ($paginas, $ciclo, $inscripcionEstado, $division, $anio, $turno, $userCentro) {
+		$apiParams = [];
+		$apiParams['por_pagina'] = $paginas;
+		$apiParams['ciclo'] = $ciclo;
+		$apiParams['estado_inscripcion'] = $inscripcionEstado;
+		$apiParams['division'] = $division;
+		$apiParams['anio'] = $anio;
+		$apiParams['turno'] = $turno;
+		$apiParams['centro_id'] = $userCentro;
+		return $apiParams;
+	}
+
 	/*
     public function i_x_curso() {
      	$this->loadModel('Curso');
