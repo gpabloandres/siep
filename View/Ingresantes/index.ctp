@@ -71,7 +71,9 @@
           <th>Institución</th>
           <th>Año</th>
           <th>Turno</th>
+          <?php if (!$ocultar) : ?>
           <th>Plaza(*)</th>
+          <?php endif; ?>
           <th>Matricula</th>
           <th>Por hermano</th>
           <th>VACANTES</th>
@@ -96,9 +98,11 @@
             <td>
               <?php echo $seccion['turno']; ?>
             </td>
+            <?php if (!$ocultar) : ?>
             <td>
               <?php echo $seccion['plazas']; ?>
             </td>
+            <?php endif; ?>
             <td>
               <?php echo $seccion['matriculas']; ?>
             </td>
