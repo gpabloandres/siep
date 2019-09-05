@@ -71,11 +71,13 @@
           <th>Institución</th>
           <th>Año</th>
           <th>Turno</th>
+          <?php if (!$ocultar) : ?>
           <th>Plaza(*)</th>
+          <?php endif; ?>
           <th>Matricula</th>
           <th>Por hermano</th>
           <th>VACANTES</th>
-            <!-- Sólo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
+            <!-- SOlo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
             <?php if ($apiParams['ciclo'] == $cicloNombreUltimo) : ?>
               <th>CONFIRMADAS</th>
             <?php endif ?>
@@ -96,9 +98,11 @@
             <td>
               <?php echo $seccion['turno']; ?>
             </td>
+            <?php if (!$ocultar) : ?>
             <td>
               <?php echo $seccion['plazas']; ?>
             </td>
+            <?php endif; ?>
             <td>
               <?php echo $seccion['matriculas']; ?>
             </td>
