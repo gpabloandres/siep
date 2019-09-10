@@ -107,6 +107,13 @@ class Curso extends AppModel {
 					'allowEmpty' => false
 				)	
 			),
+			'hs_catedras' => array(
+				'numeric' => array(
+					'rule' => 'naturalNumber',
+					'allowEmpty' => true,
+					'message' => 'Indicar número sin puntos ni comas ni espacios.'
+				)
+			),
 			'plazas' => array(
 				'required' => array(
 					'rule' => 'notBlank',
@@ -170,6 +177,15 @@ class Curso extends AppModel {
 				'message' => 'Indicar una opción'
 				)
 			),
+			/*
+			'reso_presupuestaria' => array(
+                'alphaBet' => array(
+                'allowEmpty' => true,
+                'rule' => '/^[ áÁéÉíÍóÓúÚ a-zA-ZñÑº-() 0-9]{3,}$/i',
+                'message' => 'Sólo letras, números y los caracteres especiales º-.'
+                )
+			)
+			*/
 		);
 }
 ?>

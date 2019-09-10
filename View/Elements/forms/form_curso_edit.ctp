@@ -13,7 +13,7 @@
           //Define opciones de AÑOS según el nivel.
           if ($current_user['role'] == 'superadmin') {
             $anios = array('Sala de menos de 1 año'=>'Sala de menos de 1 año','Sala de 1 año'=>'Sala de 1 año','Sala de 2 años'=>'Sala de 2 años','Sala de 3 años'=>'Sala de 3 años','Sala de 4 años'=>'Sala de 4 años','Sala de 5 años'=>'Sala de 5 años','1ro'=>'1ro','2do'=>'2do','3ro'=>'3ro','4to'=>'4to','5to'=>'5to','6to'=>'6to','7mo'=>'7mo');
-          } else if (($current_user['puesto'] == 'Dirección Jardín/Escuela') || ($current_user['puesto'] == 'Supervisión Inicial/Primaria')) {
+          } else if (($current_user['puesto'] == 'Dirección Jardín') || ($current_user['puesto'] == 'Dirección Escuela Primaria') || ($current_user['puesto'] == 'Supervisión Inicial/Primaria')) {
               $anios = array('Sala de menos de 1 año'=>'Sala de menos de 1 año','Sala de 1 año'=>'Sala de 1 año','Sala de 2 años'=>'Sala de 2 años','Sala de 3 años'=>'Sala de 3 años','Sala de 4 años'=>'Sala de 4 años','Sala de 5 años'=>'Sala de 5 años');
           } else {
               $anios = array('1ro '=>'1ro','2do' =>'2do','3ro' => '3ro','4to' => '4to','5to' => '5to','6to' => '6to','7mo' => '7mo');  
@@ -36,46 +36,35 @@
           } else {
             echo $this->Form->input('division', array('label'=>'División*', 'readonly' => true, ' between' => '<br>', 'class' => 'form-control'));
           }
-          if(($current_user['role'] == 'superadmin') && (($current_user['puesto'] == 'Sistemas') || ($current_user['puesto'] == 'Atei'))) {
-            echo $this->Form->input('titulacion_id', array('label' => 'Titulación', 'empty' => 'Ingrese una titulación...', 'options'=>$titulaciones, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
-            } else {
-              echo $this->Form->input('titulacion_id', array('label'=>'Titulación*', 'readonly' => true, 'options'=>$titulaciones, 'between' => '<br>', 'class' => 'form-control'));
-            }
+          //Define opciones de TURNOS según nivel.
+          if (($current_user['puesto'] == 'Dirección Jardín') || ($current_user['puesto'] == 'Dirección Escuela Primaria') || ($current_user['puesto'] == 'Supervisión Inicial/Primaria')) {
+            $turnos = array('Mañana' => 'Mañana', 'Tarde' =>'Tarde', 'Mañana Extendida' =>'Mañana Extendida', 'Tarde Extendida' => 'Tarde Extendida', 'Doble Extendida' =>'Doble Extendida', 'Otro' =>'Otro');
+          } else {
+            $turnos = array('Mañana' => 'Mañana', 'Tarde' =>'Tarde', 'Mañana Extendida' =>'Mañana Extendida', 'Tarde Extendida' => 'Tarde Extendida', 'Doble' =>'Doble', 'Vespertino' => 'Vespertino', 'Noche' =>'Noche', 'Otro' =>'Otro', 'Bachiller' => 'Bachiller','Tecnico' => 'Tecnico');       
+          }
+          if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
+            echo $this->Form->input('turno', array('label' => 'Turno*', 'empty' => 'Ingrese un turno...', 'options' => $turnos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
+          } else {
+            echo $this->Form->input('turno', array('label' => 'Turno*', 'readonly' => true, ' between' => '<br>', 'class' => 'form-control'));      
+          }
           //Define opciones de TIPOS.
           $tipos = array('Independiente' => 'Independiente', 'Independiente de recuperación' => 'Independiente de recuperación', 'Independiente semipresencial' => 'Independiente semipresencial', 'Independiente presencial y semipresencial' => 'Independiente presencial y semipresencial', 'Múltiple' => 'Múltiple', 'Múltiple de recuperación' => 'Múltiple de recuperación', 'Múltiple semipresencial' => 'Múltiple semipresencial', 'Múltiple presencial y semipresencial' => 'Múltiple presencial y semipresencial', 'No Corresponde' => 'No Corresponde', 'Independiente presencial y semipresencial (violeta)' => 'Independiente presencial y semipresencial (violeta)','Mixta / Bimodal' => 'Mixta / Bimodal', 'Múltiple presencial y semipresencial (violeta)' => 'Múltiple presencial y semipresencial (violeta)', 'Multinivel' => 'Multinivel', 'Multiplan' => 'Multiplan');
           if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
               echo $this->Form->input('tipo', array('empty' => 'Ingrese un tipo...', 'options' => $tipos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
           } else {
               echo $this->Form->input('tipo', array('label'=>'Tipo*', 'readonly' => true, ' between' => '<br>', 'class' => 'form-control'));
-          }
+          }         
       ?>
     </div>
   </div>     
   <div class="col-md-6 col-sm-6 col-xs-12"><!--<div class="subtitulo">Datos de contacto</div>-->
 		<div class="unit"><strong><h3>Datos Específicos</h3></strong><hr />
 			<?php		
-          /*
-          if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria') || ($current_user['puesto'] == 'Dirección Instituto Superior') || ($current_user['puesto'] == 'Supervisión Secundaria')) */
-          //Define opciones de TURNOS según nivel.
-          if (($current_user['puesto'] == 'Dirección Jardín/Escuela') || ($current_user['puesto'] == 'Supervisión Inicial/Primaria')) {
-              $turnos = array('Mañana' => 'Mañana', 'Tarde' =>'Tarde', 'Mañana Extendida' =>'Mañana Extendida', 'Tarde Extendida' => 'Tarde Extendida', 'Doble Extendida' =>'Doble Extendida', 'Otro' =>'Otro');
-          } else {
-            $turnos = array('Mañana' => 'Mañana', 'Tarde' =>'Tarde', 'Mañana Extendida' =>'Mañana Extendida', 'Tarde Extendida' => 'Tarde Extendida', 'Doble' =>'Doble', 'Vespertino' => 'Vespertino', 'Noche' =>'Noche', 'Otro' =>'Otro', 'Bachiller' => 'Bachiller','Tecnico' => 'Tecnico');       
-          }
-          if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
-              echo $this->Form->input('turno', array('label' => 'Turno*', 'empty' => 'Ingrese un turno...', 'options' => $turnos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
-          } else {
-              echo $this->Form->input('turno', array('label'=>'Turno*', 'readonly' => true, ' between' => '<br>', 'class' => 'form-control'));
-          }
-          if ($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') {
-              /*
-              echo $this->Form->input('aula_nro', array('label' => 'Aula Nro*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca un número de aula', 'Placeholder' => 'Ingrese un nº de Aula...'));
-              */
-          } else {
-              /*
-              echo $this->Form->input('aula_nro', array('label'=>'Aula Nro*', 'readonly' => true, ' between' => '<br>', 'class' => 'form-control'));
-              */
-          }          
+          if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria') || ($current_user['puesto'] == 'Dirección Instituto Superior')) {
+            echo $this->Form->input('hs_catedras', array('label' => 'Hs Cátedras', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'placeholder' => 'Ingrese cantidad de Hs Cátedras.'));
+            echo $this->Form->input('titulacion_id', array('label' => 'Titulación', 'empty' => 'Ingrese una titulación...', 'options'=>$titulaciones, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
+            echo $this->Form->input('reso_presupuestaria', array('label' => 'Resolución Presupuestaria', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'placeholder' => 'Ingrese Resolución Presupuestaria.'));
+          }  
           if (($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') || ($current_user['role'] == 'usuario' && $current_user['puesto'] == 'Supervisión Secundaria')) {
               echo $this->Form->input('plazas', array('between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca la cantidad de plazas admitidas en la sección...', 'Placeholder' => 'Ingrese cantidad máxima de plazas'));
           } else {
@@ -86,6 +75,7 @@
           echo $this->Form->input('vacantes', array('between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca las vacantes de la sección...', 'Placeholder' => 'Ingrese las vacantes de la sección'));
           */
           ?>
+          <?php if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Jardín') || ($current_user['puesto'] == 'Dirección Escuela Primaria') || ($current_user['puesto'] == 'Supervisión Inicial/Primaria')) : ?>
           <div class="input-group">
             <span class="input-group-addon">
               <?php echo $this->Form->input('pareja_pedagogica', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Pareja Pedagógica</label>'));?>
@@ -96,6 +86,8 @@
               <?php echo $this->Form->input('maestra_apoyo_inclusion', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Maestra Apoyo Inclusión</label>'));?>
             </span>
           </div>
+        <?php endif;?>
+        <?php echo $this->Form->input('observaciones', array('label' => 'Observaciones', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'placeholder' => 'Ingrese observaciones relevantes sobre la sección.'));?>
     </div>    
   </div>
   <script type="text/javascript">
