@@ -130,7 +130,7 @@
           <th>Varones</th>
           <th>VACANTES</th>
           <th>Observaciones</th>          
-          <!--<th>Acciones</th>-->
+          <!--<th>Accioness</th>-->
         </tr>
       </thead>
       <tbody>
