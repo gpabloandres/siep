@@ -57,14 +57,15 @@
         <br>
 <?php endif; ?>
 <?php
-     $ocultar = false;
-     /*
-     if( $current_user['Centro']['nivel_servicio'] === 'Común - Inicial - Primario' ||
-         $current_user['Centro']['nivel_servicio'] === 'Común - Inicial' ||
-         $current_user['Centro']['nivel_servicio'] === 'Común - Primario' ) {
-         $ocultar = true;
-     }
-     */
+    $nivelServicio = null;
+    if( $current_user['Centro']['nivel_servicio'] === 'Común - Inicial - Primario' ||
+        $current_user['Centro']['nivel_servicio'] === 'Común - Inicial' ||
+        $current_user['Centro']['nivel_servicio'] === 'Común - Primario' ) {
+        $nivelServicio = 'inicialPrimarioComun';
+    } else if ($current_user['Centro']['nivel_servicio'] === 'Común - Secundario') {
+        $nivelServicio = 'secundarioComun';
+    } 
+     
 ?>
 <div class="TituloSec">Inscripciones 2019</div>
 <div id="ContenidoSec">
@@ -115,16 +116,20 @@
           <th>Turno</th>
           <th>Tipo</th>
           <th>Titulación</th>
+          <?php if($nivelServicio == 'secundarioComun') : ?>
+          <th>Hs Cátedras</th>
+          <th>Res. Pedagógica</th>
+          <th>Res. Presupuestaria</th>
+          <?php endif; ?>
+          <?php if($nivelServicio == 'inicialPrimarioComun') : ?>
           <th>P.P.</th>
           <th>M.I.</th>
-          <?php if(!$ocultar) : ?>
-            <th>Plaza</th>
-          <?php endif ?>
+          <?php endif; ?>
+          <th>Plaza</th>
           <th>Matricula</th>
           <th>Varones</th>
-          <?php if(!$ocultar) : ?>
-              <th>VACANTES</th>
-          <?php endif ?>
+          <th>VACANTES</th>
+          <th>Observaciones</th>          
           <!--<th>Acciones</th>-->
         </tr>
       </thead>
@@ -152,6 +157,18 @@
             <td>
               <?php echo $titulacionesNombres[$seccion['titulacion_id']]; ?>
             </td>
+            <?php if($nivelServicio == 'secundarioComun') : ?>
+            <td>
+              <?php echo $seccion['hs_catedras']; ?>
+            </td>
+            <td>
+              <?php echo ($seccion['titulacion']['reso_titulacion_nro'].'/'.$seccion['titulacion']['reso_titulacion_anio']); ?>
+            </td>
+            <td>
+              <?php echo $seccion['reso_presupuestaria']; ?>
+            </td>
+            <?php endif; ?>
+            <?php if($nivelServicio == 'inicialPrimarioComun') : ?>
             <td>
                 <?php if($seccion['pareja_pedagogica'] == 1): ?>
                 <span class="glyphicon glyphicon-ok"></span>
@@ -162,6 +179,7 @@
                 <span class="glyphicon glyphicon-ok"></span>
                 <?php endif; ?>
             </td>
+            <?php endif; ?>
             <?php 
                 if($seccion['cue']=='940001300' || $seccion['cue']=='940009200' || $seccion['cue']=='940011600' || $seccion['cue']=='940013400' || $seccion['cue']=='940014600' || $seccion['cue']=='940020900') { 
                     echo'<td>'.'--'.'</td>';
@@ -182,6 +200,9 @@
                     echo'<td>'.$seccion['vacantes'].'</td>';
                 }
             ?>
+            <td>
+              <?php echo $seccion['observaciones']; ?>
+            </td>
             <td >
               <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
             </td>
