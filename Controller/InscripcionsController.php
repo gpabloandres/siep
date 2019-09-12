@@ -217,6 +217,7 @@ class InscripcionsController extends AppController {
                 case 'Común - Inicial':
                 case 'Común - Primario':
                 case 'Común - Secundario':
+                case 'Común - Superior':
                 case 'Adultos - Primario':
                 case 'Adultos - Secundario':
                 case 'Especial - Integración':
