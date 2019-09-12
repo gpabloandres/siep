@@ -221,7 +221,7 @@ class InscripcionsController extends AppController {
                 case 'Adultos - Primario':
                 case 'Adultos - Secundario':
                 case 'Especial - Integración':
-                //  PERMITIDOS AGREGAR
+                //  PERMITIDOS AGREGARR
                     break;
                 default:
                     $this->Session->setFlash('No tiene permisos para agregar inscripciones.', 'default', array('class' => 'alert alert-warning'));
