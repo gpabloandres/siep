@@ -28,7 +28,7 @@
                 };
               });
             </script>
-            <!-- End Autocomplete -->
+            <!-- End Autocompletes -->
             </div>
         <!--<div class="col-xs-2">
             <div class="input select">

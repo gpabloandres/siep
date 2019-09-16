@@ -1,4 +1,4 @@
-<!-- ************ bootstrap navbar ************ -->
+<!-- ************ bootstrap Navbar ************ -->
 <p>
 <nav class="navbar navbar-custom navbar-static-top navbar-fixed-top" role="navigation">
   <div class="container-fluid">
