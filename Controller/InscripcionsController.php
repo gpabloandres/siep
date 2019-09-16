@@ -122,7 +122,7 @@ class InscripcionsController extends AppController {
             'fields'=>array('id', 'nombre'),
             'contain'=>false
             ));
-        /* Carga combobox de Centros
+        /* Carga comboboxes de Centros
         *  Sí es superadmin carga todos los centros.
         *  Sino sí es un usario de Inicial/Primaria, carga los centros de ambos niveles.
         *  Sino sí es un usuario del resto de los niveles, carga los centros del nivel correspondientes.     
@@ -221,7 +221,7 @@ class InscripcionsController extends AppController {
                 case 'Adultos - Primario':
                 case 'Adultos - Secundario':
                 case 'Especial - Integración':
-                //  PERMITIDOS AGREGAR
+                //  PERMITIDOS AGREGARR
                     break;
                 default:
                     $this->Session->setFlash('No tiene permisos para agregar inscripciones.', 'default', array('class' => 'alert alert-warning'));
