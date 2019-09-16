@@ -1,5 +1,5 @@
 <?php
-    // Si el usuario no es Admin, muestro el filtro.
+    // Sí el usuario no es Admin, muestro el filtro.
     if(!$this->Siep->isAdmin()) :
 ?>
 <div class="TituloSec">Filtro</div>

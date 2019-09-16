@@ -122,7 +122,7 @@ class InscripcionsController extends AppController {
             'fields'=>array('id', 'nombre'),
             'contain'=>false
             ));
-        /* Carga comboboxes de Centros
+        /* Carga combobox de Centros
         *  Sí es superadmin carga todos los centros.
         *  Sino sí es un usario de Inicial/Primaria, carga los centros de ambos niveles.
         *  Sino sí es un usuario del resto de los niveles, carga los centros del nivel correspondientes.     
