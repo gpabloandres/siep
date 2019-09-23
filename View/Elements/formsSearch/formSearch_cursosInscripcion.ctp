@@ -1,13 +1,21 @@
 <?php echo $this->Form->create('CursosInscripcion',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
 
 <!-- COMBO DISPLAY -->
-<div class="form-group">
+<!--<div class="form-group">
     <div class="input select">
         <select name="modo" class="form-control" data-toggle="tooltip" data-placement="bottom">
             <option value="tarjeta">Ver resultados como tarjetas</option>
             <option value="lista" selected="selected">Ver resultados como una lista</option>
             ?>
         </select>
+    </div>
+</div>-->
+
+<!-- COMBO CICLOS -->
+<div class="form-group">
+    <div class="input select">
+        <?php
+        echo $this->Form->input('ciclo_id', array('label' => '* Debe indicar un CICLO para imprimir listado.', 'empty'=>'Seleccione un ciclo ( * Obligatorio )', 'options'=>$comboCiclo, 'default'=>$defaultForm['ciclo_id'], 'class' => 'form-control'));	?>
     </div>
 </div>
 
@@ -18,7 +26,7 @@
     if(!$this->Siep->isAdmin()) :
         ?>
             <!-- Autocomplete -->
-            <input id="Autocomplete" class="form-control" placeholder="Buscar institucion por nombre" type="text">
+            <input id="Autocomplete" class="form-control" placeholder="Ingrese el nombre de la institución..." type="text">
             <input id="AutocompleteId" type="hidden" name="centro_id">
             <script>
                 $( function() {
@@ -43,18 +51,10 @@
     ?>
 </div>
 
-<!-- COMBO CICLOS -->
-<div class="form-group">
-    <div class="input select">
-        <?php
-        echo $this->Form->input('ciclo_id', array('label' => false, 'empty'=>'Seleccione un ciclo...', 'options'=>$comboCiclo, 'default'=>$defaultForm['ciclo_id'], 'class' => 'form-control'));	?>
-    </div>
-</div>
-
 <!-- COMBO TURNOS -->
 <div class="form-group">
    <?php
-   		$turnos = array('Mañana' => 'Mañana', 'Tarde' =>'Tarde', 'Mañana Extendida' =>'Mañana Extendida', 'Tarde Extendida' => 'Tarde Extendida', 'Doble Extendida' =>'Doble Extendida', 'Vespertino' => 'Vespertino', 'Noche' =>'Noche', 'Otro' =>'Otro'); 
+   		$turnos = array('Mañana' => 'Mañana', 'Tarde' =>'Tarde', 'Mañana Extendida' =>'Mañana Extendida', 'Tarde Extendida' => 'Tarde Extendida', 'Doble Extendida' =>'Doble Extendida', 'Vespertino' => 'Vespertino', 'Noche' =>'Noche', 'Otro' =>'Otro', 'Tecnico' => 'Tecnico', 'Bachiller' => 'Bachiller'); 
    		echo $this->Form->input('Curso.turno', array('label' => false, 'empty'=>'Ingrese un turno...', 'options'=>$turnos, 'default'=>$defaultForm['turno'], 'class' => 'form-control'));	?>
 </div>
 
@@ -92,7 +92,7 @@
 
 <div class="form-group">
     <?php
-    $inscripcion_estados = array('CONFIRMADA'=>'CONFIRMADA','NO CONFIRMADA'=>'NO CONFIRMADA','BAJA'=>'BAJA','EGRESO'=>'EGRESO');
+    $inscripcion_estados = array('CONFIRMADA'=>'CONFIRMADA','NO CONFIRMADA'=>'NO CONFIRMADA','BAJA'=>'BAJA','EGRESO'=>'EGRESO','ANULADA'=>'ANULADA');
     echo $this->Form->input('estado_inscripcion', array('label' => false, 'empty' => 'Ingrese un estado de la inscripción...', 'options' => $inscripcion_estados, 'default'=>$defaultForm['estado_inscripcion'],'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
     ?>
 </div>

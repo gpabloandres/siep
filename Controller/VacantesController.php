@@ -39,6 +39,11 @@ class VacantesController extends AppController
             case 'usuario':
                 $this->Auth->allow('index', 'view');
             break;
+
+			default:
+                $this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+                $this->redirect($this->referer());
+                break;
         }
     }
 
@@ -152,8 +157,13 @@ class VacantesController extends AppController
             // Manejar error de API
         }
 
+        $centroSolicitado = '';
+        if(isset($apiParams['centro_id']))
+        {
+            $centroSolicitado = $apiParams['centro_id'];
+        }
 
-        $this->set(compact('ubicaciones','matriculas_por_seccion','cicloIdUltimo','cicloIdActual','comboCiclo','comboCiudad','comboSector', 'titulacionesNombres','queryExportarExcel','showBtnExcel'));
+        $this->set(compact('centroSolicitado','apiParams','ubicaciones','matriculas_por_seccion','cicloIdUltimo','cicloIdActual','comboCiclo','comboCiudad','comboSector', 'titulacionesNombres','queryExportarExcel','showBtnExcel'));
     }
 
     public function recuento()

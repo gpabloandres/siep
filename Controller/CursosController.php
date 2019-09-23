@@ -33,6 +33,11 @@ class CursosController extends AppController {
 					$this->Auth->allow('index', 'view');
 				}
 				break;
+
+			default:
+				$this->Session->setFlash('No tiene permisos para ver CURSOS.', 'default', array('class' => 'alert alert-warning'));
+				$this->redirect($this->referer());
+				break;
 		}
 	    /* FIN */
 		/* FUNCIÓN PRIVADA "LISTS" (INICIO).
@@ -64,7 +69,7 @@ class CursosController extends AppController {
 		$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'contain'=>false,'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 		switch ($userRole) {
 			case 'admin':
-				$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId, 'Curso.status' => 1);
+				$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId, 'Curso.status' => 1, 'Curso.division !=' => '');
 				break;
 			case 'usuario':
 				if ($nivelCentro === 'Común - Inicial - Primario') {
@@ -104,6 +109,9 @@ class CursosController extends AppController {
 		}
 		if (!empty($this->params['named']['turno'])) {
 			$conditions['Curso.turno ='] = $this->params['named']['turno'];
+		}
+		if (!empty($this->params['named']['status'])) {
+			$conditions['Curso.status ='] = $this->params['named']['status'];
 		}
 		$cursos = $this->paginate('Curso',$conditions);
 	    /* FIN */
@@ -174,6 +182,10 @@ class CursosController extends AppController {
         $cicloIdActualArray = $this->Ciclo->findById($cicloIdActual, 'id');
         $cicloIdActualString = $cicloIdActualArray['Ciclo']['id'];
 
+		// Ciclo Actua y Posterior
+		$cicloActual = $this->Ciclo->findById($cicloIdActual);
+		$cicloPosterior = $this->Ciclo->findByNombre(($cicloActual['Ciclo']['nombre'] + 1));
+
 		/* FIN */
 		/* GENERA NOMBRES PARA DATOS RELACIONADOS. (INICIO) */
 /*		$this->loadModel('Persona');
@@ -209,7 +221,7 @@ class CursosController extends AppController {
 		$userCentroId = $this->getUserCentroId();
         $userCentroNivel = $this->getUserCentroNivel($userCentroId);
 		/* FIN */
-		$this->set(compact('inscripciones','cicloNombre', 'userCentroNivel', 'vacantes', 'cursoPlazasString', 'cursoMatriculaString', 'cicloIdActualString'));
+		$this->set(compact('inscripciones','cicloNombre', 'userCentroNivel', 'vacantes', 'cursoPlazasString', 'cursoMatriculaString', 'cicloIdActualString','cicloActual','cicloPosterior','cursoDivisionString'));
 	}
 
 	function add() {

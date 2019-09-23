@@ -22,10 +22,16 @@ class ReubicacionController extends AppController {
 			case 'admin':
 				$this->Auth->allow('index','confirmarAlumnos');
 				break;
+
+			default:
+				$this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+				$this->redirect($this->referer());
+				break;
 		}
 	    /* FIN */
-		App::uses('HttpSocket', 'Network/Http');
-    } 
+		App::import('Helper', 'Siep');
+		$this->Siep= new SiepHelper(new View());
+	}
 
 /**
  * index method
@@ -55,7 +61,7 @@ class ReubicacionController extends AppController {
 
 		$success = false;
 
-		if($this->apiHasError($apiResponse)==false) {
+		if($this->Siep->apiHasError($apiResponse)==false) {
 			if($apiResponse['total']>0)
 			{
 				$firstApiData = $apiResponse['data'][0];
@@ -103,49 +109,26 @@ class ReubicacionController extends AppController {
 	{
 		try {
 			$userId = $this->Auth->user('id');
-
-			$httpSocket = new HttpSocket();
 			$this->request->data['user_id'] = $userId;
 			$data = $this->request->data;
-	
-			$hostApi = getenv('HOSTAPI');
-			$response = $httpSocket->post("http://$hostApi/api/inscripcion/reubicacion", $data);
-			$apiResponse = json_decode($response->body,true);
 
-			if($this->apiHasError($apiResponse)==false) {
+			$apiParams = $data;
+
+			$api = $this->Siep->consumeApi("api/inscripcion/reubicacion",$apiParams,'POST');
+			$apiErr = $this->Siep->apiHasError($api);
+
+			if($apiErr)
+			{
+				$this->Session->setFlash("$apiErr", 'default', array('class' => 'alert alert-danger'));
+			} else {
 				$this->Session->setFlash("Reubicacion realizada con exito", 'default', array('class' => 'alert alert-success'));
 			}
 
-			$this->redirect($this->referer());
-
 		} catch(\Exception $ex){
-			$this->Session->setFlash("API($hostApi) TryError: ".$ex->getMessage(), 'default', array('class' => 'alert alert-danger'));
-			$this->redirect($this->referer());
+			$this->Session->setFlash("API TryError: ".$ex->getMessage(), 'default', array('class' => 'alert alert-danger'));
 		}
-	}
 
-	private function apiHasError($apiResponse) {
-		if(isset($apiResponse['error'])) {
-			if(is_array($apiResponse['error']) && count($apiResponse['error'])>0) {
-				$msgError = "";
-				foreach ($apiResponse['error'] as $errParam) {
-					if(is_array($errParam))
-					{
-						foreach ($errParam as $subErr) {
-							$msgError .= $subErr."<br>";
-						}
-					} else {
-						$msgError .= $errParam."<br>";
-					}
-				}
-			} else {
-				$msgError = $apiResponse['error'];
-			}
-			$this->Session->setFlash($msgError, 'default', array('class' => 'alert alert-danger'));
-			return true;
-		} else {
-			return false;
-		}
+		$this->redirect($this->referer());
 	}
 
 	private function apiListaDeAlumnos($centroId,$cursoId,$cicloId)
@@ -153,27 +136,26 @@ class ReubicacionController extends AppController {
 		try {
 			$userId = $this->Auth->user('id');
 
-			$httpSocket = new HttpSocket();
-			$request = array('header' => array('Content-Type' => 'application/json'));
-			$this->request->data['user_id'] = $userId;
-			$this->request->data['centro_id'] = $centroId;
-			$this->request->data['curso_id'] = $cursoId;
-			$this->request->data['ciclo_id'] = $cicloId;
-			$this->request->data['estado_inscripcion'] = "CONFIRMADA";
-			$this->request->data['por_pagina'] = 'all';
+			$apiParams['user_id'] = $userId;
+			$apiParams['centro_id'] = $centroId;
+			$apiParams['curso_id'] = $cursoId;
+			$apiParams['ciclo_id'] = $cicloId;
+			$apiParams['estado_inscripcion'] = 'CONFIRMADA';
+			$apiParams['por_pagina'] = 'all';
 
-			$dataToSend = $this->request->data;
+			$api = $this->Siep->consumeApi("api/inscripcion/lista",$apiParams);
+			$apiErr = $this->Siep->apiHasError($api);
 
-			$hostApi = getenv('HOSTAPI');
-			$response = $httpSocket->get("http://$hostApi/api/inscripcion/lista", $dataToSend, $request);
+			if($apiErr)
+			{
+				$this->Session->setFlash("API Error: ".$apiErr, 'default', array('class' => 'alert alert-danger'));
+			}
 
-			$response = $response->body;
-			$apiResponse = json_decode($response,true);
-			return $apiResponse;
+			return $api;
 
 		} catch(\Exception $ex){
 			return [
-				'error'=>'API($hostApi) TryError: '.$ex->getMessage()
+				'error'=>'API TryError: '.$ex->getMessage()
 			];
 		}
 	}

@@ -19,8 +19,8 @@
                 <?php
                 if(
                     $cursosInscripcion['Inscripcion']['estado_inscripcion']=='CONFIRMADA' &&
-                    $cursosInscripcion['Inscripcion']['promocion_id'] == null &&
-                    $cursosInscripcion['Inscripcion']['repitencia_id'] == null &&
+                    $cursosInscripcion['Inscripcion']['repitencia_id'] == null  &&
+                    $cursosInscripcion['Inscripcion']['promocion_id'] == null  &&
                     $cursosInscripcion['Inscripcion']['ciclo_id'] == $cicloaPromocionar['id']
                 ) :
                 ?>
@@ -40,7 +40,7 @@
 
 <div class="col-sm-4">
     <div class="unit">
-        <div class="subtitulo">Opciones de promocion</div>
+        <div class="subtitulo">Opciones de repitencia</div>
 
         <h5>Desde</h5>
         Ciclo: <b><?php echo $cicloaPromocionar['nombre']; ?></b>
@@ -59,7 +59,7 @@
         </div>
         <hr>
         <div class="showConfirmar text-center">
-            <input type="submit" class="btn btn-primary" value="Confirmar promocion" />
+            <input type="submit" class="btn btn-primary" value="Confirmar repitencia" />
         </div>
     </div>
 </div>

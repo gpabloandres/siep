@@ -17,7 +17,7 @@
                   select: function( event, ui ) {
                     $("#AutocompleteForm").val( ui.item.Centro.sigla );
 
-                    window.location.href = "<?php echo $this->Html->url(array('controller'=>'ingresantes'));?>/index?centro_id="+ui.item.Centro.id;
+                    window.location.href = "<?php echo $this->Html->url(array('controller'=>'ingresantes'));?>/index?ciclo=<?php echo $apiParams['ciclo']; ?>&centro_id="+ui.item.Centro.id;
                     return false;
                   }
                 }).autocomplete( "instance" )._renderItem = function( ul, item ) {
@@ -28,7 +28,7 @@
               });
             </script>
           <!-- End Autocomplete -->
-        </div>  
+        </div>
          <!--<div class="col-xs-2">
             <div class="input select">
                 <?php
@@ -62,7 +62,7 @@
          $ocultar = true;
      }
 ?>
-<div class="TituloSec">Ingresantes 2019</div>
+<div class="TituloSec">Ingresantes <?php echo $apiParams['ciclo'];?></div>
 <div id="ContenidoSec">
     <div class="table-responsive">
       <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
@@ -71,14 +71,17 @@
           <th>Institución</th>
           <th>Año</th>
           <th>Turno</th>
-            <?php if(!$ocultar) : ?>
-                <th>Plaza</th>
-            <?php endif ?>
+          <?php if (!$ocultar) : ?>
+          <th>Plaza(*)</th>
+          <?php endif; ?>
           <th>Matricula</th>
-            <?php if(!$ocultar) : ?>
-                <th>VACANTES</th>
+          <th>Por hermano</th>
+          <th>VACANTES</th>
+            <!-- SOlo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
+            <?php if ($apiParams['ciclo'] == $cicloNombreUltimo) : ?>
+              <th>CONFIRMADAS</th>
             <?php endif ?>
-        </tr>
+          </tr>
       </thead>
       <tbody>
         <?php $count=0;
@@ -95,22 +98,41 @@
             <td>
               <?php echo $seccion['turno']; ?>
             </td>
-            <?php if(!$ocultar) : ?>
+            <?php if (!$ocultar) : ?>
             <td>
               <?php echo $seccion['plazas']; ?>
             </td>
-            <?php endif ?>
+            <?php endif; ?>
             <td>
               <?php echo $seccion['matriculas']; ?>
             </td>
-            <?php if(!$ocultar) : ?>
+            <td>
+              <?php echo $seccion['por_hermano']; ?>
+            </td>
+            <?php if ($seccion['vacantes'] < 0) { ?>
+            <td>
+                <?php echo $seccion['vacantes']. ' ' .'<span class="label label-danger">Sorteo</span>'; ?>
+            </td>
+            <?php } else { ?>
             <td>
               <?php echo $seccion['vacantes']; ?>
             </td>
-            <?php endif ?>
-            <td >
+            <?php } ?>            
+            <?php if ($apiParams['ciclo'] == $cicloNombreUltimo) : ?>
+            <?php if (($seccion['plazas'] != NULL) && ($seccion['confirmadas'] > $seccion['plazas'])) { ?>
+            <td>
+                <?php echo $seccion['confirmadas']. ' ' .'<span class="label label-danger">Excede Plaza</span>'; ?>
+            </td>
+            <?php } else { ?>
+            <td>
+                <?php echo $seccion['confirmadas']; ?>
+            </td>
+            <?php } ?>
+            <!-- Sólo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
+            <td>
               <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
             </td>
+            <?php endif ?>
           </tr>
         <?php endforeach; ?>
         <?php endif; ?>
@@ -168,7 +190,7 @@
         </tr>
       </tfoot>
     </table>
-
+    <strong>(*) Valores de plazas con resguardo de vacantes e indicados por las Supervisiones de los niveles.</strong>         
       <script>
         $(function(){
 

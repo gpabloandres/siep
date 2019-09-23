@@ -17,6 +17,8 @@
                     <?php echo $alumno['persona']['edad']." ".'años'; ?></p>
                     <b><?php echo __('Legajo Físico N°: '); ?></b>
                     <?php echo $alumno['legajo_fisico_nro']; ?></p>
+					<b><?php echo __('Observaciones: '); ?></b>
+                    <?php echo $alumno['observaciones']; ?></p>
                  </div>
  	          </div>
          </div>
@@ -25,11 +27,11 @@
 <div class="col-md-4">
  <div class="unit">
         <div class="subtitulo">Opciones</div>
-        <div class="opcion"><a href="<?php echo env('SIEP_API_GW_INGRESS')."/api/v1/personas/".$alumno['persona_id']."/ficha"?>" target="_blank">Ficha de Alumno</a></div>
+        <div class="opcion"><a href="<?php echo "/gateway/ficha/id:".$alumno['persona_id']; ?>" target="_blank">Ficha de Alumno</a></div>
         <div class="opcion"><?php echo $this->Html->link(__('Listar Alumnos'), array('action' => 'index')); ?></div>
-       <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
         <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $alumno['id'])); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $alumno['id']), null, sprintf(__('¿Está seguro de borrar este alumno?'))); ?></div>
+	<?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?> 
+		<div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $alumno['id']), null, sprintf(__('¿Está seguro de borrar este alumno?'))); ?></div>
         <?php /*
         <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['id'], 'ext' => 'pdf')); ?></div>-->
         <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add')); ?></div>-->

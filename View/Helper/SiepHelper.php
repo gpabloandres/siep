@@ -79,10 +79,12 @@ class SiepHelper extends AppHelper
                 'header' => array(
                     'Connection' => 'close',
                     'User-Agent' => 'CakePHP',
-                    'Content-Type' => 'application/json'
+                    'Content-Type' => 'application/json',
                 ),
                 'redirect' => false
             );
+
+            $request['header'][getenv('XHOSTCAKE')] = 'do';
 
             $httpSocket = new HttpSocket();
             $response = $httpSocket->request($request);
@@ -98,13 +100,38 @@ class SiepHelper extends AppHelper
         }
     }
 
+    public function apiHasError($apiResponse) {
+        if(isset($apiResponse['error'])) {
+            if(is_array($apiResponse['error']) && count($apiResponse['error'])>0) {
+                $msgError = "";
+                foreach ($apiResponse['error'] as $errParam) {
+                    if(is_array($errParam))
+                    {
+                        foreach ($errParam as $subErr) {
+                            $msgError .= $subErr."<br>";
+                        }
+                    } else {
+                        $msgError .= $errParam."<br>";
+                    }
+                }
+            } else {
+                $msgError = $apiResponse['error'];
+            }
+
+            return $msgError;
+        } else {
+            return false;
+        }
+    }
+
+
     public function pagination($item) {
         if(isset($item['total']))
         {
             echo '<div class="unit text-center"><p>Página 
             '.$item['current_page'].' de
             '.$item['last_page'].', mostrando
-            '.$item['per_page'].' resultados de un total de
+            '.$item['per_page'].' resultados de un <strong>TOTAL DE</strong>
             '.$item['total'].', desde
             '.$item['from'].' hasta
             '.$item['to'].'</p>';
@@ -114,6 +141,7 @@ class SiepHelper extends AppHelper
             if($item['current_page']>1) {
                 echo '<a href="'.$this->paginationLink($item['current_page']-1).'">&laquo; anterior</a> | ';
             }
+
             for($i;$i<=$item['last_page'];$i++)
             {
                 if($i == $item['current_page']) {

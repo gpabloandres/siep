@@ -15,16 +15,22 @@
                         <?php echo($this->Html->link($inscripcion['centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $inscripcion['centro_id']))); ?></p>
                         <b><?php echo __('Alumno:'); ?></b>
                         <?php echo ($this->Html->link("{$inscripcion['alumno']['persona']['nombres']} {$inscripcion['alumno']['persona']['apellidos']}", array('controller' => 'alumnos', 'action' => 'view', $inscripcion['alumno_id']))); ?></p>
-                        <b><?php echo __('Tipo de inscripción:'); ?></b>
+                        <b><?php echo __('| Inscripción - Características:'); ?></b></p>
+                        <b><?php echo __('| Tipo:'); ?></b>
                         <?php echo $inscripcion['tipo_inscripcion']; ?></p>
-                        <b><?php echo __('Estado de la inscripción:'); ?></b>
-                        <?php echo $inscripcion['estado_inscripcion']; ?></p>
-                        <b><?php echo __('Documentación presentada:'); ?></b>
-                        <?php if($inscripcion['estado_documentacion'] == "COMPLETA"){; ?>
-                        <span class="label label-success"><?php echo $inscripcion['estado_documentacion']; ?></span>
-                        <?php } else{; ?>
-                        <span class="label label-danger"><?php echo $inscripcion['estado_documentacion']; ?></span>
+                        <b><?php echo __('| Estado:'); ?></b>
+                        <?php if($inscripcion['estado_inscripcion'] == "ANULADA") {; ?>
+                            <span class="label label-danger"><?php echo $inscripcion['estado_inscripcion']; ?></span></p>
+                        <?php } else if ($inscripcion['estado_inscripcion'] == "CONFIRMADA") {; ?>
+                            <span class="label label-success"><?php echo $inscripcion['estado_inscripcion']; ?></span>
+                        <?php } else if ($inscripcion['estado_inscripcion'] == "NO CONFIRMADA") {?>
+                            <span class="label label-warning"><?php echo $inscripcion['estado_inscripcion']; ?></span>
+                        <?php } else if ($inscripcion['estado_inscripcion'] == "BAJA" || $inscripcion['estado_inscripcion'] == "EGRESO") {?>
+                            <span class="label label-info"><?php echo $inscripcion['estado_inscripcion']; ?></span>
                         <?php } ?></p>
+                        <b><?php echo __('Documentación:'); ?></b>
+                            <span class="opcion"><?php echo $inscripcion['estado_documentacion']; ?></span>
+                        </p>
                         </p>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12">
@@ -59,14 +65,17 @@
                                 <?php echo $this->Html->formatTime($inscripcion['fecha_alta']);?></p>
                                 <?php  if($inscripcion['hermano_id']): ?>
                                     <b><?php echo __('Hermano de:'); ?></b></p>
-                                    <b><?php echo ($this->Html->link($hermanoNombre, array('controller' => 'alumnos', 'action' => 'view', $inscripcion['hermano_id']))); ?></b>
+                                    <b><?php echo ($this->Html->link($inscripcion['hermano']['persona']['nombre_completo'], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['hermano_id']))); ?></b>
                                 <?php endif; ?></p>
                                 <?php  if($inscripcion['tipo_inscripcion'] === 'Pase'): ?>
                                     <b><?php echo __('Centro de Origen:'); ?></b></p>
-                                    <b><?php echo $centroOrigenNombre; ?></b>
+                                    <b><?php echo $inscripcion['pase']['sigla']; ?></b>
                                 <?php endif; ?></p>
-                                <b><?php echo __('Documentación:'); ?></b>
+                                <b><?php echo __('Documentación faltante:'); ?></b>
                                   <ul>
+                                  <?php if($inscripcion['cud_estado'] == 'No tiene'): ?>
+                                    <li><span class="label label-danger"><?php echo 'Falta CUD'; ?></span></li>
+                                   <?php endif; ?>
                                    <?php if(!$inscripcion['fotocopia_dni'] == 1): ?>
                                     <li><span class="label label-danger"><?php echo 'Falta Fotocopia DNI'; ?></span></li>
                                    <?php endif; ?>
@@ -151,18 +160,22 @@
               <div class="unit">
  			      <div class="subtitulo">Opciones</div>
                   <div class="opcion"><?php echo $this->Html->link(__('Listar Inscripciones'), array('action' => 'index')); ?></div>
-                <?php 
+                <?php
                 //Se visualiza solo sí se trata de un "superusuario", "usuario" o "admin" del mismo centro que la inscripción. 
-                  if($current_user['role'] == 'superadmin' || $current_user['role'] == 'usuario' || $userCentroId == $centroInscripcion):
+                  if($current_user['role'] == 'superadmin' || $current_user['role'] == 'usuario' || $userCentroId == $inscripcion['centro_id']):
                     // y sí la inscripción del alumno tiene estado CONFIRMADA y es del ciclo actual. 
-                    if(($estadoInscripcion === 'CONFIRMADA' || $estadoInscripcion === 'EGRESO') && ($cicloInscripcion == $cicloIdActual) || ($cicloInscripcion == $cicloIdPosterior)): ?>
-                        <div class="opcion"><a href="http://api.sieptdf.org/api/constancia/<?php echo $inscripcion['id'];?>">Constancia de Inscripción</a></div>
-                        <div class="opcion"><a href="http://api.sieptdf.org/api/constancia_regular/<?php echo $inscripcion['id'];?>">Constancia de Alumno Regular</a></div>
-                    <?php endif; ?>
+                    //if(($inscripcion['estado_inscripcion'] === 'CONFIRMADA' || $inscripcion['estado_inscripcion'] === 'EGRESO') ): ?>
+                        <div class="opcion"><a href="<?php echo "/gateway/constancia/id:".$inscripcion['id'];?>">Constancia de Inscripción</a></div>
+                        <div class="opcion"><a href="<?php echo "/gateway/constancia_regular/id:".$inscripcion['id'];?>">Constancia de Alumno Regular</a></div>
+                    <?php //endif; ?>
+                    <?php if ($inscripcion['estado_inscripcion'] != 'ANULADA') : ?>
                     <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $inscripcion['id'])); ?> </div>
+                    <?php endif; ?>
                 <?php endif; ?>  
-                <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?> 
-                    <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $inscripcion['id']), null, sprintf(__('Esta seguro de borrar la inscripción %s?'), $inscripcion['id'])); ?></div>
+                <?php if(($inscripcion['ciclo_id'] == 7) && ($current_user['role'] == 'usuario' || $current_user['id'] == 438 || $current_user['id'] == 326 || $current_user['id'] == 325 || $current_user['id'] == 338 || $current_user['id'] == 582)): ?> 
+                    <?php if ($inscripcion['estado_inscripcion'] != 'ANULADA') { ?>
+                        <div class="opcion"><?php echo $this->Html->link(__('Anular'), array('action' => 'delete', $inscripcion['id']), null, sprintf(__('Esta seguro de ANULAR la inscripción con legajo Nº: %s?'), $inscripcion['legajo_nro'])); ?></div>
+                        <?php } ?>
                 <?php endif; ?>  
               </div>
           </div>
@@ -172,9 +185,9 @@
 <div id="click_01" class="titulo_acordeon">Secciones Relacionadas <span class="caret"</span></div>
 <div id="acordeon_01">
 		<div class="row">
-	        <?php if (!empty($curso)):?>
-  			<div class="col-xs-12 col-sm-6 col-md-8">
-                <div class="col-md-4">
+	        <?php if (count($cursos)):?>
+                <?php foreach($cursos as $curso) : ?>
+  			<div class="col-xs-12 col-sm-6 col-md-3">
                     <div class="unit">
                         <?php echo '<b>Año/Gpo:</b> '.$curso['anio'];?><br>
                         <?php echo '<b>División:</b> '.$curso['division'];?><br>
@@ -191,8 +204,8 @@
                           <?php endif; ?>  
                         </div>
                     </div>
-                </div>
 			</div>
+                <?php endforeach; ?>
 			<?php else: echo '<div class="col-md-12"><div class="unit text-center">No se encuentran relaciones.</div></div>'; ?>
             <?php endif; ?>
 	  </div>

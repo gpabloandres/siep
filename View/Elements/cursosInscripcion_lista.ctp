@@ -2,7 +2,10 @@
     <?php
         if($showExportBtn>=2) :
     ?>
-    <a target="_blank" href="https://api.sieptdf.org/api/inscripcion/export/excel?<?php echo http_build_query($queryExportacionExcel); ?>" class="btn btn-success pull-right">Exportar resultados a excel</a>
+    <form method="POST" action="/gateway/excel_inscripcion">
+        <input type="hidden" name="query" value="<?php echo http_build_query($queryExportacionExcel); ?>">
+        <input  type="submit" class="btn btn-success pull-right" value="Exportar resultados a excel" />
+    </form>
     <br>
     <br>
     <?php

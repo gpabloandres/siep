@@ -22,6 +22,11 @@ class ListaAlumnosController extends AppController {
 			case 'admin':
 				$this->Auth->allow('index','updateFamiliar');
 				break;
+
+			default:
+				$this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+				$this->redirect($this->referer());
+				break;
 		}
 
 		// Importa el Helper de Siep al controlador es accesible mediante $this->Siep
@@ -43,9 +48,14 @@ class ListaAlumnosController extends AppController {
 		$nombreCicloActual = $hoyArray['year'];
 		$cicloActual = $nombreCicloActual;
 
-		// Parametros para ejecutar API
+		$cicloDatoAlumno = $cicloActual;
+		if($this->params['named']['ciclo']) {
+			$cicloDatoAlumno = $this->params['named']['ciclo'];
+		}
+
+			// Parametros para ejecutar API
 		$apiParams = [];
-		$apiParams['ciclo'] = $cicloActual;
+		$apiParams['ciclo'] = $cicloDatoAlumno;
 		$apiParams['centro_id'] = $this->params['named']['centro_id'];
 		$apiParams['curso_id'] = $this->params['named']['curso_id'];
 		$apiParams['estado_inscripcion'] = 'CONFIRMADA';
@@ -62,14 +72,17 @@ class ListaAlumnosController extends AppController {
 		// Todas las inscripciones se encuentran en DATA
 		$cursosInscripcions = $cursosInscripcions['data'];
 
-		// Obtenemos Ciclo, Centro y Curso de la primera Inscripcion de la lista
-		// Todas las inscripciones comparten estas 3 variables
-		$first = reset($cursosInscripcions);
-		$curso = $first['curso'];
-		$centro = $first['inscripcion']['centro'];
-		$ciclo = $first['inscripcion']['ciclo'];
+		if(count($cursosInscripcions))
+		{
+			// Obtenemos Ciclo, Centro y Curso de la primera Inscripcion de la lista
+			// Todas las inscripciones comparten estas 3 variables
+			$first = reset($cursosInscripcions);
+			$curso = $first['curso'];
+			$centro = $first['inscripcion']['centro'];
+			$ciclo = $first['inscripcion']['ciclo'];
+		}
 
-		$this->set(compact('cicloActual','cursosInscripcions','ciclo','centro','curso','apiParams'));
+		$this->set(compact('cicloActual','cursosInscripcions','ciclo','centro','curso','apiParams','cicloDatoAlumno'));
 	}
 
 	public function updateFamiliar()

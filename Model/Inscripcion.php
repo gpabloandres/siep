@@ -135,9 +135,9 @@ class Inscripcion extends AppModel {
 			),
 			 'alphaBet' => array(
 		 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
-		 )
-	   ),
-	   'fines' => array(
+			)
+	   	),
+	   	'fines' => array(
 			   'valid' => array(
 					'rule' => array('inList', array('No', 'Sí línea deudores de materias.', 'Sí línea trayectos educativos.')),
 					'allowEmpty' => true,
@@ -145,17 +145,17 @@ class Inscripcion extends AppModel {
 			),
 			'alphaBet' => array(
 		 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{2,}$/i',
-		 )
-	   ),
-	   */
-	   'fecha_baja' => array(
+			)
+	   	),
+	   	*/
+	   	'fecha_baja' => array(
 			   'date' => array(
 			   'rule' => 'date',
 			   'allowEmpty' => true,
 			   'message' => 'Indicar una fecha válida.'
 			   )
-	   ),
-	   'tipo_baja' => array(
+	   	),
+	   	'tipo_baja' => array(
 			   'minLength' => array(
 			   'rule' => array('minLength', 3),
 			   'allowEmpty' => true,
@@ -164,8 +164,8 @@ class Inscripcion extends AppModel {
 									 'alphaBet' => array(
 								 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{3,}$/i',
 								 )
-	   ),
-	   'motivo_baja' => array(
+	   	),
+	   	'motivo_baja' => array(
 			   'minLength' => array(
 			   'rule' => array('minLength', 3),
 			   'allowEmpty' => true,
@@ -174,16 +174,16 @@ class Inscripcion extends AppModel {
 									 'alphaBet' => array(
 								'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{3,}$/i',
 								)
-	   ),
-	   'fecha_egreso' => array(
+	   	),
+	   	'fecha_egreso' => array(
 			   'date' => array(
 			   'rule' => 'date',
 			   'allowEmpty' => true,
 			   'message' => 'Indicar una fecha válida.'
 			   )
 	   ),
-	   /*
-	   'acta_nro' => array(
+	   	/*
+	   	'acta_nro' => array(
 			 'minLength' => array(
 				'rule' => array('minLength',4),
 				'allowEmpty' => true,
@@ -193,93 +193,103 @@ class Inscripcion extends AppModel {
 				'rule' => 'naturalNumber',
 				'message' => 'Indicar número sin puntos ni comas ni espacios.'
 			)
-                   ),
-				   'libro_nro' => array(
-						 'numeric' => array(
-						 'rule' => 'naturalNumber',
-						 'allowEmpty' => true,
-						 'message' => 'Indicar número de libro sin puntos ni comas ni espacios.'
-					 )
-                   ),
-				   'folio_nro' => array(
+		),
+		'libro_nro' => array(
+				'numeric' => array(
+				'rule' => 'naturalNumber',
+				'allowEmpty' => true,
+				'message' => 'Indicar número de libro sin puntos ni comas ni espacios.'
+			)
+		),
+		'folio_nro' => array(
 
-						 'numeric' => array(
-			 				'rule' => 'naturalNumber',
-							'allowEmpty' => true,
-			 				'message' => 'Indicar número sin puntos ni comas ni espacios.'
-			 			)
-                   ),
-				   'fecha_emision_titulo' => array(
-                           'date' => array(
-                           'rule' => 'date',
-                           'allowEmpty' => true,
-                           'message' => 'Indicar una fecha válida.'
-                           )
-                   ),
-				   'recursante' => array(
-                           'boolean' => array(
-                           'rule' => array('boolean'),
-                           'allowEmpty' => true,
-					       'message' => 'Indicar una opción'
-				           )
-                   ),
-				   'condicion_aprobacion' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength', 3),
-                           'allowEmpty' => false,
-                           'message' => 'Indicar una opción.'
-                           )
-                   ),
-				   'fecha_nota' => array(
-                           'date' => array(
-                           'rule' => 'date',
-                           'allowEmpty' => true,
-                           'message' => 'Indicar una fecha válida.'
-                           )
-                   ),
-        */           
-                   'fotocopia_dni' => array(
-                           'boolean' => array(
-                           'rule' => array('boolean'),
-                           'allowEmpty' => true,
-					       'message' => 'Indicar una opción'
-				           )
-                   ),
-				   'partida_nacimiento_alumno' => array(
-                           'boolean' => array(
-                           'rule' => array('boolean'),
-                           'allowEmpty' => true,
-					       'message' => 'Indicar una opción'
-				           )
-                   ),
-				   'certificado_vacunas' => array(
-                           'boolean' => array(
-                           'rule' => array('boolean'),
-                           'allowEmpty' => true,
-					       'message' => 'Indicar una opción'
-				           )
-                   ),
-                   'certificado_septimo' => array(
-                           'boolean' => array(
-                           'rule' => array('boolean'),
-                           'allowEmpty' => true,
-					       'message' => 'Indicar una opción'
-				           )
-                   ),
-                   'estado_inscripcion' => array(
-						'valid' => array(
-						'rule' => array('inList', array('CONFIRMADA','NO CONFIRMADA','BAJA','EGRESO')),
-						'message' => 'Indicar una opción',
-						'allowEmpty' => false
-							)
-					),
-                   'estado_documentacion' => array(
-						'valid' => array(
-						'rule' => array('inList', array('PENDIENTE','COMPLETA')),
-						'message' => 'Indicar una opción',
-					  	'allowEmpty' => false
-							)
-					),
-         );
+				'numeric' => array(
+				'rule' => 'naturalNumber',
+				'allowEmpty' => true,
+				'message' => 'Indicar número sin puntos ni comas ni espacios.'
+			)
+		),
+		'fecha_emision_titulo' => array(
+				'date' => array(
+				'rule' => 'date',
+				'allowEmpty' => true,
+				'message' => 'Indicar una fecha válida.'
+				)
+		),
+		'recursante' => array(
+				'boolean' => array(
+				'rule' => array('boolean'),
+				'allowEmpty' => true,
+				'message' => 'Indicar una opción'
+				)
+		),
+		'condicion_aprobacion' => array(
+				'minLength' => array(
+				'rule' => array('minLength', 3),
+				'allowEmpty' => false,
+				'message' => 'Indicar una opción.'
+				)
+		),
+		'fecha_nota' => array(
+				'date' => array(
+				'rule' => 'date',
+				'allowEmpty' => true,
+				'message' => 'Indicar una fecha válida.'
+				)
+		),
+		*/           
+		'fotocopia_dni' => array(
+				'boolean' => array(
+				'rule' => array('boolean'),
+				'allowEmpty' => true,
+				'message' => 'Indicar una opción'
+				)
+		),
+		'partida_nacimiento_alumno' => array(
+				'boolean' => array(
+				'rule' => array('boolean'),
+				'allowEmpty' => true,
+				'message' => 'Indicar una opción'
+				)
+		),
+		'certificado_vacunas' => array(
+				'boolean' => array(
+				'rule' => array('boolean'),
+				'allowEmpty' => true,
+				'message' => 'Indicar una opción'
+				)
+		),
+		'certificado_septimo' => array(
+				'boolean' => array(
+				'rule' => array('boolean'),
+				'allowEmpty' => true,
+				'message' => 'Indicar una opción'
+				)
+		),
+		'estado_inscripcion' => array(
+			'valid' => array(
+			'rule' => array('inList', array('CONFIRMADA','NO CONFIRMADA','BAJA','EGRESO','ANULADA')),
+			'message' => 'Indicar una opción',
+			'allowEmpty' => false
+				)
+		),
+		'estado_documentacion' => array(
+			'valid' => array(
+			'rule' => array('inList', array('PENDIENTE','COMPLETA')),
+			'message' => 'Indicar una opción',
+			'allowEmpty' => false
+				)
+		),
+		'cud_estado' => array(
+			'valid' => array(
+				'rule' => array('inList', array('Actualizado', 'Desactualizado', 'No tiene')),
+				'allowEmpty' => true,
+				'message' => 'Indicar una opción'
+			),
+			'alphaBet' => array(
+				'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{7,}$/i',
+			)
+		),
+	);
 }
 ?>

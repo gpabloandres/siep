@@ -26,6 +26,11 @@ class FamiliarsController extends AppController {
 			case 'admin':
 				$this->Auth->allow('add', 'view', 'edit', 'autocompleteNombrePersona', 'autocompleteNombreAlumno');
 				break;
+
+			default:
+				$this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+				$this->redirect($this->referer());
+				break;
 		}
 		/* FIN */
     }

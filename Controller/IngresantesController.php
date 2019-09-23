@@ -22,6 +22,11 @@ class IngresantesController extends AppController
             case 'usuario':
                 $this->Auth->allow('index', 'view');
             break;
+
+			default:
+                $this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+                $this->redirect($this->referer());
+                break;
         }
     }
 
@@ -43,6 +48,8 @@ class IngresantesController extends AppController
         $this->loadModel('Ciclo');
         $comboCiclo = $this->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
         $cicloIdUltimo = $this->getLastCicloId();
+        $cicloNombreUltimo = $comboCiclo[$cicloIdUltimo];
+
         $cicloIdActual = $this->getActualCicloId();
 
         // Datos de usuario logueado
@@ -108,6 +115,6 @@ class IngresantesController extends AppController
             // Manejar error de API
         }
 
-        $this->set(compact('matriculas_por_seccion','cicloIdUltimo','cicloIdActual','comboCiclo','comboCiudad','comboSector'));
+        $this->set(compact('matriculas_por_seccion', 'cicloIdUltimo', 'cicloNombreUltimo', 'cicloIdActual','comboCiclo','comboCiudad','comboSector','apiParams'));
     }
 }

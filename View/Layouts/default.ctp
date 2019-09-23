@@ -33,52 +33,60 @@
     </head>
     <body>
     	<div class="content">
-    <!-- ******* menu principal ******* -->
-    	<?php 
+    <!-- INICIO: Menú Principal 
+    ** Carga del menú correspondiente al rol y al nivel de servicio del centro relacionado al usuario.
+    -->
+       	<?php 
             if($this->Html->loggedIn()) { 
                 $userRole = $current_user['role'];
                 $userPuesto = $current_user['puesto'];
                 if ($userRole == 'superadmin') {
                     if ($userPuesto == 'Sistemas') {
-                        echo $this->element('menues/menu-sa');
+                        echo $this->element('menues/menu-superadminSistemas');
                     } else {
-                        echo $this->element('menues/menu-u');
+                        echo $this->element('menues/menu-usuario');
                     }                    
                 } elseif ($userRole == 'admin') {
                     $userPuesto = $current_user['puesto'];
                     switch ($userPuesto) {
                         case 'Dirección Jardín':
-                            echo $this->element('menues/menu-aip');
-                            break;
                         case 'Dirección Escuela Primaria':
-                            echo $this->element('menues/menu-aip');
+                            if ($current_user['centro_id'] == 23 || $current_user['centro_id'] == 73
+                             || $current_user['centro_id'] == 81 || $current_user['centro_id'] == 180
+                             || $current_user['centro_id'] == 181 || $current_user['centro_id'] == 513) {
+                                echo $this->element('menues/menu-adminInicialPrimarioEspecial');
+                            } else {
+                                echo $this->element('menues/menu-adminInicialPrimario');
+                            }                           
                             break;
                         case 'Dirección Colegio Secundario':
-                            echo $this->element('menues/menu-a');
-                            break;                    
+                            echo $this->element('menues/menu-adminSecundario');
+                            break;
+                        case 'Dirección Instituto Superior':
+                            echo $this->element('menues/menu-adminSuperior');
+                            break;                        
                         default:
-                            //Dirección Instituto Superior.
-                            echo $this->element('menues/menu-a');
+                            echo $this->element('menues/menu-admin');
                             break;
                     }
                 } elseif ($userRole == 'usuario') {
                     $userPuesto = $current_user['puesto'];
                     switch ($userPuesto) {
                         case 'Supervisión Inicial/Primaria':
-                            echo $this->element('menues/menu-aip');
+                            echo $this->element('menues/menu-usuarioInicialPrimario');
                             break;
                         case 'Supervisión Secundaria':
-                            echo $this->element('menues/menu-a');
+                            echo $this->element('menues/menu-usuarioSecundario');
                             break;                    
                         default:
                             //Dirección Provincial de Superior.
-                            echo $this->element('menues/menu-a');
+                            echo $this->element('menues/menu-admin');
                             break;
                     }
                 }
             }    
         ?>
-    <!-- ******************************* -->
+    <!-- FIN: Menú Principal -->
     	<script>
             $(function() {
                 FastClick.attach(document.body);

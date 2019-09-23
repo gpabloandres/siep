@@ -19,7 +19,12 @@ class CursosInscripcionsController extends AppController {
 			case 'usuario':
 			case 'admin':
 				$this->Auth->allow('index','confirmarAlumnos');
-				break;			
+				break;
+			
+			default:
+				$this->Session->setFlash('No tiene permisos.', 'default', array('class' => 'alert alert-warning'));
+				$this->redirect($this->referer());
+				break;				
 		}
 	    /* FIN */
     } 
@@ -42,7 +47,11 @@ class CursosInscripcionsController extends AppController {
 		$this->loadModel('Ciclo');
 
 		// Api exportacion a Excel
-		$showExportBtn = 0;
+		if ($userRole == 'superadmin' || $userRole == 'usuario') {
+			$showExportBtn = 1;
+		} else {
+			$showExportBtn = 0;
+		}
 		$queryExportacionExcel = [];
 		// Por defecto definimos el centro_id como el centro del usuario
 		$queryExportacionExcel['por_pagina'] = 'all';
@@ -155,21 +164,31 @@ class CursosInscripcionsController extends AppController {
 		if(empty($this->params['named']['estado_inscripcion'])) {
 			$conditions['Inscripcion.estado_inscripcion ='] = 'CONFIRMADA';
 			$queryExportacionExcel['estado_inscripcion'] = $conditions['Inscripcion.estado_inscripcion ='];
-			$showExportBtn++;
+			//$showExportBtn++;
 
 			$defaultForm['estado_inscripcion'] = $conditions['Inscripcion.estado_inscripcion ='];
 
 		} else {
 			$conditions['Inscripcion.estado_inscripcion ='] = $this->params['named']['estado_inscripcion'];
 			$queryExportacionExcel['estado_inscripcion'] = $this->params['named']['estado_inscripcion'];
-			$showExportBtn++;
+			//$showExportBtn++;
 
 			$defaultForm['estado_inscripcion'] = $this->params['named']['estado_inscripcion'];
+		}
+		if(!empty($this->params['named']['tipo_inscripcion'])) {
+            $conditions['Inscripcion.tipo_inscripcion ='] = $this->params['named']['tipo_inscripcion'];
+			$queryExportacionExcel['estado_inscripcion'] = $this->params['named']['estado_inscripcion'];
+			//$showExportBtn++;
+		}
+		if(!empty($this->params['named']['tipo_baja'])) {
+            $conditions['Inscripcion.tipo_baja ='] = $this->params['named']['tipo_baja'];
+			$queryExportacionExcel['estado_inscripcion'] = $this->params['named']['estado_inscripcion'];
+			//$showExportBtn++;
 		}
 		if(!empty($this->params['named']['centro_id'])) {
 			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
 			$queryExportacionExcel['centro_id'] = $this->params['named']['centro_id'];
-			$showExportBtn++;
+			//$showExportBtn++;
 
 			$defaultForm['centro_id'] = $this->params['named']['centro_id'];
 		}
@@ -198,6 +217,11 @@ class CursosInscripcionsController extends AppController {
 			$queryExportacionExcel['division'] = $this->params['named']['division'];
 
 			$defaultForm['division'] = $this->params['named']['division'];
+		}
+		if(!empty($this->params['named']['legajo_nro'])) {
+            $conditions['Inscripcion.legajo_nro NOT LIKE'] = '%'.$this->params['named']['legajo_nro'].'%';
+			$queryExportacionExcel['legajo_nro'] = $this->params['named']['legajo_nro'];
+			//$showExportBtn++;
 		}
 
 		if(empty($this->params['named']['modo'])) {

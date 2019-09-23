@@ -5,8 +5,11 @@
     if(isset($centro['nombre'])) :
     ?>
     <div class="row">
-        <div class="col-sm-12 table-responsive">
-            <a target="_blank" href="<?php echo env('SIEP_API_GW_INGRESS').'/api/v1/exportar/excel/ListaAlumnos?'.http_build_query($apiParams); ?>" class="btn btn-success pull-right">Exportar resultados a excel</a>
+        <div class="col-sm-12">
+            <form method="POST" action="/gateway/excel_alumnos">
+                <input type="hidden" name="query" value="<?php echo http_build_query($apiParams); ?>">
+                <input  type="submit" class="btn btn-success pull-right" value="Exportar resultados a excel" />
+            </form>
             <h4>
                 <?php echo $centro['nombre']; ?>
                 <?php echo "(".$curso['anio']." ".$curso['division']." ".$curso['turno'].")" ?> | <?php echo "Ciclo ".$ciclo['nombre']; ?>
@@ -17,6 +20,7 @@
                     <tr>
                         <th>DNI</th>
                         <th>Alumno</th>
+                        <th>Fecha de Nac.</th>
                         <th>Telefono</th>
                         <th>Direccion</th>
                         <th>Familiares</th>
@@ -28,6 +32,10 @@
                     <tr>
                         <td><?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['documento_nro']; ?> </td>
                         <td><?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['nombre_completo']; ?> </td>
+                        <td><?php
+                            list($nacY,$nacM,$nacD) = explode('-',$cursosInscripcion['inscripcion']['alumno']['persona']['fecha_nac']);
+                            echo "$nacD/$nacM/$nacY";
+                            ?> </td>
                         <td><?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['telefono_nro']; ?> </td>
                         <td>
                             <?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['calle_nombre']; ?>
@@ -79,6 +87,27 @@
                         <td width="60px">
                             <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Inscripcions', 'action'=> 'view', $cursosInscripcion['inscripcion']['id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
                         </td>
+                        <td width="60px">
+
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    Imprimir
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right" aria-labelledby="dropdownMenu1">
+                                    <li>
+                                        <a target="_blank" href="<?php echo "/gateway/constancia_regular/id:".$cursosInscripcion['inscripcion']['id'];?>">
+                                            Constancia de alumno regular
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="<?php echo "/gateway/constancia/id:".$cursosInscripcion['inscripcion']['id'];?>">
+                                            Constancia de inscripcion
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
                 <?php endforeach ?>
                 </tbody>
@@ -88,7 +117,7 @@
     <?php
     else :
     ?>
-        No hay alumnos registrados en la seccion solicitada en el ciclo <b><?php echo $cicloActual; ?></b>
+        No hay alumnos registrados en la seccion solicitada en el ciclo <b><?php echo $cicloDatoAlumno; ?></b>
     <?php
     endif
     ?>
