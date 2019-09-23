@@ -77,7 +77,7 @@
           <th>Matricula</th>
           <th>Por hermano</th>
           <th>VACANTES</th>
-            <!-- SOlo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
+            <!-- Sólo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
             <?php if ($apiParams['ciclo'] == $cicloNombreUltimo) : ?>
               <th>CONFIRMADAS</th>
             <?php endif ?>
