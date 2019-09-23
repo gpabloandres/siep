@@ -71,9 +71,12 @@
           <th>Institución</th>
           <th>Año</th>
           <th>Turno</th>
+          <?php /*
           <?php if ($ocultar) { ?>
             <th>Plazas(Capacidad alumnos)</th>
           <?php } else { ?>
+          */ ?>
+          <?php if (!$ocultar) { ?>
             <th>Plazas(*)</th>
           <?php } ?>
           <?php if ($ocultar) { ?>
@@ -108,9 +111,11 @@
             <td>
               <?php echo $seccion['turno']; ?>
             </td>
+            <?php if (!$ocultar) { ?>
             <td>
               <?php echo $seccion['plazas']; ?>
             </td>
+            <?php } ?>
             <td>
               <?php echo $seccion['matriculas']; ?>
             </td>
