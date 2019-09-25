@@ -23,6 +23,7 @@
                         <th>Fecha de Nac.</th>
                         <th>Telefono</th>
                         <th>Direccion</th>
+                        <th>Email</th>
                         <th>Familiares</th>
                         <th></th>
                     </tr>
@@ -40,6 +41,9 @@
                         <td>
                             <?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['calle_nombre']; ?>
                             <?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['calle_nro']; ?>
+                        </td>
+                        <td>
+                            <?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['email']; ?>
                         </td>
                         <td>
                         <?php foreach($cursosInscripcion['inscripcion']['alumno']['familiares'] as $relacion) : ?>
