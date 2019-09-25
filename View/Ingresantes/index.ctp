@@ -55,11 +55,11 @@
 </div>
 <?php endif; ?>
 <?php
-     $ocultar = false;
+     $mostrar = false;
      if( $current_user['Centro']['nivel_servicio'] === 'Común - Inicial - Primario' ||
          $current_user['Centro']['nivel_servicio'] === 'Común - Inicial' ||
          $current_user['Centro']['nivel_servicio'] === 'Común - Primario' ) {
-         $ocultar = true;
+         $mostrar = true;
      }
 ?>
 <div class="TituloSec">Ingresantes <?php echo $apiParams['ciclo'];?></div>
@@ -71,21 +71,18 @@
           <th>Institución</th>
           <th>Año</th>
           <th>Turno</th>
-          <?php /*
-          <?php if ($ocultar) { ?>
-            <th>Plazas(Capacidad alumnos)</th>
+          <?php if ($mostrar) { ?>
+            <th>Plazas(Cupo alumnos)</th>
           <?php } else { ?>
-          */ ?>
-          <?php if (!$ocultar) { ?>
             <th>Plazas(*)</th>
           <?php } ?>
-          <?php if ($ocultar) { ?>
+          <?php if ($mostrar) { ?>
             <th>Matricula(Total Pre-inscriptos)</th>
           <?php } else { ?>
             <th>Matricula</th>
           <?php } ?>
           <th>Por hermanos</th>
-          <?php if ($ocultar) { ?>
+          <?php if ($mostrar) { ?>
             <th>VACANTES(Lugares disponibles)</th>
           <?php } else { ?>
             <th>VACANTES</th>
@@ -111,11 +108,9 @@
             <td>
               <?php echo $seccion['turno']; ?>
             </td>
-            <?php if (!$ocultar) { ?>
             <td>
               <?php echo $seccion['plazas']; ?>
             </td>
-            <?php } ?>
             <td>
               <?php echo $seccion['matriculas']; ?>
             </td>
