@@ -63,14 +63,16 @@ class IngresantesController extends AppController
         $apiParams['division'] = 'sin';
         $apiParams['order'] = 'anio';
         $apiParams['order_dir'] = 'asc';
+        // Solo se muestran salas de 4 y 1ro
+        $apiParams['anio'] = ['Sala de 4 años','1ro'];
 
         // Filtros de formulario y paginacion
         if(isset($this->request->query['ciclo'])){
             $apiParams['ciclo'] = $this->request->query['ciclo'];
         }
-        if(isset($this->request->query['anio'])){
-            $apiParams['anio'] = $this->request->query['anio'];
-        }
+//        if(isset($this->request->query['anio'])){
+//            $apiParams['anio'] = $this->request->query['anio'];
+//        }
         if(isset($this->request->query['centro_id'])){
             $apiParams['centro_id'] = $this->request->query['centro_id'];
         }
@@ -89,14 +91,12 @@ class IngresantesController extends AppController
             // Supervision Primaria ve Jardines y Escuelas
             if($this->Siep->isSupervisionInicialPrimaria())
             {
-                $apiParams['nivel_servicio'] = [
-                    'Común - Inicial',
-                    'Común - Primario',
-                    'Común - Inicial - Primario'
-                ];
+                // Solo muestra sala de 4 años y 1ro
+                $apiParams['nivel_servicio'] = ['Común - Inicial', 'Común - Primario'];
             } elseif ($this->Siep->isSupervisionSecundaria())
             {
                 // Supervision Secundaria, solo ve colegios secundarios
+                // Solo 1ro año
                 $apiParams['nivel_servicio'] = [
                     'Común - Secundario'
                 ];
