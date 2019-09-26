@@ -217,10 +217,11 @@ class InscripcionsController extends AppController {
                 case 'Común - Inicial':
                 case 'Común - Primario':
                 case 'Común - Secundario':
+                case 'Común - Superior':
                 case 'Adultos - Primario':
                 case 'Adultos - Secundario':
                 case 'Especial - Integración':
-                //  PERMITIDOS AGREGAR
+                //  PERMITIDOS AGREGARR
                     break;
                 default:
                     $this->Session->setFlash('No tiene permisos para agregar inscripciones.', 'default', array('class' => 'alert alert-warning'));
@@ -253,12 +254,23 @@ class InscripcionsController extends AppController {
             // Luego de seleccionar el ciclo, se deja en los datos que se intentarán guardar.
             $cicloId = $this->request->data['Inscripcion']['ciclo_id'];
             /* No continua la inscripcion si: 
-            ** - Es un usuario del nivel "Común-Secundario",
+            ** - Es un usuario del nivel "Común-Secundario, Común Incial o Común Primario",
             ** - Del sector "ESTATAL",
             ** - El ciclo seleccionado es 2020.*/
-            if (($userData['Centro']['nivel_servicio'] == 'Común - Secundario' && $userData['Centro']['sector'] == 'ESTATAL') && ($cicloId == 7)) {
-                $this->Session->setFlash('Momentáneamente no se permiten las inscripciones 2020.', 'default', array('class' => 'alert alert-danger'));
-                $this->redirect($this->referer());
+            if (($cicloId == 7) && ($userData['Centro']['sector'] == 'ESTATAL')) {
+                switch ($userData['Centro']['nivel_servicio']) {
+                    case 'Común - Inicial':
+                    case 'Común - Primario':
+                            $this->Session->setFlash('Momentáneamente no se permiten las inscripciones 2020.', 'default', array('class' => 'alert alert-danger'));
+                            $this->redirect($this->referer());
+                        break;
+                    case 'Común - Secundario':
+                        if (!($userData['Centro']['id'] == 101 || $userData['Centro']['id'] == 506 || $userData['Centro']['id'] == 510 || $userData['Centro']['id'] == 526)) {
+                            $this->Session->setFlash('Momentáneamente no se permiten las inscripciones 2020.', 'default', array('class' => 'alert alert-danger'));
+                            $this->redirect($this->referer());
+                        }
+                        break;
+                }
             }
             $this->Inscripcion->Ciclo->recursive = 0;
             $ciclos = $this->Inscripcion->Ciclo->findById($cicloId, 'nombre');

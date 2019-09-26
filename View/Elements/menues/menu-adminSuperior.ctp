@@ -1,4 +1,4 @@
-<!-- ************ bootstrap navbar ************ -->
+<!-- ************ Bootstrap navbar ************ -->
 <p>
 <nav class="navbar navbar-custom navbar-static-top navbar-fixed-top" role="navigation">
   <div class="container-fluid">
@@ -46,9 +46,9 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alumnado <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Inscripciones'), '/inscripcions'); ?></li>
-            <!--<li><?php echo $this->Html->link(__('Familiares'), array('controller'=>'familiars', 'action'=>'add')); ?></li>-->
+            <li><?php echo $this->Html->link(__('Familiares'), array('controller'=>'familiars', 'action'=>'add')); ?></li>
             <li><?php echo $this->Html->link(__('Alumnos'),'/alumnos'); ?></li>
-            <!--<li><?php echo $this->Html->link(__('Pases'), '/pases'); ?></li>-->
+            <!--<li><?php echo $this->Html->link(__('Pasess'), '/pases'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Inasistencias'), '/inasistencias'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Calificaciones'), '/notas'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Mesa de Exámenes'), '/mesaexamens'); ?></li>-->

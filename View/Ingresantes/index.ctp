@@ -55,11 +55,11 @@
 </div>
 <?php endif; ?>
 <?php
-     $ocultar = false;
+     $mostrar = false;
      if( $current_user['Centro']['nivel_servicio'] === 'Común - Inicial - Primario' ||
          $current_user['Centro']['nivel_servicio'] === 'Común - Inicial' ||
          $current_user['Centro']['nivel_servicio'] === 'Común - Primario' ) {
-         $ocultar = true;
+         $mostrar = true;
      }
 ?>
 <div class="TituloSec">Ingresantes <?php echo $apiParams['ciclo'];?></div>
@@ -71,19 +71,27 @@
           <th>Institución</th>
           <th>Año</th>
           <th>Turno</th>
-            <?php if(!$ocultar) : ?>
-                <th>Plaza(*)</th>
+          <?php if ($mostrar) { ?>
+            <th>Plazas(Cupo alumnos)</th>
+          <?php } else { ?>
+            <th>Plazas(*)</th>
+          <?php } ?>
+          <?php if ($mostrar) { ?>
+            <th>Matricula(Total Pre-inscriptos)</th>
+          <?php } else { ?>
+            <th>Matricula</th>
+          <?php } ?>
+          <th>Por hermanos</th>
+          <?php if ($mostrar) { ?>
+            <th>VACANTES(Lugares disponibles)</th>
+          <?php } else { ?>
+            <th>VACANTES</th>
+          <?php } ?>  
+            <!-- SOlo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
+            <?php if ($apiParams['ciclo'] == $cicloNombreUltimo) : ?>
+              <th>CONFIRMADAS</th>
             <?php endif ?>
-          <th>Matricula</th>
-          <th>Por hermano</th>
-            <?php if(!$ocultar) : ?>
-                <th>VACANTES</th>
-                <!-- Sólo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
-                <?php if ($apiParams['ciclo'] == $cicloNombreUltimo) : ?>
-                    <td>CONFIRMADAS</td>
-                <?php endif ?>
-            <?php endif ?>
-        </tr>
+          </tr>
       </thead>
       <tbody>
         <?php $count=0;
@@ -100,28 +108,36 @@
             <td>
               <?php echo $seccion['turno']; ?>
             </td>
-            <?php if(!$ocultar) : ?>
             <td>
               <?php echo $seccion['plazas']; ?>
             </td>
-            <?php endif ?>
             <td>
               <?php echo $seccion['matriculas']; ?>
             </td>
             <td>
               <?php echo $seccion['por_hermano']; ?>
             </td>
-            <?php if(!$ocultar) : ?>
+            <?php if ($seccion['vacantes'] < 0) { ?>
+            <td>
+                <?php echo $seccion['vacantes']. ' ' .'<span class="label label-danger">Sorteo</span>'; ?>
+            </td>
+            <?php } else { ?>
             <td>
               <?php echo $seccion['vacantes']; ?>
             </td>
-            <?php endif ?>
-            <!-- Sólo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
+            <?php } ?>            
             <?php if ($apiParams['ciclo'] == $cicloNombreUltimo) : ?>
-            <td >
+            <?php if (($seccion['plazas'] != NULL) && ($seccion['confirmadas'] > $seccion['plazas'])) { ?>
+            <td>
+                <?php echo $seccion['confirmadas']. ' ' .'<span class="label label-danger">Excede Plaza</span>'; ?>
+            </td>
+            <?php } else { ?>
+            <td>
                 <?php echo $seccion['confirmadas']; ?>
             </td>
-            <td >
+            <?php } ?>
+            <!-- Sólo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
+            <td>
               <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
             </td>
             <?php endif ?>
