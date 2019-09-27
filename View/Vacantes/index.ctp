@@ -119,7 +119,7 @@
           <?php if($nivelServicio == 'secundarioComun') : ?>
           <th>Hs Cátedras</th>
           <th>Res. Pedagógica</th>
-          <th>Res. Presupuestaria</th>
+          <th>Instr. Legal de Creación</th>
           <?php endif; ?>
           <?php if($nivelServicio == 'inicialPrimarioComun') : ?>
           <th>P.P.</th>
