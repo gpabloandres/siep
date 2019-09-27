@@ -125,7 +125,8 @@
 								($curso['Centro']['nivel_servicio'] == 'Adultos - Secundario' && $curso['Curso']['anio'] != '3ro') ||
 								($curso['Centro']['nivel_servicio'] == 'Adultos - Primario' && $curso['Curso']['anio'] != '3ro') ||
 								($curso['Centro']['nivel_servicio'] == 'Especial - Primario') ||
-								($curso['Centro']['nivel_servicio'] == 'Especial - Integración')
+								($curso['Centro']['nivel_servicio'] == 'Especial - Integración') ||
+								($curso['Centro']['nivel_servicio'] == 'Maternal - Inicial')
 							) {
 								$showPromocion = true;
 							}
