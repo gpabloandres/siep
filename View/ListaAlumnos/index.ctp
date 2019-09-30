@@ -1,5 +1,5 @@
 <!-- start main -->
-<div class="TituloSec">Lista de alumnos</div>
+<div class="TituloSec">Datos de alumnos</div>
 <div id="ContenidoSec">
     <?php
     if(isset($centro['nombre'])) :
@@ -23,7 +23,6 @@
                         <th>Fecha de Nac.</th>
                         <th>Telefono</th>
                         <th>Direccion</th>
-                        <th>Email</th>
                         <th>Familiares</th>
                         <th></th>
                     </tr>
@@ -41,9 +40,6 @@
                         <td>
                             <?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['calle_nombre']; ?>
                             <?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['calle_nro']; ?>
-                        </td>
-                        <td>
-                            <?php echo $cursosInscripcion['inscripcion']['alumno']['persona']['email']; ?>
                         </td>
                         <td>
                         <?php foreach($cursosInscripcion['inscripcion']['alumno']['familiares'] as $relacion) : ?>
@@ -65,8 +61,10 @@
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                 <?php endif; ?>
 
-                                        <?php echo $relacion['familiar']['persona']['nombre_completo'];  ?>
+                                        <?php echo $relacion['familiar']['persona']['nombre_completo']; ?>
                                         (<?php echo $relacion['familiar']['vinculo']; ?>)
+                                        |<?php echo $relacion['familiar']['persona']['telefono_nro']; ?>
+                                        |<?php echo $relacion['familiar']['persona']['email']; ?>
                                         <span class="caret"></span>
                                     </button>
 
