@@ -236,32 +236,24 @@
       <div class="panel panel-primary">
         <div class="panel-heading">
           <div class="text-left">
-            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-home"></i> <strong> PROMOCIONES</strong>', array('controller' => 'promocion', 'action' => 'view'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php// echo $matriculaPromociones?></span></span>
+            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-home"></i> <strong> PROMOCIONES</strong>', array('controller' => 'promocion', 'action' => 'view'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaPromociones?></span></span>
           </div>
         </div>  
         <div class="panel-body">
-          <?php /*
           <!-- INICIO: Recuento para secciones de INICIAL.-->
           <?php if($nivelCentro == 'Común - Inicial'): ?>
             <table class="table table-bordered">
               <thead>
                 <tr>
-                  <th><span class="link"><?php echo $this->Html->link('3s', array('controller' => 'cursos', 'action' => 'index/turno:/anio:Sala de 3 años/division:/tipo:Independiente'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                  <th><span class="link"><?php echo $this->Html->link('3s Mul.', array('controller' => 'cursos', 'action' => 'index/turno:/anio:Sala de 3 años/division:/tipo:Múltiple'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                  <th><span class="link"><?php echo $this->Html->link('4s', array('controller' => 'cursos', 'action' => 'index/turno:/anio:Sala de 4 años/division:/tipo:Independiente'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                  <th><span class="link"><?php echo $this->Html->link('4s Mul.', array('controller' => 'cursos', 'action' => 'index/turno:/anio:Sala de 4 años/division:/tipo:Múltiple'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                  <th><span class="link"><?php echo $this->Html->link('5s', array('controller' => 'cursos', 'action' => 'index/turno:/anio:Sala de 5 años/division:/tipo:Independiente'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                <?php if ($nivelCentro == 'Común - Secundario'): ?>
-                  <th><span class="link"><?php echo $this->Html->link('7ºs', array('controller' => 'cursos', 'action' => 'index/turno:/anio:7mo /division:/tipo:Independiente'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                <?php endif; ?>
+                  <th><span class="link"><?php echo $this->Html->link('3s', array('controller' => 'promocion', 'action' => 'view?anio=Sala de 3 años&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                  <th><span class="link"><?php echo $this->Html->link('4s', array('controller' => 'promocion', 'action' => 'view?anio=Sala de 4 años&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                  <th><span class="link"><?php echo $this->Html->link('5s', array('controller' => 'promocion', 'action' => 'view?anio=Sala de 5 años&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
                 </tr>
               </thead>
               <tbody>
-                <td><?php echo $cursosTresAnios; ?></td>
-                <td><?php echo $cursosTresAniosMultiple; ?></td>
-                <td><?php echo $cursosCuatroAnios; ?></td>
-                <td><?php echo $cursosCuatroAniosMultiple; ?></td>
-                <td><?php echo $cursosCincoAnios; ?></td>
+                <td><?php echo $matriculaPromocionesTresAnios; ?></td>
+                <td><?php echo $matriculaPromocionesCuatroAnios; ?></td>
+                <td><?php echo $matriculaPromocionesCincoAnios; ?></td>
               </tbody>
             </table>
           <?php endif; ?>
@@ -277,26 +269,19 @@
                   <th><span class="link"><?php echo $this->Html->link('4ºs', array('controller' => 'promocion', 'action' => 'view?anio=4to&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
                   <th><span class="link"><?php echo $this->Html->link('5ºs', array('controller' => 'promocion', 'action' => 'view?anio=5to&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
                   <th><span class="link"><?php echo $this->Html->link('6ºs', array('controller' => 'promocion', 'action' => 'view?anio=6to&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                <?php if ($nivelCentro == 'Común - Secundario'): ?>
-                  <th><span class="link"><?php echo $this->Html->link('7ºs', array('controller' => 'cursos', 'action' => 'index/turno:/anio:7mo /division:/tipo:Independiente'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                <?php endif; ?>
                 </tr>
               </thead>
               <tbody>
-                <td><?php echo $cursosPrimerosAnios; ?></td>
-                <td><?php echo $cursosSegundosAnios; ?></td>
-                <td><?php echo $cursosTercerosAnios; ?></td>
-                <td><?php echo $cursosCuartosAnios; ?></td>
-                <td><?php echo $cursosQuintosAnios; ?></td>
-                <td><?php echo $cursosSextosAnios; ?></td>
-              <?php if ($nivelCentro == 'Común - Secundario'): ?>
-                <td><?php echo $cursosSeptimosAnios; ?></td>
-              <?php endif; ?>
+                <td><?php echo $matriculaPromociones1ro; ?></td>
+                <td><?php echo $matriculaPromociones2do; ?></td>
+                <td><?php echo $matriculaPromociones3ro; ?></td>
+                <td><?php echo $matriculaPromociones4to; ?></td>
+                <td><?php echo $matriculaPromociones5to; ?></td>
+                <td><?php echo $matriculaPromociones6to; ?></td>
               </tbody>
             </table>
           <?php endif; ?>
           <!-- FIN: Recuento para secciones de PRIMARIO.-->
-          */?>
         </div>
       </div>
     </div>
@@ -304,32 +289,24 @@
       <div class="panel panel-primary">
         <div class="panel-heading">
           <div class="text-left">
-            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-home"></i> <strong> REPITENCIAS</strong>', array('controller' => 'repitentes', 'action' => 'view'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php// echo $matriculaPromociones?></span></span>
+            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-home"></i> <strong> REPITENCIAS</strong>', array('controller' => 'repitentes', 'action' => 'view'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaRepitencias?></span></span>
           </div>
         </div>  
           <div class="panel-body">
-            <?php /*
             <!-- INICIO: Recuento para secciones de INICIAL.-->
 						<?php if($nivelCentro == 'Común - Inicial'): ?>
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th><span class="link"><?php echo $this->Html->link('3s', array('controller' => 'cursos', 'action' => 'index/turno:/anio:Sala de 3 años/division:/tipo:Independiente'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('3s Mul.', array('controller' => 'cursos', 'action' => 'index/turno:/anio:Sala de 3 años/division:/tipo:Múltiple'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('4s', array('controller' => 'cursos', 'action' => 'index/turno:/anio:Sala de 4 años/division:/tipo:Independiente'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('4s Mul.', array('controller' => 'cursos', 'action' => 'index/turno:/anio:Sala de 4 años/division:/tipo:Múltiple'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('5s', array('controller' => 'cursos', 'action' => 'index/turno:/anio:Sala de 5 años/division:/tipo:Independiente'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                  <?php if ($nivelCentro == 'Común - Secundario'): ?>
-                    <th><span class="link"><?php echo $this->Html->link('7ºs', array('controller' => 'cursos', 'action' => 'index/turno:/anio:7mo /division:/tipo:Independiente'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                  <?php endif; ?>
+                    <th><span class="link"><?php echo $this->Html->link('3s', array('controller' => 'repitentes', 'action' => 'view?anio=Sala de 3 años&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('4s', array('controller' => 'repitentes', 'action' => 'view?anio=Sala de 4 años&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('5s', array('controller' => 'repitentes', 'action' => 'view?anio=Sala de 5 años&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <td><?php echo $cursosTresAnios; ?></td>
-                  <td><?php echo $cursosTresAniosMultiple; ?></td>
-                  <td><?php echo $cursosCuatroAnios; ?></td>
-                  <td><?php echo $cursosCuatroAniosMultiple; ?></td>
-                  <td><?php echo $cursosCincoAnios; ?></td>
+                  <td><?php echo $matriculaRepitenciasTresAnios; ?></td>
+                  <td><?php echo $matriculaRepitenciasCuatroAnios; ?></td>
+                  <td><?php echo $matriculaRepitenciasCincoAnios; ?></td>
                 </tbody>
               </table>
             <?php endif; ?>
@@ -339,32 +316,31 @@
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th><span class="link"><?php echo $this->Html->link('1ºs', array('controller' => 'promocion', 'action' => 'view?anio=1ro&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('2ºs', array('controller' => 'promocion', 'action' => 'view?anio=2do&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('3ºs', array('controller' => 'promocion', 'action' => 'view?anio=3ro&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('4ºs', array('controller' => 'promocion', 'action' => 'view?anio=4to&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('5ºs', array('controller' => 'promocion', 'action' => 'view?anio=5to&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('6ºs', array('controller' => 'promocion', 'action' => 'view?anio=6to&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('1ºs', array('controller' => 'repitentes', 'action' => 'view?anio=1ro&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('2ºs', array('controller' => 'repitentes', 'action' => 'view?anio=2do&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('3ºs', array('controller' => 'repitentes', 'action' => 'view?anio=3ro&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('4ºs', array('controller' => 'repitentes', 'action' => 'view?anio=4to&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('5ºs', array('controller' => 'repitentes', 'action' => 'view?anio=5to&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('6ºs', array('controller' => 'repitentes', 'action' => 'view?anio=6to&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
                   <?php if ($nivelCentro == 'Común - Secundario'): ?>
-                    <th><span class="link"><?php echo $this->Html->link('7ºs', array('controller' => 'cursos', 'action' => 'index/turno:/anio:7mo /division:/tipo:Independiente'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('7ºs', array('controller' => 'repitentes', 'action' => 'view?anio=6to&turno='), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
                   <?php endif; ?>
                   </tr>
                 </thead>
                 <tbody>
-                  <td><?php echo $cursosPrimerosAnios; ?></td>
-                  <td><?php echo $cursosSegundosAnios; ?></td>
-                  <td><?php echo $cursosTercerosAnios; ?></td>
-                  <td><?php echo $cursosCuartosAnios; ?></td>
-                  <td><?php echo $cursosQuintosAnios; ?></td>
-                  <td><?php echo $cursosSextosAnios; ?></td>
+                  <td><?php echo $matriculaRepitencias1ro; ?></td>
+                  <td><?php echo $matriculaRepitencias2do; ?></td>
+                  <td><?php echo $matriculaRepitencias3ro; ?></td>
+                  <td><?php echo $matriculaRepitencias4to; ?></td>
+                  <td><?php echo $matriculaRepitencias5to; ?></td>
+                  <td><?php echo $matriculaRepitencias6to; ?></td>
                 <?php if ($nivelCentro == 'Común - Secundario'): ?>
-                  <td><?php echo $cursosSeptimosAnios; ?></td>
+                  <td><?php echo $matriculaRepitencias7mo; ?></td>
                 <?php endif; ?>
                 </tbody>
               </table>
             <?php endif; ?>
             <!-- FIN: Recuento para secciones de PRIMARIO.-->
-            */?>
           </div>
         </div>
       </div>
