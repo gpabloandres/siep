@@ -78,7 +78,8 @@
             <li><?php echo $this->Html->link(__('Promocionados'), '/promocion/view');?></li>
             <li><?php echo $this->Html->link(__('Repitentes'), '/repitentes/view');?></li>
             <li><?php echo $this->Html->link(__('Ingresantes 2020'), '/ingresantes?ciclo=2020');?></li>
-        </ul>
+            <li><?php echo $this->Html->link(__('Inscripciones 2020'), '/vacantes?ciclo=2020');?></li>
+          </ul>
       </li>
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ayuda <span class="caret"></span></a>
