@@ -67,7 +67,7 @@
     } 
      
 ?>
-<div class="TituloSec">Inscripciones <?php echo $apiParams['ciclo']; ?></div>
+<div class="TituloSec">Matrícula <?php echo $apiParams['ciclo']; ?></div>
 <div id="ContenidoSec">
     <?php
     if($showBtnExcel) :
