@@ -18,7 +18,7 @@
                   select: function( event, ui ) {
                     $("#AutocompleteForm").val( ui.item.Centro.sigla );
 
-                    window.location.href = "<?php echo $this->Html->url(array('controller'=>'vacantes'));?>/index?centro_id="+ui.item.Centro.id;
+                    window.location.href = "<?php echo $this->Html->url(array('controller'=>'vacantes'));?>/index?centro_id="+ui.item.Centro.id+"&ciclo=<?php echo $apiParams['ciclo']; ?>";
                     return false;
                   }
                 }).autocomplete( "instance" )._renderItem = function( ul, item ) {
