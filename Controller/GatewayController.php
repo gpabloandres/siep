@@ -176,6 +176,43 @@ class GatewayController extends AppController
         $this->response->type('xls');
     }
 
+    public function pdf_matriculas_por_seccion()
+    {
+        $this->autoRender = false;
+        $hostApi = getenv('HOSTAPI');
+        $this->params->params["named"]["division"] = "con";
+        $this->params->params["named"]["export"] = "2";
+        $this->params->params["named"]["por_pagina"] = "all";
+        $params = $this->params->params["named"];
+        // $params = [];
+        // foreach($paramsTemp as $key => $value)
+        // {
+        //     if($value != "")
+        //     {
+        //         array_push($params,[$key => $value]);
+        //     }
+        // }
+        $query = http_build_query($params);
+
+        // $data = http_build_query($query["named"]);
+        
+        
+        $url = "http://{$hostApi}/api/v1/matriculas/cuantitativa/por_seccion?{$query}";
+        $opts = array(
+            'http' => array(
+                'method' => 'GET',
+                'agent'  => "CakePHP",
+                'header' => getenv('XHOSTCAKE').": do"
+            )
+        );
+        $context = stream_context_create($opts);
+
+        $result= file_get_contents($url,false, $context);
+        $this->response->body($result);
+        $this->response->type('pdf');
+
+    }
+
     public function excel_vacantes()
     {
         $this->autoRender = false;
