@@ -183,6 +183,7 @@ class GatewayController extends AppController
         $this->params->params["named"]["division"] = "con";
         $this->params->params["named"]["export"] = "2";
         $this->params->params["named"]["por_pagina"] = "all";
+        $this->params->params["named"]["estado_inscripcion"] = "CONFIRMADA";
         $params = $this->params->params["named"];
         // $params = [];
         // foreach($paramsTemp as $key => $value)
