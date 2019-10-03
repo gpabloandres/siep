@@ -73,7 +73,7 @@
     if($showBtnExcel) :
     ?>
         <?php
-        if($this->Siep->isAdmin()) :
+        if($this->Siep->isAdmin()):
         ?>
             <a target="_blank" class="btn btn-success pull-right" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">
                 <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel
@@ -82,7 +82,7 @@
                 <span class="glyphicon glyphicon-file"></span><span>Exportar resultados a PDF</span>
             </a>
         <?php else: ?>
-            <div class="btn-group pull-right">:
+            <div class="btn-group pull-right">
             
                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel <span class="caret"></span>
