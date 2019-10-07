@@ -260,9 +260,16 @@ class InscripcionsController extends AppController {
             if (($cicloId == 7) && ($userData['Centro']['sector'] == 'ESTATAL')) {
                 switch ($userData['Centro']['nivel_servicio']) {
                     case 'Común - Inicial':
-                    case 'Común - Primario':
+                        if (!($userData['Centro']['id'] == 129 || $userData['Centro']['id'] == 150 || $userData['Centro']['id'] == 507 || $userData['Centro']['id'] == 512 || $userData['Centro']['id'] == 532)) {    
                             $this->Session->setFlash('Momentáneamente no se permiten las inscripciones 2020.', 'default', array('class' => 'alert alert-danger'));
                             $this->redirect($this->referer());
+                        }
+                        break;
+                    case 'Común - Primario':
+                        if (!($userData['Centro']['id'] == 502 || $userData['Centro']['id'] == 505 || $userData['Centro']['id'] == 508 || $userData['Centro']['id'] == 509 || $userData['Centro']['id'] == 511)) {    
+                            $this->Session->setFlash('Momentáneamente no se permiten las inscripciones 2020.', 'default', array('class' => 'alert alert-danger'));
+                            $this->redirect($this->referer());
+                        }
                         break;
                     case 'Común - Secundario':
                         if (!($userData['Centro']['id'] == 101 || $userData['Centro']['id'] == 506 || $userData['Centro']['id'] == 510 || $userData['Centro']['id'] == 526)) {
