@@ -110,6 +110,9 @@ class VacantesController extends AppController
                 $apiParams['nivel_servicio'] = [
                     'Común - Inicial',
                     'Común - Primario',
+                    'Maternal - Inicial',
+                    'Especial - Primario',
+                    'Adultos - Primario',
                     'Común - Inicial - Primario'
                 ];
             } elseif ($this->Siep->isSupervisionSecundaria())
