@@ -55,8 +55,14 @@ class EgresoController extends AppController {
 			$this->redirect(array('controller'=>'cursos','action' => 'index'));
 		}
 
-		$cicloActual = 2018;
-		$cicloEgreso = 2018;
+		$serverDate = getdate();
+		$cicloActual = $serverDate['year'];
+		$cicloEgreso = $cicloActual; // Solo en febrero el cicloActual no es igual al cicloEgreso
+
+		if(isset($this->params['named']['ciclo'])) {
+			$cicloActual = $this->params['named']['ciclo'];
+			$cicloEgreso = $cicloActual;
+		}
 
 		// Parametros para ejecutar API
 		$apiParams = [];
