@@ -233,19 +233,6 @@ class CursosController extends AppController {
 		}
 		if (!empty($this->data)) {
 			$this->Curso->create();
-			/*
-			//Antes de guardar sí el nivel_servicio del centro es INICIAL o PRIMARIO, obtiene la titulación.
-            $centroId = $this->request->data['Curso']['centro_id'];
-            $this->loadModel('Centro');
-            $this->Centro->recursive = 0;
-        	$this->Centro->Behaviors->load('Containable');
-            $centroNivel = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'contain'=>false, 'conditions'=>array('id'=>$centroId)));
-			if ($centroNivel == 'INICIAL') {
-				$this->request->data['Curso']['titulacion_id'] = 9;
-			} else if ($centroNivel == 'PRIMARIA') {
-				$this->request->data['Curso']['titulacion_id'] = 10;
-			}
-			*/
 			// Antes de guardar obtiene los valores de matrícula y vacantes.
 			$plazas = $this->request->data['Curso']['plazas'];
 			$vacantes = $plazas;
@@ -260,13 +247,9 @@ class CursosController extends AppController {
 				$this->Session->setFlash('La sección no fué grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-		//$this->Curso->Materia->recursive = 0;
-		//$materias = $this->Curso->Materia->find('list');
 		$this->Curso->Centro->recursive = 0;
 		$centros = $this->Curso->Centro->find('list');
-		$this->Inscripcion->recursive = 0;
-		$inscripcions = $this->Inscripcion->find('list');
-		$this->set(compact(/*'materias', */'ciclos', 'inscripcions', $inscripcions, 'centros'));
+		$this->set(compact('ciclos', 'centros'));
 	}
 
 	function edit($id = null) {
@@ -319,9 +302,7 @@ class CursosController extends AppController {
 		$this->Ciclo->recursive = 0;
         $this->Ciclo->Behaviors->load('Containable');
 		$ciclos = $this->Ciclo->find('list');
-		$this->Inscripcion->recursive = 0;
-		$inscripcions = $this->Inscripcion->find('list');
-		$this->set(compact('centros', 'modalidads', 'ciclos', 'inscripcions', $inscripcions, 'titulaciones'));
+		$this->set(compact('centros', 'modalidads', 'ciclos', 'titulaciones'));
 	}
 
 	function delete($id = null) {

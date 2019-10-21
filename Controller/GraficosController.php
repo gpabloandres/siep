@@ -124,19 +124,6 @@ class GraficosController extends AppController {
 			))
 		);
 		// Conteo de promociones Totales.		
-		/*
-		// Parametros de API por defecto
-		$apiParamsTotal = [];
-		$apiParamsTotal['ciclo'] = '2018';
-		$apiParamsTotal['promocion'] = 'con';
-		$apiParamsTotal['centro_id'] = $userCentroId;
-		
-		$matriculaPromociones = $this->Siep->consumeApi("api/v1/matriculas/cuantitativa/por_seccion",$apiParamsTotal);
-		if(isset($promociones['error'])) {
-			// Manejar error de API
-		}
-		$matriculaPromocionesTotal = $matriculaPromociones['total'];
-		*/
 		$this->loadModel('CursosInscripcion');
 		$matriculaPromociones = $this->CursosInscripcion->find('count', array(
 			'conditions' => array(
@@ -160,6 +147,27 @@ class GraficosController extends AppController {
 				'Inscripcion.estado_inscripcion' => 'EGRESO',
 				'Inscripcion.ciclo_id' => $cicloIdAnterior
 			))
+		);
+		/* Conteo de PASES ENTRANTES*/
+		//$matriculaPases = $inscripcionesPorPase + $bajasSalidosConPase;
+		$matriculaPasesEntrantes = $this->CursosInscripcion->Inscripcion->find('count', array(
+			'contain'=>false,
+			'conditions'=>array(
+				'ciclo_id'=>$cicloIdActual, 
+				'centro_id'=>$userCentroId,
+				'tipo_inscripcion'=>'Pase',
+				'estado_inscripcion'=>'CONFIRMADA')
+			)
+		);
+		/* Conteo de PASES SALIENTES*/
+		$matriculaPasesSalientes = $this->CursosInscripcion->Inscripcion->find('count', array(
+			'contain'=>false,
+			'conditions'=>array(
+				'ciclo_id'=>$cicloIdActual,
+				'centro_id'=>$userCentroId,
+				'estado_inscripcion'=>'BAJA',
+				'tipo_baja'=>'Salido con pase')
+			)
 		);
 		/* FIN: conteos generales */
 		/* INICIO: conteos específicos */
@@ -329,7 +337,6 @@ class GraficosController extends AppController {
 				# code...
 				break;
 		}
-		
 		// Conteo de inscripciones por hermanos.
 		$inscripcionesPorHermano = $this->Inscripcion->find('count', array(
 			'conditions' => array(
@@ -416,255 +423,535 @@ class GraficosController extends AppController {
 				'Inscripcion.legajo_nro NOT LIKE' => '%'.$legajoTipo.'%'
 			))
 		);
-		// Conteo de pases: Entradas + Salidas
-		$matriculaPases = $inscripcionesPorPase + $bajasSalidosConPase;
-		/* Conteo de promociones según años. */
-		// Sala de 3 años.
-		$matriculaPromocionesTresAnios = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.promocion_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => 'Sala de 3 años'
-			))
-		);
-		// Sala de 4 años.
-		$matriculaPromocionesCuatroAnios = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.promocion_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => 'Sala de 4 años'
-			))
-		);
-		// Sala de 5 años.
-		$matriculaPromocionesCincoAnios = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.promocion_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => 'Sala de 5 años'
-			))
-		);
-		// Primer año.
-		/*
-		// Parametros de API por defecto
-		$apiParams1ro = [];
-		$apiParams1ro['ciclo'] = '2018';
-		$apiParams1ro['promocion'] = 'con';
-		$apiParams1ro['centro_id'] = $userCentroId;
-		$apiParams1ro['anio'] = '1ro';
-		$matriculaPromociones = $this->Siep->consumeApi("api/v1/matriculas/cuantitativa/por_seccion",$apiParams1ro);
-		if(isset($promociones['error'])) {
-			// Manejar error de API
+		/* Conteo de PASES ENTRANTES por AÑO */
+		switch ($nivelCentro) {
+			case 'Común - Inicial':
+				// Sala de 3 años.
+				$matriculaPasesEntrantes3anios = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.tipo_inscripcion'=>'Pase',
+						'Inscripcion.estado_inscripcion'=>'CONFIRMADA',
+						'Curso.anio' => 'Sala de 3 años'
+					))
+				);
+				// Sala de 4 años.
+				$matriculaPasesEntrantes4anios = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.tipo_inscripcion'=>'Pase',
+						'Inscripcion.estado_inscripcion'=>'CONFIRMADA',
+						'Curso.anio' => 'Sala de 4 años'
+					))
+				);
+				// Sala de 5 años.
+				$matriculaPasesEntrantes5anios = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.tipo_inscripcion'=>'Pase',
+						'Inscripcion.estado_inscripcion'=>'CONFIRMADA',
+						'Curso.anio' => 'Sala de 5 años'
+					))
+				);
+				break;
+			
+			case 'Común - Primario':
+			case 'Común - Secundario':
+			case 'Adultos - Primario':
+			case 'Adultos - Secundario':
+				// 1ro.
+				$matriculaPasesEntrantes1ro = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.tipo_inscripcion'=>'Pase',
+						'Inscripcion.estado_inscripcion'=>'CONFIRMADA',
+						'Curso.anio' => '1ro'
+					))
+				);
+				// 2do.
+				$matriculaPasesEntrantes2do = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.tipo_inscripcion'=>'Pase',
+						'Inscripcion.estado_inscripcion'=>'CONFIRMADA',
+						'Curso.anio' => '2do'
+					))
+				);
+				// 3ro.
+				$matriculaPasesEntrantes3ro = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.tipo_inscripcion'=>'Pase',
+						'Inscripcion.estado_inscripcion'=>'CONFIRMADA',
+						'Curso.anio' => '3ro'
+					))
+				);
+				// 4to.
+				$matriculaPasesEntrantes4to = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.tipo_inscripcion'=>'Pase',
+						'Inscripcion.estado_inscripcion'=>'CONFIRMADA',
+						'Curso.anio' => '4to'
+					))
+				);
+				// 5to.
+				$matriculaPasesEntrantes5to = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.tipo_inscripcion'=>'Pase',
+						'Inscripcion.estado_inscripcion'=>'CONFIRMADA',
+						'Curso.anio' => '5to'
+					))
+				);
+				// 6to.
+				$matriculaPasesEntrantes6to = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.tipo_inscripcion'=>'Pase',
+						'Inscripcion.estado_inscripcion'=>'CONFIRMADA',
+						'Curso.anio' => '6to'
+					))
+				);
+				// Sólo Secundarios cuentan 7mos.
+				if ($nivelCentro == 'Común - Secundario') {
+					// 7mo.
+					$matriculaPasesEntrantes7mo = $this->CursosInscripcion->find('count', array(
+						'conditions' => array(
+							'Inscripcion.ciclo_id'=>$cicloIdActual,
+							'Inscripcion.centro_id'=>$userCentroId,
+							'Inscripcion.tipo_inscripcion'=>'Pase',
+							'Inscripcion.estado_inscripcion'=>'CONFIRMADA',
+							'Curso.anio' => '7mo'
+						))
+					);
+				}
+				if ($nivelCentro == 'Adultos - Primario') {
+					// Alfabetizacion.
+					$matriculaPasesEntrantesAlfabetizacion = $this->CursosInscripcion->find('count', array(
+						'conditions' => array(
+							'Inscripcion.ciclo_id'=>$cicloIdActual,
+							'Inscripcion.centro_id'=>$userCentroId,
+							'Inscripcion.tipo_inscripcion'=>'Pase',
+							'Inscripcion.estado_inscripcion'=>'CONFIRMADA',
+							'Curso.anio' => 'ALFABETIZACIÓN'
+						))
+					);
+					// CAP.
+					$matriculaPasesEntrantesCAP = $this->CursosInscripcion->find('count', array(
+						'conditions' => array(
+							'Inscripcion.ciclo_id'=>$cicloIdActual,
+							'Inscripcion.centro_id'=>$userCentroId,
+							'Inscripcion.tipo_inscripcion'=>'Pase',
+							'Inscripcion.estado_inscripcion'=>'CONFIRMADA',
+							'Curso.anio' => 'CAP'
+						))
+					);
+				}	
+				break;
+			
+			default:
+				# code...
+				break;
 		}
-		$matriculaPromociones1ro = $matriculaPromociones['total'];
-		// Primer año.
-		// Parametros de API por defecto
-		$apiParams1ro = [];
-		$apiParams1ro['ciclo'] = '2018';
-		$apiParams1ro['promocion'] = 'con';
-		$apiParams1ro['centro_id'] = $userCentroId;
-		$apiParams1ro['anio'] = '1ro';
-		$matriculaPromociones = $this->Siep->consumeApi("api/v1/matriculas/cuantitativa/por_seccion",$apiParams1ro);
-		if(isset($promociones['error'])) {
-			// Manejar error de API
+		/* Conteo de PASES SALIENTES por AÑO */
+		switch ($nivelCentro) {
+			case 'Común - Inicial':
+				// Sala de 3 años.
+				$matriculaPasesSalientes3anios = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.estado_inscripcion'=>'BAJA',
+						'Inscripcion.tipo_baja'=>'Salido con pase',
+						'Curso.anio' => 'Sala de 3 años'
+					))
+				);
+				// Sala de 4 años.
+				$matriculaPasesSalientes4anios = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.estado_inscripcion'=>'BAJA',
+						'Inscripcion.tipo_baja'=>'Salido con pase',
+						'Curso.anio' => 'Sala de 4 años'
+					))
+				);
+				// Sala de 5 años.
+				$matriculaPasesSalientes5anios = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.estado_inscripcion'=>'BAJA',
+						'Inscripcion.tipo_baja'=>'Salido con pase',
+						'Curso.anio' => 'Sala de 5 años'
+					))
+				);
+				break;
+			
+			case 'Común - Primario':
+			case 'Común - Secundario':
+			case 'Adultos - Primario':
+			case 'Adultos - Secundario':
+				// 1ro.
+				$matriculaPasesSalientes1ro = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.estado_inscripcion'=>'BAJA',
+						'Inscripcion.tipo_baja'=>'Salido con pase',
+						'Curso.anio' => '1ro'
+					))
+				);
+				// 2do.
+				$matriculaPasesSalientes2do = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.estado_inscripcion'=>'BAJA',
+						'Inscripcion.tipo_baja'=>'Salido con pase',
+						'Curso.anio' => '2do'
+					))
+				);
+				// 3ro.
+				$matriculaPasesSalientes3ro = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.estado_inscripcion'=>'BAJA',
+						'Inscripcion.tipo_baja'=>'Salido con pase',
+						'Curso.anio' => '3ro'
+					))
+				);
+				// 4to.
+				$matriculaPasesSalientes4to = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.estado_inscripcion'=>'BAJA',
+						'Inscripcion.tipo_baja'=>'Salido con pase',
+						'Curso.anio' => '4to'
+					))
+				);
+				// 5to.
+				$matriculaPasesSalientes5to = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.estado_inscripcion'=>'BAJA',
+						'Inscripcion.tipo_baja'=>'Salido con pase',
+						'Curso.anio' => '5to'
+					))
+				);
+				// 6to.
+				$matriculaPasesSalientes6to = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id'=>$cicloIdActual,
+						'Inscripcion.centro_id'=>$userCentroId,
+						'Inscripcion.estado_inscripcion'=>'BAJA',
+						'Inscripcion.tipo_baja'=>'Salido con pase',
+						'Curso.anio' => '6to'
+					))
+				);
+				// Sólo Secundarios cuentan 7mos.
+				if ($nivelCentro == 'Común - Secundario') {
+					// 7mo.
+					$matriculaPasesSalientes7mo = $this->CursosInscripcion->find('count', array(
+						'conditions' => array(
+							'Inscripcion.ciclo_id'=>$cicloIdActual,
+							'Inscripcion.centro_id'=>$userCentroId,
+							'Inscripcion.estado_inscripcion'=>'BAJA',
+							'Inscripcion.tipo_baja'=>'Salido con pase',
+							'Curso.anio' => '7mo'
+						))
+					);
+				}
+				if ($nivelCentro == 'Adultos - Primario') {
+					// Alfabetizacion.
+					$matriculaPasesSalientesAlfabetizacion = $this->CursosInscripcion->find('count', array(
+						'conditions' => array(
+							'Inscripcion.ciclo_id'=>$cicloIdActual,
+							'Inscripcion.centro_id'=>$userCentroId,
+							'Inscripcion.estado_inscripcion'=>'BAJA',
+							'Inscripcion.tipo_baja'=>'Salido con pase',
+							'Curso.anio' => 'ALFABETIZACIÓN'
+						))
+					);
+					// CAP.
+					$matriculaPasesSalientesCAP = $this->CursosInscripcion->find('count', array(
+						'conditions' => array(
+							'Inscripcion.ciclo_id'=>$cicloIdActual,
+							'Inscripcion.centro_id'=>$userCentroId,
+							'Inscripcion.estado_inscripcion'=>'BAJA',
+							'Inscripcion.tipo_baja'=>'Salido con pase',
+							'Curso.anio' => 'CAP'
+						))
+					);
+				}	
+				break;
+			
+			default:
+				# code...
+				break;
 		}
-		$matriculaPromociones1ro = $matriculaPromociones['total'];
-		*/
-		$matriculaPromociones1ro = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.promocion_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => '1ro'
-			))
-		);
-		// Segundo año.
-		$matriculaPromociones2do = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.promocion_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => '2do'
-			))
-		);
-		// Tercer año.
-		$matriculaPromociones3ro = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.promocion_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => '3ro'
-			))
-		);
-		// Cuarto año.
-		$matriculaPromociones4to = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.promocion_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => '4to'
-			))
-		);
-		// Quinto año.
-		$matriculaPromociones5to = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.promocion_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => '5to'
-			))
-		);
-		// Sexto año.
-		$matriculaPromociones6to = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.promocion_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => '6to'
-			))
-		);
-		/* Conteo de repitencias según años. */
-		// Sala de 3 años.
-		$matriculaRepitenciasTresAnios = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.repitencia_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => 'Sala de 3 años'
-			))
-		);
-		// Sala de 4 años.
-		$matriculaRepitenciasCuatroAnios = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.repitencia_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => 'Sala de 4 años'
-			))
-		);
-		// Sala de 5 años.
-		$matriculaRepitenciasCincoAnios = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.repitencia_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => 'Sala de 5 años'
-			))
-		);
-		// Primer año.
-		/*
-		// Parametros de API por defecto
-		$apiParams1ro = [];
-		$apiParams1ro['ciclo'] = '2018';
-		$apiParams1ro['promocion'] = 'con';
-		$apiParams1ro['centro_id'] = $userCentroId;
-		$apiParams1ro['anio'] = '1ro';
-		$matriculaPromociones = $this->Siep->consumeApi("api/v1/matriculas/cuantitativa/por_seccion",$apiParams1ro);
-		if(isset($promociones['error'])) {
-			// Manejar error de API
+		/* Conteo de PROMOCIONES por años. */
+		switch ($nivelCentro) {
+			case 'Común - Inicial':
+				// Sala de 3 años.
+				$matriculaPromocionesTresAnios = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.promocion_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => 'Sala de 3 años'
+					))
+				);
+				// Sala de 4 años.
+				$matriculaPromocionesCuatroAnios = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.promocion_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => 'Sala de 4 años'
+					))
+				);
+				// Sala de 5 años.
+				$matriculaPromocionesCincoAnios = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.promocion_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => 'Sala de 5 años'
+					))
+				);
+				break;
+			case 'Común - Primario':
+			case 'Común - Secundario':
+			case 'Adultos - Primario':
+			case 'Adultos - Secundario':
+				// Primer año.
+				$matriculaPromociones1ro = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.promocion_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => '1ro'
+					))
+				);
+				// Segundo año.
+				$matriculaPromociones2do = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.promocion_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => '2do'
+					))
+				);
+				// Tercer año.
+				$matriculaPromociones3ro = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.promocion_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => '3ro'
+					))
+				);
+				// Cuarto año.
+				$matriculaPromociones4to = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.promocion_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => '4to'
+					))
+				);
+				// Quinto año.
+				$matriculaPromociones5to = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.promocion_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => '5to'
+					))
+				);
+				// Sexto año.
+				$matriculaPromociones6to = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.promocion_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => '6to'
+					))
+				);
+				if ($nivelCentro == 'Adultos - Primario') {
+					// Alfabetizacion.
+					$matriculaPromocionesAlfabetizacion = $this->CursosInscripcion->find('count', array(
+						'conditions' => array(
+							'Inscripcion.ciclo_id' => $cicloIdAnterior,
+							'Inscripcion.promocion_id !=' => '',
+							'Inscripcion.centro_id' => $userCentroId,
+							'Curso.anio' => 'ALFABETIZACIÓN'
+						))
+					);
+					// CAP.
+					$matriculaPromocionesCAP = $this->CursosInscripcion->find('count', array(
+						'conditions' => array(
+							'Inscripcion.ciclo_id' => $cicloIdAnterior,
+							'Inscripcion.promocion_id !=' => '',
+							'Inscripcion.centro_id' => $userCentroId,
+							'Curso.anio' => 'CAP'
+						))
+					);
+				}
+				break;
+
+			default:
+				# code...
+				break;
 		}
-		$matriculaPromociones1ro = $matriculaPromociones['total'];
-		// Primer año.
-		// Parametros de API por defecto
-		$apiParams1ro = [];
-		$apiParams1ro['ciclo'] = '2018';
-		$apiParams1ro['promocion'] = 'con';
-		$apiParams1ro['centro_id'] = $userCentroId;
-		$apiParams1ro['anio'] = '1ro';
-		$matriculaPromociones = $this->Siep->consumeApi("api/v1/matriculas/cuantitativa/por_seccion",$apiParams1ro);
-		if(isset($promociones['error'])) {
-			// Manejar error de API
+		/* Conteo de REPITENCIAS por años. */
+		switch ($nivelCentro) {
+			case 'Común - Inicial':
+				// Sala de 3 años.
+				$matriculaRepitenciasTresAnios = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.repitencia_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => 'Sala de 3 años'
+					))
+				);
+				// Sala de 4 años.
+				$matriculaRepitenciasCuatroAnios = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.repitencia_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => 'Sala de 4 años'
+					))
+				);
+				// Sala de 5 años.
+				$matriculaRepitenciasCincoAnios = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.repitencia_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => 'Sala de 5 años'
+					))
+				);
+				break;
+			case 'Común - Primario':
+			case 'Común - Secundario':
+			case 'Adultos - Primario':
+			case 'Adultos - Secundario':
+				// Primer año.
+				$matriculaRepitencias1ro = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.repitencia_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => '1ro'
+					))
+				);
+				// Segundo año.
+				$matriculaRepitencias2do = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.repitencia_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => '2do'
+					))
+				);
+				// Tercer año.
+				$matriculaRepitencias3ro = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.repitencia_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => '3ro'
+					))
+				);
+				// Cuarto año.
+				$matriculaRepitencias4to = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.repitencia_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => '4to'
+					))
+				);
+				// Quinto año.
+				$matriculaRepitencias5to = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.repitencia_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => '5to'
+					))
+				);
+				// Sexto año.
+				$matriculaRepitencias6to = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.repitencia_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => '6to'
+					))
+				);
+				// Sexto año.
+				$matriculaRepitencias7mo = $this->CursosInscripcion->find('count', array(
+					'conditions' => array(
+						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.repitencia_id !=' => '',
+						'Inscripcion.centro_id' => $userCentroId,
+						'Curso.anio' => '7mo'
+					))
+				);
+				if ($nivelCentro == 'Adultos - Primario') {
+					// Alfabetizacion.
+					$matriculaRepitenciasAlfabetizacion = $this->CursosInscripcion->find('count', array(
+						'conditions' => array(
+							'Inscripcion.ciclo_id' => $cicloIdAnterior,
+							'Inscripcion.repitencia_id !=' => '',
+							'Inscripcion.centro_id' => $userCentroId,
+							'Curso.anio' => 'ALFABETIZACIÓN'
+						))
+					);
+					// CAP.
+					$matriculaRepitenciasCAP = $this->CursosInscripcion->find('count', array(
+						'conditions' => array(
+							'Inscripcion.ciclo_id' => $cicloIdAnterior,
+							'Inscripcion.repitencia_id !=' => '',
+							'Inscripcion.centro_id' => $userCentroId,
+							'Curso.anio' => 'CAP'
+						))
+					);
+				}
+			break;
+
+			default:
+				# code...
+			break;
 		}
-		$matriculaPromociones1ro = $matriculaPromociones['total'];
-		*/
-		$matriculaRepitencias1ro = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.repitencia_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => '1ro'
-			))
-		);
-		// Segundo año.
-		$matriculaRepitencias2do = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.repitencia_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => '2do'
-			))
-		);
-		// Tercer año.
-		$matriculaRepitencias3ro = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.repitencia_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => '3ro'
-			))
-		);
-		// Cuarto año.
-		$matriculaRepitencias4to = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.repitencia_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => '4to'
-			))
-		);
-		// Quinto año.
-		$matriculaRepitencias5to = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.repitencia_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => '5to'
-			))
-		);
-		// Sexto año.
-		$matriculaRepitencias6to = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.repitencia_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => '6to'
-			))
-		);
-		// Sexto año.
-		$matriculaRepitencias7mo = $this->CursosInscripcion->find('count', array(
-			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
-				'Inscripcion.repitencia_id !=' => '',
-				'Inscripcion.centro_id' => $userCentroId,
-				'Curso.anio' => '7mo'
-			))
-		);
 		// Envío de valores a la vista.
 		$this->set(compact('centroNombre', 'usuarios', 'empleados', 'cursos', 'matricula', 'ingresantes',
-		 'matriculaBaja', 'matriculaPromociones', 'matriculaPromocionesTresAnios', 'matriculaPromocionesCuatroAnios', 'matriculaPromocionesCincoAnios', 'matriculaPromociones1ro', 'matriculaPromociones2do', 'matriculaPromociones3ro', 'matriculaPromociones4to', 'matriculaPromociones5to', 'matriculaPromociones6to',
-		 'matriculaRepitencias', 'matriculaRepitenciasTresAnios', 'matriculaRepitenciasCuatroAnios', 'matriculaRepitenciasCincoAnios', 'matriculaRepitencias1ro', 'matriculaRepitencias2do', 'matriculaRepitencias3ro', 'matriculaRepitencias4to', 'matriculaRepitencias5to', 'matriculaRepitencias6to', 'matriculaRepitencias7mo',
-		 'matriculaEgresos', 'matriculaPases', 'cursosTresAnios', 'cursosTresAniosMultiple', 'cursosCuatroAnios', 'cursosCuatroAniosMultiple',
-		 'cursosCincoAnios', 'cursosPrimerosAnios', 'cursosSegundosAnios', 'cursosTercerosAnios', 'cursosCuartosAnios',
+		 'matriculaBaja', 'matriculaPromociones', 'matriculaPromocionesTresAnios', 'matriculaPromocionesCuatroAnios', 'matriculaPromocionesCincoAnios', 'matriculaPromociones1ro', 'matriculaPromociones2do', 'matriculaPromociones3ro', 'matriculaPromociones4to', 'matriculaPromociones5to', 'matriculaPromociones6to', 'matriculaPromocionesAlfabetizacion', 'matriculaPromocionesCAP',
+		 'matriculaRepitencias', 'matriculaRepitenciasTresAnios', 'matriculaRepitenciasCuatroAnios', 'matriculaRepitenciasCincoAnios', 'matriculaRepitencias1ro', 'matriculaRepitencias2do', 'matriculaRepitencias3ro', 'matriculaRepitencias4to', 'matriculaRepitencias5to', 'matriculaRepitencias6to', 'matriculaRepitencias7mo', 'matriculaRepitenciasAlfabetizacion', 'matriculaRepitenciasCAP',
+		 'matriculaEgresos', 'matriculaPasesEntrantes', 'matriculaPasesSalientes', 'matriculaPasesEntrantes3anios', 'matriculaPasesEntrantes4anios', 'matriculaPasesEntrantes5anios', 'matriculaPasesEntrantes1ro', 'matriculaPasesEntrantes2do', 'matriculaPasesEntrantes3ro', 'matriculaPasesEntrantes4to', 'matriculaPasesEntrantes5to', 'matriculaPasesEntrantes6to', 'matriculaPasesEntrantes7mo', 'matriculaPasesEntrantesAlfabetizacion', 'matriculaPasesEntrantesCAP',
+		 'matriculaPasesSalientes3anios', 'matriculaPasesSalientes4anios', 'matriculaPasesSalientes5anios', 'matriculaPasesSalientes1ro', 'matriculaPasesSalientes2do', 'matriculaPasesSalientes3ro', 'matriculaPasesSalientes4to', 'matriculaPasesSalientes5to', 'matriculaPasesSalientes6to', 'matriculaPasesSalientes7mo', 'matriculaPasesSalientesAlfabetizacion', 'matriculaPasesSalientesCAP',
+		 'cursosTresAnios', 'cursosTresAniosMultiple', 'cursosCuatroAnios', 'cursosCuatroAniosMultiple', 'cursosCincoAnios', 'cursosPrimerosAnios', 'cursosSegundosAnios', 'cursosTercerosAnios', 'cursosCuartosAnios',
 		 'cursosQuintosAnios', 'cursosSextosAnios', 'cursosSeptimosAnios', 'cursosAlfabetizacion', 'cursosCAP', 'inscripcionesPorHermano', 'inscripcionesComunes', 'inscripcionesPorSituacionSocial',
 		 'inscripcionesPorPase', 'bajasSalidosConPase', 'bajasSalidosSinPase', 'bajasPerdidaRegularidad', 
 		 'bajasFallecimiento', 'bajasSinEspecificar', 'titulacionesIdActivas', 'nivelCentro')); 
 	} 
-	/*
-    public function i_x_curso() {
-     	$this->loadModel('Curso');
-     	$cursos = $this->Curso->find('list', array('field'=>array('matricula'), 'conditions'=>array('centro_id'=>19)));
-		$this->set(compact($cursos));
-	}
-
-	public function r_x_curso() {
-
-	}
-, 
-	public function a_x_curso() {
-
-	}
-	*/
 }
 ?>

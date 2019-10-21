@@ -198,7 +198,9 @@ class PromocionController extends AppController {
 			'recursive'=>-1,
 			'fields'=>array('id','nombre_completo_curso'),
 			'conditions'=>array(
-				'centro_id'=>$this->params['named']['centro_id']))
+				'centro_id'=>$this->params['named']['centro_id'],
+				'anio >'=>$curso['anio']
+				))
 			);	
 		} else {
 			$secciones = $this->Curso->find('list', array(
@@ -206,7 +208,9 @@ class PromocionController extends AppController {
 			'fields'=>array('id','nombre_completo_curso'),
 			'conditions'=>array(
 				'centro_id'=>$this->params['named']['centro_id'],
-				'division !='=> ''))
+				'division !='=> '',
+				'anio >'=>$curso['anio']
+				))
 			);
 		}	
 		$this->set(compact('cicloaPromocionar','centro','curso','cursosInscripcions','cicloaPromocionar','cicloSiguienteNombre','secciones'));
