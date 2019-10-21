@@ -459,19 +459,42 @@ class InscripcionsController extends AppController {
             switch($userCentroNivel) {
                 case 'Común - Inicial':
                 case 'Común - Primario':
-                        if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1)) {
+                case 'Maternal - Inicial':
+                case 'Adultos - Primario':
+                    if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1) && ($this->request->data['Inscripcion']['cud_estado'] =='Actualizado' || $this->request->data['Inscripcion']['cud_estado'] =='No corresponde' || $this->request->data['Inscripcion']['cud_estado'] =='NULL')) {
                                $estadoDocumentacion = "COMPLETA";
                         } else {
                                 $estadoDocumentacion = "PENDIENTE";
                         }
                     break;
                 case 'Común - Secundario':
-                        if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1) && ($this->request->data['Inscripcion']['certificado_septimo'] ==1)) {
+                        if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1) && ($this->request->data['Inscripcion']['certificado_septimo'] ==1) && ($this->request->data['Inscripcion']['cud_estado'] =='Actualizado' || $this->request->data['Inscripcion']['cud_estado'] =='No corresponde' || $this->request->data['Inscripcion']['cud_estado'] =='NULL')) {
                                 $estadoDocumentacion = "COMPLETA";
                         } else {
                                 $estadoDocumentacion = "PENDIENTE";   
                         }                        
                     break;
+                case 'Especial - Primario':
+                    if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1) && ($this->request->data['Inscripcion']['certificado_septimo'] ==1) && ($this->request->data['Inscripcion']['cud_estado'] =='Actualizado' || $this->request->data['Inscripcion']['cud_estado'] =='NULL')) {
+                            $estadoDocumentacion = "COMPLETA";
+                    } else {
+                            $estadoDocumentacion = "PENDIENTE";   
+                    }                        
+                break;
+                case 'Adultos - Primario':
+                    if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['cud_estado'] =='Actualizado' || $this->request->data['Inscripcion']['cud_estado'] =='No corresponde' || $this->request->data['Inscripcion']['cud_estado'] =='NULL')) {
+                               $estadoDocumentacion = "COMPLETA";
+                        } else {
+                                $estadoDocumentacion = "PENDIENTE";
+                        }
+                    break;
+                case 'Adultos - Secundario':
+                    if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['certificado_septimo'] ==1) && ($this->request->data['Inscripcion']['cud_estado'] =='Actualizado' || $this->request->data['Inscripcion']['cud_estado'] =='No corresponde' || $this->request->data['Inscripcion']['cud_estado'] =='NULL')) {
+                            $estadoDocumentacion = "COMPLETA";
+                    } else {
+                            $estadoDocumentacion = "PENDIENTE";   
+                    }                        
+                break;
                 default:
                        $estadoDocumentacion = "PENDIENTE";
             }
@@ -598,30 +621,43 @@ class InscripcionsController extends AppController {
                 case 'Común - Inicial':
                 case 'Común - Primario':
                 case 'Maternal - Inicial':
-                case 'Especial - Primario':
-                    if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1)) {
-                        $estadoDocumentacion = "COMPLETA";
-                    } else {
-                        $estadoDocumentacion = "PENDIENTE";
-                    }
+                case 'Adultos - Primario':
+                    if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1) && ($this->request->data['Inscripcion']['cud_estado'] =='Actualizado' || $this->request->data['Inscripcion']['cud_estado'] =='No corresponde' || $this->request->data['Inscripcion']['cud_estado'] =='NULL')) {
+                               $estadoDocumentacion = "COMPLETA";
+                        } else {
+                                $estadoDocumentacion = "PENDIENTE";
+                        }
                     break;
                 case 'Común - Secundario':
-                    if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1) && ($this->request->data['Inscripcion']['certificado_septimo'] ==1)) {
-                        $estadoDocumentacion = "COMPLETA";
+                        if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1) && ($this->request->data['Inscripcion']['certificado_septimo'] ==1) && ($this->request->data['Inscripcion']['cud_estado'] =='Actualizado' || $this->request->data['Inscripcion']['cud_estado'] =='No corresponde' || $this->request->data['Inscripcion']['cud_estado'] =='NULL')) {
+                                $estadoDocumentacion = "COMPLETA";
+                        } else {
+                                $estadoDocumentacion = "PENDIENTE";   
+                        }                        
+                    break;
+                case 'Especial - Primario':
+                    if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] ==1) && ($this->request->data['Inscripcion']['certificado_vacunas'] ==1) && ($this->request->data['Inscripcion']['certificado_septimo'] ==1) && ($this->request->data['Inscripcion']['cud_estado'] =='Actualizado' || $this->request->data['Inscripcion']['cud_estado'] =='NULL')) {
+                            $estadoDocumentacion = "COMPLETA";
                     } else {
-                        $estadoDocumentacion = "PENDIENTE";   
+                            $estadoDocumentacion = "PENDIENTE";   
                     }                        
+                break;
+                case 'Adultos - Primario':
+                    if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['cud_estado'] =='Actualizado' || $this->request->data['Inscripcion']['cud_estado'] =='No corresponde' || $this->request->data['Inscripcion']['cud_estado'] =='NULL')) {
+                               $estadoDocumentacion = "COMPLETA";
+                        } else {
+                                $estadoDocumentacion = "PENDIENTE";
+                        }
                     break;
                 case 'Adultos - Secundario':
-                case 'Adultos - Primario':
-                    if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['certificado_septimo'] ==1)) {
-                        $estadoDocumentacion = "COMPLETA";
+                    if(($this->request->data['Inscripcion']['fotocopia_dni'] ==1) && ($this->request->data['Inscripcion']['certificado_septimo'] ==1) && ($this->request->data['Inscripcion']['cud_estado'] =='Actualizado' || $this->request->data['Inscripcion']['cud_estado'] =='No corresponde' || $this->request->data['Inscripcion']['cud_estado'] =='NULL')) {
+                            $estadoDocumentacion = "COMPLETA";
                     } else {
-                        $estadoDocumentacion = "PENDIENTE";   
+                            $estadoDocumentacion = "PENDIENTE";   
                     }                        
-                    break;    
+                break;
                 default:
-                    //$estadoDocumentacion = "PENDIENTE";
+                       $estadoDocumentacion = "PENDIENTE";
             }
             //Se genera el estado y se deja en los datos que se intentaran guardar
             $this->request->data['Inscripcion']['estado_documentacion'] = $estadoDocumentacion;

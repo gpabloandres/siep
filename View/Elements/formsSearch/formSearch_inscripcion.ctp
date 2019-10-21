@@ -22,16 +22,16 @@
     echo $this->Form->input('estado_inscripcion', array('label' => false, 'empty' => 'Ingrese un estado de la inscripción...', 'options' => $inscripcion_estados, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
     ?>
 </div>
-<?php if ($current_user['centro_id'] == 23 || $current_user['centro_id'] == 73
+<?php/* if ($current_user['centro_id'] == 23 || $current_user['centro_id'] == 73
         || $current_user['centro_id'] == 81 || $current_user['centro_id'] == 180
-        || $current_user['centro_id'] == 181 || $current_user['centro_id'] == 513) { ?>
+        || $current_user['centro_id'] == 181 || $current_user['centro_id'] == 513) { */?>
 <div class="form-group">
     <?php
-		$cud_estados = array('Actualizado'=>'Actualizado','Desactualizado'=>'Desactualizado','No tiene'=>'No tiene');
+		$cud_estados = array('Actualizado'=>'Actualizado','Desactualizado'=>'Desactualizado','No tiene'=>'No tiene','No corresponde'=>'No corresponde');
 		echo $this->Form->input('cud_estado', array('label' => false, 'empty' => 'Ingrese un estado del CUD...', 'options' => $cud_estados, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
     ?>
 </div>
-<?php } ?>
+<?php/* } */?>
 <div class="form-group">
     <?php
 		$documentacion_estados = array('COMPLETA' => 'COMPLETA', 'PENDIENTE' => 'PENDIENTE');

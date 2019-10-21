@@ -30,6 +30,22 @@ class Inscripcion extends AppModel {
 		),
 	);
 
+	var $hasOne = array(
+		'Pase' => array(
+			'className' => 'Pase',
+			'foreignKey' => 'inscripcion_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		)
+	);
+
 	var $hasAndBelongsToMany = array(
 		'Curso' => array(
 			'className' => 'Curso',
@@ -282,7 +298,7 @@ class Inscripcion extends AppModel {
 		),
 		'cud_estado' => array(
 			'valid' => array(
-				'rule' => array('inList', array('Actualizado', 'Desactualizado', 'No tiene')),
+				'rule' => array('inList', array('Actualizado', 'Desactualizado', 'No tiene', 'No corresponde')),
 				'allowEmpty' => true,
 				'message' => 'Indicar una opción'
 			),

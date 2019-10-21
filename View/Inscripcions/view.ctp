@@ -73,7 +73,7 @@
                                 <?php endif; ?></p>
                                 <b><?php echo __('Documentación faltante:'); ?></b>
                                   <ul>
-                                  <?php if($inscripcion['cud_estado'] == 'No tiene'): ?>
+                                  <?php if($inscripcion['cud_estado'] == 'Desactualizado' || $inscripcion['cud_estado'] == 'No tiene'): ?>
                                     <li><span class="label label-danger"><?php echo 'Falta CUD'; ?></span></li>
                                    <?php endif; ?>
                                    <?php if(!$inscripcion['fotocopia_dni'] == 1): ?>
