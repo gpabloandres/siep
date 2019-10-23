@@ -238,19 +238,20 @@
     <div class="col-md-4 col-sm-6 col-xs-12">
         <div class="unit"><h3>PASO 3: Documentación Presentada</h3><hr />
             <div class="row"><br>
-            <?php if ($current_user['centro_id'] == 23 || $current_user['centro_id'] == 73
+            <?php/* if ($current_user['centro_id'] == 23 || $current_user['centro_id'] == 73
                         || $current_user['centro_id'] == 81 || $current_user['centro_id'] == 180
-                        || $current_user['centro_id'] == 181 || $current_user['centro_id'] == 513) {
-            ?>  
+                        || $current_user['centro_id'] == 181 || $current_user['centro_id'] == 513
+                        || $userCentroNivel == 'Común - Secundario') {
+            */?>  
             <div class="input-group">
                 <span class="input-group-addon">
                 <?php
-                        $cud_estados = array('Actualizado'=>'Actualizado','Desactualizado'=>'Desactualizado','No tiene'=>'No tiene'); 
-                        echo $this->Form->input('cud_estado', array('label'=>'Estado del CUD (*Obligatorio)', 'empty' => 'Ingrese un estado del CUD...', 'options'=>$cud_estados, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                    $cud_estados = array('Actualizado'=>'Actualizado','Desactualizado'=>'Desactualizado','No tiene'=>'No tiene','No corresponde'=>'No corresponde'); 
+                    echo $this->Form->input('cud_estado', array('label'=>'CERTIFICADO ÚNICO DISCAPACIDAD [CUD](*Obligatorio)', 'default'=>'No corresponde', 'options'=>$cud_estados, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
                 ?>
                 </span>
             </div>
-            <?php } ?>
+            <?php/* } */?>
             <div class="input-group">
                 <span class="input-group-addon">
                     <?php echo $this->Form->input('fotocopia_dni', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Fotocopia DNI</label>')); ?>
@@ -271,7 +272,7 @@
           <!--
           <div class="input-group">
             <span class="input-group-addon">
-             <?php echo $this->Form->input('partida_nacimiento_tutor', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Tutor</label>'));?>
+             <?php// echo $this->Form->input('partida_nacimiento_tutor', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Tutor</label>'));?>
             </span>
           </div>
           -->
