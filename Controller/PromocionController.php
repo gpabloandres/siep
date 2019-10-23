@@ -48,6 +48,9 @@ class PromocionController extends AppController {
  */
 	public function index()
 	{
+        // Botón de exportación Excel y PDF
+		$showExportBtn = false;
+
 		// Datos del usuario
 		$userCentroId = $this->getUserCentroId();
 		$userRole = $this->Auth->user('role');
@@ -212,11 +215,14 @@ class PromocionController extends AppController {
 				'anio >'=>$curso['anio']
 				))
 			);
-		}	
-		$this->set(compact('cicloaPromocionar','centro','curso','cursosInscripcions','cicloaPromocionar','cicloSiguienteNombre','secciones'));
+		}
+
+		$this->set(compact('cicloaPromocionar','centro','curso','cursosInscripcions','cicloaPromocionar','cicloSiguienteNombre','secciones','showExportBtn'));
 	}
 
 	public function view() {
+		$showExportBtn = false;
+		$ubicaciones = [];
 		// Datos de usuario logueado
 		$userCentro = $this->Auth->user('Centro');
 
@@ -237,6 +243,13 @@ class PromocionController extends AppController {
 		}
 		if(isset($this->request->query['centro_id'])){
 			$apiParams['centro_id'] = $this->request->query['centro_id'];
+			$showExportBtn = true;
+			// Consumo de API
+			$ubicaciones = $this->Siep->consumeApi("api/v1/ciudades");
+			if(isset($ubicaciones['error']))
+			{
+				// Manejar error de API
+			}
 		}
 		if(isset($this->request->query['turno'])){
 			$apiParams['turno'] = $this->request->query['turno'];
@@ -320,7 +333,7 @@ class PromocionController extends AppController {
 			}
 		}
 
-		$this->set(compact('filtro','promociones','comboAño','comboTurno','apiParams'));
+		$this->set(compact('filtro','centro','promociones','ubicaciones','comboAño','comboTurno','apiParams','showExportBtn'));
 	}
 
 	public function confirmarAlumnos()
