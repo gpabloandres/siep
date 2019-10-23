@@ -1,5 +1,5 @@
 <!-- start main -->
-<div class="TituloSec">Lista de alumnos</div>
+<div class="TituloSec">Datos de alumnos</div>
 <div id="ContenidoSec">
     <?php
     if(isset($centro['nombre'])) :
@@ -61,8 +61,10 @@
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                 <?php endif; ?>
 
-                                        <?php echo $relacion['familiar']['persona']['nombre_completo'];  ?>
+                                        <?php echo $relacion['familiar']['persona']['nombre_completo']; ?>
                                         (<?php echo $relacion['familiar']['vinculo']; ?>)
+                                        |<?php echo $relacion['familiar']['persona']['telefono_nro']; ?>
+                                        |<?php echo $relacion['familiar']['persona']['email']; ?>
                                         <span class="caret"></span>
                                     </button>
 

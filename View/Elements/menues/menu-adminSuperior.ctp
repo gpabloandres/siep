@@ -1,4 +1,4 @@
-<!-- ************ bootstrap navbar ************ -->
+<!-- ************ Bootstrap navbar ************ -->
 <p>
 <nav class="navbar navbar-custom navbar-static-top navbar-fixed-top" role="navigation">
   <div class="container-fluid">
@@ -46,9 +46,9 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alumnado <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Inscripciones'), '/inscripcions'); ?></li>
-            <!--<li><?php echo $this->Html->link(__('Familiares'), array('controller'=>'familiars', 'action'=>'add')); ?></li>-->
+            <li><?php echo $this->Html->link(__('Familiares'), array('controller'=>'familiars', 'action'=>'add')); ?></li>
             <li><?php echo $this->Html->link(__('Alumnos'),'/alumnos'); ?></li>
-            <!--<li><?php echo $this->Html->link(__('Pases'), '/pases'); ?></li>-->
+            <!--<li><?php echo $this->Html->link(__('Pasess'), '/pases'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Inasistencias'), '/inasistencias'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Calificaciones'), '/notas'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Mesa de Exámenes'), '/mesaexamens'); ?></li>-->
@@ -71,18 +71,12 @@
             <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
             <li><?php echo $this->Html->link(__('Mapa Educativo'),'https://admin.sieptdf.org/#/instituciones', array('target' => '_blank')); ?></li>
             <li><?php echo $this->Html->link(__('Alumnos por Sección'), '/cursos_inscripcions');?></li>
-            <!--<li><?php// echo $this->Html->link(__('Inscripciones 2018 [cuantitativo]'), '/matriculas');?></li>-->
-            <!--<li><?php echo $this->Html->link(__('Ingresantes 2019'), '/ingresantes');?></li>-->
-            <li><?php echo $this->Html->link(__('Inscripciones 2019'), '/vacantes');?></li>
+            <li><?php echo $this->Html->link(__('Matrícula 2019'), '/vacantes');?></li>
             <li><?php echo $this->Html->link(__('Promocionados'), '/promocion/view');?></li>
             <li><?php echo $this->Html->link(__('Recursantes'), '/repitentes/view');?></li>
-            <!--<li><?php echo $this->Html->link(__('Ingresantes 2020'), '/ingresantes?ciclo=2020');?></li>-->
-            <!--<li><?php echo $this->Html->link(__('Tablero 2019'), '/graficos'); ?></li>-->
-            <!--<li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>-->
-            <!--<li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>-->
-            <!--<li><?php echo $this->Html->link(__('Calendario'),'/full_calendar');?></li>--> 
-        </ul>
-      </li>
+            <li><?php echo $this->Html->link(__('Matrícula 2020'), '/vacantes?ciclo=2020');?></li>
+          </ul>
+        </li>
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ayuda <span class="caret"></span></a>
         <ul class="dropdown-menu">
