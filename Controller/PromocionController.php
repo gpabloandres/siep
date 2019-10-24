@@ -1,4 +1,5 @@
 <?php
+use Cake\I18n\Time;
 App::uses('AppController', 'Controller');
 
 class PromocionController extends AppController {
@@ -222,14 +223,15 @@ class PromocionController extends AppController {
 
 	public function view() {
 		$showExportBtn = false;
-		$ubicaciones = [];
 		// Datos de usuario logueado
 		$userCentro = $this->Auth->user('Centro');
 
 		// Parametros de API por defecto
+		$currentYear = date("Y");
+
 		$apiParams = [];
 		$apiParams['por_pagina'] = 20;
-		$apiParams['ciclo'] = 2018;
+		$apiParams['ciclo'] = $currentYear;
 		$apiParams['estado_inscripcion'] = 'CONFIRMADA';
 		$apiParams['division'] = 'con';
 		//$apiParams['order'] = 'anio';
@@ -244,12 +246,6 @@ class PromocionController extends AppController {
 		if(isset($this->request->query['centro_id'])){
 			$apiParams['centro_id'] = $this->request->query['centro_id'];
 			$showExportBtn = true;
-			// Consumo de API
-			$ubicaciones = $this->Siep->consumeApi("api/v1/ciudades");
-			if(isset($ubicaciones['error']))
-			{
-				// Manejar error de API
-			}
 		}
 		if(isset($this->request->query['turno'])){
 			$apiParams['turno'] = $this->request->query['turno'];
@@ -333,7 +329,7 @@ class PromocionController extends AppController {
 			}
 		}
 
-		$this->set(compact('filtro','centro','promociones','ubicaciones','comboAño','comboTurno','apiParams','showExportBtn'));
+		$this->set(compact('filtro','centro','promociones','comboAño','comboTurno','apiParams','showExportBtn'));
 	}
 
 	public function confirmarAlumnos()
