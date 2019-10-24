@@ -127,7 +127,7 @@ class GraficosController extends AppController {
 		$this->loadModel('CursosInscripcion');
 		$matriculaPromociones = $this->CursosInscripcion->find('count', array(
 			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
+				'Inscripcion.ciclo_id' => $cicloIdActual,
 				'Inscripcion.promocion_id !=' => '',
 				'Inscripcion.centro_id' => $userCentroId,
 			))
@@ -135,7 +135,7 @@ class GraficosController extends AppController {
 		// Conteo de repitentes. (PENDIENTE CON el campo repitencia_id) 
 		$matriculaRepitencias = $this->CursosInscripcion->find('count', array(
 			'conditions' => array(
-				'Inscripcion.ciclo_id' => $cicloIdAnterior,
+				'Inscripcion.ciclo_id' => $cicloIdActual,
 				'Inscripcion.repitencia_id !=' => '',
 				'Inscripcion.centro_id' => $userCentroId,
 			))
@@ -145,7 +145,7 @@ class GraficosController extends AppController {
 			'conditions' => array(
 				'Inscripcion.centro_id' => $userCentroId,
 				'Inscripcion.estado_inscripcion' => 'EGRESO',
-				'Inscripcion.ciclo_id' => $cicloIdAnterior
+				'Inscripcion.ciclo_id' => $cicloIdActual
 			))
 		);
 		/* Conteo de PASES ENTRANTES*/
@@ -709,7 +709,7 @@ class GraficosController extends AppController {
 				// Sala de 3 años.
 				$matriculaPromocionesTresAnios = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.promocion_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => 'Sala de 3 años'
@@ -718,7 +718,7 @@ class GraficosController extends AppController {
 				// Sala de 4 años.
 				$matriculaPromocionesCuatroAnios = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.promocion_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => 'Sala de 4 años'
@@ -727,7 +727,7 @@ class GraficosController extends AppController {
 				// Sala de 5 años.
 				$matriculaPromocionesCincoAnios = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.promocion_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => 'Sala de 5 años'
@@ -741,7 +741,7 @@ class GraficosController extends AppController {
 				// Primer año.
 				$matriculaPromociones1ro = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.promocion_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => '1ro'
@@ -750,7 +750,7 @@ class GraficosController extends AppController {
 				// Segundo año.
 				$matriculaPromociones2do = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.promocion_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => '2do'
@@ -759,7 +759,7 @@ class GraficosController extends AppController {
 				// Tercer año.
 				$matriculaPromociones3ro = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.promocion_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => '3ro'
@@ -768,7 +768,7 @@ class GraficosController extends AppController {
 				// Cuarto año.
 				$matriculaPromociones4to = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.promocion_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => '4to'
@@ -777,7 +777,7 @@ class GraficosController extends AppController {
 				// Quinto año.
 				$matriculaPromociones5to = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.promocion_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => '5to'
@@ -786,7 +786,7 @@ class GraficosController extends AppController {
 				// Sexto año.
 				$matriculaPromociones6to = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.promocion_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => '6to'
@@ -796,7 +796,7 @@ class GraficosController extends AppController {
 					// Alfabetizacion.
 					$matriculaPromocionesAlfabetizacion = $this->CursosInscripcion->find('count', array(
 						'conditions' => array(
-							'Inscripcion.ciclo_id' => $cicloIdAnterior,
+							'Inscripcion.ciclo_id' => $cicloIdActual,
 							'Inscripcion.promocion_id !=' => '',
 							'Inscripcion.centro_id' => $userCentroId,
 							'Curso.anio' => 'ALFABETIZACIÓN'
@@ -805,7 +805,7 @@ class GraficosController extends AppController {
 					// CAP.
 					$matriculaPromocionesCAP = $this->CursosInscripcion->find('count', array(
 						'conditions' => array(
-							'Inscripcion.ciclo_id' => $cicloIdAnterior,
+							'Inscripcion.ciclo_id' => $cicloIdActual,
 							'Inscripcion.promocion_id !=' => '',
 							'Inscripcion.centro_id' => $userCentroId,
 							'Curso.anio' => 'CAP'
@@ -824,7 +824,7 @@ class GraficosController extends AppController {
 				// Sala de 3 años.
 				$matriculaRepitenciasTresAnios = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.repitencia_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => 'Sala de 3 años'
@@ -833,7 +833,7 @@ class GraficosController extends AppController {
 				// Sala de 4 años.
 				$matriculaRepitenciasCuatroAnios = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.repitencia_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => 'Sala de 4 años'
@@ -842,7 +842,7 @@ class GraficosController extends AppController {
 				// Sala de 5 años.
 				$matriculaRepitenciasCincoAnios = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.repitencia_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => 'Sala de 5 años'
@@ -856,7 +856,7 @@ class GraficosController extends AppController {
 				// Primer año.
 				$matriculaRepitencias1ro = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.repitencia_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => '1ro'
@@ -865,7 +865,7 @@ class GraficosController extends AppController {
 				// Segundo año.
 				$matriculaRepitencias2do = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.repitencia_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => '2do'
@@ -874,7 +874,7 @@ class GraficosController extends AppController {
 				// Tercer año.
 				$matriculaRepitencias3ro = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.repitencia_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => '3ro'
@@ -883,7 +883,7 @@ class GraficosController extends AppController {
 				// Cuarto año.
 				$matriculaRepitencias4to = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.repitencia_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => '4to'
@@ -892,7 +892,7 @@ class GraficosController extends AppController {
 				// Quinto año.
 				$matriculaRepitencias5to = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.repitencia_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => '5to'
@@ -901,7 +901,7 @@ class GraficosController extends AppController {
 				// Sexto año.
 				$matriculaRepitencias6to = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.repitencia_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => '6to'
@@ -910,7 +910,7 @@ class GraficosController extends AppController {
 				// Sexto año.
 				$matriculaRepitencias7mo = $this->CursosInscripcion->find('count', array(
 					'conditions' => array(
-						'Inscripcion.ciclo_id' => $cicloIdAnterior,
+						'Inscripcion.ciclo_id' => $cicloIdActual,
 						'Inscripcion.repitencia_id !=' => '',
 						'Inscripcion.centro_id' => $userCentroId,
 						'Curso.anio' => '7mo'
@@ -920,7 +920,7 @@ class GraficosController extends AppController {
 					// Alfabetizacion.
 					$matriculaRepitenciasAlfabetizacion = $this->CursosInscripcion->find('count', array(
 						'conditions' => array(
-							'Inscripcion.ciclo_id' => $cicloIdAnterior,
+							'Inscripcion.ciclo_id' => $cicloIdActual,
 							'Inscripcion.repitencia_id !=' => '',
 							'Inscripcion.centro_id' => $userCentroId,
 							'Curso.anio' => 'ALFABETIZACIÓN'
@@ -929,7 +929,7 @@ class GraficosController extends AppController {
 					// CAP.
 					$matriculaRepitenciasCAP = $this->CursosInscripcion->find('count', array(
 						'conditions' => array(
-							'Inscripcion.ciclo_id' => $cicloIdAnterior,
+							'Inscripcion.ciclo_id' => $cicloIdActual,
 							'Inscripcion.repitencia_id !=' => '',
 							'Inscripcion.centro_id' => $userCentroId,
 							'Curso.anio' => 'CAP'

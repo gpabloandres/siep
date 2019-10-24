@@ -468,7 +468,7 @@
       <div class="panel panel-primary">
         <div class="panel-heading">
           <div class="text-left">
-            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-list-alt"></i> <strong> MATRÍCULA - EGRESOS | 2018</strong>', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:4/turno:/anio:/division:/estado_inscripcion:EGRESO'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaEgresos?></span></span>
+            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-list-alt"></i> <strong> MATRÍCULA - EGRESOS</strong>', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:4/turno:/anio:/division:/estado_inscripcion:EGRESO'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaEgresos?></span></span>
           </div>
         </div>
         <div class="panel-body">
