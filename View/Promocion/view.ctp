@@ -68,74 +68,12 @@
     <?php
         if($showExportBtn) :
     ?>
-    <?php
-        if($this->Siep->isAdmin()):
-        ?>
-            <a target="_blank" class="btn btn-success pull-right" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centro['Centro']['id'].'/report_type:promociones'; ?>">
-                <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel
-            </a>
-            <a target="_blank" style="margin-right:5px;" class="btn btn-danger pull-right" href="<?php echo '/gateway/pdf_matriculas_por_seccion/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centro['Centro']['id'].'/report_type:promociones';?>">
-                <span class="glyphicon glyphicon-file"></span><span>Exportar resultados a PDF</span>
-            </a>
-        <?php else: ?>
-            <div class="btn-group pull-right">
-            
-                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <?php
-                    foreach($ubicaciones as $ubicacion):
-                        ?>
-                        <li>
-                            <a target="_blank" href="<?php echo '/gateway/excel_vacantes/ciudad:'.$ubicacion['nombre'].'/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centro['Centro']['id'].'/report_type:promociones'; ?>">
-                                <?php echo $ubicacion['nombre']; ?>
-                            </a>
-                        </li>
-                        <?php
-                    endforeach;
-                    ?>
-                    <li role="separator" class="divider"></li>
-                    <li>
-                    <li>
-                        <a target="_blank" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centro['Centro']['id'].'/report_type:promociones'; ?>">Toda la provincia</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- <div class="btn-group pull-right">:
-            
-                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="glyphicon glyphicon-file"></span> Exportar resultados a PDF <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <?php
-                    foreach($ubicaciones as $ubicacion):
-                        ?>
-                        <li>
-                            <a target="_blank" href="<?php echo '/gateway/pdf_matriculas_por_seccion/ciudad:'.$ubicacion['nombre'].'/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centro['Centro']['id'].'/report_type:promociones'; ?>">
-                                <?php echo $ubicacion['nombre']; ?>
-                            </a>
-                        </li>
-                        <?php
-                    endforeach;
-                    ?>
-                    <li role="separator" class="divider"></li>
-                    <li>
-                    <li>
-                        <a target="_blank" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centro['Centro']['id'].'/report_type:promociones'; ?>">Toda la provincia</a>
-                    </li>
-                </ul>
-            </div> -->
-            <?php
-            if(isset($centro) && $centro !=""): ?>
-            <a target="_blank" style="margin-right:5px;" class="btn btn-danger pull-right" href="<?php echo '/gateway/pdf_matriculas_por_seccion/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centro['Centro']['id'].'/report_type:promociones';?>">
-                <span class="glyphicon glyphicon-file"></span><span>Exportar resultados a PDF</span>
-            </a>
-
-        <?php
-            endif; 
-          endif; 
-        ?>
+        <a target="_blank" class="btn btn-success pull-right" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centro['Centro']['id'].'/report_type:promociones'; ?>">
+            <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel
+        </a>
+        <a target="_blank" style="margin-right:5px;" class="btn btn-danger pull-right" href="<?php echo '/gateway/pdf_matriculas_por_seccion/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centro['Centro']['id'].'/report_type:promociones';?>">
+            <span class="glyphicon glyphicon-file"></span><span>Exportar resultados a PDF</span>
+        </a>
         <br>
         <br>
     <?php endif; ?>
@@ -150,9 +88,9 @@
                       <thead>
                       <tr>
                           <th>Nombre completo</th>
-                          <th>2018</th>
-                          <th></th>
                           <th>2019</th>
+                          <th></th>
+                          <th>2020</th>
                       </tr>
                       </thead>
                       <tbody>
