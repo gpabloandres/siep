@@ -72,18 +72,13 @@
     <?php
     if($showBtnExcel) :
     ?>
-        <?php
-        if($this->Siep->isAdmin()):
-        ?>
-            <a target="_blank" class="btn btn-success pull-right" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">
-                <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel
-            </a>
-            <a target="_blank" style="margin-right:5px;" class="btn btn-danger pull-right" href="<?php echo '/gateway/pdf_matriculas_por_seccion/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado;?>">
-                <span class="glyphicon glyphicon-file"></span><span>Exportar resultados a PDF</span>
-            </a>
-        <?php
-          endif; 
-        ?>
+        <a target="_blank" class="btn btn-success pull-right" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">
+            <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel
+        </a>
+        <a target="_blank" style="margin-right:5px;" class="btn btn-danger pull-right" href="<?php echo '/gateway/pdf_matriculas_por_seccion/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado;?>">
+            <span class="glyphicon glyphicon-file"></span><span>Exportar resultados a PDF</span>
+        </a>
+        
         <br>
         <br>
     <?php endif; ?>

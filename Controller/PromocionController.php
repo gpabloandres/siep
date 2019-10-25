@@ -54,6 +54,12 @@ class PromocionController extends AppController {
 
 		// Datos del usuario
 		$userCentroId = $this->getUserCentroId();
+
+		// Si el usuario tiene Centro ID asignado, muestra los botones de expo
+		if($userCentroId){
+			$showExportBtn = true;
+		}
+
 		$userRole = $this->Auth->user('role');
 
 		// Modelos a utilizar
@@ -258,6 +264,7 @@ class PromocionController extends AppController {
 		if($this->Siep->isAdmin())
 		{
 			$apiParams['centro_id'] = $userCentro['id'];
+			$showExportBtn = true;
 		}
 
 		if($this->Siep->isUsuario())
@@ -281,6 +288,7 @@ class PromocionController extends AppController {
 				$userNivelServicio = $userCentro['nivel_servicio'];
 				$apiParams['centro_id'] = $userCentro['id'];
 				$apiParams['nivel_servicio'] = $userNivelServicio;
+				$showExportBtn = true;
 			}
 		}
 
@@ -322,6 +330,7 @@ class PromocionController extends AppController {
 			$centro = $this->Centro->findById($apiParams['centro_id']);
 			if($centro)
 			{
+				$showExportBtn = true;
 				$filtro = [
 					'centro_id' => $centro['Centro']['id'],
 					'centro_sigla' => $centro['Centro']['sigla']
