@@ -176,19 +176,58 @@ class GatewayController extends AppController
         $this->response->type('xls');
     }
 
+    public function pdf_matriculas_por_seccion()
+    {
+        $this->autoRender = false;
+        $hostApi = getenv('HOSTAPI');
+        $this->params->params["named"]["division"] = "con";
+        $this->params->params["named"]["export"] = "2";
+        $this->params->params["named"]["por_pagina"] = "all";
+        $this->params->params["named"]["estado_inscripcion"] = "CONFIRMADA";
+        $params = $this->params->params["named"];
+        // $params = [];
+        // foreach($paramsTemp as $key => $value)
+        // {
+        //     if($value != "")
+        //     {
+        //         array_push($params,[$key => $value]);
+        //     }
+        // }
+        $query = http_build_query($params);
+
+        // $data = http_build_query($query["named"]);
+        
+        
+        $url = "http://{$hostApi}/api/v1/matriculas/cuantitativa/por_seccion?{$query}";
+        $opts = array(
+            'http' => array(
+                'method' => 'GET',
+                'agent'  => "CakePHP",
+                'header' => getenv('XHOSTCAKE').": do"
+            )
+        );
+        $context = stream_context_create($opts);
+
+        $result= file_get_contents($url,false, $context);
+        $this->response->body($result);
+        $this->response->type('pdf');
+
+    }
+
     public function excel_vacantes()
     {
         $this->autoRender = false;
         $hostApi = getenv('HOSTAPI');
 
         $apiParams = [];
-        $apiParams['por_pagina'] = 10000;
-        $apiParams['ciclo'] = 2019;
+        $apiParams['por_pagina'] = 'all';
         $apiParams['estado_inscripcion'] = 'CONFIRMADA';
         $apiParams['division'] = 'con';
         $apiParams['order'] = 'anio';
         $apiParams['order_dir'] = 'asc';
-        $apiParams['export'] = 'excel';
+        $apiParams['export'] = '1';
+
+        $fileName = 'Exportacion_Vacantes.xls';
 
         // Filtros de formulario y paginacion
         if(isset($this->params['named']['ciclo'])){
@@ -201,8 +240,17 @@ class GatewayController extends AppController
             $apiParams['ciudad'] = $this->params['named']['ciudad'];
         }
 
-        $query = http_build_query($apiParams);
+        if(isset($this->params['named']['report_type']) && $this->params['named']['report_type'] != ''){
+            $apiParams['report_type'] = $this->params['named']['report_type'];
 
+            if($apiParams['report_type'] == 'repitencias'){
+                $fileName = 'Exportacion_Repitencias.xls';
+            }else if($apiParams['report_type'] == 'promociones'){
+                $fileName = 'Exportacion_Promociones.xls';
+            }
+        }
+
+        $query = http_build_query($apiParams);
         $url = "http://{$hostApi}/api/v1/matriculas/cuantitativa/por_seccion?$query";
 
         $opts = array(
@@ -218,7 +266,7 @@ class GatewayController extends AppController
 
         header('Cache-Control: public');
         header('Content-type: application/xls');
-        header('Content-Disposition: attachment; filename="Exportacion_Vacantes.xls"');
+        header("Content-Disposition: attachment; filename=$fileName");
         header('Content-Length: '.strlen($result));
 
         $this->response->body($result);

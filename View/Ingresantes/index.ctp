@@ -55,11 +55,11 @@
 </div>
 <?php endif; ?>
 <?php
-     $ocultar = false;
+     $mostrar = false;
      if( $current_user['Centro']['nivel_servicio'] === 'Común - Inicial - Primario' ||
          $current_user['Centro']['nivel_servicio'] === 'Común - Inicial' ||
          $current_user['Centro']['nivel_servicio'] === 'Común - Primario' ) {
-         $ocultar = true;
+         $mostrar = true;
      }
 ?>
 <div class="TituloSec">Ingresantes <?php echo $apiParams['ciclo'];?></div>
@@ -71,12 +71,22 @@
           <th>Institución</th>
           <th>Año</th>
           <th>Turno</th>
-          <?php if (!$ocultar) : ?>
-          <th>Plaza(*)</th>
-          <?php endif; ?>
-          <th>Matricula</th>
-          <th>Por hermano</th>
-          <th>VACANTES</th>
+          <?php if ($mostrar) { ?>
+            <th>Plazas(Cupo alumnos)</th>
+          <?php } else { ?>
+            <th>Plazas(*)</th>
+          <?php } ?>
+          <?php if ($mostrar) { ?>
+            <th>Matricula(Total Pre-inscriptos)</th>
+          <?php } else { ?>
+            <th>Matricula</th>
+          <?php } ?>
+          <th>Por hermanos</th>
+          <?php if ($mostrar) { ?>
+            <th>VACANTES(Lugares disponibles)</th>
+          <?php } else { ?>
+            <th>VACANTES</th>
+          <?php } ?>  
             <!-- SOlo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
             <?php if ($apiParams['ciclo'] == $cicloNombreUltimo) : ?>
               <th>CONFIRMADAS</th>
@@ -98,11 +108,9 @@
             <td>
               <?php echo $seccion['turno']; ?>
             </td>
-            <?php if (!$ocultar) : ?>
             <td>
               <?php echo $seccion['plazas']; ?>
             </td>
-            <?php endif; ?>
             <td>
               <?php echo $seccion['matriculas']; ?>
             </td>

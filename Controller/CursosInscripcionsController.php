@@ -125,7 +125,8 @@ class CursosInscripcionsController extends AppController {
 					$nivelCentroId = $this->Centro->find('list', array(
 						'fields'=>array('id'),
 						'conditions'=>array(
-							'nivel_servicio'=>array('Común - Inicial', 'Común - Primario', 'Común - Inicial - Primario')
+							'nivel_servicio'=>array('Común - Inicial', 'Común - Primario', 'Común - Inicial - Primario', 'Maternal - Inicial', 'Especial - Primario',
+							'Adultos - Primario')
 						)
 					));
 

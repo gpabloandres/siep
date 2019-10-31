@@ -1,4 +1,5 @@
 <?php
+use Cake\I18n\Time;
 App::uses('AppController', 'Controller');
 
 class PromocionController extends AppController {
@@ -48,8 +49,17 @@ class PromocionController extends AppController {
  */
 	public function index()
 	{
+        // Botón de exportación Excel y PDF
+		$showExportBtn = false;
+
 		// Datos del usuario
 		$userCentroId = $this->getUserCentroId();
+
+		// Si el usuario tiene Centro ID asignado, muestra los botones de expo
+		if($userCentroId){
+			$showExportBtn = true;
+		}
+
 		$userRole = $this->Auth->user('role');
 
 		// Modelos a utilizar
@@ -198,7 +208,9 @@ class PromocionController extends AppController {
 			'recursive'=>-1,
 			'fields'=>array('id','nombre_completo_curso'),
 			'conditions'=>array(
-				'centro_id'=>$this->params['named']['centro_id']))
+				'centro_id'=>$this->params['named']['centro_id'],
+				'anio >'=>$curso['anio']
+				))
 			);	
 		} else {
 			$secciones = $this->Curso->find('list', array(
@@ -206,20 +218,26 @@ class PromocionController extends AppController {
 			'fields'=>array('id','nombre_completo_curso'),
 			'conditions'=>array(
 				'centro_id'=>$this->params['named']['centro_id'],
-				'division !='=> ''))
+				'division !='=> '',
+				'anio >'=>$curso['anio']
+				))
 			);
-		}	
-		$this->set(compact('cicloaPromocionar','centro','curso','cursosInscripcions','cicloaPromocionar','cicloSiguienteNombre','secciones'));
+		}
+
+		$this->set(compact('cicloaPromocionar','centro','curso','cursosInscripcions','cicloaPromocionar','cicloSiguienteNombre','secciones','showExportBtn'));
 	}
 
 	public function view() {
+		$showExportBtn = false;
 		// Datos de usuario logueado
 		$userCentro = $this->Auth->user('Centro');
 
 		// Parametros de API por defecto
+		$currentYear = date("Y");
+
 		$apiParams = [];
 		$apiParams['por_pagina'] = 20;
-		$apiParams['ciclo'] = 2018;
+		$apiParams['ciclo'] = $currentYear;
 		$apiParams['estado_inscripcion'] = 'CONFIRMADA';
 		$apiParams['division'] = 'con';
 		//$apiParams['order'] = 'anio';
@@ -233,6 +251,7 @@ class PromocionController extends AppController {
 		}
 		if(isset($this->request->query['centro_id'])){
 			$apiParams['centro_id'] = $this->request->query['centro_id'];
+			$showExportBtn = true;
 		}
 		if(isset($this->request->query['turno'])){
 			$apiParams['turno'] = $this->request->query['turno'];
@@ -245,6 +264,7 @@ class PromocionController extends AppController {
 		if($this->Siep->isAdmin())
 		{
 			$apiParams['centro_id'] = $userCentro['id'];
+			$showExportBtn = true;
 		}
 
 		if($this->Siep->isUsuario())
@@ -268,6 +288,7 @@ class PromocionController extends AppController {
 				$userNivelServicio = $userCentro['nivel_servicio'];
 				$apiParams['centro_id'] = $userCentro['id'];
 				$apiParams['nivel_servicio'] = $userNivelServicio;
+				$showExportBtn = true;
 			}
 		}
 
@@ -309,6 +330,7 @@ class PromocionController extends AppController {
 			$centro = $this->Centro->findById($apiParams['centro_id']);
 			if($centro)
 			{
+				$showExportBtn = true;
 				$filtro = [
 					'centro_id' => $centro['Centro']['id'],
 					'centro_sigla' => $centro['Centro']['sigla']
@@ -316,7 +338,7 @@ class PromocionController extends AppController {
 			}
 		}
 
-		$this->set(compact('filtro','promociones','comboAño','comboTurno','apiParams'));
+		$this->set(compact('filtro','centro','promociones','comboAño','comboTurno','apiParams','showExportBtn'));
 	}
 
 	public function confirmarAlumnos()

@@ -1,5 +1,5 @@
 <?php
-    // Si el usuario no es Admin, muestro el filtro.
+    // Sí el usuario no es Admin, muestro el filtro.
     if(!$this->Siep->isAdmin()) :
 ?>
 <div class="TituloSec">Filtro</div>
@@ -18,7 +18,7 @@
                   select: function( event, ui ) {
                     $("#AutocompleteForm").val( ui.item.Centro.sigla );
 
-                    window.location.href = "<?php echo $this->Html->url(array('controller'=>'vacantes'));?>/index?centro_id="+ui.item.Centro.id;
+                    window.location.href = "<?php echo $this->Html->url(array('controller'=>'vacantes'));?>/index?centro_id="+ui.item.Centro.id+"&ciclo=<?php echo $apiParams['ciclo']; ?>";
                     return false;
                   }
                 }).autocomplete( "instance" )._renderItem = function( ul, item ) {
@@ -67,42 +67,18 @@
     } 
      
 ?>
-<div class="TituloSec">Inscripciones 2019</div>
+<div class="TituloSec">Matrícula <?php echo $apiParams['ciclo']; ?></div>
 <div id="ContenidoSec">
     <?php
     if($showBtnExcel) :
     ?>
-        <?php
-        if($this->Siep->isAdmin()) :
-        ?>
-            <a target="_blank" class="btn btn-success pull-right" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">
-                <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel
-            </a>
-        <?php else: ?>
-            <div class="btn-group pull-right">:
-                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <?php
-                    foreach($ubicaciones as $ubicacion):
-                        ?>
-                        <li>
-                            <a target="_blank" href="<?php echo '/gateway/excel_vacantes/ciudad:'.$ubicacion['nombre'].'/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">
-                                <?php echo $ubicacion['nombre']; ?>
-                            </a>
-                        </li>
-                        <?php
-                    endforeach;
-                    ?>
-                    <li role="separator" class="divider"></li>
-                    <li>
-                    <li>
-                        <a target="_blank" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">Toda la provincia</a>
-                    </li>
-                </ul>
-            </div>
-        <?php endif; ?>
+        <a target="_blank" class="btn btn-success pull-right" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">
+            <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel
+        </a>
+        <a target="_blank" style="margin-right:5px;" class="btn btn-danger pull-right" href="<?php echo '/gateway/pdf_matriculas_por_seccion/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado;?>">
+            <span class="glyphicon glyphicon-file"></span><span>Exportar resultados a PDF</span>
+        </a>
+        
         <br>
         <br>
     <?php endif; ?>
@@ -119,7 +95,7 @@
           <?php if($nivelServicio == 'secundarioComun') : ?>
           <th>Hs Cátedras</th>
           <th>Res. Pedagógica</th>
-          <th>Res. Presupuestaria</th>
+          <th>Instr. Legal de Creación</th>
           <?php endif; ?>
           <?php if($nivelServicio == 'inicialPrimarioComun') : ?>
           <th>P.P.</th>
@@ -203,9 +179,15 @@
             <td>
               <?php echo $seccion['observaciones']; ?>
             </td>
-            <td >
-              <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
-            </td>
+            <?php if ($apiParams['ciclo'] == 2019) { ?>
+              <td>
+                <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
+              </td>
+            <?php } else { ?>
+              <td>  
+                <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'ListaAlumnos', 'action'=> '/index/centro_id:'.$seccion['centro_id'].'/curso_id:'.$seccion['curso_id'].'/ciclo:2020'), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
+              </td>
+            <?php } ?>
           </tr>
         <?php endforeach; ?>
         <?php endif; ?>
@@ -213,7 +195,7 @@
       <!--<tfoot>
         <tr>
           <th>
-            <!-- Autocomplete 
+            Autocomplete 
               <input id="AutocompleteForm" class="form-control" placeholder="Buscar institucion por nombre" type="text">
 
             <script>
@@ -234,7 +216,7 @@
                 };
               });
             </script>
-            <!-- End Autocomplete 
+             End Autocomplete 
           </th>
           <th>
               <?php echo $this->Form->create('Vacantes',array('id'=>'formFiltroAnio','type'=>'get','url'=>'index', 'novalidate' => true));?>

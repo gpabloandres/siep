@@ -71,15 +71,11 @@
             <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
             <li><?php echo $this->Html->link(__('Mapa Educativo'),'https://admin.sieptdf.org/#/instituciones', array('target' => '_blank')); ?></li>
             <li><?php echo $this->Html->link(__('Alumnos por Sección'), '/cursos_inscripcions');?></li>
-            <!--<li><?php echo $this->Html->link(__('Alumnos por Unidad Curricular'), '/inscripcions_materias');?></li>-->
-            <!--<li><?php// echo $this->Html->link(__('Inscripciones 2018 [cuantitativo]'), '/matriculas');?></li>-->
-            <li><?php echo $this->Html->link(__('Ingresantes 2019'), '/ingresantes');?></li>
-            <li><?php echo $this->Html->link(__('Inscripciones 2019'), '/vacantes');?></li>
+            <li><?php echo $this->Html->link(__('Matrícula 2019'), '/vacantes');?></li>
             <li><?php echo $this->Html->link(__('Promocionados'), '/promocion/view');?></li>
             <li><?php echo $this->Html->link(__('Repitentes'), '/repitentes/view');?></li>
-
             <li><?php echo $this->Html->link(__('Ingresantes 2020'), '/ingresantes?ciclo=2020');?></li>
-            <!--<li><?php echo $this->Html->link(__('Tablero 2019'), '/graficos'); ?></li>-->
+            <li><?php echo $this->Html->link(__('Matrícula 2020'), '/vacantes?ciclo=2020');?></li>
           </ul>
         </li>
         <li class="dropdown">
