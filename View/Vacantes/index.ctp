@@ -58,14 +58,22 @@
 <?php endif; ?>
 <?php
     $nivelServicio = null;
-    if( $current_user['Centro']['nivel_servicio'] === 'Común - Inicial - Primario' ||
-        $current_user['Centro']['nivel_servicio'] === 'Común - Inicial' ||
-        $current_user['Centro']['nivel_servicio'] === 'Común - Primario' ) {
+    switch ($current_user['Centro']['nivel_servicio']) {
+      case 'Común - Inicial':
+      case 'Común - Primario':
         $nivelServicio = 'inicialPrimarioComun';
-    } else if ($current_user['Centro']['nivel_servicio'] === 'Común - Secundario') {
+        break;
+      case 'Común - Inicial - Primario':
+        $nivelServicio = 'supervisionInicialPrimarioComun';
+        break;
+      case 'Común - Secundario':
         $nivelServicio = 'secundarioComun';
-    } 
-     
+        break;
+      
+      default:
+        # code...
+        break;
+    }
 ?>
 <div class="TituloSec">Matrícula <?php echo $apiParams['ciclo']; ?></div>
 <div id="ContenidoSec">
@@ -92,20 +100,22 @@
           <th>Turno</th>
           <th>Tipo</th>
           <th>Titulación</th>
-          <?php if($nivelServicio == 'secundarioComun') : ?>
+        <?php if($nivelServicio == 'secundarioComun') : ?>
           <th>Hs Cátedras</th>
           <th>Res. Pedagógica</th>
           <th>Instr. Legal de Creación</th>
-          <?php endif; ?>
-          <?php if($nivelServicio == 'inicialPrimarioComun') : ?>
+        <?php endif; ?>
+        <?php if($nivelServicio == 'inicialPrimarioComun' || $nivelServicio == 'supervisionInicialPrimarioComun') : ?>
           <th>P.P.</th>
           <th>M.I.</th>
-          <?php endif; ?>
+        <?php endif; ?>
           <th>Plaza</th>
           <th>Matricula</th>
           <th>Varones</th>
           <th>VACANTES</th>
-          <th>Observaciones</th>          
+        <?php if($nivelServicio != 'inicialPrimarioComun') : ?>
+          <th>Observaciones</th>
+        <?php endif; ?>
           <!--<th>Accioness</th>-->
         </tr>
       </thead>
@@ -133,7 +143,7 @@
             <td>
               <?php echo $titulacionesNombres[$seccion['titulacion_id']]; ?>
             </td>
-            <?php if($nivelServicio == 'secundarioComun') : ?>
+          <?php if($nivelServicio == 'secundarioComun') : ?>
             <td>
               <?php echo $seccion['hs_catedras']; ?>
             </td>
@@ -143,51 +153,53 @@
             <td>
               <?php echo $seccion['reso_presupuestaria']; ?>
             </td>
-            <?php endif; ?>
-            <?php if($nivelServicio == 'inicialPrimarioComun') : ?>
+          <?php endif; ?>
+          <?php if($nivelServicio == 'inicialPrimarioComun' || $nivelServicio == 'supervisionInicialPrimarioComun') : ?>
             <td>
-                <?php if($seccion['pareja_pedagogica'] == 1): ?>
+              <?php if($seccion['pareja_pedagogica'] == 1): ?>
                 <span class="glyphicon glyphicon-ok"></span>
-                <?php endif; ?>
+              <?php endif; ?>
             </td>
             <td>
-                <?php if($seccion['maestra_apoyo_inclusion'] == 1): ?>
+              <?php if($seccion['maestra_apoyo_inclusion'] == 1): ?>
                 <span class="glyphicon glyphicon-ok"></span>
-                <?php endif; ?>
+              <?php endif; ?>
             </td>
-            <?php endif; ?>
-            <?php 
+          <?php endif; ?>
+          <?php 
                 if($seccion['cue']=='940001300' || $seccion['cue']=='940009200' || $seccion['cue']=='940011600' || $seccion['cue']=='940013400' || $seccion['cue']=='940014600' || $seccion['cue']=='940020900') { 
                     echo'<td>'.'--'.'</td>';
                 } else { 
                     echo'<td>'.$seccion['plazas'].'</td>';
                 }
-            ?>    
+          ?>    
             <td>
               <?php echo $seccion['matriculas']; ?>
             </td>
             <td>
                 <?php echo $seccion['varones']; ?>
             </td>
-            <?php
+          <?php
                 if($seccion['cue']=='940001300' || $seccion['cue']=='940009200' || $seccion['cue']=='940011600' || $seccion['cue']=='940013400' || $seccion['cue']=='940014600' || $seccion['cue']=='940020900') { 
                     echo'<td>'.'--'.'</td>';
                 } else { 
                     echo'<td>'.$seccion['vacantes'].'</td>';
                 }
-            ?>
+          ?>
+          <?php if($nivelServicio != 'inicialPrimarioComun') : ?>
             <td>
               <?php echo $seccion['observaciones']; ?>
             </td>
-            <?php if ($apiParams['ciclo'] == 2019) { ?>
+          <?php endif; ?>
+          <?php if ($apiParams['ciclo'] == 2019) { ?>
               <td>
                 <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
               </td>
-            <?php } else { ?>
+          <?php } else { ?>
               <td>  
                 <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'ListaAlumnos', 'action'=> '/index/centro_id:'.$seccion['centro_id'].'/curso_id:'.$seccion['curso_id'].'/ciclo:2020'), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
               </td>
-            <?php } ?>
+          <?php } ?>
           </tr>
         <?php endforeach; ?>
         <?php endif; ?>
