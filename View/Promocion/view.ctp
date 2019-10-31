@@ -65,6 +65,18 @@
 <!-- start main -->
 <div class="TituloSec">Promocionados</div>
 <div id="ContenidoSec">
+    <?php
+        if($showExportBtn) :
+    ?>
+        <a target="_blank" class="btn btn-success pull-right" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centro['Centro']['id'].'/report_type:promociones'; ?>">
+            <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel
+        </a>
+        <a target="_blank" style="margin-right:5px;" class="btn btn-danger pull-right" href="<?php echo '/gateway/pdf_matriculas_por_seccion/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centro['Centro']['id'].'/report_type:promociones';?>">
+            <span class="glyphicon glyphicon-file"></span><span>Exportar resultados a PDF</span>
+        </a>
+        <br>
+        <br>
+    <?php endif; ?>
     <div id="main">
     <!-- start second nav -->
       <div class="row">
@@ -76,9 +88,9 @@
                       <thead>
                       <tr>
                           <th>Nombre completo</th>
-                          <th>2018</th>
-                          <th></th>
                           <th>2019</th>
+                          <th></th>
+                          <th>2020</th>
                       </tr>
                       </thead>
                       <tbody>
