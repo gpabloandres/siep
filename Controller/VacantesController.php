@@ -79,9 +79,9 @@ class VacantesController extends AppController
         $apiParams['ciclo'] = 2019;
         $apiParams['estado_inscripcion'] = 'CONFIRMADA';
         $apiParams['division'] = 'con';
-        $apiParams['order'] = 'anio';
+        //$apiParams['order'] = 'anio';
         $apiParams['order_dir'] = 'asc';
-
+        
         // Filtros de formulario y paginacion
         if(isset($this->request->query['ciclo'])){
             $apiParams['ciclo'] = $this->request->query['ciclo'];
@@ -91,6 +91,21 @@ class VacantesController extends AppController
         }
         if(isset($this->request->query['centro_id'])){
             $apiParams['centro_id'] = $this->request->query['centro_id'];
+        }
+        if(isset($this->request->query['ciudad_id'])){
+            $apiParams['ciudad_id'] = $this->request->query['ciudad_id'];
+        }
+        if(isset($this->request->query['nivel_servicio'])){
+            $apiParams['nivel_servicio'] = $this->request->query['nivel_servicio'];
+        }
+        if(isset($this->request->query['sector'])){
+            $apiParams['sector'] = $this->request->query['sector'];
+        }
+        if(isset($this->request->query['turno'])){
+            $apiParams['turno'] = $this->request->query['turno'];
+        }
+        if(isset($this->request->query['vacantes'])){
+            $apiParams['vacantes'] = $this->request->query['vacantes'];
         }
         if(isset($this->request->query['page'])){
             $apiParams['page'] = $this->request->query['page'];
