@@ -40,14 +40,12 @@ class ReubicacionController extends AppController {
  */
 	public function index()
 	{
-		// Ciclo actual
-		$hoyArray = getdate();
-		$this->loadModel('Ciclo');
-		$cicloActual = $this->Ciclo->find('first', array(
-			'recursive' => -1,
-			'conditions' => array('nombre' => $hoyArray['year'])
-		));
-		$cicloActual = array_pop($cicloActual);
+		$serverDate = getdate();
+		$cicloActual = $serverDate['year'];
+
+		if(isset($this->params['named']['ciclo'])) {
+			$cicloActual = $this->params['named']['ciclo'];
+		}
 
 		$centro_id = $this->params['named']['centro_id'];
 		$curso_id = $this->params['named']['curso_id'];
@@ -56,7 +54,7 @@ class ReubicacionController extends AppController {
 		$apiResponse = $this->apiListaDeAlumnos(
 			$centro_id,
 			$curso_id,
-			$cicloActual['id']
+			$cicloActual
 		);
 
 		$success = false;
@@ -131,7 +129,7 @@ class ReubicacionController extends AppController {
 		$this->redirect($this->referer());
 	}
 
-	private function apiListaDeAlumnos($centroId,$cursoId,$cicloId)
+	private function apiListaDeAlumnos($centroId,$cursoId,$ciclo)
 	{
 		try {
 			$userId = $this->Auth->user('id');
@@ -139,7 +137,7 @@ class ReubicacionController extends AppController {
 			$apiParams['user_id'] = $userId;
 			$apiParams['centro_id'] = $centroId;
 			$apiParams['curso_id'] = $cursoId;
-			$apiParams['ciclo_id'] = $cicloId;
+			$apiParams['ciclo'] = $ciclo;
 			$apiParams['estado_inscripcion'] = 'CONFIRMADA';
 			$apiParams['por_pagina'] = 'all';
 
