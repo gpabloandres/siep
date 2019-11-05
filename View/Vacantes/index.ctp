@@ -6,10 +6,10 @@
 <div id="ContenidoSec">
     <?php echo $this->Form->create('Curso',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
     <div class="row">
-          <div class="col-xs-4">
-              <!-- Autocomplete --> 
-              <strong>Nombre de la Institución</strong>
-              <input id="AutocompleteForm" class="form-control" placeholder="Indique el nombre de la institución" type="text">
+        <div class="col-xs-4">
+        <!-- Autocomplete --> 
+        <strong>Nombre de la Institución</strong>
+        <input id="AutocompleteForm" class="form-control" placeholder="Indique el nombre de la institución" type="text">
             <script>
               $( function() {
                 $( "#AutocompleteForm" ).autocomplete({
@@ -28,29 +28,61 @@
                 };
               });
             </script>
-            <!-- End Autocompletes -->
-            </div>
-        <!--<div class="col-xs-2">
+          <!-- End Autocompletes -->
+        </div><br><hr>
+        <div class="col-xs-2">
             <div class="input select">
-                <?php
-                echo $this->Form->input('sector', array('options'=>$comboSector, 'empty'=>'- Todos los sectores -', 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-                ?>
+              <?php
+                echo $this->Form->input('ciudad_id', array('default'=>'Ushuaia', 'options'=>$comboCiudad, 'empty'=>'- Todas las ciudades -', 'label'=>'Ciudad', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+              ?>
             </div>
-        </div>-->
-        <!--<div class="col-xs-2">
+        </div>
+        <div class="col-xs-2">
             <div class="input select">
-                <?php
-                echo $this->Form->input('ciudad_id', array('options'=>$comboCiudad, 'empty'=>'- Todas las ciudades -', 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-                ?>
+              <?php
+                $nivelesServicios = array('Común - Inicial' => 'Común - Inicial', 'Común - Primario' => 'Común - Primario', 'Común - Secundario' => 'Común - Secundario', 'Especial - Primario' => 'Especial - Primario', 'Adulto - Primario' => 'Adulto - Primario', 'Adulto - Secundario' => 'Adulto - Secundario', 'Común - Superior' => 'Común - Superior');
+                echo $this->Form->input('nivel_servicio', array('default'=>'Común - Inicial', 'options'=>$nivelesServicios, 'empty'=>'- Todos los niveles -', 'label'=>'Nivel-Servicio', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+              ?>
             </div>
-        </div>-->
-        <!--<div class="col-xs-2">
+        </div>
+        <div class="col-xs-2">
+            <div class="input select">
+              <?php
+                echo $this->Form->input('sector', array('default'=>'ESTATAL', 'options'=>$comboSector, 'empty'=>'- Todos los sectores -', 'label'=>'Sector', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+              ?>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="input select">
+              <?php
+                $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años', '1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+                echo $this->Form->input('anio', array('default'=>'Sala de 4 años', 'options'=>$anios, 'empty'=>'- Todos los anios -', 'label'=>'Año', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+              ?>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="input select">
+              <?php
+                $turnos = array('Mañana' => 'Mañana', 'Tarde' =>'Tarde', 'Mañana Extendida' =>'Mañana Extendida', 'Tarde Extendida' => 'Tarde Extendida', 'Doble Extendida' =>'Doble Extendida', 'Vespertino' => 'Vespertino', 'Noche' =>'Noche');
+                echo $this->Form->input('turno', array('default'=>'Mañana', 'options'=>$turnos, 'empty'=>'- Todos los turnos -', 'label'=>'Turno', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+              ?>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="input select">
+              <?php
+                $vacancias = array('con' => 'Con vacantes', 'sin' => 'Sin vacantes');
+                echo $this->Form->input('vacantes', array('default'=>'Con vacantes', 'options'=>$vacancias, 'empty'=>'- Todos las vacantes -', 'label'=>'Vacantes', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+              ?>
+            </div>
+        </div><br><hr><br>
+        <div class=".col-md-3 .col-md-offset-3">
             <div class="text-center">
                 <span class="link">
                     <?php echo $this->Form->button('<span class="glyphicon glyphicon-search"></span> Aplicar filtro', array('class' => 'btn btn-primary')); ?>
                 </span>
             </div>
-        </div>-->
+        </div>
     </div>
     <?php echo $this->Form->end(); ?>
 </div>
