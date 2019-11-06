@@ -30,6 +30,9 @@
             </script>
           <!-- End Autocompletes -->
         </div><br><hr>
+        <?php
+            echo $this->Form->input('ciclo', array('default'=>$apiParams['ciclo'], 'type'=>'hidden'));
+        ?>
         <div class="col-xs-2">
             <div class="input select">
               <?php
