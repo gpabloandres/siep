@@ -2,7 +2,7 @@
     // Sí el usuario no es Admin, muestro el filtro.
     if(!$this->Siep->isAdmin()) :
 ?>
-<div class="TituloSec">Filtro</div>
+<div class="TituloSec">Filtro por Institución</div>
 <div id="ContenidoSec">
     <?php echo $this->Form->create('Curso',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
     <div class="row">
@@ -29,7 +29,17 @@
               });
             </script>
           <!-- End Autocompletes -->
-        </div><br><hr>
+        </div><br>
+        </div>
+    <?php echo $this->Form->end(); ?>
+</div>
+<div class="TituloSec">Otros Filtros</div>
+<div id="ContenidoSec">
+      <?php echo $this->Form->create('Curso',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
+      <div class="row">
+      <?php
+          echo $this->Form->input('ciclo', array('default'=>$apiParams['ciclo'], 'type'=>'hidden'));
+      ?>
         <div class="col-xs-2">
             <div class="input select">
               <?php
@@ -85,8 +95,7 @@
         </div>
     </div>
     <?php echo $this->Form->end(); ?>
-</div>
-        <br>
+</div><hr>
 <?php endif; ?>
 <?php
     $nivelServicio = null;
