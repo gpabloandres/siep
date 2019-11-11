@@ -2,14 +2,14 @@
     // Sí el usuario no es Admin, muestro el filtro.
     if(!$this->Siep->isAdmin()) :
 ?>
-<div class="TituloSec">Filtro</div>
+<div class="TituloSec">Filtro por Institución</div>
 <div id="ContenidoSec">
     <?php echo $this->Form->create('Curso',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
     <div class="row">
-          <div class="col-xs-4">
-              <!-- Autocomplete --> 
-              <strong>Nombre de la Institución</strong>
-              <input id="AutocompleteForm" class="form-control" placeholder="Indique el nombre de la institución" type="text">
+        <div class="col-xs-4">
+        <!-- Autocomplete --> 
+        <strong>Nombre de la Institución</strong>
+        <input id="AutocompleteForm" class="form-control" placeholder="Indique el nombre de la institución" type="text">
             <script>
               $( function() {
                 $( "#AutocompleteForm" ).autocomplete({
@@ -28,118 +28,137 @@
                 };
               });
             </script>
-            <!-- End Autocompletes -->
-            </div>
-        <!--<div class="col-xs-2">
+          <!-- End Autocompletes -->
+        </div><br>
+        </div>
+    <?php echo $this->Form->end(); ?>
+</div>
+<div class="TituloSec">Otros Filtros</div>
+<div id="ContenidoSec">
+      <?php echo $this->Form->create('Curso',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
+      <div class="row">
+      <?php
+          echo $this->Form->input('ciclo', array('default'=>$apiParams['ciclo'], 'type'=>'hidden'));
+      ?>
+        <div class="col-xs-2">
             <div class="input select">
-                <?php
-                echo $this->Form->input('sector', array('options'=>$comboSector, 'empty'=>'- Todos los sectores -', 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-                ?>
+              <?php
+                echo $this->Form->input('ciudad_id', array('default'=>'Ushuaia', 'options'=>$comboCiudad, 'empty'=>'- Todas las ciudades -', 'label'=>'Ciudad', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+              ?>
             </div>
-        </div>-->
-        <!--<div class="col-xs-2">
+        </div>
+        <div class="col-xs-2">
+          <div class="input select">
+              <?php
+                  $default = null;
+                  switch ($current_user['puesto']) {
+                    case 'Supervisión Inicial/Primaria':
+                      $nivelesServicios = array('Común - Inicial' => 'Común - Inicial', 'Común - Primario' => 'Común - Primario', 'Especial - Primario' => 'Especial - Primario', 'Adulto - Primario' => 'Adulto - Primario');
+                      echo $this->Form->input('nivel_servicio', array('options'=>$nivelesServicios, 'empty'=>'- Todos los niveles -', 'label'=>'Nivel-Servicio', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                      break;
+                    case 'Supervisión Secundaria':
+                      $nivelesServicios = array('Común - Secundario' => 'Común - Secundario', 'Adulto - Secundario' => 'Adulto - Secundario');
+                      echo $this->Form->input('nivel_servicio', array('default'=>'Común - Secundario', 'options'=>$nivelesServicios, 'empty'=>'- Todos los niveles -', 'label'=>'Nivel-Servicio', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                      break;
+                    
+                    default:
+                      $nivelesServicios = array('Común - Inicial' => 'Común - Inicial', 'Común - Primario' => 'Común - Primario', 'Común - Secundario' => 'Común - Secundario', 'Especial - Primario' => 'Especial - Primario', 'Adulto - Primario' => 'Adulto - Primario', 'Adulto - Secundario' => 'Adulto - Secundario', 'Común - Superior' => 'Común - Superior');
+                      echo $this->Form->input('nivel_servicio', array('options'=>$nivelesServicios, 'empty'=>'- Todos los niveles -', 'label'=>'Nivel-Servicio', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                    break;
+                  }
+              ?>
+          </div>
+        </div>
+        <div class="col-xs-2">
             <div class="input select">
-                <?php
-                echo $this->Form->input('ciudad_id', array('options'=>$comboCiudad, 'empty'=>'- Todas las ciudades -', 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-                ?>
+              <?php
+                $sectores = array('ESTATAL' => 'ESTATAL', 'PRIVADO' => 'PRIVADO');
+                echo $this->Form->input('sector', array('default'=>'ESTATAL', 'options'=>$sectores, 'empty'=>'- Todos los sectores -', 'label'=>'Sector', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+              ?>
             </div>
-        </div>-->
-        <!--<div class="col-xs-2">
+        </div>
+        <div class="col-xs-2">
+            <div class="input select">
+              <?php
+                switch ($current_user['Centro']['nivel_servicio']) {
+                  case 'Común - Inicial':
+                    $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años');
+                  case 'Común - Primario':
+                    $anios = array('1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to');
+                    break;
+                  case 'Común - Secundario':
+                    $anios = array('1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+                    break;
+                  
+                  default:
+                  $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años', '1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+                    break;
+                }            
+                echo $this->Form->input('anio', array('default'=>'Sala de 4 años', 'options'=>$anios, 'empty'=>'- Todos los anios -', 'label'=>'Año', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+              ?>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="input select">
+              <?php
+                $turnos = array('Mañana' => 'Mañana', 'Tarde' =>'Tarde', 'Mañana Extendida' =>'Mañana Extendida', 'Tarde Extendida' => 'Tarde Extendida', 'Doble Extendida' =>'Doble Extendida', 'Vespertino' => 'Vespertino', 'Noche' =>'Noche');
+                echo $this->Form->input('turno', array('default'=>'Mañana', 'options'=>$turnos, 'empty'=>'- Todos los turnos -', 'label'=>'Turno', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+              ?>
+            </div>
+        </div>
+      <?php if ($apiParams['ciclo'] == '2019') : ?> 
+        <div class="col-xs-2">
+            <div class="input select">
+              <?php
+                $vacancias = array('con' => 'Con vacantes', 'sin' => 'Sin vacantes');
+                echo $this->Form->input('vacantes', array('default'=>'Con vacantes', 'options'=>$vacancias, 'empty'=>'- Todos las vacantes -', 'label'=>'Vacantes', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+              ?>
+            </div>
+        </div>
+      <?php endif; ?>  
+        <br><hr><br>
+        <div class=".col-md-3 .col-md-offset-3">
             <div class="text-center">
                 <span class="link">
                     <?php echo $this->Form->button('<span class="glyphicon glyphicon-search"></span> Aplicar filtro', array('class' => 'btn btn-primary')); ?>
                 </span>
             </div>
-        </div>-->
+        </div>
     </div>
     <?php echo $this->Form->end(); ?>
-</div>
-        <br>
+</div><hr>
 <?php endif; ?>
 <?php
     $nivelServicio = null;
-    if( $current_user['Centro']['nivel_servicio'] === 'Común - Inicial - Primario' ||
-        $current_user['Centro']['nivel_servicio'] === 'Común - Inicial' ||
-        $current_user['Centro']['nivel_servicio'] === 'Común - Primario' ) {
+    switch ($current_user['Centro']['nivel_servicio']) {
+      case 'Común - Inicial':
+      case 'Común - Primario':
         $nivelServicio = 'inicialPrimarioComun';
-    } else if ($current_user['Centro']['nivel_servicio'] === 'Común - Secundario') {
+        break;
+      case 'Común - Inicial - Primario':
+        $nivelServicio = 'supervisionInicialPrimarioComun';
+        break;
+      case 'Común - Secundario':
         $nivelServicio = 'secundarioComun';
-    } 
-     
+        break;
+      
+      default:
+        # code...
+        break;
+    }
 ?>
 <div class="TituloSec">Matrícula <?php echo $apiParams['ciclo']; ?></div>
 <div id="ContenidoSec">
     <?php
     if($showBtnExcel) :
     ?>
-        <?php
-        if($this->Siep->isAdmin()):
-        ?>
-            <a target="_blank" class="btn btn-success pull-right" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">
-                <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel
-            </a>
-            <a target="_blank" style="margin-right:5px;" class="btn btn-danger pull-right" href="<?php echo '/gateway/pdf_matriculas_por_seccion/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado;?>">
-                <span class="glyphicon glyphicon-file"></span><span>Exportar resultados a PDF</span>
-            </a>
-        <?php else: ?>
-            <div class="btn-group pull-right">
-            
-                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <?php
-                    foreach($ubicaciones as $ubicacion):
-                        ?>
-                        <li>
-                            <a target="_blank" href="<?php echo '/gateway/excel_vacantes/ciudad:'.$ubicacion['nombre'].'/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">
-                                <?php echo $ubicacion['nombre']; ?>
-                            </a>
-                        </li>
-                        <?php
-                    endforeach;
-                    ?>
-                    <li role="separator" class="divider"></li>
-                    <li>
-                    <li>
-                        <a target="_blank" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">Toda la provincia</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- <div class="btn-group pull-right">:
-            
-                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="glyphicon glyphicon-file"></span> Exportar resultados a PDF <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <?php
-                    foreach($ubicaciones as $ubicacion):
-                        ?>
-                        <li>
-                            <a target="_blank" href="<?php echo '/gateway/pdf_matriculas_por_seccion/ciudad:'.$ubicacion['nombre'].'/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">
-                                <?php echo $ubicacion['nombre']; ?>
-                            </a>
-                        </li>
-                        <?php
-                    endforeach;
-                    ?>
-                    <li role="separator" class="divider"></li>
-                    <li>
-                    <li>
-                        <a target="_blank" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">Toda la provincia</a>
-                    </li>
-                </ul>
-            </div> -->
-            <?php
-            if(isset($centroSolicitado) && $centroSolicitado !=""): ?>
-            <a target="_blank" style="margin-right:5px;" class="btn btn-danger pull-right" href="<?php echo '/gateway/pdf_matriculas_por_seccion/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado;?>">
-                <span class="glyphicon glyphicon-file"></span><span>Exportar resultados a PDF</span>
-            </a>
-
-        <?php
-            endif; 
-          endif; 
-        ?>
+        <a target="_blank" class="btn btn-success pull-right" href="<?php echo '/gateway/excel_vacantes/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado; ?>">
+            <span class="glyphicon glyphicon-file"></span> Exportar resultados a excel
+        </a>
+        <a target="_blank" style="margin-right:5px;" class="btn btn-danger pull-right" href="<?php echo '/gateway/pdf_matriculas_por_seccion/ciclo:'.$apiParams['ciclo'].'/centro_id:'.$centroSolicitado;?>">
+            <span class="glyphicon glyphicon-file"></span><span>Exportar resultados a PDF</span>
+        </a>
+        
         <br>
         <br>
     <?php endif; ?>
@@ -153,20 +172,22 @@
           <th>Turno</th>
           <th>Tipo</th>
           <th>Titulación</th>
-          <?php if($nivelServicio == 'secundarioComun') : ?>
+        <?php if($nivelServicio == 'secundarioComun') : ?>
           <th>Hs Cátedras</th>
           <th>Res. Pedagógica</th>
           <th>Instr. Legal de Creación</th>
-          <?php endif; ?>
-          <?php if($nivelServicio == 'inicialPrimarioComun') : ?>
+        <?php endif; ?>
+        <?php if($nivelServicio == 'inicialPrimarioComun' || $nivelServicio == 'supervisionInicialPrimarioComun') : ?>
           <th>P.P.</th>
           <th>M.I.</th>
-          <?php endif; ?>
+        <?php endif; ?>
           <th>Plaza</th>
           <th>Matricula</th>
           <th>Varones</th>
           <th>VACANTES</th>
-          <th>Observaciones</th>          
+        <?php if($nivelServicio != 'inicialPrimarioComun') : ?>
+          <th>Observaciones</th>
+        <?php endif; ?>
           <!--<th>Accioness</th>-->
         </tr>
       </thead>
@@ -194,7 +215,7 @@
             <td>
               <?php echo $titulacionesNombres[$seccion['titulacion_id']]; ?>
             </td>
-            <?php if($nivelServicio == 'secundarioComun') : ?>
+          <?php if($nivelServicio == 'secundarioComun') : ?>
             <td>
               <?php echo $seccion['hs_catedras']; ?>
             </td>
@@ -204,51 +225,53 @@
             <td>
               <?php echo $seccion['reso_presupuestaria']; ?>
             </td>
-            <?php endif; ?>
-            <?php if($nivelServicio == 'inicialPrimarioComun') : ?>
+          <?php endif; ?>
+          <?php if($nivelServicio == 'inicialPrimarioComun' || $nivelServicio == 'supervisionInicialPrimarioComun') : ?>
             <td>
-                <?php if($seccion['pareja_pedagogica'] == 1): ?>
+              <?php if($seccion['pareja_pedagogica'] == 1): ?>
                 <span class="glyphicon glyphicon-ok"></span>
-                <?php endif; ?>
+              <?php endif; ?>
             </td>
             <td>
-                <?php if($seccion['maestra_apoyo_inclusion'] == 1): ?>
+              <?php if($seccion['maestra_apoyo_inclusion'] == 1): ?>
                 <span class="glyphicon glyphicon-ok"></span>
-                <?php endif; ?>
+              <?php endif; ?>
             </td>
-            <?php endif; ?>
-            <?php 
+          <?php endif; ?>
+          <?php 
                 if($seccion['cue']=='940001300' || $seccion['cue']=='940009200' || $seccion['cue']=='940011600' || $seccion['cue']=='940013400' || $seccion['cue']=='940014600' || $seccion['cue']=='940020900') { 
                     echo'<td>'.'--'.'</td>';
                 } else { 
                     echo'<td>'.$seccion['plazas'].'</td>';
                 }
-            ?>    
+          ?>    
             <td>
               <?php echo $seccion['matriculas']; ?>
             </td>
             <td>
                 <?php echo $seccion['varones']; ?>
             </td>
-            <?php
+          <?php
                 if($seccion['cue']=='940001300' || $seccion['cue']=='940009200' || $seccion['cue']=='940011600' || $seccion['cue']=='940013400' || $seccion['cue']=='940014600' || $seccion['cue']=='940020900') { 
                     echo'<td>'.'--'.'</td>';
                 } else { 
                     echo'<td>'.$seccion['vacantes'].'</td>';
                 }
-            ?>
+          ?>
+          <?php if($nivelServicio != 'inicialPrimarioComun') : ?>
             <td>
               <?php echo $seccion['observaciones']; ?>
             </td>
-            <?php if ($apiParams['ciclo'] == 2019) { ?>
+          <?php endif; ?>
+          <?php if ($apiParams['ciclo'] == 2019) { ?>
               <td>
                 <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
               </td>
-            <?php } else { ?>
+          <?php } else { ?>
               <td>  
                 <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'ListaAlumnos', 'action'=> '/index/centro_id:'.$seccion['centro_id'].'/curso_id:'.$seccion['curso_id'].'/ciclo:2020'), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
               </td>
-            <?php } ?>
+          <?php } ?>
           </tr>
         <?php endforeach; ?>
         <?php endif; ?>
