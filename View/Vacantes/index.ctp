@@ -48,24 +48,52 @@
             </div>
         </div>
         <div class="col-xs-2">
+          <div class="input select">
+              <?php
+                  $default = null;
+                  switch ($current_user['puesto']) {
+                    case 'Supervisión Inicial/Primaria':
+                      $nivelesServicios = array('Común - Inicial' => 'Común - Inicial', 'Común - Primario' => 'Común - Primario', 'Especial - Primario' => 'Especial - Primario', 'Adulto - Primario' => 'Adulto - Primario');
+                      echo $this->Form->input('nivel_servicio', array('options'=>$nivelesServicios, 'empty'=>'- Todos los niveles -', 'label'=>'Nivel-Servicio', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                      break;
+                    case 'Supervisión Secundaria':
+                      $nivelesServicios = array('Común - Secundario' => 'Común - Secundario', 'Adulto - Secundario' => 'Adulto - Secundario');
+                      echo $this->Form->input('nivel_servicio', array('default'=>'Común - Secundario', 'options'=>$nivelesServicios, 'empty'=>'- Todos los niveles -', 'label'=>'Nivel-Servicio', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                      break;
+                    
+                    default:
+                      $nivelesServicios = array('Común - Inicial' => 'Común - Inicial', 'Común - Primario' => 'Común - Primario', 'Común - Secundario' => 'Común - Secundario', 'Especial - Primario' => 'Especial - Primario', 'Adulto - Primario' => 'Adulto - Primario', 'Adulto - Secundario' => 'Adulto - Secundario', 'Común - Superior' => 'Común - Superior');
+                      echo $this->Form->input('nivel_servicio', array('options'=>$nivelesServicios, 'empty'=>'- Todos los niveles -', 'label'=>'Nivel-Servicio', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                    break;
+                  }
+              ?>
+          </div>
+        </div>
+        <div class="col-xs-2">
             <div class="input select">
               <?php
-                $nivelesServicios = array('Común - Inicial' => 'Común - Inicial', 'Común - Primario' => 'Común - Primario', 'Común - Secundario' => 'Común - Secundario', 'Especial - Primario' => 'Especial - Primario', 'Adulto - Primario' => 'Adulto - Primario', 'Adulto - Secundario' => 'Adulto - Secundario', 'Común - Superior' => 'Común - Superior');
-                echo $this->Form->input('nivel_servicio', array('default'=>'Común - Inicial', 'options'=>$nivelesServicios, 'empty'=>'- Todos los niveles -', 'label'=>'Nivel-Servicio', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                $sectores = array('ESTATAL' => 'ESTATAL', 'PRIVADO' => 'PRIVADO');
+                echo $this->Form->input('sector', array('default'=>'ESTATAL', 'options'=>$sectores, 'empty'=>'- Todos los sectores -', 'label'=>'Sector', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
               ?>
             </div>
         </div>
         <div class="col-xs-2">
             <div class="input select">
               <?php
-                echo $this->Form->input('sector', array('default'=>'ESTATAL', 'options'=>$comboSector, 'empty'=>'- Todos los sectores -', 'label'=>'Sector', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-              ?>
-            </div>
-        </div>
-        <div class="col-xs-2">
-            <div class="input select">
-              <?php
-                $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años', '1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+                switch ($current_user['Centro']['nivel_servicio']) {
+                  case 'Común - Inicial':
+                    $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años');
+                  case 'Común - Primario':
+                    $anios = array('1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to');
+                    break;
+                  case 'Común - Secundario':
+                    $anios = array('1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+                    break;
+                  
+                  default:
+                  $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años', '1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+                    break;
+                }            
                 echo $this->Form->input('anio', array('default'=>'Sala de 4 años', 'options'=>$anios, 'empty'=>'- Todos los anios -', 'label'=>'Año', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
               ?>
             </div>
@@ -78,6 +106,7 @@
               ?>
             </div>
         </div>
+      <?php if ($apiParams['ciclo'] == '2019') : ?> 
         <div class="col-xs-2">
             <div class="input select">
               <?php
@@ -85,7 +114,9 @@
                 echo $this->Form->input('vacantes', array('default'=>'Con vacantes', 'options'=>$vacancias, 'empty'=>'- Todos las vacantes -', 'label'=>'Vacantes', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
               ?>
             </div>
-        </div><br><hr><br>
+        </div>
+      <?php endif; ?>  
+        <br><hr><br>
         <div class=".col-md-3 .col-md-offset-3">
             <div class="text-center">
                 <span class="link">
