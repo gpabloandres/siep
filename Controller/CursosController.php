@@ -69,7 +69,7 @@ class CursosController extends AppController {
 		$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'contain'=>false,'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 		switch ($userRole) {
 			case 'admin':
-				$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId, 'Curso.status' => 1, 'Curso.division !=' => '');
+				$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId, 'Curso.status' => 1, array('or'=> array('Curso.division !=' => '', 'Curso.division' => 'SIN TERMINALIDAD')));
 				break;
 			case 'usuario':
 				if ($nivelCentro === 'Común - Inicial - Primario') {
@@ -178,11 +178,12 @@ class CursosController extends AppController {
 		$this->loadModel('Ciclo');
 		$this->Ciclo->recursive = 0;
         $this->Ciclo->Behaviors->load('Containable');
-        $cicloIdActual = $this->getActualCicloId();
+		$cicloIdActual = 6;
+		//$cicloIdActual = $this->getActualCicloId(); Para utilizar luego de Agosto.
         $cicloIdActualArray = $this->Ciclo->findById($cicloIdActual, 'id');
         $cicloIdActualString = $cicloIdActualArray['Ciclo']['id'];
 
-		// Ciclo Actua y Posterior
+		// Ciclo Actual y Posterior
 		$cicloActual = $this->Ciclo->findById($cicloIdActual);
 		$cicloPosterior = $this->Ciclo->findByNombre(($cicloActual['Ciclo']['nombre'] + 1));
 

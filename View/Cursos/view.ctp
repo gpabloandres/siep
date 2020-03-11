@@ -77,7 +77,7 @@
 		    <div class="unit">
 				<?php
 
-				$cicloDatoAlumno = $cicloActual['Ciclo']['nombre'];
+				$cicloDatoAlumno = $cicloPosterior['Ciclo']['nombre'];
 				if(empty($cursoDivisionString))
 				{
 					$cicloDatoAlumno = $cicloPosterior['Ciclo']['nombre'];
@@ -96,15 +96,16 @@
 					// Por defecto se ocultan las siguientes opciones
 					$showPromocion = false;
 					$showEgreso = false;
-					$showRepetir = true;
+					$showRepetir = false;
 
-				if ($curso['Curso']['division'] != '') {
+				if ($curso['Curso']['division'] != '' && $curso['Curso']['division'] != 'SIN TERMINALIDAD') {
 						/*  Los unicos 6to que promocionan
 							940007700 CEPET
 							940008300 EPET
 							940015900 SABATO
 							940015700 GUEVARA
 						*/
+						$showRepetir = true;
 						if($curso['Curso']['anio'] == '6to') {
 							if(
 								($curso['Centro']['cue'] == '940007700') ||
@@ -126,7 +127,8 @@
 								($curso['Centro']['nivel_servicio'] == 'Adultos - Primario' && $curso['Curso']['anio'] != '3ro') ||
 								($curso['Centro']['nivel_servicio'] == 'Especial - Primario') ||
 								($curso['Centro']['nivel_servicio'] == 'Especial - Integración') ||
-								($curso['Centro']['nivel_servicio'] == 'Maternal - Inicial')
+								($curso['Centro']['nivel_servicio'] == 'Maternal - Inicial') ||
+								($curso['Centro']['nivel_servicio'] == 'Común - Servicios complementarios')
 							) {
 								$showPromocion = true;
 							}
@@ -134,10 +136,10 @@
 					}	
 				?>
 
-				<?php
+				<?php /*
 
 					// Hardcode
-					// Los centros con las siguientes ID
+					// Según la sección del centro que se trate, puede definir el ciclo a promocionar.
 					$promocionCustomCentroId =[11,509,510];
 					$promocionCustomCicloId = $cicloActual['Ciclo']['nombre'];
 					if(in_array($curso['Centro']['id'],$promocionCustomCentroId))
@@ -145,50 +147,52 @@
 						$promocionCustomCicloId= 2018;
 					}
 
-					?>
+				*/?>
 
-					<?php  if($showPromocion) : ?>
-						<div class="opcion"><?php echo $this->Html->link(__('Promocionar'), array('action' => 'index','controller' => 'Promocion',
-								'centro_id'=>$curso['Centro']['id'],
-								'curso_id'=>$curso['Curso']['id'],
-								'ciclo' => $promocionCustomCicloId
-							)); ?>
-						</div>
-					<?php endif; ?>
+				<?php  if($showPromocion) : ?>
+					<div class="opcion"><?php echo $this->Html->link(__('Promocionar'), array('action' => 'index','controller' => 'Promocion',
+							'centro_id'=>$curso['Centro']['id'],
+							'curso_id'=>$curso['Curso']['id'],
+							'ciclo' =>$cicloActual['Ciclo']['nombre']
+							//'ciclo' => $promocionCustomCicloId
+						)); ?>
+					</div>
+				<?php endif; ?>
 
-					<?php
-						if($curso['Curso']['anio'] == '6to')
-						{
-							/*Deben mostrar la opción "EGRESAR" los 7mos de las secciones con orientación técnica y los 6tos de las secciones con orientación bachiller*/
-							if(
-								($curso['Centro']['cue'] == '940007700') ||
-								($curso['Centro']['cue'] == '940008300')/* ||
-								($curso['Centro']['cue'] == '940015900') ||
-								($curso['Centro']['cue'] == '940015700')*/
-							) {
-								$showEgreso = false;
-							} else {
-								$showEgreso = true;
-							}
+				<?php
+					if($curso['Curso']['anio'] == '6to')
+					{
+						/*Deben mostrar la opción "EGRESAR" los 7mos de las secciones con orientación técnica y los 6tos de las secciones con orientación bachiller*/
+						if(
+							($curso['Centro']['cue'] == '940007700') ||
+							($curso['Centro']['cue'] == '940008300')/* ||
+							($curso['Centro']['cue'] == '940015900') ||
+							($curso['Centro']['cue'] == '940015700')*/
+						) {
+							$showEgreso = false;
 						} else {
-							// Egresos de Sala de 5 años (Inicial) y 3ros (Primario/Secundario Adultos).
-							if(
-								($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] == 'Sala de 5 años') || ($curso['Curso']['tipo'] == 'Múltiple' && $curso['Curso']['anio'] == 'Sala de 4 años') || ($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] == '7mo') ||
-								($curso['Centro']['nivel_servicio'] == 'Adultos - Secundario' && $curso['Curso']['anio'] == '3ro') ||
-								($curso['Centro']['nivel_servicio'] == 'Adultos - Primario' && $curso['Curso']['anio'] == '3ro')
-							) {
-								$showEgreso = true;
-							}
+							$showEgreso = true;
 						}
-					?>
+					} else {
+						// Egresos de Sala de 5 años (Inicial) y 3ros (Primario/Secundario Adultos).
+						if(
+							($curso['Centro']['nivel_servicio'] == 'Común - Inicial' && $curso['Curso']['anio'] == 'Sala de 5 años') || ($curso['Curso']['tipo'] == 'Múltiple' && $curso['Curso']['anio'] == 'Sala de 4 años') || ($curso['Centro']['nivel_servicio'] == 'Común - Secundario' && $curso['Curso']['anio'] == '7mo') ||
+							($curso['Centro']['nivel_servicio'] == 'Adultos - Secundario' && $curso['Curso']['anio'] == '3ro') ||
+							($curso['Centro']['nivel_servicio'] == 'Adultos - Primario' && $curso['Curso']['anio'] == '3ro')
+						) {
+							$showEgreso = true;
+						}
+					}
+				?>
 
-					<?php  if($showEgreso) : ?>
-						<div class="opcion"><?php echo $this->Html->link(__('Egresar'), array('action' => 'index','controller' => 'Egreso',
-								'centro_id'=>$curso['Centro']['id'],
-								'curso_id'=>$curso['Curso']['id']
-							)); ?>
-						</div>
-					<?php endif; ?>
+				<?php  if($showEgreso) : ?>
+					<div class="opcion"><?php echo $this->Html->link(__('Egresar'), array('action' => 'index','controller' => 'Egreso',
+							'centro_id'=>$curso['Centro']['id'],
+							'curso_id'=>$curso['Curso']['id'],
+							'ciclo' =>$cicloActual['Ciclo']['nombre']
+						)); ?>
+					</div>
+				<?php endif; ?>
 
 				<?php  if($showRepetir) : ?>
 					<div class="opcion"><?php echo $this->Html->link(__('Repitencia'), array('action' => 'index','controller' => 'Repitentes',
@@ -199,19 +203,18 @@
 					</div>
 				<?php endif; ?>
 
-					<div class="opcion"><?php echo $this->Html->link(__('Reubicar'), array('action' => 'index','controller' => 'Reubicacion',
-							'centro_id'=>$curso['Centro']['id'],
-							'curso_id'=>$curso['Curso']['id']
-						)); ?>
-					</div>
+				<div class="opcion"><?php echo $this->Html->link(__('Reubicar'), array('action' => 'index','controller' => 'Reubicacion',
+						'centro_id'=>$curso['Centro']['id'],
+						'curso_id'=>$curso['Curso']['id']
+					)); ?>
+				</div>
 
-
-			  <?php if(($current_user['role'] == 'superadmin' && ($current_user['puesto'] == 'Sistemas' || $current_user['puesto'] == 'Atei')) || ($current_user['role'] == 'usuario' && ($current_user['puesto'] == 'Supervisión Secundaria'))): ?>
-				<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $curso['Curso']['id'])); ?></div>
-              <?php endif; ?>
-              <?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
-				<div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $curso['Curso']['id']), null, sprintf(__('Esta seguro de borrar el curso %s?'), $curso['Curso']['division'])); ?></div>
-			  <?php endif; ?>	
+				<?php if(($current_user['role'] == 'superadmin' && ($current_user['puesto'] == 'Sistemas' || $current_user['puesto'] == 'Atei')) || ($current_user['role'] == 'usuario' && ($current_user['puesto'] == 'Supervisión Secundaria'))): ?>
+					<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $curso['Curso']['id'])); ?></div>
+				<?php endif; ?>
+				<?php if($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas'): ?>
+					<div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $curso['Curso']['id']), null, sprintf(__('Esta seguro de borrar el curso %s?'), $curso['Curso']['division'])); ?></div>
+				<?php endif; ?>	
 		 	</div>
 		</div>
     </div>

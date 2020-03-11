@@ -53,7 +53,7 @@ class ListaAlumnosController extends AppController {
 			$cicloDatoAlumno = $this->params['named']['ciclo'];
 		}
 
-			// Parametros para ejecutar API
+		// Parametros para ejecutar API
 		$apiParams = [];
 		$apiParams['ciclo'] = $cicloDatoAlumno;
 		$apiParams['centro_id'] = $this->params['named']['centro_id'];

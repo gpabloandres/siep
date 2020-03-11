@@ -22,12 +22,12 @@ class AlumnosController extends AppController {
 					$this->Auth->allow();				
 				} else {
 					//En caso de ser ATEI
-					$this->Auth->allow('index', 'add' , 'view', 'edit', 'autocompleteNombrePersona', 'autocompleteNombreAlumno');	
+					$this->Auth->allow('index', 'add' , 'view', 'edit', 'autocompleteNombrePersona', 'autocompleteNombreAlumno', 'editConstancia');	
 				}
 				break;
 			case 'usuario':
 			case 'admin':
-				$this->Auth->allow('index', 'add' , 'view', 'edit', 'autocompleteNombrePersona', 'autocompleteNombreAlumno');
+				$this->Auth->allow('index', 'add' , 'view', 'edit', 'autocompleteNombrePersona', 'autocompleteNombreAlumno', 'editConstancia');
 				break;
 
 			default:
@@ -162,6 +162,25 @@ class AlumnosController extends AppController {
 		$personaNombre = $personaNombreArray['Persona']['nombre_completo_persona'];
 		
 		$this->set(compact('alumnos', 'personaNombre'));
+	}
+
+	public function editConstancia($id = null){
+		// var_dump($id);
+		// FALTA UPDATE DE MODEL
+		// var_dump($this->request->data["Alumno"],$this->Alumno->persona_id);
+		// exit();
+		$alumno = array(
+			'Alumno'=>array(
+				'id'=>$id,
+				'persona_id'=>$this->request->data["Alumno"]["persona_id"],
+				'observaciones'=>$this->request->data["Alumno"]["observaciones"]
+			));
+		if ($this->Alumno->save($alumno)) {
+			$this->Session->setFlash('El alumno ha sido actualizado', 'default', array('class' => 'alert alert-success'));
+			$this->redirect('/gateway/constancia_regular_preview/id:'.$this->request->data["Alumno"]["id"]);
+		} else {
+			$this->Session->setFlash('El alumno no ha sido actualizado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
+		}
 	}
 
 	public function delete($id = null) {

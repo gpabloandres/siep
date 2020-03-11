@@ -50,9 +50,8 @@ class VacantesController extends AppController
 
     public function index() {
         $showBtnExcel = false;
-
+        // Obtener combo Centros.
         $this->loadModel('Centro');
-
         $this->Centro->recursive = -1;
         $comboSectorDb = $this->Centro->find('all', array('fields'=>'DISTINCT sector'));
         // Sanatizo el combo sector, a una simple lista
@@ -61,12 +60,20 @@ class VacantesController extends AppController
             $sector = $v['Centro']['sector'];
             $comboSector[$sector] = $sector;
         }
-
+        // Obtención combo Ciudades.
         $this->loadModel('Ciudad');
-        $comboCiudad = $this->Ciudad->find('list', array('fields'=>array('nombre')));
-
+        $this->Ciudad->recursive = 0;
+        $this->Ciudad->Behaviors->load('Containable');
+        $comboCiudad = $this->Ciudad->find('list', array(
+            'fields'=>array('nombre'),
+            'contain'=>false));
+        // Obtención combo Ciclos.
         $this->loadModel('Ciclo');
-        $comboCiclo = $this->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
+        $this->Ciclo->recursive = 0;
+        $this->Ciclo->Behaviors->load('Containable');
+        $comboCiclo = $this->Ciclo->find('list', array(
+            'fields'=>array('id', 'nombre'),
+            'contain'=>false));
         $cicloIdUltimo = $this->getLastCicloId();
         $cicloIdActual = $this->getActualCicloId();
 
@@ -79,20 +86,35 @@ class VacantesController extends AppController
         $apiParams['ciclo'] = 2019;
         $apiParams['estado_inscripcion'] = 'CONFIRMADA';
         $apiParams['division'] = 'con';
-        $apiParams['order'] = 'anio';
+        //$apiParams['order'] = 'anio';
         $apiParams['order_dir'] = 'asc';
-
+        
         // Filtros de formulario y paginacion
-        if(isset($this->request->query['ciclo'])){
+        if(isset($this->request->query['ciclo']) && !empty($this->request->query['ciclo'])){
             $apiParams['ciclo'] = $this->request->query['ciclo'];
         }
-        if(isset($this->request->query['anio'])){
+        if(isset($this->request->query['anio']) && !empty($this->request->query['anio'])){
             $apiParams['anio'] = $this->request->query['anio'];
         }
-        if(isset($this->request->query['centro_id'])){
+        if(isset($this->request->query['centro_id']) && !empty($this->request->query['centro_id'])){
             $apiParams['centro_id'] = $this->request->query['centro_id'];
         }
-        if(isset($this->request->query['page'])){
+        if(isset($this->request->query['ciudad_id']) && !empty($this->request->query['ciudad_id'])){
+            $apiParams['ciudad_id'] = $this->request->query['ciudad_id'];
+        }
+        if(isset($this->request->query['nivel_servicio']) && !empty($this->request->query['nivel_servicio'])){
+            $apiParams['nivel_servicio'] = $this->request->query['nivel_servicio'];
+        }
+        if(isset($this->request->query['sector'])&& !empty($this->request->query['sector'])){
+            $apiParams['sector'] = $this->request->query['sector'];
+        }
+        if(isset($this->request->query['turno'])&& !empty($this->request->query['turno'])){
+            $apiParams['turno'] = $this->request->query['turno'];
+        }
+        if(isset($this->request->query['vacantes'])&& !empty($this->request->query['vacantes'])){
+            $apiParams['vacantes'] = $this->request->query['vacantes'];
+        }
+        if(isset($this->request->query['page'])&& !empty($this->request->query['page'])){
             $apiParams['page'] = $this->request->query['page'];
         }
 

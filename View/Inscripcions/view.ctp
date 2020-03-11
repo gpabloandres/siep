@@ -24,9 +24,11 @@
                         <?php } else if ($inscripcion['estado_inscripcion'] == "CONFIRMADA") {; ?>
                             <span class="label label-success"><?php echo $inscripcion['estado_inscripcion']; ?></span>
                         <?php } else if ($inscripcion['estado_inscripcion'] == "NO CONFIRMADA") {?>
-                            <span class="label label-warning"><?php echo $inscripcion['estado_inscripcion']; ?></span>
-                        <?php } else if ($inscripcion['estado_inscripcion'] == "BAJA" || $inscripcion['estado_inscripcion'] == "EGRESO") {?>
                             <span class="label label-info"><?php echo $inscripcion['estado_inscripcion']; ?></span>
+                        <?php } else if ($inscripcion['estado_inscripcion'] == "SIN TERMINALIDAD" || $inscripcion['estado_inscripcion'] == "EGRESO") {?>
+                            <span class="label label-warning"><?php echo $inscripcion['estado_inscripcion']; ?></span>
+                        <?php } else if ($inscripcion['estado_inscripcion'] == "BAJA") {?>
+                            <span class="label label-danger"><?php echo $inscripcion['estado_inscripcion']; ?></span>
                         <?php } ?></p>
                         <b><?php echo __('Documentación:'); ?></b>
                             <span class="opcion"><?php echo $inscripcion['estado_documentacion']; ?></span>
@@ -79,7 +81,7 @@
                                    <?php if(!$inscripcion['fotocopia_dni'] == 1): ?>
                                     <li><span class="label label-danger"><?php echo 'Falta Fotocopia DNI'; ?></span></li>
                                    <?php endif; ?>
-                                   <?php if($userCentroNivel != 'Adultos - Secundario' && $userCentroNivel != 'Adultos - Primario') : ?>
+                                   <?php if($userCentroNivel != 'Adultos - Secundario' && $userCentroNivel != 'Adultos - Primario' && $userCentroNivel != 'Común - Servicios complementarios') : ?>
                                     <?php if(!$inscripcion['partida_nacimiento_alumno'] == 1): ?>
                                         <li><span class="label label-danger"><?php echo 'Falta Partida Alumno'; ?></span></li>
                                     <?php endif; ?>
@@ -166,7 +168,7 @@
                     // y sí la inscripción del alumno tiene estado CONFIRMADA y es del ciclo actual. 
                     //if(($inscripcion['estado_inscripcion'] === 'CONFIRMADA' || $inscripcion['estado_inscripcion'] === 'EGRESO') ): ?>
                         <div class="opcion"><a href="<?php echo "/gateway/constancia/id:".$inscripcion['id'];?>">Constancia de Inscripción</a></div>
-                        <div class="opcion"><a href="<?php echo "/gateway/constancia_regular/id:".$inscripcion['id'];?>">Constancia de Alumno Regular</a></div>
+                        <div class="opcion"><a href="<?php echo "/gateway/constancia_regular_preview/id:".$inscripcion['id'];?>">Constancia de Alumno Regular</a></div>
                     <?php //endif; ?>
                     <?php if ($inscripcion['estado_inscripcion'] != 'ANULADA') : ?>
                     <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $inscripcion['id'])); ?> </div>
