@@ -236,7 +236,7 @@ class RepitentesController extends AppController
 
         $apiParams = [];
         $apiParams['por_pagina'] = 20;
-        $apiParams['ciclo'] = $currentYear;
+        $apiParams['ciclo'] = $currentYear-1;
         $apiParams['estado_inscripcion'] = 'CONFIRMADA';
         $apiParams['division'] = 'con';
         //$apiParams['order'] = 'anio';

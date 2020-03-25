@@ -968,8 +968,10 @@ class InscripcionsController extends AppController {
 			//Sí es superadmin
 			$personaId = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'contain'=>false));
 		}
-		/* FIN */
-        $this->set(compact('ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual','cicloIdUltimo', 'userCentroNivel'));
+        $userData = $this->Auth->user();
+        $userCentroSector = $userData['Centro']['sector'];
+        /* FIN */
+        $this->set(compact('ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual','cicloIdUltimo', 'userCentroNivel', 'userCentroSector'));
 	}
 
     /* INICIO: FUNCIONES PARA GENERACIÓN DE CÓDIGOS DE INSCRIPCIÓN ESPECÍFICOS */

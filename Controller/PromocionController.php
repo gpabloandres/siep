@@ -273,7 +273,7 @@ class PromocionController extends AppController {
 
 		$apiParams = [];
 		$apiParams['por_pagina'] = 20;
-		$apiParams['ciclo'] = $currentYear;
+		$apiParams['ciclo'] = $currentYear-1;
 		$apiParams['estado_inscripcion'] = 'CONFIRMADA';
 		$apiParams['division'] = 'con';
 		//$apiParams['order'] = 'anio';
@@ -297,6 +297,17 @@ class PromocionController extends AppController {
 		}
 
 		// Filtros de roles
+		if($this->Siep->isSuperAdmin())
+		{
+			$apiParams['nivel_servicio'] = [
+				'Común - Inicial',
+				'Común - Primario',
+				'Común - Inicial - Primario',
+				'Común - Secundario'
+			];
+			$showExportBtn = true;
+		}
+
 		if($this->Siep->isAdmin())
 		{
 			$apiParams['centro_id'] = $userCentro['id'];

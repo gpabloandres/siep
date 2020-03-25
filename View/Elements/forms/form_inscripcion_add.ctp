@@ -116,10 +116,14 @@
             switch ($current_user['puesto']) {
                 case 'Dirección Jardín':
                 case 'Dirección Escuela Primaria':
-                    $tipos_inscripcion = array('Pase'=>'Pase', 'Situación social'=>'Situación social', 'Integración'=>'Integración');     
+                    if ($userCentroSector == 'ESTATAL') {
+                        $tipos_inscripcion = array('Pase'=>'Pase', 'Situación social'=>'Situación social', 'Integración'=>'Integración');
+                    } else {
+                        $tipos_inscripcion = array('Común'=>'Común','Hermano de alumno regular'=>'Hermano de alumno regular','Pase'=>'Pase','Situación social'=>'Situación social', 'Integración'=>'Integración');
+                    }
                     break;
                 case 'Dirección Colegio Secundario':
-                    if ($current_user['centro_id'] == 92) {
+                    if ($userCentroSector == 'PRIVADO' || $current_user['centro_id'] == 92) {
                         $tipos_inscripcion = array('Común'=>'Común','Hermano de alumno regular'=>'Hermano de alumno regular','Pase'=>'Pase','Situación social'=>'Situación social', 'Integración'=>'Integración');
                     } else {
                         $tipos_inscripcion = array('Común'=>'Común', 'Pase'=>'Pase', 'Situación social'=>'Situación social', 'Integración'=>'Integración');
