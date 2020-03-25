@@ -1,4 +1,4 @@
-# Sistema de Información Educativa Provincial [SIEP]
+# Sistema de Información Educativa Provincial [S.I.E.P.]
 
 [ACCEDER A SIEP](https://siep.tdf.educar.gob.ar/)
 
