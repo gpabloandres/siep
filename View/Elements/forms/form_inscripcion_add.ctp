@@ -112,11 +112,12 @@
         ?>
         <br>
         <?php
-            // Reestricción provisoria de inscripciones por hermanos.
+            // Reestricción provisoria de tipos de inscripciones.
             switch ($current_user['puesto']) {
                 case 'Dirección Jardín':
                 case 'Dirección Escuela Primaria':
-                    if ($userCentroSector == 'ESTATAL') {
+                    // Deshabilitadas para realizar inscripción COMÚN y/o por HERMANOS. 
+                    if ($userCentroSector == 'ESTATAL' && $userCentroNivel == 'Común - Primario') {
                         $tipos_inscripcion = array('Pase'=>'Pase', 'Situación social'=>'Situación social', 'Integración'=>'Integración');
                     } else {
                         $tipos_inscripcion = array('Común'=>'Común','Hermano de alumno regular'=>'Hermano de alumno regular','Pase'=>'Pase','Situación social'=>'Situación social', 'Integración'=>'Integración');

@@ -174,7 +174,7 @@
                     <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $inscripcion['id'])); ?> </div>
                     <?php endif; ?>
                 <?php endif; ?>  
-                <?php if(($inscripcion['ciclo_id'] == 7) && ($current_user['role'] == 'usuario' || $current_user['id'] == 438 || $current_user['id'] == 326 || $current_user['id'] == 325 || $current_user['id'] == 338 || $current_user['id'] == 582)): ?> 
+                <?php if(($inscripcion['ciclo_id'] == 7) && ($current_user['role'] == 'usuario' || $current_user['id'] == 438 || $current_user['id'] == 326 || $current_user['id'] == 325 || $current_user['id'] == 338)): ?> 
                     <?php if ($inscripcion['estado_inscripcion'] != 'ANULADA') { ?>
                         <div class="opcion"><?php echo $this->Html->link(__('Anular'), array('action' => 'delete', $inscripcion['id']), null, sprintf(__('Esta seguro de ANULAR la inscripción con legajo Nº: %s?'), $inscripcion['legajo_nro'])); ?></div>
                         <?php } ?>

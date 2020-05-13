@@ -256,12 +256,28 @@ class PersonasController extends AppController {
 			//Obtención del rol y el centro del usuario.
 			$userRole = $this->Auth->user('role');
 			$userCentroId = $this->Auth->user('centro_id');
-			//Si el rol es ADMIN edita a la persona solo si ésta pertenece a su institucion como alumno.
+			// Obtención del nivel de servicio del centro donde registra la última inscripción el alumno.
+			$this->loadModel('Centro');
+			$this->Centro->recursive = 0;
+			$this->Centro->Behaviors->load('Containable');
+			$nivelServicioCentroArray = $this->Centro->find('first',array(
+				'field' => 'nivel_servicio',
+				'contain' => false,
+				'conditions' => array(
+					'Centro.id' => $ultimaInscripcionCentroId)	
+				)
+			);
+			$nivelServicioCentro = $nivelServicioCentroArray ['Centro']['nivel_servicio'];
+			//Si el usuario es ADMIN no edita personas que sean alumnos de otra institución, salvo sean de instituciones de niveles: Adultos - Primario, Adultos - Secundario o Común - Superior (Familiares).
 			if($userRole == 'admin') {
-				if($userCentroId != $ultimaInscripcionCentroId) {
-					$this->Session->setFlash('No tiene permisos para editar a esta persona, no pertenece a su establecimiento', 'default', array('class' => 'alert alert-warning'));
-					$this->redirect(array('action' => 'index'));
-				}	
+				if($personaEsFamiliar == 0 || $personaEsAlumno == 1) {
+					if($nivelServicioCentro == 'Común - Inicial' || $nivelServicioCentro == 'Común - Primario' || $nivelServicioCentro == 'Común - Secundario' || $nivelServicioCentro == 'Especial - Primario') {
+						if($userCentroId != $ultimaInscripcionCentroId) {
+							$this->Session->setFlash('No tiene permisos para editar a esta persona, no pertenece a su establecimiento', 'default', array('class' => 'alert alert-warning'));
+							$this->redirect(array('action' => 'index'));
+						}
+					}					
+				}					
 			}
 			/*
 			if(!$this->adminCanEdit($id, $ultimaInscripcionCentroId)) {
