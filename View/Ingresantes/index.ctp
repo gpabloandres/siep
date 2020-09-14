@@ -102,9 +102,9 @@
           <?php } ?>
           <th>Por hermanos</th>
           <?php if ($mostrar) { ?>
-            <th>VACANTES(Lugares disponibles)</th>
+            <!--<th>VACANTES(Lugares disponibles)</th>
           <?php } else { ?>
-            <th>VACANTES</th>
+            <th>VACANTES</th>-->
           <?php } ?>  
             <!-- SOlo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
             <?php if ($apiParams['ciclo'] == $cicloNombreUltimo) : ?>
@@ -137,9 +137,9 @@
               <?php echo $seccion['por_hermano']; ?>
             </td>
             <?php if ($seccion['vacantes'] < 0) { ?>
-            <td>
+            <!--<td>
                 <?php echo $seccion['vacantes']. ' ' .'<span class="label label-danger">Sorteo</span>'; ?>
-            </td>
+            </td>-->
             <?php } else { ?>
             <td>
               <?php echo $seccion['vacantes']; ?>
@@ -155,9 +155,12 @@
                 <?php echo $seccion['confirmadas']; ?>
             </td>
             <?php } ?>
-            <!-- Sólo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
+            <!-- Sólo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2021. -->
             <td>
-              <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
+              <!-- En el 2020 -->
+              <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'ListaAlumnos', 'action'=> '/index/centro_id:'.$seccion['centro_id'].'/curso_id:'.$seccion['curso_id'].'/ciclo:2021'), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
+              <!-- En el 2021 -->
+              <!--<span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $seccion['curso_id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>-->
             </td>
             <?php endif ?>
           </tr>

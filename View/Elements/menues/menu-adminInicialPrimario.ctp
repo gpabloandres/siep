@@ -77,8 +77,8 @@
             <li><?php echo $this->Html->link(__('Matrícula 2019'), '/vacantes');?></li>
             <li><?php echo $this->Html->link(__('Promocionados'), '/promocion/view');?></li>
             <li><?php echo $this->Html->link(__('Repitentes'), '/repitentes/view');?></li>
-            <li><?php echo $this->Html->link(__('Ingresantes 2020'), '/ingresantes?ciclo=2020');?></li>
             <li><?php echo $this->Html->link(__('Matrícula 2020'), '/vacantes?ciclo=2020');?></li>
+            <li><?php echo $this->Html->link(__('Ingresantes 2021'), '/ingresantes?ciclo=2021');?></li>
           </ul>
         </li>
         <li class="dropdown">
