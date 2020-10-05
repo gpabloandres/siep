@@ -56,9 +56,9 @@
 <?php endif; ?>
 <?php
      $mostrar = false;
-     if( $current_user['Centro']['nivel_servicio'] === 'Común - Inicial - Primario' ||
+     if( $current_user['Centro']['nivel_servicio'] === 'Común - Inicial - Primario'/* ||
          $current_user['Centro']['nivel_servicio'] === 'Común - Inicial' ||
-         $current_user['Centro']['nivel_servicio'] === 'Común - Primario' ) {
+         $current_user['Centro']['nivel_servicio'] === 'Común - Primario'*/ ) {
          $mostrar = true;
      }
 ?>
@@ -90,26 +90,18 @@
           <th>Institución</th>
           <th>Año</th>
           <th>Turno</th>
-          <?php if ($mostrar) { ?>
-            <th>Plazas(Cupo alumnos)</th>
-          <?php } else { ?>
-            <th>Plazas(*)</th>
-          <?php } ?>
-          <?php if ($mostrar) { ?>
-            <th>Matricula(Total Pre-inscriptos)</th>
-          <?php } else { ?>
-            <th>Matricula</th>
-          <?php } ?>
+          <?php if($mostrar): ?>
+          <th>Plazas(*)</th>
+          <?php endif ?>
+          <th>Matricula(**)</th>
           <th>Por hermanos</th>
-          <?php if ($mostrar) { ?>
-            <!--<th>VACANTES(Lugares disponibles)</th>
-          <?php } else { ?>
-            <th>VACANTES</th>-->
-          <?php } ?>  
-            <!-- SOlo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
-            <?php if ($apiParams['ciclo'] == $cicloNombreUltimo) : ?>
-              <th>CONFIRMADAS</th>
-            <?php endif ?>
+          <?php if($mostrar): ?>
+          <th>VACANTES(***)</th>
+          <?php endif ?>
+          <!-- SOlo muestra acceso al VIEW de la sección ficticia sí corresponde a INGRESANTES 2020. -->
+          <?php if ($apiParams['ciclo'] == $cicloNombreUltimo) : ?>
+            <th>CONFIRMADAS</th>
+          <?php endif ?>
           </tr>
       </thead>
       <tbody>
@@ -127,24 +119,28 @@
             <td>
               <?php echo $seccion['turno']; ?>
             </td>
+            <?php if($mostrar): ?>
             <td>
               <?php echo $seccion['plazas']; ?>
             </td>
+            <?php endif ?>
             <td>
               <?php echo $seccion['matriculas']; ?>
             </td>
             <td>
               <?php echo $seccion['por_hermano']; ?>
             </td>
+            <?php if($mostrar): ?>
             <?php if ($seccion['vacantes'] < 0) { ?>
-            <!--<td>
+            <td>
                 <?php echo $seccion['vacantes']. ' ' .'<span class="label label-danger">Sorteo</span>'; ?>
-            </td>-->
+            </td>
             <?php } else { ?>
             <td>
               <?php echo $seccion['vacantes']; ?>
             </td>
-            <?php } ?>            
+            <?php } ?>
+            <?php endif ?>
             <?php if ($apiParams['ciclo'] == $cicloNombreUltimo) : ?>
             <?php if (($seccion['plazas'] != NULL) && ($seccion['confirmadas'] > $seccion['plazas'])) { ?>
             <td>
@@ -220,7 +216,11 @@
         </tr>
       </tfoot>
     </table>
-    <strong>(*) Valores de plazas con resguardo de vacantes e indicados por las Supervisiones de los niveles.</strong>         
+    <p><strong>
+      (*) Valores de PLAZAS (refiere al cupo de alumnos) con resguardo de vacantes e indicados por las Supervisiones de los niveles.<br>         
+      (**) La MATRÍCULA refiere al total de pre-inscriptos.<br>
+      (***) Las VACANTES son los lugares disponibles.   
+    </strong></p>
       <script>
         $(function(){
 

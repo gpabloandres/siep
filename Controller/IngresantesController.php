@@ -62,7 +62,7 @@ class IngresantesController extends AppController
         // Parametros de API por defecto
         $apiParams = [];
         $apiParams['por_pagina'] = 10;
-        $apiParams['ciclo'] = 2020;
+        $apiParams['ciclo'] = 2021;
         $apiParams['estado_inscripcion'] = ['CONFIRMADA', 'NO CONFIRMADA',];
         $apiParams['division'] = 'sin';
         $apiParams['order'] = 'anio';

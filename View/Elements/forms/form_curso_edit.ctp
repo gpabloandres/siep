@@ -65,7 +65,7 @@
             echo $this->Form->input('titulacion_id', array('label' => 'Titulación', 'empty' => 'Ingrese una titulación...', 'options'=>$titulaciones, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
             echo $this->Form->input('reso_presupuestaria', array('label' => 'Resolución Presupuestaria', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'placeholder' => 'Ingrese Resolución Presupuestaria.'));
           }  
-          if (($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') || ($current_user['role'] == 'usuario' && $current_user['puesto'] == 'Supervisión Secundaria')) {
+          if (($current_user['role'] == 'superadmin' && $current_user['puesto'] == 'Sistemas') || ($current_user['role'] == 'usuario' && $current_user['puesto'] == 'Supervisión Inicial/Primaria')) {
               echo $this->Form->input('plazas', array('between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca la cantidad de plazas admitidas en la sección...', 'Placeholder' => 'Ingrese cantidad máxima de plazas'));
           } else {
               echo $this->Form->input('plazas', array('label'=>'Plazas*', 'readonly' => true, ' between' => '<br>', 'class' => 'form-control'));
