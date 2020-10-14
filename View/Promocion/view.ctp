@@ -88,9 +88,9 @@
                       <thead>
                       <tr>
                           <th>Nombre completo</th>
-                          <th>2019</th>
-                          <th></th>
                           <th>2020</th>
+                          <th></th>
+                          <th>2021</th>
                       </tr>
                       </thead>
                       <tbody>

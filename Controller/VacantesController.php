@@ -83,7 +83,7 @@ class VacantesController extends AppController
         // Parametros de API por defecto
         $apiParams = [];
         $apiParams['por_pagina'] = 10;
-        $apiParams['ciclo'] = 2019;
+        $apiParams['ciclo'] = 2021;
         $apiParams['estado_inscripcion'] = 'CONFIRMADA';
         $apiParams['division'] = 'con';
         //$apiParams['order'] = 'anio';
