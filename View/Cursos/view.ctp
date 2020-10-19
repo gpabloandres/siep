@@ -86,10 +86,16 @@
 				?>
 		 		<div class="subtitulo">Opciones</div>
 				<div class="opcion"><?php echo $this->Html->link(__('Listar Secciones'), array('action' => 'index')); ?></div>
-				<div class="opcion"><?php echo $this->Html->link(__('Datos de Alumnos'), array('action' => 'index','controller' => 'ListaAlumnos',
+				<div class="opcion"><?php echo $this->Html->link(__('Datos de Alumnos 2020'), array('action' => 'index','controller' => 'ListaAlumnos',
 						'centro_id'=>$curso['Centro']['id'],
 						'curso_id'=>$curso['Curso']['id'],
 						'ciclo'=>$cicloDatoAlumno
+					)); ?>
+				</div>
+				<div class="opcion"><?php echo $this->Html->link(__('Datos de Alumnos 2021'), array('action' => 'index','controller' => 'ListaAlumnos',
+						'centro_id'=>$curso['Centro']['id'],
+						'curso_id'=>$curso['Curso']['id'],
+						'ciclo'=>$cicloPosterior['Ciclo']['nombre']
 					)); ?>
 				</div>
 				<?php
