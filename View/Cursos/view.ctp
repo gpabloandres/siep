@@ -77,10 +77,10 @@
 		    <div class="unit">
 				<?php
 
-				$cicloDatoAlumno = $cicloPosterior['Ciclo']['nombre'];
+				$cicloDatoAlumno = $cicloActual['Ciclo']['nombre'];
 				if(empty($cursoDivisionString))
 				{
-					$cicloDatoAlumno = $cicloPosterior['Ciclo']['nombre'];
+					$cicloDatoAlumno = $cicloActual['Ciclo']['nombre'];
 				}
 
 				?>
@@ -203,9 +203,16 @@
 					</div>
 				<?php endif; ?>
 
-				<div class="opcion"><?php echo $this->Html->link(__('Reubicar'), array('action' => 'index','controller' => 'Reubicacion',
+				<div class="opcion"><?php echo $this->Html->link(__('Reubicar 2020'), array('action' => 'index','controller' => 'Reubicacion',
 						'centro_id'=>$curso['Centro']['id'],
 						'curso_id'=>$curso['Curso']['id']
+					)); ?>
+				</div>
+
+				<div class="opcion"><?php echo $this->Html->link(__('Reubicar 2021'), array('action' => 'index','controller' => 'Reubicacion',
+						'centro_id'=>$curso['Centro']['id'],
+						'curso_id'=>$curso['Curso']['id'],
+						'ciclo' =>$cicloPosterior['Ciclo']['nombre']
 					)); ?>
 				</div>
 
