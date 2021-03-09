@@ -19,7 +19,7 @@
 <div class="jumbotron">
   <div class="container text-center">
   <hr>  
-  <h3><i class= "glyphicon glyphicon-dashboard"></i> TABLERO 2020 | <?php echo $centroNombre; ?></h3>      
+  <h3><i class= "glyphicon glyphicon-dashboard"></i> TABLERO 2021 | <?php echo $centroNombre; ?></h3>      
     <!--<p>Aquí podríamos indicar AVISOS SEMANALES.</p>-->
   </div>
 </div>
@@ -168,17 +168,17 @@
       <div class="panel panel-primary">
         <div class="panel-heading">
           <div class="text-left">
-            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-list-alt"></i> <strong> MATRÍCULA - ALTAS</strong>', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:CONFIRMADA'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matricula?></span></span>
+            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-list-alt"></i> <strong> MATRÍCULA - ALTAS</strong>', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:CONFIRMADA'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matricula?></span></span>
           </div>
         </div>
         <div class="panel-body">
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th><span class="link"><?php echo $this->Html->link('Por Hermano', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Hermano%20de%20alumno%20regular'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                <th><span class="link"><?php echo $this->Html->link('Común', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Com%C3%BAn'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                <th><span class="link"><?php echo $this->Html->link('Situación Social', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Situaci%C3%B3n%20social'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                <th><span class="link"><?php echo $this->Html->link('Pase (Entrada)', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                <th><span class="link"><?php echo $this->Html->link('Por Hermano', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Hermano%20de%20alumno%20regular'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                <th><span class="link"><?php echo $this->Html->link('Común', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Com%C3%BAn'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                <th><span class="link"><?php echo $this->Html->link('Situación Social', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Situaci%C3%B3n%20social'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                <th><span class="link"><?php echo $this->Html->link('Pase (Entrada)', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
               </tr>
             </thead>
             <tbody>
@@ -200,18 +200,18 @@
       <div class="panel panel-primary">
         <div class="panel-heading">
           <div class="text-left">
-            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-list-alt"></i> <strong> MATRÍCULA - BAJAS</strong>', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:BAJA/legajo_nro:SINVACANTE'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaBaja?></span></span>
+            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-list-alt"></i> <strong> MATRÍCULA - BAJAS</strong>', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:BAJA/legajo_nro:SINVACANTE'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaBaja?></span></span>
           </div>
         </div>
         <div class="panel-body">
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th><span class="link"><?php echo $this->Html->link('Salido con pase', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:BAJA/tipo_baja:Salido%20con%20pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                <th><span class="link"><?php echo $this->Html->link('Salido sin pase', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:BAJA/tipo_baja:Salido%20sin%20pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                <th><span class="link"><?php echo $this->Html->link('Pérdida de regul.', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:BAJA/tipo_baja:P%C3%A9rdida%20de%20regularidad'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                <th><span class="link"><?php echo $this->Html->link('Fallec.', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:BAJA/tipo_baja:Fallecimiento'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                <th><span class="link"><?php echo $this->Html->link('Sin espec.', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:BAJA/tipo_baja:Sin%20especificar'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                <th><span class="link"><?php echo $this->Html->link('Salido con pase', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:BAJA/tipo_baja:Salido%20con%20pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                <th><span class="link"><?php echo $this->Html->link('Salido sin pase', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:BAJA/tipo_baja:Salido%20sin%20pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                <th><span class="link"><?php echo $this->Html->link('Pérdida de regul.', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:BAJA/tipo_baja:P%C3%A9rdida%20de%20regularidad'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                <th><span class="link"><?php echo $this->Html->link('Fallec.', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:BAJA/tipo_baja:Fallecimiento'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                <th><span class="link"><?php echo $this->Html->link('Sin espec.', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:BAJA/tipo_baja:Sin%20especificar'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
               </tr>
             </thead>
             <tbody>
@@ -229,7 +229,7 @@
       <div class="panel panel-primary">
         <div class="panel-heading">
           <div class="text-left">
-            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-home"></i> <strong> PASES - ENTRANTES</strong>', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaPasesEntrantes?></span></span>
+            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-home"></i> <strong> PASES - ENTRANTES</strong>', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaPasesEntrantes?></span></span>
           </div>
         </div>  
           <div class="panel-body">
@@ -238,9 +238,9 @@
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th><span class="link"><?php echo $this->Html->link('3s', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:Sala de 3 años/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('4s', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:Sala de 4 años/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('5s', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:Sala de 5 años/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('3s', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:Sala de 3 años/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('4s', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:Sala de 4 años/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('5s', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:Sala de 5 años/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -256,20 +256,20 @@
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th><span class="link"><?php echo $this->Html->link('1ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:1ro/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('2ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:2do/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('3ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:3ro/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('1ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:1ro/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('2ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:2do/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('3ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:3ro/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
                   <?php if ($nivelCentro == 'Común - Primario' || $nivelCentro == 'Común - Secundario'): ?>  
-                    <th><span class="link"><?php echo $this->Html->link('4ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:4to/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('5ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:5to/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('6ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:6to/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('4ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:4to/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('5ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:5to/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('6ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:6to/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
                   <?php endif; ?>
                   <?php if ($nivelCentro == 'Común - Secundario'): ?>
-                    <th><span class="link"><?php echo $this->Html->link('7ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:7mo/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('7ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:7mo/division:/estado_inscripcion:CONFIRMADA/tipo_inscripcion:Pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
                   <?php endif; ?>
                   <?php if ($nivelCentro == 'Adultos - Primario'): ?>
-                    <th><span class="link"><?php echo $this->Html->link('Alfabetización', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:ALFABETIZACIÓN /division:/tipo:Múltiple'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                    <th><span class="link"><?php echo $this->Html->link('CAP', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:CAP /division:/'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('Alfabetización', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:ALFABETIZACIÓN /division:/tipo:Múltiple'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                    <th><span class="link"><?php echo $this->Html->link('CAP', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:CAP /division:/'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
                   <?php endif; ?>
                   </tr>
                 </thead>
@@ -300,7 +300,7 @@
         <div class="panel panel-primary">
           <div class="panel-heading">
             <div class="text-left">
-              <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-home"></i> <strong> PASES - SALIENTES</strong>', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaPasesSalientes?></span></span>
+              <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-home"></i> <strong> PASES - SALIENTES</strong>', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaPasesSalientes?></span></span>
             </div>
           </div>  
             <div class="panel-body">
@@ -309,9 +309,9 @@
                 <table class="table table-bordered">
                   <thead>
                     <tr>
-                      <th><span class="link"><?php echo $this->Html->link('3s', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:Sala de 3 años/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                      <th><span class="link"><?php echo $this->Html->link('4s', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:Sala de 4 años/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                      <th><span class="link"><?php echo $this->Html->link('5s', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:Sala de 5 años/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                      <th><span class="link"><?php echo $this->Html->link('3s', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:Sala de 3 años/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                      <th><span class="link"><?php echo $this->Html->link('4s', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:Sala de 4 años/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                      <th><span class="link"><?php echo $this->Html->link('5s', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:Sala de 5 años/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -327,16 +327,16 @@
                 <table class="table table-bordered">
                   <thead>
                     <tr>
-                      <th><span class="link"><?php echo $this->Html->link('1ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:1ro/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                      <th><span class="link"><?php echo $this->Html->link('2ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:2do/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                      <th><span class="link"><?php echo $this->Html->link('3ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:3ro/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                      <th><span class="link"><?php echo $this->Html->link('1ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:1ro/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                      <th><span class="link"><?php echo $this->Html->link('2ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:2do/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                      <th><span class="link"><?php echo $this->Html->link('3ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:3ro/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
                     <?php if ($nivelCentro == 'Común - Primario' || $nivelCentro == 'Común - Secundario'): ?>  
-                      <th><span class="link"><?php echo $this->Html->link('4ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:4to/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                      <th><span class="link"><?php echo $this->Html->link('5ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:5to/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
-                      <th><span class="link"><?php echo $this->Html->link('6ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:6to/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                      <th><span class="link"><?php echo $this->Html->link('4ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:4to/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                      <th><span class="link"><?php echo $this->Html->link('5ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:5to/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                      <th><span class="link"><?php echo $this->Html->link('6ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:6to/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
                     <?php endif; ?>
                     <?php if ($nivelCentro == 'Común - Secundario'): ?>
-                      <th><span class="link"><?php echo $this->Html->link('7ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:6/centro_id:'.$userCentroId.'/turno:/anio:7mo/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
+                      <th><span class="link"><?php echo $this->Html->link('7ºs', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:8/centro_id:'.$userCentroId.'/turno:/anio:7mo/division:/estado_inscripcion:BAJA/tipo_baja:Salido con pase'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
                     <?php endif; ?>
                     <?php if ($nivelCentro == 'Adultos - Primario'): ?>
                       <th><span class="link"><?php echo $this->Html->link('Alfabetización', array('controller' => 'cursos', 'action' => 'index/centro_id:'.$userCentroId.'/turno:/anio:ALFABETIZACIÓN /division:/tipo:Múltiple'), array('class' => 'link', 'target' => '_blank', 'escape' => false)); ?></th>
@@ -377,7 +377,7 @@
       <div class="panel panel-primary">
         <div class="panel-heading">
           <div class="text-left">
-            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-home"></i> <strong> PROMOCIONES 2019/20</strong>', array('controller' => 'promocion', 'action' => '/view?centro_id='.$userCentroId), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaPromociones?></span></span>
+            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-home"></i> <strong> PROMOCIONES 2020/21</strong>', array('controller' => 'promocion', 'action' => '/view?centro_id='.$userCentroId), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaPromociones?></span></span>
           </div>
         </div>  
         <div class="panel-body">
@@ -442,7 +442,7 @@
       <div class="panel panel-primary">
         <div class="panel-heading">
           <div class="text-left">
-            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-home"></i> <strong> REPITENCIAS 2019/20</strong>', array('controller' => 'repitentes', 'action' => 'view?centro_id='.$userCentroId), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaRepitencias?></span></span>
+            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-home"></i> <strong> REPITENCIAS 2020/21</strong>', array('controller' => 'repitentes', 'action' => 'view?centro_id='.$userCentroId), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaRepitencias?></span></span>
           </div>
         </div>  
           <div class="panel-body">
@@ -513,7 +513,7 @@
       <div class="panel panel-primary">
         <div class="panel-heading">
           <div class="text-left">
-            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-list-alt"></i> <strong> EGRESOS 2019</strong>', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:4/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:EGRESO'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaEgresos?></span></span>
+            <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-list-alt"></i> <strong> EGRESOS 2020</strong>', array('controller' => 'cursos_inscripcions', 'action' => 'index/ciclo_id:7/centro_id:'.$userCentroId.'/turno:/anio:/division:/estado_inscripcion:EGRESO'), array('class' => 'btn btn-primary', 'target' => '_blank', 'escape' => false)); ?><span class="badge"> | <?php echo $matriculaEgresos?></span></span>
           </div>
         </div>
         <div class="panel-body">

@@ -208,9 +208,13 @@ class InscripcionsController extends AppController {
                 case 'Común - Inicial':
                 case 'Común - Primario':
                     if ($userData['Centro']['sector'] == 'ESTATAL') {
-                        $this->Session->setFlash('No tiene permisos para agregar inscripciones.', 'default', array('class' => 'alert alert-warning'));
-                        $this->redirect( array( 'action' => 'index' ));
-                    }
+                        if($userData['Centro']['id'] == '146' || $userData['Centro']['id'] == '186' || $userData['Centro']['id'] == '89' || $userData['Centro']['id'] == '195') {
+                            //Permite agregar
+                        } else {   
+                            $this->Session->setFlash('No tiene permisos para agregar inscripciones.', 'default', array('class' => 'alert alert-warning'));
+                            $this->redirect( array( 'action' => 'index' ));
+                        }
+                    }    
                     break;
                 /*
                 case 'Común - Secundario':
@@ -230,7 +234,7 @@ class InscripcionsController extends AppController {
                 case 'Adultos - Secundario':
                 case 'Especial - Integración':
                 case 'Común - Servicios complementarios':
-                //  PERMITIDOS AGREGARR
+                //  PERMITIDOS AGREGAR
                     break;
                 default:
                     $this->Session->setFlash('No tiene permisos para agregar inscripciones.', 'default', array('class' => 'alert alert-warning'));

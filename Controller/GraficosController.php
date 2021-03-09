@@ -24,7 +24,7 @@ class GraficosController extends AppController {
 				break;
 			
 			default:
-				$this->Session->setFlash('No tiene permisos para ver TABLERO 2019.', 'default', array('class' => 'alert alert-warning'));
+				$this->Session->setFlash('No tiene permisos para ver TABLERO 2021.', 'default', array('class' => 'alert alert-warning'));
 				$this->redirect($this->referer());
 				break;
 		}
@@ -43,6 +43,7 @@ class GraficosController extends AppController {
 		$ciclosVecinos = $this->Ciclo->find('neighbors', ['field' => 'id', 'value' => $cicloIdActual]);
 		$cicloIdAnterior = $ciclosVecinos ['prev']['Ciclo']['id'];
 		$cicloIdPosterior = $ciclosVecinos ['next']['Ciclo']['id'];		
+		
 		// Obtención del nombre y el nivel del centro del usuario.
 		$this->loadModel('Centro');
 		$this->Centro->recursive = 0;
@@ -80,17 +81,17 @@ class GraficosController extends AppController {
 		switch ($this->Auth->user('puesto')) {
 			case 'Supervisión Inicial/Primaria':
 				if ($nivelCentro == 'Común - Inicial' || $nivelCentro == 'Común - Primario' || $nivelCentro == 'Adultos - Primario' || $nivelCentro == 'Especial - Primario') {
-					// Puede ver el Tablero 2019 del centro seleccionado.
+					// Puede ver el Tablero 2021 del centro seleccionado.
 				} else {
-					$this->Session->setFlash('No tiene permisos para ver el TABLERO 2019 solicitado.', 'default', array('class' => 'alert alert-warning'));
+					$this->Session->setFlash('No tiene permisos para ver el TABLERO 2021 solicitado.', 'default', array('class' => 'alert alert-warning'));
 					$this->redirect($this->referer());
 				}
 				break;
 			case 'Supervisión Secundaria':
 			if ($nivelCentro == 'Común - Secundario' || $nivelCentro == 'Adultos - Secundario') {
-				// Puede ver el Tablero 2019 del centro seleccionado.
+				// Puede ver el Tablero 2021 del centro seleccionado.
 			} else {
-				$this->Session->setFlash('No tiene permisos para ver el TABLERO 2019 solicitado.', 'default', array('class' => 'alert alert-warning'));
+				$this->Session->setFlash('No tiene permisos para ver el TABLERO 2021 solicitado.', 'default', array('class' => 'alert alert-warning'));
 				$this->redirect($this->referer());
 			}
 			break;
